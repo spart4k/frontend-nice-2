@@ -6,7 +6,9 @@
 
 <script lang="js">
 export default {
-  name: 'TheHeader'
+  name: 'TheHeader',
+  setup () {
+  }
 }
 </script>
 
