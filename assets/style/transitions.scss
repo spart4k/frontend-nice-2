@@ -1,0 +1,149 @@
+.v-application{
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .3s ease;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0!important;
+  }
+}
+
+.fade-up-enter-active, .fade-up-leave-active {
+  transition: opacity .4s ease, transform .4s ease;
+}
+.fade-up-enter, .fade-up-leave-to {
+  opacity: 0;
+  transform: translateY(-4rem);
+}
+
+.fade-fast-enter-active, .fade-fast-leave-active {
+  transition: opacity .2s ease, transform .2s ease;
+}
+.fade-fast-enter, .fade-fast-leave-to {
+  opacity: 0;
+  transform: translateY(4rem);
+}
+
+.scale-down-enter-active, .scale-down-leave-active {
+  transition: opacity .4s ease, transform .4s ease;
+}
+.scale-down-enter, .scale-down-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+
+.scale-down-fast-enter-active, .scale-down-fast-leave-active {
+  transition: opacity .2s ease, transform .2s ease;
+}
+.scale-down-fast-enter, .scale-down-fast-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.quiz-card-enter-active, .quiz-card-leave-active {
+  transition: opacity .8s ease, transform .8s ease;
+}
+.quiz-card-leave-to {
+  opacity: 0;
+  transform: translate(-50%, 0);
+}
+
+.quiz-card-enter {
+  opacity: 0;
+  transform: translate(50%, 0);
+}
+
+.v-application{
+  .fade-slide-enter-active, .fade-slide-leave-active {
+    transition: opacity .2s ease, transform .2s ease;
+    transform: translateX(0);
+  }
+  .fade-slide-enter, .fade-slide-leave-to {
+    opacity: 0;
+    transform: translateX(4rem);
+  }
+}
+
+.slide-enter-active, .slide-leave-active {
+  transition: transform .6s;
+  transform: translateX(0);
+}
+.slide-enter, .slide-leave-to {
+  transform: translateX(100%);
+}
+
+.slide-left-fast-active, .slide-left-fast-leave-active {
+  transition: transform .3s, opacity .3s ease;
+  transform: translateX(0);
+}
+.slide-left-fast-enter, .slide-left-fast-leave-to {
+  transform: translateX(-10%);
+  opacity: 0;
+}
+
+//list
+.v-application{ //list-complete
+  .list-complete-move{
+    transition: all .6s;
+  }
+  .list-complete-enter, .list-complete-leave-to{
+    opacity: 0;
+    transform: translateX(8rem)!important;
+  }
+  .list-complete-leave-active {
+    position: absolute;
+    z-index: 4;
+  }
+}
+
+//expand
+.expand-enter-active, .expand-leave-active {
+  transition: max-height .8s;
+  max-height: 100rem;
+  overflow-y: hidden;
+}
+.expand-enter, .expand-leave-to {
+  max-height: 0;
+  transition: max-height .2s;
+}
+
+
+//notification-fade
+.notification-fade-enter-active, .notification-fade-leave-active {
+  max-height: 50rem;
+  overflow-y: hidden;
+  transition: max-height .8s, opacity .4s ease;
+}
+.notification-fade-enter, .notification-fade-leave-to {
+  max-height: 0;
+  opacity: 0!important;
+  transition: max-height .4s, opacity .8s ease;
+}
+
+//course-move
+.flip-list-move {
+  transition: transform 0.8s ease;
+}
+.no-move {
+  transition: transform 0s;
+}
+
+.show-next-enter-active,
+.show-next-leave-enter {
+  transform: translateX(0);
+  transition: all .3s linear;
+}
+.show-next-enter,
+.show-next-leave-to {
+  transform: translateX(100%);
+}
+
+.show-prev-enter-active,
+.show-prev-leave-enter {
+  transform: translateX(100%);
+  transition: all .3s linear;
+}
+.show-prev-enter,
+.show-prev-leave-to {
+  transform: translateX(0);
+}
