@@ -1,21 +1,72 @@
-$border-radius: 5px;
-$border-radius-large: 2.4rem;
-
-$mp: 1.5rem;
-$mp-s: 0.5rem;
-
-$fontColorDefault: #151515;
-$fontColorGrey: #909090;
-
-$defaultColorPrimary: #4243DE;
-
+$fontColorDefault: #1C262E;
+$black: #000;
 $white: #ffffff;
+$gray: #EBEBEB;
+$gray2: #E6E6E6;
+$orange: #FF4F02;
+$yellow: #F6DA65;
+$pink: #FFC8C8;
+$blue: #BBD6FF;
+$blueBlack: #3E5366;
 
-$primary: var(--primary);
-//$primary: #4243DE;
-$primary-light: #F6F7FF;
-$primary-light2: #4E76DE;
-$primary-light3: #6EC5E6;
-$primary-inverse: #fff;
-$app-ui-bg: #fff;
 
+@mixin montserratRegular {
+  font-family: 'Montserrat-Regular', sans-serif;
+  font-weight: 400;
+}
+@mixin montserratMedium {
+  font-family: 'Montserrat-Medium', sans-serif;
+  font-weight: 500;
+}
+@mixin montserratSemiBold {
+  font-family: 'Montserrat-SemiBold', sans-serif;
+  font-weight: 600;
+}
+@mixin montserratBold {
+  font-family: 'Montserrat-Bold', sans-serif;
+  font-weight: 700;
+}
+@mixin montserratExtraBold {
+  font-family: 'Montserrat-ExtraBold', sans-serif;
+  font-weight: 800;
+}
+@mixin montserratBlack {
+  font-family: 'Montserrat-Black', sans-serif;
+  font-weight: 900;
+}
+
+//@mixin
+
+@mixin title {
+  font-size: 4.8rem;
+  line-height: .745;
+}
+
+@mixin title-sm {
+  font-size: 2.6rem;
+  line-height: 1.2188461538;
+}
+@mixin subtitle {
+  font-size: 2.2rem;
+  line-height: 1.2190909091;
+}
+
+@mixin subtitle-sm {
+  font-size: 2rem;
+  line-height: 1.219;
+}
+
+@mixin text {
+  font-size: 1.8rem;
+  line-height: 1.0088888889;
+}
+
+@mixin text-md {
+  font-size: 1.4rem;
+  line-height: 1.2192857143;
+}
+
+@mixin text-sm {
+  font-size: 1.2rem;
+  line-height: 1.4091666667;
+}
