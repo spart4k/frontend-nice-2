@@ -1,9 +1,15 @@
 <template>
-  <h1>test</h1>
+  <div v-html="require(`~/static/icon/icon-${name}.svg?raw`)" />
 </template>
 <script lang="js">
 export default {
-  name: 'NIcon'
+  name: 'NIcon',
+  props: {
+    name: {
+      type: String,
+      default: 'image'
+    }
+  }
 }
 </script>
 
