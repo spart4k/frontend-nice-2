@@ -20,7 +20,7 @@ export default {
   css: [
   // Load a Node.js module directly (here it's a Sass file)
   // CSS file in the project
-  '../assets/style/main.scss',
+    '../assets/style/main.scss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -47,7 +47,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    '@nuxtjs/style-resources',
+    '@nuxtjs/style-resources'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -58,7 +58,7 @@ export default {
 
   styleResources: {
     scss: [
-    '~/assets/style/main.scss'
+      '~/assets/style/main.scss'
     ]
   },
 

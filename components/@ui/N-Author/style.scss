@@ -1,0 +1,16 @@
+.author {
+  display: flex;
+  align-items: center;
+  &__name {
+    @include text;
+    text-decoration-line: underline;
+  }
+  &__img {
+    background-image: url('@/static/plug-author.png');
+    border-radius: 100%;
+    width: 3.8rem;
+    height: 3.8rem;
+    background-size: cover;
+    margin-right: 1.5rem;
+  }
+}
