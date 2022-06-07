@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="$style.storybook">
     <Row title="title">
       Фамилия Обломов не связана со словом «облом». 5 фактов о литературе из школьной программы, которых вы не знал
     </Row>
@@ -13,6 +13,11 @@
       <N-Icon name="plus" />
       <N-Icon name="message" />
       <N-Icon name="minus" />
+    </Row>
+    <Row title="title">
+      <div :class="$style.slider">
+        <N-Slider />
+      </div>
     </Row>
   </div>
 </template>
@@ -29,5 +34,13 @@ export default {
 .storybook {
   display: flex;
   flex-direction: column;
+  background-color: #c2b6b6;
+}
+.slider {
+  width: 334px;
+  margin: 0 auto;
+  border: 1px solid white;
+  padding: 20px;
+  border-radius: 10px;
 }
 </style>
