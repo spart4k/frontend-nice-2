@@ -1,6 +1,9 @@
 $tabletWidth: 900px;
 $mobileWidth: 375px;
 
+$border-radius-1: 1rem;
+$border-radius-2: .6rem;
+
 $fontColorDefault: #1C262E;
 $black: #000;
 $white: #ffffff;
@@ -11,7 +14,7 @@ $yellow: #F6DA65;
 $pink: #FFC8C8;
 $blue: #BBD6FF;
 $blueBlack: #3E5366;
-
+$blueBlack2: #2F2E4D;
 
 @mixin montserratRegular {
   font-family: 'Montserrat-Regular', sans-serif;

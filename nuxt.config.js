@@ -58,7 +58,7 @@ export default {
 
   styleResources: {
     scss: [
-      '~/assets/style/main.scss'
+      '~/assets/style/_variables.scss'
     ]
   },
 
