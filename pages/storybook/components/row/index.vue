@@ -1,8 +1,10 @@
 <template>
   <div :class="$style.row">
-    <div :class="$style.title">{{title}}</div>
+    <div :class="$style.title">
+      {{ title }}
+    </div>
     <div>
-      <slot/>
+      <slot />
     </div>
   </div>
 </template>
@@ -10,7 +12,10 @@
 export default {
   name: 'StoryBookRow',
   props: {
-    title: String
+    title: {
+      type: String,
+      default: 'Заголовок'
+    }
   }
 }
 </script>
