@@ -19,9 +19,12 @@ html, #app {
 html {
   font-size: calc((10 / 1280) * 100vw);
   background-color: white;
-  //@media (max-width: $mobileWidth) {
-  //  font-size: 2.6666666667vw;
-  //}
+  @media (max-width: $tabletWidth) {
+    font-size: calc((10 / 685) * 100vw);
+  }
+  @media (max-width: $mobileWidth) {
+    font-size: calc((10 / 375) * 100vw);
+  }
 
   //@media (max-width: $mobileWidth) and (orientation: landscape) {
   //  font-size: 1.302083333vw !important;
