@@ -1,5 +1,5 @@
 <template>
-  <div v-html="require(`~/static/icon/icon-${name}.svg?raw`)" />
+  <div class="icon" v-html="require(`~/static/icon/icon-${name}.svg?raw`)" />
 </template>
 <script lang="js">
 export default {
@@ -13,8 +13,8 @@ export default {
 }
 </script>
 
-<style scoped>
-h1 {
-  background-color: red;
+<style lang="scss" scoped>
+.icon {
+  line-height: 0;
 }
 </style>
