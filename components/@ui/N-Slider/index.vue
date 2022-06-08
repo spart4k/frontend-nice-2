@@ -5,26 +5,10 @@
         ref="c1"
         :as-nav-for="$refs.c2"
         :focus-on-select="true"
-        :arrows="true"
         @beforeChange="syncSliders"
       >
-        <div :class="$style.item">
-          <img src="./img_lights.jpeg" alt="1">
-        </div>
-        <div :class="$style.item">
-          <img src="./123.jpeg" alt="1">
-        </div>
-        <div :class="$style.item">
-          <img src="./123.jpeg" alt="1">
-        </div>
-        <div :class="$style.item">
-          <img src="./123.jpeg" alt="1">
-        </div>
-        <div :class="$style.item">
-          <img src="./img_lights.jpeg" alt="1">
-        </div>
-        <div :class="$style.item">
-          <img src="./123.jpeg" alt="1">
+        <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
+          <img :src="item.src" alt="1">
         </div>
       </VueSlickCarousel>
     </div>
@@ -36,42 +20,11 @@
         :slides-to-show="3"
         :as-nav-for="$refs.c1"
         :focus-on-select="true"
-        center-padding="162.5px"
         @beforeChange="syncSlidersBottom"
       >
-        <div>
+        <div v-for="(item, index) in sliderItem" :key="index">
           <div :class="$style.item">
-            <img src="./img_lights.jpeg" alt="1">
-          </div>
-        </div>
-
-        <div>
-          <div :class="$style.item">
-            <img src="./123.jpeg" alt="1">
-          </div>
-        </div>
-
-        <div>
-          <div :class="$style.item">
-            <img src="./123.jpeg" alt="1">
-          </div>
-        </div>
-
-        <div>
-          <div :class="$style.item">
-            <img src="./123.jpeg" alt="1">
-          </div>
-        </div>
-
-        <div>
-          <div :class="$style.item">
-            <img src="./img_lights.jpeg" alt="1">
-          </div>
-        </div>
-
-        <div>
-          <div :class="$style.item">
-            <img src="./123.jpeg" alt="1">
+            <img :src="item.src" alt="1">
           </div>
         </div>
       </VueSlickCarousel>
@@ -89,7 +42,12 @@ export default {
   components: {
     VueSlickCarousel
   },
-
+  props: {
+    sliderItem: {
+      type: Array,
+      required: true
+    }
+  },
   setup () {
     const c1 = ref(null)
     const c2 = ref(null)
@@ -146,7 +104,7 @@ export default {
   .slider_top {
     :global(.slick-slider) {
       .item {
-        height: 325px;
+        height: 32.5rem;
       }
     }
   }

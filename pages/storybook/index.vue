@@ -16,7 +16,7 @@
     </Row>
     <Row title="title">
       <div :class="$style.slider">
-        <N-Slider />
+        <N-Slider :slider-item="sliderItem" />
       </div>
     </Row>
     <Row title="Comment">
@@ -70,8 +70,16 @@ export default {
       chips: ['музыка'],
       amountComment: 0
     })
+
+    const sliderItem = ref([
+      { src: './img_slider.jpeg' },
+      { src: '/img_slider-2.jpeg' },
+      { src: '/img_slider.jpeg' },
+      { src: '/img_slider-2.jpeg' }
+    ])
     return {
-      NCard
+      NCard,
+      sliderItem
     }
   }
 }
@@ -84,7 +92,7 @@ export default {
   background-color: #c2b6b6;
 }
 .slider {
-  width: 335px;
+  width: 33.5rem;
   margin: 0 auto;
   border: 1px solid white;
   padding-bottom: 100px;
