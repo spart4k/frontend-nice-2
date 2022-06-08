@@ -50,10 +50,21 @@
     <Row title="Chip">
       <N-Chip>искусство</N-Chip>
     </Row>
+    <Row title="ROW-BASKET">
+      <div :class="$style.bakset">
+        <n-basket-row
+          v-for="(basketItem, index) in basketRow"
+          :key="index"
+          :item="basketItem"
+          @changeCount="($event) => changeCount($event, index)"
+        />
+        {{ countAll }}
+      </div>
+    </Row>
   </div>
 </template>
 <script>
-import { ref } from '@nuxtjs/composition-api'
+import { computed, ref } from '@nuxtjs/composition-api'
 import Row from './components/row/index'
 
 export default {
@@ -72,14 +83,42 @@ export default {
     })
 
     const sliderItem = ref([
-      { src: './img_slider.jpeg' },
-      { src: '/img_slider-2.jpeg' },
-      { src: '/img_slider.jpeg' },
-      { src: '/img_slider-2.jpeg' }
+      { src: require('~/assets/img/img_slider.jpeg') },
+      { src: require('~/assets/img/img_slider-2.jpeg') },
+      { src: require('~/assets/img/img_slider.jpeg') },
+      { src: require('~/assets/img/img_slider-2.jpeg') }
     ])
+
+    const basketRow = ref([
+      {
+        title: 'Wine',
+        price: 3000,
+        count: 0,
+        img: require('~/assets/img/basket-image.png')
+      },
+      {
+        title: 'white wine',
+        price: 500,
+        count: 0,
+        img: require('~/assets/img/basket-image.png')
+      },
+      {
+        title: 'sweet wine ',
+        price: 800,
+        count: 0,
+        img: require('~/assets/img/basket-image.png')
+      }
+    ])
+    const changeCount = (value, index) => {
+      basketRow.value[index].count = value
+    }
+    const countAll = computed(() => basketRow.value.reduce((acc, val) => acc + val.count * val.price, 0))
     return {
       NCard,
-      sliderItem
+      sliderItem,
+      basketRow,
+      changeCount,
+      countAll
     }
   }
 }
@@ -99,5 +138,9 @@ export default {
   border-radius: 10px;
   background-color: $gray;
   overflow: hidden;
+}
+.bakset {
+  width: 33.5rem;
+  margin: 0 auto;
 }
 </style>
