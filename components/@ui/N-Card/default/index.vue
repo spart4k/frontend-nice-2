@@ -25,14 +25,14 @@
         <p>Автор: {{ $props.author }}</p>
       </template>
       <template v-else>
-        <div :class="$style.body__top">
+        <NuxtLink :class="$style.body__top" tag="div" to="/">
           <h2>
             {{ $props.title }}
           </h2>
           <p>
             {{ $props.description }}
           </p>
-        </div>
+        </NuxtLink>
         <div :class="$style.body__bottom">
           <N-Chip
             v-for="item in $props.chips"
@@ -92,6 +92,7 @@ export default {
     &__top {
       border-bottom: solid 1px rgba($black, .1);
       padding-bottom: 1.03rem;
+      cursor: pointer;
       h2 {
         text-decoration-line: underline;
         font-weight: 600;
