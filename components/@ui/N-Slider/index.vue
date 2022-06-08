@@ -8,22 +8,22 @@
         :arrows="true"
         @beforeChange="syncSliders"
       >
-        <div :class="$style.top">
+        <div :class="$style.item">
           <img src="./img_lights.jpeg" alt="1">
         </div>
-        <div :class="$style.top">
+        <div :class="$style.item">
           <img src="./123.jpeg" alt="1">
         </div>
-        <div :class="$style.top">
+        <div :class="$style.item">
           <img src="./123.jpeg" alt="1">
         </div>
-        <div :class="$style.top">
+        <div :class="$style.item">
           <img src="./123.jpeg" alt="1">
         </div>
-        <div :class="$style.top">
+        <div :class="$style.item">
           <img src="./img_lights.jpeg" alt="1">
         </div>
-        <div :class="$style.top">
+        <div :class="$style.item">
           <img src="./123.jpeg" alt="1">
         </div>
       </VueSlickCarousel>
@@ -33,9 +33,10 @@
         ref="c2"
         :class="$style.slider_bottom"
         :arrows="false"
-        :slides-to-show="4"
+        :slides-to-show="3"
         :as-nav-for="$refs.c1"
         :focus-on-select="true"
+        center-padding="162.5px"
         @beforeChange="syncSlidersBottom"
       >
         <div>
@@ -114,68 +115,55 @@ export default {
 
 .wrapper {
   width: 100%;
+  :global(.slick-initialized) {
+    & > :global(.slick-prev), & > :global(.slick-next) {
+      background-image: url('@/static/icon/arrow-right-slider.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      width: 20px;
+      height: 20px;
+      z-index: 5;
+      &::before {
+        content: "";
+        display: none;
+      }
+    }
+    & > :global(.slick-prev) {
+      transform: rotate(180deg) translateY(50%);
+      left: 2rem;
+    }
+    & > :global(.slick-next) {
+      right: 2rem;
+    }
+  }
   img {
+    height: 100%;
     max-width: 100%;
+    object-position: center;
     object-fit: cover;
   }
+
   .slider_top {
     :global(.slick-slider) {
-      .top {
-        height: 50rem;
-
-        img {
-          max-width: 100%;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: center;
-        }
+      .item {
+        height: 325px;
       }
     }
   }
 
   .slider_bottom {
+    padding: 0 2rem;
     :global(.slick-list) {
       margin-top: 1.42rem;
-      width: calc(100% + 16px);
-      margin-left: -8px;
+      width: calc(100% + 1.2rem);
+      margin-left: -.6rem;
     }
+    :global(.slick-slide) {}
     .item {
-      height: 75px;
-      img {
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-      }
-      margin: 0 8px;
+      //width: 6.5rem;
+      //height: 6.5rem;
+      margin: 0 .6rem;
     }
   }
 }
-
-:global(.slick-initialized) {
-  & > :global(.slick-prev) {
-    background-image: url('@/static/icon/arrow-right-slider.png');
-    background-size: cover;
-    transform: rotate(180deg) translateY(50%);
-    z-index: 5;
-    left: 10px;
-    &::before {
-      content: "";
-      display: none;
-    }
-  }
-}
-:global(.slick-initialized) {
-  & > :global(.slick-next) {
-    background-image: url('@/static/icon/arrow-right-slider.png');
-    background-size: cover;
-    z-index: 5;
-    right: 10px;
-    &::before {
-      content: "";
-      display: none;
-    }
-  }
-}
-
 </style>

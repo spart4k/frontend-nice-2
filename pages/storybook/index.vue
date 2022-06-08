@@ -84,12 +84,12 @@ export default {
   background-color: #c2b6b6;
 }
 .slider {
-  width: 334px;
+  width: 335px;
   margin: 0 auto;
   border: 1px solid white;
-  padding: 20px;
+  padding-bottom: 100px;
   border-radius: 10px;
-  min-height: 100vh;
   background-color: $gray;
+  overflow: hidden;
 }
 </style>
