@@ -48,6 +48,9 @@
           />
         </div>
       </template>
+      <div v-if="$style.footer">
+        <slot name="footer" />
+      </div>
     </div>
   </div>
 </template>
