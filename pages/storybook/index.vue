@@ -22,16 +22,25 @@
     <Row title="Comment">
       <N-Comment :current="43" />
     </Row>
-    <Row title="Карточка Default">
+    <Row flex title="Карточка Default">
       <N-Card-Default
         v-bind="NCard"
         :amount-comment="32"
+      />
+      <N-Card-Music-Detail
+        v-bind="NCard"
+        :amount-comment="32"
+      />
+      <N-Card-Default
+        v-bind="NCard"
+        :amount-comment="32"
+        :images="[{ src: require('~/assets/img/testPlug.jpg') }, { src: require('~/assets/img/testPlug.jpg') }]"
       />
     </Row>
     <Row title="Карточка с видео">
       <N-Card-Default
         v-bind="NCard"
-        :img="''"
+        :images="null"
         :video="NCard.video"
       />
     </Row>
@@ -39,6 +48,13 @@
       <N-Card-General
         v-bind="NCard"
         :chips="['видео', 'музыка', 'хэштэг']"
+      />
+    </Row>
+    <Row title="Карточка чтение">
+      <N-Card-Read
+        :author="cardRead.author"
+        :description="cardRead.description"
+        :books="cardRead.books"
       />
     </Row>
     <Row title="Карточка альбомы">
@@ -61,6 +77,28 @@
         {{ countAll }}
       </div>
     </Row>
+    <Row title="Audio">
+      <N-Audio />
+    </Row>
+    <Row title="Contain">
+      <N-Contain>
+        Фамилия Обломов не связана со словом «облом».
+        5 фактов о литературе из школьной программы, которых вы не знал. Обломов не связана со словом «облом».
+        5 фактов о литературе из школьной программы, которых вы не знал. Фамилия Обломов не связана со словом «облом».
+        5 фактов о литературе из школьной программы, которых вы не знал.
+      </N-Contain>
+    </Row>
+    <Row title="Popup общий">
+      <button @click="openPopup">
+        open
+      </button>
+      <NPopup v-model="activePopup" />
+    </Row>
+    <Row title="TextField">
+      <N-Text-Field v-model="valTextField" />
+      {{ valTextField }}
+      <N-Text-Field v-model="valTextField" md-fz />
+    </Row>
   </div>
 </template>
 <script>
@@ -73,13 +111,20 @@ export default {
     Row
   },
   setup () {
+    const activePopup = ref(false)
+    const valTextField = ref('')
     const NCard = ref({
-      img: require('~/assets/img/testPlug.jpg'),
+      images: [{ src: require('~/assets/img/testPlug.jpg') }],
       video: require('~/assets/video/testPlug.mp4'),
       title: 'Название альбома',
       description: 'Фамилия Обломов не связана со словом «облом». 5 фактов о литературе из школьной программы, которых вы не знал',
       chips: ['музыка'],
-      amountComment: 0
+      amountComment: 0,
+      audio: [
+        { title: 'Название композиции', src: '/media/cc0-audio/t-rex-roar.mp3', id: '123' },
+        { title: 'Название композиции', src: '/media/cc0-audio/t-rex-roar.mp3', id: '1233' },
+        { title: 'Название композиции', src: '/media/cc0-audio/t-rex-roar.mp3', id: '12321' }
+      ]
     })
 
     const sliderItem = ref([
@@ -88,6 +133,36 @@ export default {
       { src: require('~/assets/img/img_slider.jpeg') },
       { src: require('~/assets/img/img_slider-2.jpeg') }
     ])
+    const author = {
+      name: 'Адрюша Евкакий',
+      src: ''
+    }
+
+    const cardRead = {
+      author: { ...author },
+      description: 'Биография автора на 250 символов максимум.  Биография автора на 250 знаков максимум.',
+      books: [
+        {
+          title: 'Название книги',
+          description: 'Фамилия Обломов не связана со словом «облом». ' +
+          '5 фактов о литературе из школьной программы, которых вы не знал. Обломов не связана со словом «облом». ' +
+          '5 фактов о литературе из школьной программы, которых вы не знал. Фамилия Обломов не связана со словом «облом». ' +
+          '5 фактов о литературе из школьной программы, которых вы не знал.'
+        },
+        {
+          title: 'Название книги',
+          description: 'Фамилия Обломов не связана со словом «облом». ' +
+            '5 фактов о литературе из школьной программы, которых вы не 1знал. Обломов не связана со словом «облом». ' +
+            '5 фактов о литературе из школьной программы, которых вы не знал. Фамилия Обломов не связана со словом «облом». ' +
+            '5 фактов о литературе из школьной программы, которых вы не знал.'
+        }
+      ]
+    }
+
+    const openPopup = () => {
+      activePopup.value = true
+    }
+
 
     const basketRow = ref([
       {
@@ -119,6 +194,12 @@ export default {
       basketRow,
       changeCount,
       countAll
+      sliderItem,
+      author,
+      cardRead,
+      activePopup,
+      valTextField,
+      openPopup
     }
   }
 }

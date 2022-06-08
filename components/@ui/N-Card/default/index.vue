@@ -1,20 +1,26 @@
 <template>
   <div :class="$style.card">
-    <div
-      v-if="$props.img"
-      :class="[
-        $style.hat,
-      ]"
-      :style="{
-        backgroundImage: `url('${$props.img}')`,
-        height: `${$props.hatHeight || 23.6}rem`
-      }"
-    />
-    <div v-else-if="$props.video">
+    <template v-if="$props.images && $props.images.length > 1">
+      <N-Slider :slider-item="$props.images" />
+    </template>
+    <template v-else-if="$props.images && $props.images.length === 1">
+      <div
+        v-for="item in $props.images"
+        :key="item.src"
+        :class="[
+          $style.hat,
+        ]"
+        :style="{
+          backgroundImage: `url('${item.src}')`,
+          height: `${$props.hatHeight || 23.6}rem`
+        }"
+      />
+    </template>
+    <template v-else-if="$props.video">
       <video controls="controls">
         <source :src="$props.video" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
       </video>
-    </div>
+    </template>
     <div
       :class="[
         $style.body,
@@ -48,6 +54,9 @@
           />
         </div>
       </template>
+      <div v-if="$slots.footer" :class="$style.body__footer">
+        <slot name="footer" />
+      </div>
     </div>
   </div>
 </template>
@@ -105,6 +114,9 @@ export default {
     &__bottom {
       display: flex;
       margin-top: 1.36rem;
+    }
+    &__footer {
+      margin-top: 3rem;
     }
     .comment {
       margin-left: auto;

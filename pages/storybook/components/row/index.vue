@@ -3,7 +3,7 @@
     <div :class="$style.title">
       {{ title }}
     </div>
-    <div>
+    <div :class="[$style.body, $props.flex && $style.flex]">
       <slot />
     </div>
   </div>
@@ -15,6 +15,10 @@ export default {
     title: {
       type: String,
       default: 'Заголовок'
+    },
+    flex: {
+      type: Boolean,
+      default: false
     }
   }
 }
@@ -32,5 +36,11 @@ export default {
 .title {
   color: $yellow;
   @include title-sm;
+}
+.body {
+  &.flex {
+    display: flex;
+    align-items: flex-start;
+  }
 }
 </style>

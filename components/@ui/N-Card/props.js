@@ -1,9 +1,9 @@
 export default {
   name: 'NCardDefault',
   props: {
-    img: {
-      type: String,
-      default: ''
+    images: {
+      type: Array,
+      default: null
     },
     video: {
       type: String,
