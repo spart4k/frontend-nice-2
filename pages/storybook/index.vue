@@ -22,8 +22,12 @@
     <Row title="Comment">
       <N-Comment :current="43" />
     </Row>
-    <Row title="Карточка Default">
+    <Row flex title="Карточка Default">
       <N-Card-Default
+        v-bind="NCard"
+        :amount-comment="32"
+      />
+      <N-Card-Music-Detail
         v-bind="NCard"
         :amount-comment="32"
       />
@@ -50,6 +54,9 @@
     <Row title="Chip">
       <N-Chip>искусство</N-Chip>
     </Row>
+    <Row title="Audio">
+      <N-Audio />
+    </Row>
   </div>
 </template>
 <script>
@@ -68,7 +75,12 @@ export default {
       title: 'Название альбома',
       description: 'Фамилия Обломов не связана со словом «облом». 5 фактов о литературе из школьной программы, которых вы не знал',
       chips: ['музыка'],
-      amountComment: 0
+      amountComment: 0,
+      audio: [
+        { title: 'Название композиции', src: '/media/cc0-audio/t-rex-roar.mp3', id: '123' },
+        { title: 'Название композиции', src: '/media/cc0-audio/t-rex-roar.mp3', id: '1233' },
+        { title: 'Название композиции', src: '/media/cc0-audio/t-rex-roar.mp3', id: '12321' }
+      ]
     })
     return {
       NCard

@@ -48,7 +48,7 @@
           />
         </div>
       </template>
-      <div v-if="$style.footer">
+      <div v-if="$slots.footer" :class="$style.body__footer">
         <slot name="footer" />
       </div>
     </div>
@@ -108,6 +108,9 @@ export default {
     &__bottom {
       display: flex;
       margin-top: 1.36rem;
+    }
+    &__footer {
+      margin-top: 3rem;
     }
     .comment {
       margin-left: auto;
