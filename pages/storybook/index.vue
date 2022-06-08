@@ -14,6 +14,11 @@
       <N-Icon name="message" />
       <N-Icon name="minus" />
     </Row>
+    <Row title="title">
+      <div :class="$style.slider">
+        <N-Slider />
+      </div>
+    </Row>
     <Row title="Comment">
       <N-Comment :current="43" />
     </Row>
@@ -76,7 +81,15 @@ export default {
 .storybook {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  background-color: #c2b6b6;
+}
+.slider {
+  width: 335px;
+  margin: 0 auto;
+  border: 1px solid white;
+  padding-bottom: 100px;
+  border-radius: 10px;
   background-color: $gray;
+  overflow: hidden;
 }
 </style>
