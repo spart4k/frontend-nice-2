@@ -4,16 +4,26 @@
     :class="$style.wrapper"
     @click="close"
   >
-    <N-Contain :class="$style.popup">
+    <N-Contain :class="$style.popup" @click.stop>
+      <div :class="$style.hat">
+        <h2>{{ title }}</h2>
+        <n-icon :class="$style.close" name="close" @click.stop="close" />
+      </div>
       <slot />
     </N-Contain>
   </div>
 </template>
 <script lang="js">
+import NIcon from '~/components/@ui/N-Icon'
 export default {
   name: 'NPopup',
+  components: { NIcon },
   props: {
-    value: Boolean
+    value: Boolean,
+    title: {
+      type: String,
+      default: ''
+    }
   },
   setup (props, ctx) {
     const { emit } = ctx
@@ -29,6 +39,7 @@ export default {
 <style lang="scss" module>
   .wrapper {
     position: fixed;
+    z-index: 10;
     top: 0;
     left: 0;
     display: flex;
@@ -42,6 +53,14 @@ export default {
     padding-bottom: 3.5rem;
     .popup {
       margin-top: 14.7rem;
+    }
+    .hat {
+      display: flex;
+      align-items: center;
+    }
+    .close {
+      margin-left: auto;
+      cursor: pointer;
     }
   }
 </style>

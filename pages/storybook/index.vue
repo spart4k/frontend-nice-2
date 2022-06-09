@@ -92,15 +92,27 @@
       <button @click="openPopup">
         open
       </button>
-      <NPopup v-model="activePopup" />
+      <NPopup v-model="activePopup" title="Вход и регистрация">
+        <FormAuthDefault />
+      </NPopup>
     </Row>
     <Row title="TextField">
-      <N-Text-Field v-model="valTextField" />
-      {{ valTextField }}
+      <N-Text-Field v-model="valTextField" title="Имя" />
+      шрифт больше
       <N-Text-Field v-model="valTextField" md-fz />
+      <N-Text-Field v-model="valTextField" mask="+7 (###) ###-##-##" md-fz />
     </Row>
-    <Row>
+    <Row title="TextArea">
       <N-Text-Area v-model="valTextArea" />
+    </Row>
+    <Row title="Form-auth">
+      <FormAuthDefault />
+    </Row>
+    <Row title="FormAuthConfirmation">
+      <FormAuthConfirmation />
+    </Row>
+    <Row title="open auth">
+      <FormAuthSteps />
     </Row>
   </div>
 </template>
@@ -114,10 +126,10 @@ export default {
     Row
   },
   setup () {
-    const activePopup = ref(false)
+    const activePopup = ref(true)
     const valTextField = ref('')
     const valTextArea = ref('')
-
+    const test = ref()
     const NCard = ref({
       images: [{ src: require('~/assets/img/testPlug.jpg') }],
       video: require('~/assets/video/testPlug.mp4'),
@@ -168,7 +180,6 @@ export default {
       activePopup.value = true
     }
 
-
     const basketRow = ref([
       {
         title: 'Wine',
@@ -197,15 +208,15 @@ export default {
       NCard,
       sliderItem,
       basketRow,
-      changeCount,
-      countAll
-      sliderItem,
+      countAll,
       author,
       cardRead,
       activePopup,
       valTextField,
       valTextArea,
-      openPopup
+      test,
+      openPopup,
+      changeCount
     }
   }
 }

@@ -1,5 +1,8 @@
 <template>
-  <div :class="$style.contain">
+  <div
+    :class="$style.contain"
+    @click="$emit('click', $event)"
+  >
     <slot />
   </div>
 </template>

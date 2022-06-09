@@ -5,38 +5,62 @@
       $props.mdFz && $style.mdFz
     ]"
   >
-    <input v-model="getValue" type="text" @keydown.enter="$emit('keydown', $event)">
+    <h3 v-if="$props.title" :class="$style.title">
+      {{ $props.title }}
+    </h3>
+    <div :class="$style.wrapperInput">
+      <input
+        v-model="proxyVal"
+        v-mask="$props.mask"
+        type="text"
+        :placeholder="$props.placeholder"
+        @keydown.enter="$emit('keydown', $event)"
+      >
+    </div>
   </label>
 </template>
 <script lang="js">
-import { computed } from '@nuxtjs/composition-api'
+import { ref, watch } from '@nuxtjs/composition-api'
 export default {
   name: 'NTextField',
   props: {
     value: undefined,
+    title: {
+      type: String,
+      default: ''
+    },
     mdFz: {
       type: Boolean,
       default: false
+    },
+    mask: {
+      type: String,
+      default: ''
+    },
+    placeholder: {
+      type: String,
+      default: ''
     }
   },
   setup (props, ctx) {
     const { emit } = ctx
-    const getValue = computed({
-      get () {
-        return props.value
-      },
-      set (val) {
-        emit('input', val)
-      }
+    const proxyVal = ref(props.value)
+
+    watch(proxyVal, () => {
+      emit('input', proxyVal.value)
     })
 
-    const test = () => {
-      console.log(true)
-    }
+    // const getValue = computed({
+    //   get () {
+    //     return props.value
+    //   },
+    //   set (val) {
+    //     emit('input', val)
+    //   }
+    // })
 
     return {
-      getValue,
-      test
+      proxyVal
     }
   }
 }
@@ -44,15 +68,23 @@ export default {
 <style lang="scss" module>
 .textField {
   display: block;
-  height: 5.1rem;
-  padding-left: 1.478rem;
-  padding-right: 1.478rem;
-  background-color: $gray2;
-  border-radius: .4rem;
+
   &.mdFz {
     input {
       @include text;
     }
+  }
+  h3 {
+    color: $fontColorDefault;
+    @include text-md;
+    margin-bottom: 0.75rem;
+  }
+  .wrapperInput {
+    height: 5.1rem;
+    padding-left: 1.478rem;
+    padding-right: 1.478rem;
+    background-color: $gray2;
+    border-radius: .4rem;
   }
   input {
     width: 100%;

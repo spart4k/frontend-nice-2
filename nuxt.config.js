@@ -25,13 +25,15 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '@plugins/v-mask.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: {
     dirs: [
       '~/components',
-      '~/components/@ui'
+      '~/components/@ui',
+      '~/components/@logic'
     ]
   },
 
@@ -47,7 +49,8 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    '@nuxtjs/style-resources'
+    '@nuxtjs/style-resources',
+    '@nuxtjs/auth-next'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -61,7 +64,9 @@ export default {
       '~/assets/style/_variables.scss'
     ]
   },
-
+  auth: {
+    // Options
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }
