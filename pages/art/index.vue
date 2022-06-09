@@ -1,32 +1,35 @@
 <template>
-  <n-intro :description="introTitle">
-    <N-Card-Default
-      v-bind="NCard"
-      :amount-comment="32"
-      :images="[{ src: require('~/assets/img/testPlug.jpg') }, { src: require('~/assets/img/testPlug.jpg') }]"
-    />
-    <N-Card-Default
-      v-bind="NCard"
-      :amount-comment="32"
-      :images="[{ src: require('~/assets/img/testPlug.jpg') }, { src: require('~/assets/img/testPlug.jpg') }]"
-    />
-    <N-Card-Default
-      v-bind="NCard"
-      :amount-comment="32"
-      :images="[{ src: require('~/assets/img/testPlug.jpg') }, { src: require('~/assets/img/testPlug.jpg') }]"
-    />
-  </n-intro>
+  <div>
+    <n-intro :description="introTitle">
+      <N-Card-Default
+        v-bind="NCard"
+        :amount-comment="32"
+        :images="[{ src: require('~/assets/img/testPlug.jpg') }, { src: require('~/assets/img/testPlug.jpg') }]"
+      />
+      <N-Card-Default
+        v-bind="NCard"
+        :amount-comment="32"
+        :images="[{ src: require('~/assets/img/testPlug.jpg') }, { src: require('~/assets/img/testPlug.jpg') }]"
+      />
+      <N-Card-Default
+        v-bind="NCard"
+        :amount-comment="32"
+        :images="[{ src: require('~/assets/img/testPlug.jpg') }, { src: require('~/assets/img/testPlug.jpg') }]"
+      />
+    </n-intro>
+  </div>
 </template>
 
 <script>
 import { ref } from '@nuxtjs/composition-api'
 
 export default {
-  name: 'IndexPage',
+  name: 'NMusic',
+  layout: 'default',
   setup () {
     const introTitle = ref({
-      title: 'Главная',
-      subtitle: 'творческое объединение'
+      title: 'ИСКУССТВО',
+      subtitle: 'чето про искусство чето про искусство'
 
     })
     const NCard = ref({
@@ -43,9 +46,14 @@ export default {
       ]
     })
     return {
-      introTitle,
-      NCard
+      NCard,
+      introTitle
     }
   }
 }
 </script>
+
+<style scoped lang="scss" module>
+.wrapper {
+}
+</style>

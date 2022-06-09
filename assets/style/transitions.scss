@@ -8,7 +8,7 @@
 }
 
 .fade-up-enter-active, .fade-up-leave-active {
-  transition: opacity .4s ease, transform .4s ease;
+  transition: opacity .2s ease, transform .2s ease;
 }
 .fade-up-enter, .fade-up-leave-to {
   opacity: 0;

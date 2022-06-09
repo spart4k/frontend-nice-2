@@ -75,7 +75,7 @@ export default {
   width: 100%;
   :global(.slick-initialized) {
     & > :global(.slick-prev), & > :global(.slick-next) {
-      background-image: url('@/static/icon/arrow-right-slider.png');
+      background-image: url('@/static/icon/icon-arrow-right-slider.png');
       background-size: contain;
       background-repeat: no-repeat;
       width: 20px;
@@ -95,7 +95,6 @@ export default {
     }
   }
   img {
-    height: 100%;
     max-width: 100%;
     object-position: center;
     object-fit: cover;
@@ -106,6 +105,9 @@ export default {
       .item {
         height: 32.5rem;
       }
+    }
+    img {
+     height: 100%;
     }
   }
 

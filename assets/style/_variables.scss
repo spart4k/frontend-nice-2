@@ -1,5 +1,5 @@
 $tabletWidth: 900px;
-$mobileWidth: 400px;
+$mobileWidth: 450px;
 
 $border-radius-1: 1rem;
 $border-radius-2: .6rem;
@@ -15,9 +15,10 @@ $pink: #FFC8C8;
 $blue: #BBD6FF;
 $blueBlack: #3E5366;
 $blueBlack2: #2F2E4D;
-$headerHeight: 9rem;
+$headerHeight: 7.8rem;
 :root {
-  --mobile-width: $mobileWidth
+  --mobile-width: $mobileWidth;
+  --header-height: 7.8rem;
 }
 
 @mixin montserratRegular {
@@ -44,10 +45,18 @@ $headerHeight: 9rem;
   font-family: 'Montserrat-Black', sans-serif;
   font-weight: 900;
 }
+@mixin montserratBlack {
+  font-family: 'Montserrat-Black', sans-serif;
+  font-weight: 900;
+}
+@mixin Bankir-Retro {
+  font-family: 'Bankir-Retro', sans-serif;
+  font-weight: 400;
+}
 
 @mixin container {
-  padding-left: 2.1rem;
-  padding-right: 2.1rem;
+  padding-left: 1.95rem;
+  padding-right: 1.95rem;
 }
 
 @mixin title {
