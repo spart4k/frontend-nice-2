@@ -163,7 +163,6 @@ export default {
       activePopup.value = true
     }
 
-
     const basketRow = ref([
       {
         title: 'Wine',
@@ -193,8 +192,7 @@ export default {
       sliderItem,
       basketRow,
       changeCount,
-      countAll
-      sliderItem,
+      countAll,
       author,
       cardRead,
       activePopup,
