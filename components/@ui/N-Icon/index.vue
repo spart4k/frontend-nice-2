@@ -1,5 +1,9 @@
 <template>
-  <div class="icon" v-html="require(`~/static/icon/icon-${name}.svg?raw`)" />
+  <div
+    class="icon"
+    @click="$emit('click', $event)"
+    v-html="require(`~/static/icon/icon-${name}.svg?raw`)"
+  />
 </template>
 <script lang="js">
 export default {
