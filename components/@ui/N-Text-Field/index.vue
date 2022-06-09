@@ -5,7 +5,7 @@
       $props.mdFz && $style.mdFz
     ]"
   >
-    <input v-model="getValue" type="text" @keydown.enter="test">
+    <input v-model="getValue" type="text" @keydown.enter="$emit('keydown', $event)">
   </label>
 </template>
 <script lang="js">

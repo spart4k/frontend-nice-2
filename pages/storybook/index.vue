@@ -88,6 +88,9 @@
       {{ valTextField }}
       <N-Text-Field v-model="valTextField" md-fz />
     </Row>
+    <Row>
+      <N-Text-Area v-model="valTextArea" />
+    </Row>
   </div>
 </template>
 <script>
@@ -102,6 +105,8 @@ export default {
   setup () {
     const activePopup = ref(false)
     const valTextField = ref('')
+    const valTextArea = ref('')
+
     const NCard = ref({
       images: [{ src: require('~/assets/img/testPlug.jpg') }],
       video: require('~/assets/video/testPlug.mp4'),
@@ -159,6 +164,7 @@ export default {
       cardRead,
       activePopup,
       valTextField,
+      valTextArea,
       openPopup
     }
   }
