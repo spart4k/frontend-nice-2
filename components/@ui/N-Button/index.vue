@@ -10,6 +10,7 @@ export default {
   props: {
     typeButton: {
       type: String,
+      default: '',
       required: false
     }
   }

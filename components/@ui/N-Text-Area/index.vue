@@ -1,5 +1,6 @@
 <template>
   <div :class="$style.wrapper">
+    <h3>{{ $props.title }}</h3>
     <textarea
       ref="textAreaRef"
       v-model="getVal"
@@ -13,7 +14,11 @@ import { computed, ref } from '@nuxtjs/composition-api'
 export default {
   name: 'NTextArea',
   props: {
-    value: undefined
+    value: undefined,
+    title: {
+      type: String,
+      default: ''
+    }
   },
   setup (props, ctx) {
     const { emit } = ctx

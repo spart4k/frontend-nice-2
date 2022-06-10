@@ -119,6 +119,26 @@
     <Row title="auth steps">
       <n-button>button</n-button>
     </Row>
+    <Row title="form profile">
+      <Form-Profile-Default />
+    </Row>
+    <Row title="vTooltip">
+      <N-Tooltip :class="$style.ml3">
+        <N-Icon name="user" />
+        <template #data>
+          <N-Contain>
+            <N-Audio :class="$style.widthAudio" />
+          </N-Contain>
+        </template>
+      </N-Tooltip>
+    </Row>
+    <Row>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+    </Row>
   </div>
 </template>
 <script>
@@ -249,5 +269,11 @@ export default {
 .bakset {
   width: 33.5rem;
   margin: 0 auto;
+}
+.ml3 {
+  margin-left: 30rem;
+}
+.widthAudio {
+  width: 29rem;
 }
 </style>
