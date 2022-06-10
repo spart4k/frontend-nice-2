@@ -98,9 +98,8 @@
     </Row>
     <Row title="TextField">
       <N-Text-Field v-model="valTextField" title="Имя" />
-      шрифт больше
-      <N-Text-Field v-model="valTextField" md-fz />
-      <N-Text-Field v-model="valTextField" mask="+7 (###) ###-##-##" md-fz />
+      <N-Text-Field v-model="valTextField" title="шрифт побольше" md-fz />
+      <N-Text-Field v-model="valTextField" title="телефон" mask="+7 (###) ###-##-##" md-fz />
     </Row>
     <Row title="TextArea">
       <N-Text-Area v-model="valTextArea" />
@@ -111,22 +110,31 @@
     <Row title="FormAuthConfirmation">
       <FormAuthConfirmation />
     </Row>
-    <Row title="open auth">
-      <FormAuthSteps />
+    <Row title="auth steps">
+      <FormAuthSteps v-model="activeAuthSteps" />
+      <n-button @click="activeAuthSteps = true">
+        open
+      </n-button>
+    </Row>
+    <Row title="auth steps">
+      <n-button>button</n-button>
     </Row>
   </div>
 </template>
 <script>
 import { computed, ref } from '@nuxtjs/composition-api'
 import Row from './components/row/index'
+import NButton from '~/components/@ui/N-Button'
 
 export default {
   name: 'StoryBook',
   components: {
+    NButton,
     Row
   },
   setup () {
-    const activePopup = ref(true)
+    const activePopup = ref(false)
+    const activeAuthSteps = ref(false)
     const valTextField = ref('')
     const valTextArea = ref('')
     const test = ref()
@@ -208,7 +216,6 @@ export default {
       NCard,
       sliderItem,
       basketRow,
-      changeCount,
       countAll,
       author,
       cardRead,
@@ -216,7 +223,9 @@ export default {
       valTextField,
       valTextArea,
       test,
+      activeAuthSteps,
       openPopup,
+      changeCount
     }
   }
 }

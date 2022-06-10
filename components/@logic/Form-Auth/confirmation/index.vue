@@ -1,17 +1,17 @@
 <template>
-  <N-Contain>
+  <div :class="$style.wrapper">
     <h2 :class="$style.title">
       Мы отправили код на номер
       {{ $props.titleTel }}
     </h2>
 
     <form @submit.prevent="onSubmit">
-      <n-text-field v-model="formData.code" :class="$style.input" title="Имя" />
+      <n-text-field v-model="formData.code" title="Код из СМС" />
       <n-button :class="$style.button" type="submit">
-        Зарегистрироваться
+        подтвердить
       </n-button>
     </form>
-  </N-Contain>
+  </div>
 </template>
 <script lang="js">
 import { reactive } from '@nuxtjs/composition-api'
@@ -24,12 +24,13 @@ export default {
       default: ''
     }
   },
-  setup () {
+  setup (props, ctx) {
+    const { emit } = ctx
     const formData = reactive({
       code: ''
     })
     const onSubmit = () => {
-      console.log(formData)
+      emit('closePopup')
     }
 
     return {
@@ -40,7 +41,9 @@ export default {
 }
 </script>
 <style lang="scss" module>
-.input {}
+.wrapper {
+  margin-top: 2.7rem;
+}
 .button {
   margin-top: 2.3rem;
 }
