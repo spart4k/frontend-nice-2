@@ -1,6 +1,7 @@
 <template>
   <div>
     <div :class="$style.intro">
+      <div :class="$style.bg" />
       <div ref="wrapper" :class="$style.wrapper">
         <div :class="[$style.intro__container, scrollingContent && $style.scrolling]">
           <h1 v-if="!isHomePage" :class="$style.intro__title">
@@ -52,16 +53,16 @@ export default {
 
     onMounted(() => {
       // document.body.style.backgroundImage = `url(${require('@/assets/img/background.png')})`
-      const vh = window.innerHeight * 0.01
-      document.documentElement.style.setProperty('--vh', `${vh}px`)
-      window.addEventListener('resize', () => {
-        // We execute the same script as before
-        const vh = window.innerHeight * 0.01
-        document.documentElement.style.setProperty('--vh', `${vh}px`)
-      })
+      // const vh = window.innerHeight * 0.01
+      // document.documentElement.style.setProperty('--vh', `${vh}px`)
+      // window.addEventListener('resize', () => {
+      //   // We execute the same script as before
+      //   const vh = window.innerHeight * 0.01
+      //   document.documentElement.style.setProperty('--vh', `${vh}px`)
+      // })
       const options = {
-        root: wrapper.value,
-        threshold: 0.01,
+        root: null,
+        threshold: 0.2,
         rootMargin: '0px'
       }
 
@@ -75,7 +76,6 @@ export default {
 
       const observer = new IntersectionObserver(callback, options)
       observer.observe(content.value)
-      observer.observe(anchor.value)
     })
 
     const scrollTo = () => {
@@ -98,25 +98,40 @@ export default {
 .intro {
   width: 100%;
   min-height: -webkit-fill-available;
-  height: calc(var(--vh, 1vh) * 100);
-  background-image: url('@/assets/img/background.png');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  //height: calc(var(--vh, 1vh) * 100);
+  height: calc(100% - var(--header-height));
   color: $white;
   padding-top: $headerHeight;
   overflow: auto;
+  .bg {
+    background-image: url('@/assets/img/background.png');
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    min-height: 100vh;
+    //height: calc(100% - var(--footer-height));
+    height: -webkit-fill-available;
+    background-size: cover;
+  }
   .wrapper {
-    //height: 100vh; /* Fallback for browsers that do not support Custom Properties */
     height: 100%;
-    //height: 100vh;
-    //min-height: -webkit-fill-available;
-    //position: relative;
-    //z-index: 2;
+    position: relative;
+    z-index: 2;
     overflow: auto;
     &::-webkit-scrollbar {
       display: none;
     }
+  }
+  .shim {
+    min-height: -webkit-fill-available;
+    //height: calc((var(--vh, 1vh) * 100) - var(--header-height));
+    height: calc(100vh - var(--header-height));
+    margin-top: 7.9rem;
+    width: 100%;
+    position: relative;
+    z-index: 10;
   }
   img {
     max-width: 100%;
@@ -151,14 +166,6 @@ export default {
     //top: 10rem;
     width: 100%;
   }
-  .shim {
-    min-height: -webkit-fill-available;
-    height: calc((var(--vh, 1vh) * 100) - var(--header-height));
-    margin-top: 7.9rem;
-    width: 100%;
-    position: relative;
-    z-index: 10;
-  }
   &__logo {
     width: 20.2rem;
   }
@@ -177,7 +184,7 @@ export default {
 }
 .linkAnchor {
   position: fixed;
-  z-index: 11;
+  z-index: 10;
   bottom: 6.8rem;
   left: 50%;
   transform: translateX(-50%);
