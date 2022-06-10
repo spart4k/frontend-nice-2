@@ -14,7 +14,9 @@
   </div>
 </template>
 <script lang="js">
+import { watch } from '@nuxtjs/composition-api'
 import NIcon from '~/components/@ui/N-Icon'
+
 export default {
   name: 'NPopup',
   components: { NIcon },
@@ -30,6 +32,14 @@ export default {
     const close = () => {
       emit('input', false)
     }
+    watch(() => props.value, () => {
+      const body = document.querySelector('body')
+      if (props.value) {
+        body.style.overflow = 'hidden'
+        return
+      }
+      body.style.overflow = 'visible'
+    })
     return {
       close
     }

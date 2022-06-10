@@ -15,6 +15,10 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  // transition: {
+  //   mode: 'in-out'
+  // },
+  // cache: false,
   server: {
     port: 8000 // default: 3000
   },
@@ -28,7 +32,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '@plugins/v-mask.js'
+    '@plugins/v-mask.js',
+    '@plugins/v-tooltip.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
