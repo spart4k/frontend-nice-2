@@ -95,7 +95,7 @@ export default {
     }
   }
   img {
-    max-width: 100%;
+    width: 100%;
     object-position: center;
     object-fit: cover;
   }

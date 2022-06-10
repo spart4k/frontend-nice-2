@@ -15,10 +15,12 @@ $pink: #FFC8C8;
 $blue: #BBD6FF;
 $blueBlack: #3E5366;
 $blueBlack2: #2F2E4D;
-$headerHeight: 7.8rem;
+$blueBlack3: #2E3E4D;
+$headerHeight: 8.8rem;
 :root {
   --mobile-width: $mobileWidth;
-  --header-height: 7.8rem;
+  --header-height: 8.8rem;
+  --vh: 10rem;
 }
 
 @mixin montserratRegular {

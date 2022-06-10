@@ -216,7 +216,7 @@ export default {
       valTextField,
       valTextArea,
       test,
-      openPopup,
+      openPopup
     }
   }
 }

@@ -1,9 +1,7 @@
 <template>
   <div>
     <the-header :header-items="headerItems" />
-    <main :class="$style.main">
-      <Nuxt />
-    </main>
+    <Nuxt />
   </div>
 </template>
 

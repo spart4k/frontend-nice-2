@@ -1,28 +1,31 @@
 <template>
-  <div :class="$style.intro">
-    <div ref="wrapper" :class="$style.wrapper">
-      <div :class="$style.intro__container">
-        <h1 v-if="!isHomePage" :class="$style.intro__title">
-          {{ description.title }}
-        </h1>
+  <div>
+    <div :class="$style.intro">
+      <div ref="wrapper" :class="$style.wrapper">
+        <div :class="[$style.intro__container, scrollingContent && $style.scrolling]">
+          <h1 v-if="!isHomePage" :class="$style.intro__title">
+            {{ description.title }}
+          </h1>
 
-        <div :class="isHomePage && $style.intro__logo_subtitle_wrapper">
-          <div :class="[isHomePage && $style.intro__subtitle_homePage ,$style.intro__subtitle]">
-            {{ description.subtitle }}
-          </div>
-          <div v-if="isHomePage" :class="$style.intro__logo">
-            <img src="@/assets/img/logo.png" alt="логоти nice">
+          <div :class="[isHomePage && $style.intro__logo_subtitle_wrapper]">
+            <div :class="[isHomePage && $style.intro__subtitle_homePage ,$style.intro__subtitle]">
+              {{ description.subtitle }}
+            </div>
+            <div v-if="isHomePage" :class="$style.intro__logo">
+              <n-logo size="big" />
+            </div>
           </div>
         </div>
-
+        <div :class="$style.shim" />
         <div ref="anchor" :class="[$style.linkAnchor, scrollingContent && $style.scrolling]">
           <div @click="scrollTo">
             <n-icon name="arrow-top" />
           </div>
         </div>
-      </div>
-      <div ref="content" :class="$style.content">
-        <slot />
+        <div ref="content" :class="$style.content">
+          <slot />
+        </div>
+        <the-footer />
       </div>
     </div>
   </div>
@@ -48,9 +51,18 @@ export default {
     const isHomePage = computed(() => route.value.name === 'index')
 
     onMounted(() => {
+      // document.body.style.backgroundImage = `url(${require('@/assets/img/background.png')})`
+      const vh = window.innerHeight * 0.01
+      document.documentElement.style.setProperty('--vh', `${vh}px`)
+      window.addEventListener('resize', () => {
+        // We execute the same script as before
+        const vh = window.innerHeight * 0.01
+        document.documentElement.style.setProperty('--vh', `${vh}px`)
+      })
       const options = {
-        rootMargin: '0px',
-        threshold: 0.01
+        root: wrapper.value,
+        threshold: 0.01,
+        rootMargin: '0px'
       }
 
       const callback = (entries) => {
@@ -63,6 +75,7 @@ export default {
 
       const observer = new IntersectionObserver(callback, options)
       observer.observe(content.value)
+      observer.observe(anchor.value)
     })
 
     const scrollTo = () => {
@@ -84,13 +97,27 @@ export default {
 <style scoped lang="scss" module>
 .intro {
   width: 100%;
-  height: 100vh;
+  min-height: -webkit-fill-available;
+  height: calc(var(--vh, 1vh) * 100);
   background-image: url('@/assets/img/background.png');
+  background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   color: $white;
   padding-top: $headerHeight;
-  overflow: hidden;
+  overflow: auto;
+  .wrapper {
+    //height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+    height: 100%;
+    //height: 100vh;
+    //min-height: -webkit-fill-available;
+    //position: relative;
+    //z-index: 2;
+    overflow: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
   img {
     max-width: 100%;
   }
@@ -109,6 +136,7 @@ export default {
     @include subtitle;
     width: auto;
   }
+
   &__logo_subtitle_wrapper {
     display: flex;
     flex-direction: column;
@@ -116,8 +144,20 @@ export default {
   }
   &__container {
     @include container;
-    height: calc(100vh - var(--header-height) - 7.9rem);
     margin-top: 7.9rem;
+    position: fixed;
+    z-index: 1;
+    transition: opacity 0.3s ease-in-out;
+    //top: 10rem;
+    width: 100%;
+  }
+  .shim {
+    min-height: -webkit-fill-available;
+    height: calc((var(--vh, 1vh) * 100) - var(--header-height));
+    margin-top: 7.9rem;
+    width: 100%;
+    position: relative;
+    z-index: 10;
   }
   &__logo {
     width: 20.2rem;
@@ -128,26 +168,25 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  z-index: 10;
   & > * + * {
     margin-top: 2rem;
   }
-}
-.wrapper {
-  overflow: auto;
-  height: calc(100vh - var(--header-height));
+  margin-bottom: 2rem;
 }
 .linkAnchor {
-  position: absolute;
+  position: fixed;
+  z-index: 11;
   bottom: 6.8rem;
   left: 50%;
   transform: translateX(-50%);
   pointer-events: visible;
   transition: opacity 0.1s ease-in-out;
-  z-index: 1;
   cursor: pointer;
-  &.scrolling {
-    opacity: 0;
-    pointer-events: none;
-  }
+}
+.scrolling {
+  opacity: 0;
+  pointer-events: none;
 }
 </style>

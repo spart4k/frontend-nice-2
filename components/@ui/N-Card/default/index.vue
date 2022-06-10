@@ -71,7 +71,8 @@ export default {
 <style lang="scss" module>
   .card {
     background-color: $white;
-    width: 32.5rem;
+    //width: 32.5rem;
+    width: 100%;
     border-radius: $border-radius-1;
     overflow: hidden;
     video {
