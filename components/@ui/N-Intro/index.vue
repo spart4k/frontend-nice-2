@@ -1,35 +1,35 @@
 <template>
-  <div>
+  <main>
     <div :class="$style.intro">
-      <div :class="$style.bg" />
-      <div ref="wrapper" :class="$style.wrapper">
-        <div :class="[$style.intro__container, scrollingContent && $style.scrolling]">
-          <h1 v-if="!isHomePage" :class="$style.intro__title">
-            {{ description.title }}
-          </h1>
+      <div :class="$style.bg" :style="{ backgroundImage: backgroundImage}">
+        <img v-if="!isHomePage && image" :src="image">
+      </div>
+      <div :class="[$style.intro__container, scrollingContent && $style.scrolling]">
+        <h1 v-if="!isHomePage" :class="$style.intro__title">
+          {{ description.title }}
+        </h1>
 
-          <div :class="[isHomePage && $style.intro__logo_subtitle_wrapper]">
-            <div :class="[isHomePage && $style.intro__subtitle_homePage ,$style.intro__subtitle]">
-              {{ description.subtitle }}
-            </div>
-            <div v-if="isHomePage" :class="$style.intro__logo">
-              <n-logo size="big" />
-            </div>
+        <div :class="[isHomePage && $style.intro__logo_subtitle_wrapper]">
+          <div v-if="description.subtitle" :class="[isHomePage && $style.intro__subtitle_homePage ,$style.intro__subtitle]">
+            {{ description.subtitle }}
+          </div>
+          <div v-if="isHomePage" :class="$style.intro__logo">
+            <n-logo size="big" />
           </div>
         </div>
-        <div :class="$style.shim" />
-        <div ref="anchor" :class="[$style.linkAnchor, scrollingContent && $style.scrolling]">
-          <div @click="scrollTo">
-            <n-icon name="arrow-top" />
-          </div>
+      </div>
+      <div :class="$style.shim" />
+      <div ref="anchor" :class="[$style.linkAnchor, scrollingContent && $style.scrolling]">
+        <div @click="scrollTo">
+          <n-icon name="arrow-top" />
         </div>
-        <div ref="content" :class="$style.content">
-          <slot />
-        </div>
-        <the-footer />
       </div>
     </div>
-  </div>
+
+    <div ref="content" :class="$style.content" class="content">
+      <slot />
+    </div>
+  </main>
 </template>
 
 <script>
@@ -43,23 +43,18 @@ export default {
       type: Object
     }
   },
-  setup () {
+  setup (props, ctx) {
+    const { $store } = ctx.root
     const anchor = ref(null)
     const content = ref(null)
     const wrapper = ref(null)
     const scrollingContent = ref(null)
     const route = useRoute()
     const isHomePage = computed(() => route.value.name === 'index')
+    const backgroundImage = computed(() => `url(${require('@/assets/img/background/' + `${route.value.name}-background.png`)})`)
+    const image = computed(() => `${require('@/assets/img/background/' + `${route.value.name}.png`)}` ?? null)
 
     onMounted(() => {
-      // document.body.style.backgroundImage = `url(${require('@/assets/img/background.png')})`
-      // const vh = window.innerHeight * 0.01
-      // document.documentElement.style.setProperty('--vh', `${vh}px`)
-      // window.addEventListener('resize', () => {
-      //   // We execute the same script as before
-      //   const vh = window.innerHeight * 0.01
-      //   document.documentElement.style.setProperty('--vh', `${vh}px`)
-      // })
       const options = {
         root: null,
         threshold: 0.2,
@@ -69,8 +64,10 @@ export default {
       const callback = (entries) => {
         if (entries[0].isIntersecting) {
           scrollingContent.value = true
+          $store.commit('content/changeState', { key: 'showLogo', value: true })
         } else {
           scrollingContent.value = false
+          $store.commit('content/changeState', { key: 'showLogo', value: false })
         }
       }
 
@@ -80,14 +77,16 @@ export default {
 
     const scrollTo = () => {
       const contentBounding = content.value.getBoundingClientRect()
-      scrollBy(wrapper.value, { behavior: 'smooth', top: contentBounding.top - 90 })
+      scrollBy(window, { behavior: 'smooth', top: contentBounding.top - 90 })
     }
     return {
       anchor,
       content,
       wrapper,
       scrollingContent,
+      image,
       isHomePage,
+      backgroundImage,
       scrollTo
     }
   }
@@ -97,32 +96,40 @@ export default {
 <style scoped lang="scss" module>
 .intro {
   width: 100%;
-  min-height: -webkit-fill-available;
+  //min-height: -webkit-fill-available;
   //height: calc(var(--vh, 1vh) * 100);
-  height: calc(100% - var(--header-height));
+  //height: calc(100% - var(--header-height));
   color: $white;
   padding-top: $headerHeight;
   overflow: auto;
   .bg {
-    background-image: url('@/assets/img/background.png');
     position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
     width: 100%;
     min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     //height: calc(100% - var(--footer-height));
     height: -webkit-fill-available;
     background-size: cover;
+    @media (max-width: $bgWidth) {
+      background-size: 100% 100vh;
+    }
+    img {
+      max-height: 53rem;
+    }
   }
   .wrapper {
     height: 100%;
     position: relative;
     z-index: 2;
-    overflow: auto;
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    //overflow: auto;
+    //&::-webkit-scrollbar {
+    //  display: none;
+    //}
   }
   .shim {
     min-height: -webkit-fill-available;
@@ -146,6 +153,7 @@ export default {
     @include text;
     color: rgba($white, .85);
     width: 15.5rem;
+    line-height: 2.9rem;
   }
   &__subtitle_homePage {
     @include subtitle;
@@ -159,7 +167,7 @@ export default {
   }
   &__container {
     @include container;
-    margin-top: 7.9rem;
+    margin-top: calc(7.9rem  + var(--header-height));
     position: fixed;
     z-index: 1;
     transition: opacity 0.3s ease-in-out;

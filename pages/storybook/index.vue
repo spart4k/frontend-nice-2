@@ -27,12 +27,19 @@
         v-bind="NCard"
         :amount-comment="32"
       />
+    </Row>
+    <Row title="Карточка Defaul2">
       <N-Card-Music-Detail
         v-bind="NCard"
         :amount-comment="32"
       />
+    </Row>
+    <Row
+      title="Карточка Default3"
+    >
       <N-Card-Default
-        v-bind="NCard"
+        v-bind="
+          NCard"
         :amount-comment="32"
         :images="[{ src: require('~/assets/img/testPlug.jpg') }, { src: require('~/assets/img/testPlug.jpg') }]"
       />
@@ -50,13 +57,13 @@
         :chips="['видео', 'музыка', 'хэштэг']"
       />
     </Row>
-    <Row title="Карточка чтение">
-      <N-Card-Read
-        :author="cardRead.author"
-        :description="cardRead.description"
-        :books="cardRead.books"
-      />
-    </Row>
+    <!--    <Row title="Карточка чтение">-->
+    <!--      <N-Card-Read-->
+    <!--        :author="cardRead.author"-->
+    <!--        :description="cardRead.description"-->
+    <!--        :books="cardRead.books"-->
+    <!--      />-->
+    <!--    </Row>-->
     <Row title="Карточка альбомы">
       <N-Card-Album
         v-bind="NCard"
@@ -275,5 +282,9 @@ export default {
 }
 .widthAudio {
   width: 29rem;
+}
+.rows {
+  //display: flex;
+  //flex-direction: column;
 }
 </style>

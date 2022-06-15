@@ -26,7 +26,17 @@
   background-image: url('@/assets/img/background.png');
   background-position: top center;
   background-size: cover;
-
+  @media (max-width: $bgWidth) {
+    background-size: 100% 100vh;;
+  }
+}
+.headerUser__item {
+  .icon {
+    svg {
+      width: 2.7rem;
+      height: 2.7rem;
+    }
+  }
 }
 .linkHome {
   position: absolute;

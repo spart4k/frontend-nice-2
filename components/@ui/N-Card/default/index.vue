@@ -1,17 +1,28 @@
 <template>
   <div :class="$style.card">
-    <template v-if="$props.images && $props.images.length > 1">
+    <template v-if="data.images.length && data.images.length > 1">
       <N-Slider :slider-item="$props.images" />
     </template>
-    <template v-else-if="$props.images && $props.images.length === 1">
+    <!--    v-else-if="$props.images && $props.images.length === 1"-->
+    <template v-if="data.images.length === 1">
+      <!--      <div-->
+      <!--        v-for="item in $props.images"-->
+      <!--        :key="item.src"-->
+      <!--        :class="[-->
+      <!--          $style.hat,-->
+      <!--        ]"-->
+      <!--        :style="{-->
+      <!--          backgroundImage: `url('${item.src}')`,-->
+      <!--          height: `${$props.hatHeight || 23.6}rem`-->
+      <!--        }"-->
+      <!--      />-->
+
       <div
-        v-for="item in $props.images"
-        :key="item.src"
         :class="[
           $style.hat,
         ]"
         :style="{
-          backgroundImage: `url('${item.src}')`,
+          backgroundImage: `url(${$axios.defaults.baseURL}${data.images[0].src})`,
           height: `${$props.hatHeight || 23.6}rem`
         }"
       />
@@ -33,25 +44,23 @@
       <template v-else>
         <NuxtLink :class="$style.body__top" tag="div" to="/">
           <h2>
-            {{ $props.title }}
+            {{ data.title }}
           </h2>
-          <p>
-            {{ $props.description }}
-          </p>
+          <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" />
         </NuxtLink>
         <div :class="$style.body__bottom">
           <N-Chip
-            v-for="item in $props.chips"
-            :key="item"
+            v-for="item in data.tags"
+            :key="item.id"
             :class="$style.chip"
           >
-            {{ item }}
+            {{ item.title }}
           </N-Chip>
-          <N-Comment
-            v-if="$props.amountComment"
-            :class="$style.comment"
-            :current="$props.amountComment"
-          />
+          <!--          <N-Comment-->
+          <!--            v-if="$props.amountComment"-->
+          <!--            :class="$style.comment"-->
+          <!--            :current="$props.amountComment"-->
+          <!--          />-->
         </div>
       </template>
       <div v-if="$slots.footer" :class="$style.body__footer">
@@ -61,11 +70,25 @@
   </div>
 </template>
 <script lang="js">
+import { computed } from '@nuxtjs/composition-api'
 import dataProps from '../props'
 
 export default {
   name: 'NCardDefault',
-  props: { ...dataProps.props }
+  props: { ...dataProps.props },
+  setup (props) {
+    const isJsonString = computed(() => {
+      try {
+        JSON.parse(props?.data?.text)
+      } catch (e) {
+        return false
+      }
+      return true
+    })
+    return {
+      isJsonString
+    }
+  }
 }
 </script>
 <style lang="scss" module>
@@ -74,6 +97,7 @@ export default {
     //width: 32.5rem;
     width: 100%;
     border-radius: $border-radius-1;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
     overflow: hidden;
     video {
       width: 100%;

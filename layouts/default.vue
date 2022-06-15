@@ -2,27 +2,24 @@
   <div>
     <the-header :header-items="headerItems" />
     <Nuxt />
+    <the-footer />
   </div>
 </template>
 
 <script>
-import { ref } from '@nuxtjs/composition-api'
+import { ref, useContext, useFetch } from '@nuxtjs/composition-api'
 
 export default {
   name: 'DefaultLayout',
   setup () {
-    const headerItems = ref([
-      { title: 'Музыка', url: '/music' },
-      { title: 'Видео', url: '/' },
-      { title: 'Чтиво', url: '/' },
-      { title: 'Искусство', url: '/art' },
-      { title: 'Кухня', url: '/' },
-      { title: 'Магазин', url: '/' },
-      { title: 'Фото', url: '/photo' },
-      { title: 'Одежда', url: '/' },
-      { title: 'Мероприятия', url: '/' },
-      { title: 'Эфир', url: '/' }
-    ])
+    const headerItems = ref([])
+    const { $axios, store } = useContext()
+    useFetch(async () => {
+      headerItems.value = []
+      const response = await $axios('api/v1/sections')
+      headerItems.value = response.data
+      store.commit('content/changeState', { key: 'sections', value: response.data })
+    })
     return {
       headerItems
     }

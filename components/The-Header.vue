@@ -1,6 +1,6 @@
 <template>
   <!--  <div :class="$style.headerHolder">-->
-  <header :class="$style.header">
+  <header :class="$style.header" :style="{backgroundImage: backgroundImage}">
     <ul :class="[$style.headerUser__list, active && $style.hideElement]">
       <li :class="$style.headerUser__item">
         <n-icon name="telegram" />
@@ -31,7 +31,7 @@
         <div :class="$style.headerNav__inner">
           <ul :class="$style.headerMenu__list">
             <li v-for="item in headerItems" :key="item.title" :class="$style.headerMenu__item" @click.stop="toggleMenu">
-              <nuxt-link :to="item.url">
+              <nuxt-link :to="item.slug">
                 {{ item.title }}
               </nuxt-link>
             </li>
@@ -40,11 +40,12 @@
       </nav>
     </transition>
 
-    <nuxt-link v-if="!isHomePage" to="/" :class="[$style.logo, active && $style.hideElement]">
-      <div>творческое объединение</div>
-      <!--        <img src="@/assets/img/logo.png" alt="Логотип Nice">-->
-      <n-logo size="lg" />
-    </nuxt-link>
+    <transition name="fade-fast">
+      <nuxt-link v-if="isHomePage ? showLogo : true" to="/" :class="[$style.logo, active && $style.hideElement]">
+        <div>творческое объединение</div>
+        <n-logo size="lg" />
+      </nuxt-link>
+    </transition>
 
     <n-button
       type-button="transparent"
@@ -72,11 +73,14 @@ export default {
       default: () => []
     }
   },
-  setup () {
+  setup (_, ctx) {
+    const { $store } = ctx.root
     const hasOpenMenu = ref(false)
     const active = ref(false)
     const route = useRoute()
     const isHomePage = computed(() => route.value.name === 'index')
+    const backgroundImage = computed(() => `url(${require('@/assets/img/background/' + `${route.value.name}-background.png`)})`)
+
     const toggleMenu = () => {
       active.value = false
     }
@@ -85,9 +89,16 @@ export default {
       active.value = !active.value
       hasOpenMenu.value = !hasOpenMenu.value
     }
+
+    const showLogo = computed(() => $store.state.content.showLogo)
+    // onMounted(() => {
+    //   const observe = new in
+    // })
     return {
+      backgroundImage,
       openMenu,
       toggleMenu,
+      showLogo,
       isHomePage,
       active,
       hasOpenMenu

@@ -5,6 +5,10 @@ export default {
       type: Array,
       default: null
     },
+    data: {
+      type: Object,
+      default: null
+    },
     video: {
       type: String,
       default: ''
@@ -14,6 +18,10 @@ export default {
       default: ''
     },
     description: {
+      type: String,
+      default: ''
+    },
+    text: {
       type: String,
       default: ''
     },

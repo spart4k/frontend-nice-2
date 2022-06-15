@@ -2,17 +2,17 @@
   <footer :class="$style.footer">
     <div :class="$style.container">
       <ul :class="$style.footer__colLeft">
-        <li v-for="(item, index) in itemMenu.left" :key="index">
-          <nuxt-link :to="item.url">
-            {{ item.text }}
+        <li v-for="(item, index) in sections.left" :key="index">
+          <nuxt-link :to="item.slug">
+            {{ item.title }}
           </nuxt-link>
         </li>
       </ul>
       <n-logo size="md" />
       <ul :class="$style.footer__colRight">
-        <li v-for="(item, index) in itemMenu.left" :key="index">
-          <nuxt-link :to="item.url">
-            {{ item.text }}
+        <li v-for="(item, index) in sections.right" :key="index">
+          <nuxt-link :to="item.slug">
+            {{ item.title }}
           </nuxt-link>
         </li>
       </ul>
@@ -21,51 +21,23 @@
 </template>
 
 <script>
-import { ref } from '@nuxtjs/composition-api'
+import { ref, useContext, computed } from '@nuxtjs/composition-api'
 
 export default {
   name: 'TheFooter',
   setup () {
     const itemMenu = ref({
-      left: [
-        {
-          text: 'МУЗЫКА',
-          url: '/music'
-        },
-        {
-          text: 'МУЗЫКА',
-          url: '/music'
-        },
-        {
-          text: 'МУЗЫКА',
-          url: '/music'
-        },
-        {
-          text: 'МУЗЫКА',
-          url: '/music'
-        }
-      ],
-      right: [
-        {
-          text: 'МУЗЫКА',
-          url: '/music'
-        },
-        {
-          text: 'МУЗЫКА',
-          url: '/music'
-        },
-        {
-          text: 'МУЗЫКА',
-          url: '/music'
-        },
-        {
-          text: 'МУЗЫКА',
-          url: '/music'
-        }
-      ]
+      left: [],
+      right: []
     })
+    const { store } = useContext()
+
+    const sections = computed(() => store.getters['content/footerSection'])
+    itemMenu.value.right = sections.value
+    // itemMenu.value.left = sections.value
     return {
-      itemMenu
+      itemMenu,
+      sections
     }
   }
 }
@@ -75,6 +47,8 @@ export default {
   .footer {
     background-color: $blueBlack3;
     padding: 3.9rem 2rem;
+    position: relative;
+    z-index: 10;
     .container {
       @include container;
       @include text-sm;

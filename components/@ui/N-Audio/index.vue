@@ -1,7 +1,7 @@
 <template>
   <audio
     controls
-    src="/media/cc0-audio/t-rex-roar.mp3"
+    :src="src"
   >
     <!--    <code>audio</code> element.-->
   </audio>

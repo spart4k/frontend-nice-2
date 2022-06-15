@@ -1,11 +1,11 @@
 <template>
   <N-Card-Default v-bind="$props">
-    <template #footer>
-      <div v-for="item in $props.audio" :key="item.id" :class="$style.row">
+    <template v-if="data.files" #footer>
+      <div v-for="item in data.files" :key="item.id" :class="$style.row">
         <h2>
           {{ item.title }}
         </h2>
-        <N-Audio :src="item.src" />
+        <N-Audio :src="`https://nice.c.roky.rocks/${item.src}`" />
       </div>
     </template>
   </N-Card-Default>

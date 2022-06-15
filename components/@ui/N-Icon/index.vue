@@ -1,6 +1,6 @@
 <template>
   <div
-    class="icon"
+    :class="$style.icon"
     @click="$emit('click', $event)"
     v-html="require(`~/static/icon/icon-${name}.svg?raw`)"
   />
@@ -17,8 +17,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" scoped module>
 .icon {
   line-height: 0;
+  svg {
+    width: 100%;
+  }
 }
 </style>
