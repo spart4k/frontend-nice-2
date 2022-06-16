@@ -28,6 +28,7 @@ export default {
     font-weight: 600;
     @include text;
     transition: background-color .2s;
+    max-width: 100%;
     &:hover {
       background-color: rgba($blueBlack, .9);
     }

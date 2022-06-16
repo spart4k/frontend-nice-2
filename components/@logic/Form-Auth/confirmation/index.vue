@@ -6,7 +6,7 @@
     </h2>
 
     <form @submit.prevent="onSubmit">
-      <n-text-field v-model="formData.code" title="Код из СМС" />
+      <n-text-field v-model="formData.code" type="number"  title="Код из СМС" />
       <n-button :class="$style.button" type="submit">
         подтвердить
       </n-button>
@@ -14,7 +14,7 @@
   </div>
 </template>
 <script lang="js">
-import { reactive } from '@nuxtjs/composition-api'
+import { reactive, useContext } from '@nuxtjs/composition-api'
 
 export default {
   name: 'FormAuthConfirmation',
@@ -25,11 +25,13 @@ export default {
     }
   },
   setup (props, ctx) {
+    const { store } = useContext()
     const { emit } = ctx
     const formData = reactive({
       code: ''
     })
     const onSubmit = () => {
+      store.dispatch('auth/sendCode', formData.code)
       emit('closePopup')
     }
 

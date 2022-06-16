@@ -1,10 +1,14 @@
 <template>
-  <NPopup v-model="getActivePopup" title="Вход и регистрация">
-    <components
-      :is="getComponent"
-      v-model="step"
-      @closePopup="closePopup"
-    />
+  <NPopup v-model="getActivePopup" :title="getTitle">
+    <div class="wrapper">
+      <components
+        :is="getComponent"
+        :titleTel="titleTel"
+        v-model="step"
+        @closePopup="closePopup"
+        @saveTel="saveTel"
+      />
+    </div>
   </NPopup>
 </template>
 <script lang="js">
@@ -21,7 +25,29 @@ export default {
   setup (props, ctx) {
     const { emit } = ctx
     const step = ref(0)
-    const getComponent = computed(() => !step.value ? 'FormAuthDefault' : 'FormAuthConfirmation')
+    const titleTel = ref('')
+    const getComponent = computed(() => {
+      if (step.value === 0) {
+        return 'FormAuthDefault'
+      } else if (step.value === 1) {
+        return 'FormAuthLogin'
+      } else if (step.value === 2) {
+        return 'FormAuthConfirmation'
+      }
+    })
+    const getTitle = computed(() => {
+      if (step.value === 0) {
+        return 'Регистрация'
+      } else if (step.value === 1) {
+        return 'Вход'
+      } else if (step.value === 2) {
+        return 'Подтверждение'
+      }
+    })
+    const saveTel = (tel) => {
+      titleTel.value = tel
+      console.log('test')
+    }
     const getActivePopup = computed({
       get () {
         return props.value
@@ -40,8 +66,20 @@ export default {
       getActivePopup,
       getComponent,
       step,
-      closePopup
+      closePopup,
+      getTitle,
+      titleTel,
+      saveTel
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  h2 {
+      margin-bottom: 1rem;
+  }
+  .wrapper {
+    margin-top: 2.7rem;
+  }
+</style>

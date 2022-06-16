@@ -22,19 +22,20 @@
     <Row title="Comment">
       <N-Comment :current="43" />
     </Row>
-    <Row flex title="Карточка Default">
+    <!-- <Row flex title="Карточка Default">
       <N-Card-Default
+        :images="[{ src: require('~/assets/img/testPlug.jpg') }, { src: require('~/assets/img/testPlug.jpg') }]"
         v-bind="NCard"
         :amount-comment="32"
       />
-    </Row>
-    <Row title="Карточка Defaul2">
+    </Row> -->
+    <!-- <Row title="Карточка Defaul2">
       <N-Card-Music-Detail
         v-bind="NCard"
         :amount-comment="32"
       />
-    </Row>
-    <Row
+    </Row> -->
+    <!-- <Row
       title="Карточка Default3"
     >
       <N-Card-Default
@@ -43,20 +44,20 @@
         :amount-comment="32"
         :images="[{ src: require('~/assets/img/testPlug.jpg') }, { src: require('~/assets/img/testPlug.jpg') }]"
       />
-    </Row>
-    <Row title="Карточка с видео">
+    </Row> -->
+    <!-- <Row title="Карточка с видео">
       <N-Card-Default
         v-bind="NCard"
-        :images="null"
+        :images="[{ src: require('~/assets/img/testPlug.jpg') }, { src: require('~/assets/img/testPlug.jpg') }]"
         :video="NCard.video"
       />
-    </Row>
-    <Row title="Карточка с главной страницы списком">
+    </Row> -->
+    <!-- <Row title="Карточка с главной страницы списком">
       <N-Card-General
         v-bind="NCard"
         :chips="['видео', 'музыка', 'хэштэг']"
       />
-    </Row>
+    </Row> -->
     <!--    <Row title="Карточка чтение">-->
     <!--      <N-Card-Read-->
     <!--        :author="cardRead.author"-->
@@ -64,12 +65,12 @@
     <!--        :books="cardRead.books"-->
     <!--      />-->
     <!--    </Row>-->
-    <Row title="Карточка альбомы">
+    <!-- <Row title="Карточка альбомы">
       <N-Card-Album
         v-bind="NCard"
         author="Сергей Николаев"
       />
-    </Row>
+    </Row> -->
     <Row title="Chip">
       <N-Chip>искусство</N-Chip>
     </Row>

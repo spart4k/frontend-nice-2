@@ -12,7 +12,9 @@
       <input
         v-model="proxyVal"
         v-mask="$props.mask"
-        type="text"
+        :type="$props.type"
+        :maxlength="$props.maxlength"
+        :max="$props.max"
         :placeholder="$props.placeholder"
         @keydown.enter="$emit('keydown', $event)"
       >
@@ -40,6 +42,18 @@ export default {
     placeholder: {
       type: String,
       default: ''
+    },
+    type: {
+      type: String,
+      default: 'text'
+    },
+    maxlength: {
+      type: Number,
+      default: 0
+    },
+    max: {
+      type: Number,
+      default: null
     }
   },
   setup (props, ctx) {
