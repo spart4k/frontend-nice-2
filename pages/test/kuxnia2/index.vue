@@ -16,8 +16,8 @@ export default {
     const route = useRoute()
 
     const introTitle = ref({
-      title: 'МАГАЗИН',
-      subtitle: 'чето про магазин чето про магазин чето про магазин чето про магазин чето про магазин чето про магазин',
+      title: 'НАПИТКИ',
+      subtitle: 'чето там про чтиво про про чтиво чтиво ',
       background: route.value.name
     })
     return {

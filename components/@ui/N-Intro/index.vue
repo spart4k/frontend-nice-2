@@ -1,6 +1,7 @@
 <template>
   <main>
     <div :class="$style.intro">
+      <!--      :style="{ backgroundImage: backgroundImage}"-->
       <div :class="$style.bg" :style="{ backgroundImage: backgroundImage}">
         <img v-if="!isHomePage && image" :src="image">
       </div>
@@ -51,8 +52,8 @@ export default {
     const scrollingContent = ref(null)
     const route = useRoute()
     const isHomePage = computed(() => route.value.name === 'index')
-    const backgroundImage = computed(() => `url(${require('@/assets/img/background/' + `${route.value.name}-background.png`)})`)
-    const image = computed(() => `${require('@/assets/img/background/' + `${route.value.name}.png`)}` ?? null)
+    const backgroundImage = computed(() => `url(${require('@/assets/img/background/' + `${props.description.background}-background.png`)})`)
+    const image = computed(() => `${require('@/assets/img/background/' + `${props.description.background}.png`)}` ?? null)
 
     onMounted(() => {
       const options = {

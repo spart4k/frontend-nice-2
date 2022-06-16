@@ -34,7 +34,7 @@ import { pagination } from '~/plugins/pagination'
 export default {
   name: 'IndexPage',
   setup () {
-    const { store } = useContext()
+    const { store, route } = useContext()
     // const page = ref(1)
     const cards = ref([])
 
@@ -44,6 +44,7 @@ export default {
       background: 'main'
     })
     // store.commit('content/changeState', { key: 'logoBg', value: 'main' })
+    console.log(route.value)
     const fetch = (currentPage) => {
       const params = {
         page: currentPage
@@ -59,6 +60,7 @@ export default {
     }
 
     cards.value = useAsync(async () => {
+      store.commit('content/changeState', { key: 'bgIntro', value: route.value.name })
       try {
         const response = await fetch()
         return response.data.data

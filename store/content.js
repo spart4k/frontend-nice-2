@@ -1,6 +1,8 @@
 export const state = () => ({
   showLogo: false,
   logoBg: '',
+  bgIntro: '',
+  imgIntro: '',
   sections: []
 })
 

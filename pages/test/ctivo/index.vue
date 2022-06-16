@@ -2,13 +2,11 @@
   <n-intro :description="introTitle">
     <div :class="$style.cards">
       <div v-for="(card) in cards.value" :key="card.id" :class="$style.cards__item">
-        <template v-if="card.section.id === 3">
-          <N-Card-Read
-            :data="card"
-            :author="{ src: require('~/assets/img/testPlug.jpg') }"
-            :amount-comment="32"
-          />
-        </template>
+        <N-Card-Read
+          :data="card"
+          :author="{ src: require('~/assets/img/testPlug.jpg') }"
+          :amount-comment="32"
+        />
       </div>
       <n-lazy-pagination
         v-if="cards.length > 0"
@@ -37,9 +35,10 @@ export default {
 
     const fetch = (currentPage) => {
       const params = {
-        page: currentPage
+        page: currentPage,
+        section_id: 1
       }
-      const response = store.dispatch('main/getData', params)
+      const response = store.dispatch('pages/getData', params)
       return response
     }
 

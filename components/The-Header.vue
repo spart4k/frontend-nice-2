@@ -13,7 +13,7 @@
       <nav v-if="active" :class="[$style.headerNav, active && $style.active]">
         <div :class="[$style.linkHome]" @click="active = false">
           <transition name="fade-fast">
-            <nuxt-link v-if="!isHomePage" to="/">
+            <nuxt-link v-if="!isHomePage" :to="{path: '/'}">
               <n-icon name="arrow" :class="$style.icon" />
               <span>На главную</span>
             </nuxt-link>
@@ -31,7 +31,7 @@
         <div :class="$style.headerNav__inner">
           <ul :class="$style.headerMenu__list">
             <li v-for="item in headerItems" :key="item.title" :class="$style.headerMenu__item" @click.stop="toggleMenu">
-              <nuxt-link :to="item.slug">
+              <nuxt-link :to="{ path: item.slug, params: { id: item.id } }">
                 {{ item.title }}
               </nuxt-link>
             </li>
@@ -63,7 +63,7 @@
 </template>
 
 <script lang="js">
-import { computed, ref, useRoute } from '@nuxtjs/composition-api'
+import { computed, ref, useRouter, useRoute } from '@nuxtjs/composition-api'
 
 export default {
   name: 'TheHeader',
@@ -78,9 +78,12 @@ export default {
     const hasOpenMenu = ref(false)
     const active = ref(false)
     const route = useRoute()
+    const router = useRouter()
     const isHomePage = computed(() => route.value.name === 'index')
-    const backgroundImage = computed(() => `url(${require('@/assets/img/background/' + `${route.value.name}-background.png`)})`)
-
+    console.log(route.value)
+    // const backgroundImage = computed(() => `url(${require('@/assets/img/background/' + `${route.value.params.slug}-background.png`)})`)
+    const backgroundImage = computed(() => `url(${require('@/assets/img/background/' + 'ctivo-background.png')})`)
+    console.log($store.state)
     const toggleMenu = () => {
       active.value = false
     }
@@ -89,7 +92,10 @@ export default {
       active.value = !active.value
       hasOpenMenu.value = !hasOpenMenu.value
     }
-
+    const openTestPage = (num) => {
+      console.log(num, router)
+      router.push({ path: `${num}` })
+    }
     const showLogo = computed(() => $store.state.content.showLogo)
     // onMounted(() => {
     //   const observe = new in
@@ -101,7 +107,8 @@ export default {
       showLogo,
       isHomePage,
       active,
-      hasOpenMenu
+      hasOpenMenu,
+      openTestPage
     }
   }
 }

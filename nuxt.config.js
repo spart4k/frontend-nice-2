@@ -3,7 +3,7 @@ export default {
   head: {
     title: 'frontend-nice-nuxt3',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'ru'
     },
     meta: [
       { charset: 'utf-8' },
