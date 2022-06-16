@@ -34,17 +34,16 @@ import { pagination } from '~/plugins/pagination'
 export default {
   name: 'IndexPage',
   setup () {
-    const { store, route } = useContext()
+    const { store } = useContext()
     // const page = ref(1)
     const cards = ref([])
 
     const introTitle = ref({
       title: 'Главная',
       subtitle: 'творческое объединение',
-      background: 'main'
+      background: ''
     })
     // store.commit('content/changeState', { key: 'logoBg', value: 'main' })
-    console.log(route.value)
     const fetch = (currentPage) => {
       const params = {
         page: currentPage
@@ -58,9 +57,8 @@ export default {
     const lazyPagination = ($state) => {
       getData($state)
     }
-
+    store.commit('content/clearBgIntro')
     cards.value = useAsync(async () => {
-      store.commit('content/changeState', { key: 'bgIntro', value: route.value.name })
       try {
         const response = await fetch()
         return response.data.data

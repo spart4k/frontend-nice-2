@@ -28,13 +28,13 @@ export default {
 
     cards.value = useAsync(async () => {
       try {
-        store.commit('content/changeState', { key: 'bgIntro', value: route.value.params.slug })
+        store.commit('content/changeBgIntro', route.value.params.slug)
         const response = await fetchData()
         return response.data.data
       } catch (e) {
         console.log(e)
       }
-    })
+    }, route.value.params.slug)
     const introTitle = ref({
       title: 'ВИДЕО2',
       subtitle: 'чето там про видео про видео про видео',

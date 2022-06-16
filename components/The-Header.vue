@@ -80,10 +80,14 @@ export default {
     const route = useRoute()
     const router = useRouter()
     const isHomePage = computed(() => route.value.name === 'index')
-    console.log(route.value)
-    // const backgroundImage = computed(() => `url(${require('@/assets/img/background/' + `${route.value.params.slug}-background.png`)})`)
-    const backgroundImage = computed(() => `url(${require('@/assets/img/background/' + 'ctivo-background.png')})`)
-    console.log($store.state)
+    const bgName = computed(() => $store.state.content.bgIntro)
+    const backgroundImage = computed(() => {
+      if (bgName.value) {
+        return `url(${require('@/assets/img/background/' + `${bgName.value}-background.png`)})`
+      } else {
+        return `url(${require('@/assets/img/background/index-background.png')})`
+      }
+    })
     const toggleMenu = () => {
       active.value = false
     }
@@ -93,13 +97,10 @@ export default {
       hasOpenMenu.value = !hasOpenMenu.value
     }
     const openTestPage = (num) => {
-      console.log(num, router)
       router.push({ path: `${num}` })
     }
     const showLogo = computed(() => $store.state.content.showLogo)
-    // onMounted(() => {
-    //   const observe = new in
-    // })
+
     return {
       backgroundImage,
       openMenu,
@@ -108,7 +109,8 @@ export default {
       isHomePage,
       active,
       hasOpenMenu,
-      openTestPage
+      openTestPage,
+      bgName
     }
   }
 }

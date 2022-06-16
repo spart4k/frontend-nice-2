@@ -52,8 +52,22 @@ export default {
     const scrollingContent = ref(null)
     const route = useRoute()
     const isHomePage = computed(() => route.value.name === 'index')
-    const backgroundImage = computed(() => `url(${require('@/assets/img/background/' + `${props.description.background}-background.png`)})`)
-    const image = computed(() => `${require('@/assets/img/background/' + `${props.description.background}.png`)}` ?? null)
+
+    const backgroundImage = computed(() => {
+      if (props.description.background) {
+        return `url(${require('@/assets/img/background/' + `${props.description.background}-background.png`)})`
+      } else {
+        return `url(${require('@/assets/img/background/index-background.png')})`
+      }
+    })
+
+    const image = computed(() => {
+      if (props.description.background) {
+        return `${require('@/assets/img/background/' + `${props.description.background}.png`)}`
+      } else {
+        return require('@/assets/img/background/odezda.png')
+      }
+    })
 
     onMounted(() => {
       const options = {
@@ -65,10 +79,10 @@ export default {
       const callback = (entries) => {
         if (entries[0].isIntersecting) {
           scrollingContent.value = true
-          $store.commit('content/changeState', { key: 'showLogo', value: true })
+          $store.commit('content/changeLogo', true)
         } else {
           scrollingContent.value = false
-          $store.commit('content/changeState', { key: 'showLogo', value: false })
+          $store.commit('content/changeLogo', false)
         }
       }
 

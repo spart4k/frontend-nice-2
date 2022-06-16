@@ -18,7 +18,7 @@ export default {
       headerItems.value = []
       const response = await $axios('api/v1/sections')
       headerItems.value = response.data
-      store.commit('content/changeState', { key: 'sections', value: response.data })
+      store.commit('content/changeSections', response.data)
     })
     return {
       headerItems

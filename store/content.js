@@ -7,8 +7,18 @@ export const state = () => ({
 })
 
 export const mutations = {
-  changeState (state, { key, value }) {
-    state[key] = value
+  changeBgIntro (state, value) {
+    console.log(value)
+    state.bgIntro = value
+  },
+  clearBgIntro (state) {
+    state.bgIntro = ''
+  },
+  changeLogo (state, value) {
+    state.showLogo = value
+  },
+  changeSections (state, value) {
+    state.sections = value
   }
 }
 
