@@ -31,7 +31,7 @@
         <div :class="$style.headerNav__inner">
           <ul :class="$style.headerMenu__list">
             <li v-for="item in headerItems" :key="item.title" :class="$style.headerMenu__item" @click.stop="toggleMenu">
-              <nuxt-link :to="{ path: item.slug, params: { id: item.id } }">
+              <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
                 {{ item.title }}
               </nuxt-link>
             </li>
@@ -41,7 +41,11 @@
     </transition>
 
     <transition name="fade-fast">
-      <nuxt-link v-if="isHomePage ? showLogo : true" to="/" :class="[$style.logo, active && $style.hideElement]">
+      <nuxt-link
+        v-if="isHomePage ? showLogo : true"
+        to="/"
+        :class="[$style.logo, active && $style.hideElement]"
+      >
         <div>творческое объединение</div>
         <n-logo size="lg" />
       </nuxt-link>
@@ -82,10 +86,10 @@ export default {
     const isHomePage = computed(() => route.value.name === 'index')
     const bgName = computed(() => $store.state.content.bgIntro)
     const backgroundImage = computed(() => {
-      if (bgName.value) {
-        return `url(${require('@/assets/img/background/' + `${bgName.value}-background.png`)})`
+      if (isHomePage.value) {
+        return `url(${require('@/assets/img/background/index-background.jpg')})`
       } else {
-        return `url(${require('@/assets/img/background/index-background.png')})`
+        return `url(${require('@/assets/img/background/' + `${route.value.params.slug}-background.jpg`)})`
       }
     })
     const toggleMenu = () => {

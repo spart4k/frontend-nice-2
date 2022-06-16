@@ -1,10 +1,8 @@
 <template>
-  <N-Card-Default v-bind="$props">
+  <N-Card-Default v-bind="$props" @clickTag="($event) => $emit('clickTag', $event)">
     <template v-if="data.files" #footer>
       <div v-for="item in data.files" :key="item.id" :class="$style.row">
         <h2>
-          W$BfS7LnBr7C
-
           {{ item.title }}
         </h2>
         <N-Audio :src="`https://nice.c.roky.rocks/${item.src}`" />

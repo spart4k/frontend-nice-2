@@ -1,40 +1,26 @@
 <template>
   <n-intro :description="introTitle">
     <div :class="$style.cards">
-      <!--      <template v-for="card in cards">-->
-      <!--        <component-->
-      <!--          :is="componentsName[card.section.slug]"-->
-      <!--          :key="card.id"-->
-      <!--          :data="card"-->
-      <!--          :amount-comment="32"-->
-      <!--        />-->
-      <!--        :author="{ src: require('~/assets/img/testPlug.jpg') }"-->
       <div v-for="(card) in cards.value" :key="card.id" :class="$style.cards__item">
-        <template v-if="card.section.id === 1">
-          <N-Card-MusicDetail :data="card" />
-        </template>
-        <template v-if="card.section.id === 3">
-          <N-Card-Read
-            :data="card"
-            :author="{ src: require('~/assets/img/testPlug.jpg') }"
-            :amount-comment="32"
-          />
-        </template>
+        <SectionCards :id="card.section.id" :key="card.id" :card="card" @clickTag="($event) => clickTag($event, card.section.id)" />
       </div>
-      <n-lazy-pagination
-        v-if="cards.length > 0"
-        @lazyPagination="lazyPagination"
-      />
+      <client-only>
+        <n-lazy-pagination
+          v-if="cards.length > 0"
+          @lazyPagination="lazyPagination"
+        />
+      </client-only>
     </div>
   </n-intro>
 </template>
 <script>
-import { ref, useContext, useAsync } from '@nuxtjs/composition-api'
+import { ref, useContext, useAsync, useRouter } from '@nuxtjs/composition-api'
 import { pagination } from '~/plugins/pagination'
 export default {
   name: 'IndexPage',
   setup () {
     const { store } = useContext()
+    const router = useRouter()
     // const page = ref(1)
     const cards = ref([])
 
@@ -57,6 +43,10 @@ export default {
     const lazyPagination = ($state) => {
       getData($state)
     }
+    const clickTag = (tag, section) => {
+      router.push({ path: 'tags', query: { tag, id: section } })
+      console.log(tag, section)
+    }
     store.commit('content/clearBgIntro')
     cards.value = useAsync(async () => {
       try {
@@ -71,7 +61,8 @@ export default {
       introTitle,
       cards,
       page,
-      lazyPagination
+      lazyPagination,
+      clickTag
     }
   }
 }

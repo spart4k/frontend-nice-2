@@ -43,9 +43,12 @@
       </template>
       <template v-else>
         <NuxtLink :class="$style.body__top" tag="div" to="/">
-          <h2>
+          <h2 :class="$style.title">
             {{ data.title }}
           </h2>
+          <div v-if="data.date_event" :class="$style.time">
+            {{ dateFormat }}
+          </div>
           <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" />
         </NuxtLink>
         <div :class="$style.body__bottom">
@@ -53,6 +56,7 @@
             v-for="item in data.tags"
             :key="item.id"
             :class="$style.chip"
+            @click="$emit('clickTag', item.id)"
           >
             {{ item.title }}
           </N-Chip>
@@ -85,8 +89,12 @@ export default {
       }
       return true
     })
+    const dateFormat = computed(() => {
+      return props.data.date_event?.replace(/:(\w+)/, '')?.replace(/\s/, ' / ') ?? ''
+    })
     return {
-      isJsonString
+      isJsonString,
+      dateFormat
     }
   }
 }
@@ -122,6 +130,9 @@ export default {
         font-weight: 600;
         @include text-md;
       }
+    }
+    .title, .time {
+      margin-bottom: .8rem;
     }
     &__top {
       border-bottom: solid 1px rgba($black, .1);

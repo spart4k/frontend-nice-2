@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.chip">
+  <div :class="$style.chip" v-on="$listeners">
     <slot />
   </div>
 </template>

@@ -55,9 +55,9 @@ export default {
 
     const backgroundImage = computed(() => {
       if (props.description.background) {
-        return `url(${require('@/assets/img/background/' + `${props.description.background}-background.png`)})`
+        return `url(${require('@/assets/img/background/' + `${props.description.background}-background.jpg`)})`
       } else {
-        return `url(${require('@/assets/img/background/index-background.png')})`
+        return `url(${require('@/assets/img/background/index-background.jpg')})`
       }
     })
 
