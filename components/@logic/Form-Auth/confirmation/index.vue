@@ -6,8 +6,14 @@
     </h2>
 
     <form @submit.prevent="onSubmit">
-      <n-text-field v-model="formData.code" type="number"  title="Код из СМС" />
-      <n-button :typeButton="!filledTel ? 'disable' : '' "  :class="$style.button" type="submit">
+      <n-text-field
+      @input="checkValue"
+      :errCustom="errResponse"
+      :error="v$.code.$errors"
+      v-model="formData.code"
+      type="number"
+      title="Код из СМС" />
+      <n-button :typeButton="v$.$invalid ? 'disable' : '' "  :class="$style.button" type="submit">
         <n-loading v-if="loading"></n-loading>
         <template v-else>Подтвердить</template>
       </n-button>
@@ -15,7 +21,9 @@
   </div>
 </template>
 <script lang="js">
-import { reactive, ref, useContext, computed } from '@nuxtjs/composition-api'
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
+import { reactive, ref, useContext } from '@nuxtjs/composition-api'
 
 export default {
   name: 'FormAuthConfirmation',
@@ -28,19 +36,20 @@ export default {
   setup (props, ctx) {
     const { store } = useContext()
     const { emit } = ctx
+    const rules = {
+      code: { required }
+    }
     const formData = reactive({
       code: ''
     })
-    const filledTel = computed(() => {
-      const number = formData.code
-      if (number.length) {
-        return true
-      } else {
-        return false
-      }
-    })
+    const errResponse = ref('')
+    const v$ = useVuelidate(rules, formData)
     const loading = ref(false)
     const onSubmit = () => {
+      v$.value.$touch()
+      if (v$.value.$invalid) {
+        return
+      }
       loading.value = true
       store.dispatch('auth/sendCode', {
         phone: props.titleTel,
@@ -51,15 +60,27 @@ export default {
           loading.value = false
           if (res.status === 200) {
             emit('closePopup')
+          } else {
+            console.log(res.message)
+            if (res.message === 'Wrong sms code') {
+              errResponse.value = 'Неверный код'
+            }
           }
       })
+    }
+    const checkValue = () => {
+      if (errResponse) {
+        errResponse.value = ''
+      }
     }
 
     return {
       formData,
       onSubmit,
+      errResponse,
+      checkValue,
       loading,
-      filledTel
+      v$
     }
   }
 }

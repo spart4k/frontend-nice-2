@@ -1,6 +1,13 @@
 <template>
   <form @submit.prevent="onSubmit">
-    <n-text-field v-model.trim="formData.tel" mask="+7 (###) ###-##-##" md-fz :class="[ $style.input ]" title="Телефон" />
+    <n-text-field
+    v-model.trim="formData.tel"
+    :error="v$.tel.$errors"
+    mask="+7 (###) ###-##-##"
+    md-fz
+    :class="[ $style.input ]"
+    title="Телефон"
+     />
     <n-button :class="$style.button" :typeButton="!filledTel ? 'disable' : '' " type="submit">
       <n-loading v-if="loading"></n-loading>
       <template v-else>Войти</template>
@@ -11,6 +18,8 @@
   </form>
 </template>
 <script lang="js">
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength } from '@vuelidate/validators'
 import { reactive, ref, useContext, computed } from '@nuxtjs/composition-api'
 
 export default {
@@ -19,8 +28,12 @@ export default {
     const { store } = useContext()
     const { emit } = ctx
     const formData = reactive({
-      tel: '+79876543210'
+      tel: ''
     })
+    const rules = {
+      tel: { required, minLength: minLength(18) }
+    }
+
     const loading = ref(false)
     const errorTel = ref(false)
     const filledTel = computed(() => {
@@ -31,13 +44,16 @@ export default {
         return false
       }
     })
+    const v$ = useVuelidate(rules, formData)
     const onSubmit = () => {
-      emit('saveTel', formData.tel)
-      const number = formData.tel.replace(/\D/g, '')
-      errorTel.value = false
+      v$.value.$touch()
+      if (v$.value.$invalid) {
+        return
+      }
       loading.value = true
-      formData.tel = '+' + number
-      store.dispatch('auth/getSms', formData.tel)
+      emit('saveTel', formData.tel)
+      const number = '+' + formData.tel.replace(/\D/g, '')
+      store.dispatch('auth/getSms', number)
       .then((res) => {
         console.log(res)
         loading.value = false
@@ -53,7 +69,8 @@ export default {
       returnRegister,
       loading,
       errorTel,
-      filledTel
+      filledTel,
+      v$
     }
   }
 }

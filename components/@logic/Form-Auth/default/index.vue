@@ -1,22 +1,43 @@
 <template>
   <form @submit.prevent="onSubmit">
-    <n-text-field v-model="formData.name" :class="$style.input" title="Никнем" />
-    <n-text-field v-model="formData.email" :class="$style.input" title="Email" />
-    <n-text-field mask="+7 (###) ###-##-##" md-fz :class="$style.input" title="Телефон" />
-    <n-button :class="$style.button" type="submit">
-      Зарегистрироваться
+    <n-text-field
+      v-model="formData.name"
+      :error="v$.name.$errors"
+      :class="$style.input"
+      title="Никнем"
+    />
+    <n-text-field
+      v-model="formData.email"
+      :error="v$.email.$errors"
+      :class="$style.input"
+      title="Email"
+    />
+    <n-text-field
+      mask="+7 (###) ###-##-##"
+      :error="v$.tel.$errors"
+      v-model="formData.tel"
+      md-fz
+      :class="$style.input"
+      title="Телефон"
+    />
+    <n-button :class="$style.button" :typeButton="v$.$invalid ? 'disable' : '' " type="submit">
+      <n-loading v-if="loading"></n-loading>
+      <template v-else>Зарегистрироваться</template>
     </n-button>
-    <n-button @click="openLogin" typeButton="sub" :class="$style.button" >
+    <n-button @click="openLogin" typeButton="sub" :class="$style.button">
       Уже есть аккаунт
     </n-button>
   </form>
 </template>
 <script lang="js">
-import { reactive } from '@nuxtjs/composition-api'
+import { useVuelidate } from '@vuelidate/core'
+import { email, required, minLength } from '@vuelidate/validators'
+import { reactive, ref, useContext } from '@nuxtjs/composition-api'
 
 export default {
   name: 'FormAuth',
   setup (props, ctx) {
+    const { store } = useContext()
     const { emit } = ctx
     const formData = reactive({
       name: '',
@@ -26,25 +47,49 @@ export default {
     const openLogin = () => {
       emit('input', 1)
     }
-    const onSubmit = () => {
-      emit('input', 2)
+    const loading = ref(false)
+    const rules = {
+      name: { required },
+      email: { required, email },
+      tel: { required, minLength: minLength(18) }
     }
+    const v$ = useVuelidate(rules, formData)
+    const onSubmit = () => {
+      loading.value = true
+      v$.value.$touch()
+      console.log(v$.value)
+
+      if (v$.value.$invalid) {
+        return
+      }
+      const number = '+' + formData.tel.replace(/\D/g, '')
+      store.dispatch('auth/getSms', number)
+      .then((res) => {
+        console.log(res)
+        emit('saveTel', formData.tel)
+        loading.value = false
+        emit('input', 2)
+      })
+    }
+
     return {
       formData,
+      v$,
       onSubmit,
+      loading,
       openLogin
     }
   }
 }
 </script>
 <style lang="scss" module>
-  form {
-    & > .input + .input {
-      margin-top: 1.6rem;
-    }
-    .button {
-      width: 100%;
-      margin-top: 2.7rem;
-    }
+form {
+  & > .input + .input {
+    margin-top: 2.2rem;
   }
+  .button {
+    width: 100%;
+    margin-top: 2.7rem;
+  }
+}
 </style>

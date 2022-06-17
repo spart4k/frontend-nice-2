@@ -1,14 +1,15 @@
 <template>
-  <label
-    :class="[
-      $style.textField,
-      $props.mdFz && $style.mdFz
-    ]"
-  >
+  <label :class="[$style.textField, $props.mdFz && $style.mdFz, $props.error.length || $props.errCustom ? $style.error : '']">
     <h3 v-if="$props.title" :class="$style.title">
       {{ $props.title }}
     </h3>
     <div :class="$style.wrapperInput">
+      <span class="input-error" v-if="error">
+        {{ errMessage }}
+      </span>
+      <span class="input-error" v-if="errCustom">
+        {{ errCustom }}
+      </span>
       <input
         v-model="proxyVal"
         v-mask="$props.mask"
@@ -16,12 +17,12 @@
         :max="$props.max"
         :placeholder="$props.placeholder"
         @keydown.enter="$emit('keydown', $event)"
-      >
+      />
     </div>
   </label>
 </template>
 <script lang="js">
-import { ref, watch } from '@nuxtjs/composition-api'
+import { ref, watch, computed } from '@nuxtjs/composition-api'
 export default {
   name: 'NTextField',
   props: {
@@ -49,6 +50,14 @@ export default {
     max: {
       type: Number,
       default: null
+    },
+    error: {
+      type: Array,
+      default: () => []
+    },
+    errCustom: {
+      type: String,
+      default: ''
     }
   },
   setup (props, ctx) {
@@ -59,6 +68,24 @@ export default {
       emit('input', proxyVal.value)
     })
 
+    const errMessage = computed(() => {
+      if (props.error[0]) {
+        const text = props.error[0].$message
+        let newText = ''
+        switch (text) {
+          case 'Value is required':
+            newText = 'Обязательное поле'
+            break
+          case 'Value is not a valid email address':
+            newText = 'Email введен не корректно'
+            break
+          case 'This field should be at least 18 characters long':
+            newText = 'Введите номер полностью'
+            break
+        }
+        return newText
+      }
+    })
     // const getValue = computed({
     //   get () {
     //     return props.value
@@ -69,7 +96,8 @@ export default {
     // })
 
     return {
-      proxyVal
+      proxyVal,
+      errMessage
     }
   }
 }
@@ -77,7 +105,11 @@ export default {
 <style lang="scss" module>
 .textField {
   display: block;
-
+  &.error {
+    .wrapperInput {
+      border: red 1px solid;
+    }
+  }
   &.mdFz {
     input {
       @include text;
@@ -89,11 +121,20 @@ export default {
     margin-bottom: 0.75rem;
   }
   .wrapperInput {
+    position: relative;
     height: 5.1rem;
     padding-left: 1.478rem;
     padding-right: 1.478rem;
     background-color: $gray2;
-    border-radius: .4rem;
+    border: 1px solid $gray2;
+    border-radius: 0.4rem;
+    transition: .2s;
+    span {
+      position: absolute;
+      bottom: -1.8rem;
+      left: 0;
+      color: red;
+    }
   }
   input {
     width: 100%;
@@ -104,13 +145,6 @@ export default {
     font-weight: 600;
     @include text-md;
   }
-  &.input-error {
-    h3 {
-      color: red;
-    }
-    input {
-      border-color: red;
-    }
-  }
+
 }
 </style>
