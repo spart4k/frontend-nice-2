@@ -13,18 +13,20 @@
       title="Email"
     />
     <n-text-field
+      v-model="formData.tel"
       mask="+7 (###) ###-##-##"
       :error="v$.tel.$errors"
-      v-model="formData.tel"
       md-fz
       :class="$style.input"
       title="Телефон"
     />
-    <n-button :class="$style.button" :typeButton="v$.$invalid ? 'disable' : '' " type="submit">
-      <n-loading v-if="loading"></n-loading>
-      <template v-else>Зарегистрироваться</template>
+    <n-button :class="$style.button" :type-button="v$.$invalid ? 'disable' : '' " type="submit">
+      <n-loading v-if="loading" />
+      <template v-else>
+        Зарегистрироваться
+      </template>
     </n-button>
-    <n-button @click="openLogin" typeButton="sub" :class="$style.button">
+    <n-button type-button="sub" :class="$style.button" @click="openLogin">
       Уже есть аккаунт
     </n-button>
   </form>
@@ -55,13 +57,11 @@ export default {
     }
     const v$ = useVuelidate(rules, formData)
     const onSubmit = () => {
-      loading.value = true
       v$.value.$touch()
-      console.log(v$.value)
-
       if (v$.value.$invalid) {
         return
       }
+      loading.value = true
       const number = '+' + formData.tel.replace(/\D/g, '')
       store.dispatch('auth/getSms', number)
       .then((res) => {

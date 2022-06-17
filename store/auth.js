@@ -25,10 +25,7 @@ export const actions = {
   },
   async sendCode ({ commit }, params) {
     try {
-      console.log(params)
       const res = await this.$axios.post('api/v1/user/sms_code', params)
-      console.log(res)
-      console.log(res.data.access_token)
       commit('setToken', res.data.access_token)
       commit('setUserData', res.data.user)
       return res

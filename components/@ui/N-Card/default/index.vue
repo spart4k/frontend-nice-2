@@ -29,8 +29,8 @@
       </div>
     </template>
     <template v-else-if="$props.withVideo">
-      <video controls="controls" playsinline>
-        <source :src="`${$axios.defaults.baseURL}/${data.files[0].src}`" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
+      <video ref="videoRef" playsinline controls muted>
+        <source :src="videoUrl" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
       </video>
     </template>
     <div
@@ -75,13 +75,15 @@
   </div>
 </template>
 <script lang="js">
-import { computed } from '@nuxtjs/composition-api'
+import { computed, onMounted, ref, useContext } from '@nuxtjs/composition-api'
 import dataProps from '../props'
 
 export default {
   name: 'NCardDefault',
   props: { ...dataProps.props },
   setup (props) {
+    const videoRef = ref(null)
+    const { $axios } = useContext()
     const isJsonString = computed(() => {
       try {
         JSON.parse(props?.data?.text)
@@ -90,12 +92,22 @@ export default {
       }
       return true
     })
+    const videoUrl = ref()
+    onMounted(() => {
+      if (props.withVideo) {
+        // videoUrl.value = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`
+        videoRef.value.src = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`
+        videoRef.value.load()
+      }
+    })
     const dateFormat = computed(() => {
       return props.data.date_event?.replace(/:(\w+)/, '')?.replace(/\s/, ' / ') ?? ''
     })
     return {
       isJsonString,
-      dateFormat
+      dateFormat,
+      videoRef,
+      videoUrl
     }
   }
 }

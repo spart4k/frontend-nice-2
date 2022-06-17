@@ -72,7 +72,7 @@ export default {
     onMounted(() => {
       const options = {
         root: null,
-        threshold: 0.1,
+        threshold: 0.04,
         rootMargin: '0px'
       }
 
@@ -111,9 +111,6 @@ export default {
 <style scoped lang="scss" module>
 .intro {
   width: 100%;
-  //min-height: -webkit-fill-available;
-  //height: calc(var(--vh, 1vh) * 100);
-  //height: calc(100% - var(--header-height));
   color: $white;
   padding-top: $headerHeight;
   overflow: auto;
@@ -127,7 +124,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    //height: calc(100% - var(--footer-height));
     height: -webkit-fill-available;
     background-size: cover;
     @media (max-width: $bgWidth) {
@@ -141,14 +137,9 @@ export default {
     height: 100%;
     position: relative;
     z-index: 2;
-    //overflow: auto;
-    //&::-webkit-scrollbar {
-    //  display: none;
-    //}
   }
   .shim {
     min-height: -webkit-fill-available;
-    //height: calc((var(--vh, 1vh) * 100) - var(--header-height));
     height: calc(100vh - var(--header-height));
     margin-top: 7.9rem;
     width: 100%;

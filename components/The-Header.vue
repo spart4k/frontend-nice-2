@@ -68,7 +68,7 @@
 </template>
 
 <script lang="js">
-import { computed, ref, useRouter, useRoute, onMounted, watch } from '@nuxtjs/composition-api'
+import { computed, ref, useRouter, useRoute, onMounted, watch, nextTick } from '@nuxtjs/composition-api'
 
 export default {
   name: 'TheHeader',
@@ -89,13 +89,21 @@ export default {
     const bgName = computed(() => $store.state.content.bgIntro)
     onMounted(() => {
       window.addEventListener('scroll', () => {
-        if (isHomePage.value) {
-          if (header.value.style.backgroundImage !== '') { return }
-          header.value.style.backgroundImage = `url(${require('@/assets/img/background/index-background.jpg')})`
-        } else {
-          if (header.value.style.backgroundImage !== '') { return }
-          header.value.style.backgroundImage = `url(${require('@/assets/img/background/' + `${route.value.params.slug}-background.jpg`)})`
-        }
+        const content = document.querySelector('.content')
+        nextTick(() => {
+          const boundingContent = content.getBoundingClientRect()
+          const boundingHeader = header.value.getBoundingClientRect()
+          console.log(boundingContent.top)
+          if (boundingHeader.bottom >= boundingContent.top) {
+            if (isHomePage.value) {
+              if (header.value.style.backgroundImage !== '') { return }
+              header.value.style.backgroundImage = `url(${require('@/assets/img/background/index-background.jpg')})`
+            } else {
+              if (header.value.style.backgroundImage !== '') { return }
+              header.value.style.backgroundImage = `url(${require('@/assets/img/background/' + `${route.value.params.slug}-background.jpg`)})`
+            }
+          }
+        })
       })
     })
     watch(() => route.value.path, () => {
