@@ -1,6 +1,7 @@
 <template>
   <!--  <div :class="$style.headerHolder">-->
-  <header :class="$style.header" :style="{backgroundImage: backgroundImage}">
+  <!--  :style="{backgroundImage: backgroundImage}"-->
+  <header ref="header" :class="$style.header">
     <ul :class="[$style.headerUser__list, active && $style.hideElement]">
       <li :class="$style.headerUser__item">
         <n-icon name="telegram" />
@@ -67,7 +68,7 @@
 </template>
 
 <script lang="js">
-import { computed, ref, useRouter, useRoute } from '@nuxtjs/composition-api'
+import { computed, ref, useRouter, useRoute, onMounted, watch } from '@nuxtjs/composition-api'
 
 export default {
   name: 'TheHeader',
@@ -83,8 +84,23 @@ export default {
     const active = ref(false)
     const route = useRoute()
     const router = useRouter()
+    const header = ref(null)
     const isHomePage = computed(() => route.value.name === 'index')
     const bgName = computed(() => $store.state.content.bgIntro)
+    onMounted(() => {
+      window.addEventListener('scroll', () => {
+        if (isHomePage.value) {
+          if (header.value.style.backgroundImage !== '') { return }
+          header.value.style.backgroundImage = `url(${require('@/assets/img/background/index-background.jpg')})`
+        } else {
+          if (header.value.style.backgroundImage !== '') { return }
+          header.value.style.backgroundImage = `url(${require('@/assets/img/background/' + `${route.value.params.slug}-background.jpg`)})`
+        }
+      })
+    })
+    watch(() => route.value.path, () => {
+      header.value.style.backgroundImage = ''
+    })
     const backgroundImage = computed(() => {
       if (isHomePage.value) {
         return `url(${require('@/assets/img/background/index-background.jpg')})`
@@ -114,6 +130,7 @@ export default {
       active,
       hasOpenMenu,
       openTestPage,
+      header,
       bgName
     }
   }

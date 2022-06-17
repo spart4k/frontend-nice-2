@@ -7,6 +7,19 @@
     />
     <!--    <h2>{{ data.title }}</h2>-->
     <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" />
+    <N-Chip
+      v-for="item in data.tags"
+      :key="item.id"
+      :class="$style.chip"
+      @click="$emit('clickTag', item.id)"
+    >
+      {{ item.title }}
+    </N-Chip>
+    <!--          <N-Comment-->
+    <!--            v-if="$props.amountComment"-->
+    <!--            :class="$style.comment"-->
+    <!--            :current="$props.amountComment"-->
+    <!--          />-->
     <!--    <p>-->
     <!--      {{ $props.description }}-->
     <!--    </p>-->
@@ -88,6 +101,11 @@ export default {
     font-weight: 700;
     @include text-sm;
     margin-bottom: .73rem;
+  }
+  .chip {
+    & + .chip {
+      margin-left: 1rem;
+    }
   }
 }
 </style>

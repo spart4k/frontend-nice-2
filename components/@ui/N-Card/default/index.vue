@@ -16,30 +16,31 @@
       <!--          height: `${$props.hatHeight || 23.6}rem`-->
       <!--        }"-->
       <!--      />-->
-
+      <!--      backgroundImage: `url(${$axios.defaults.baseURL}${data.images[0].src})`,-->
       <div
         :class="[
           $style.hat,
         ]"
         :style="{
-          backgroundImage: `url(${$axios.defaults.baseURL}${data.images[0].src})`,
           height: `${$props.hatHeight || 23.6}rem`
         }"
-      />
+      >
+        <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+      </div>
     </template>
-    <template v-else-if="$props.video">
-      <video controls="controls">
-        <source :src="$props.video" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
+    <template v-else-if="$props.withVideo">
+      <video controls="controls" playsinline>
+        <source :src="`${$axios.defaults.baseURL}/${data.files[0].src}`" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
       </video>
     </template>
     <div
       :class="[
         $style.body,
-        $props.author && $style.author
+        $props.withAuthor && $style.author
       ]"
     >
-      <template v-if="$props.author">
-        <p>Автор: {{ $props.author }}</p>
+      <template v-if="$props.withAuthor">
+        <p>Автор: {{ data.author }}</p>
       </template>
       <template v-else>
         <NuxtLink :class="$style.body__top" tag="div" to="/">
@@ -110,14 +111,22 @@ export default {
     video {
       width: 100%;
       height: 100%;
+      max-height: 24rem;
     }
   }
   .hat {
     //height: 23.6rem;
     width: 100%;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: #e7dddd;
+    //img {
+    //  width: 100%;
+    //  height: 100%;
+    //  object-fit: cover;
+    //  object-position: center;
+    //}
+    //background-size: cover;
+    //background-position: center;
+    //background-repeat: no-repeat;
   }
   .body {
     padding: 2.7rem 1.697rem 1.823rem;

@@ -5,7 +5,7 @@
         <h2>
           {{ item.title }}
         </h2>
-        <N-Audio :src="`https://nice.c.roky.rocks/${item.src}`" />
+        <N-Audio v-if="item.src" :src="`https://nice.c.roky.rocks/${item.src}`" />
       </div>
     </template>
   </N-Card-Default>

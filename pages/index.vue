@@ -1,12 +1,13 @@
 <template>
   <n-intro :description="introTitle">
-    <div :class="$style.cards">
-      <div v-for="(card) in cards.value" :key="card.id" :class="$style.cards__item">
-        <SectionCards :id="card.section.id" :key="card.id" :card="card" @clickTag="($event) => clickTag($event, card.section.id)" />
-      </div>
+    <div v-if="cards.value && cards.value.data" :class="$style.cards">
+      <TransitionGroup name="list">
+        <div v-for="(card) in cards.value.data" :key="card.id" :class="$style.cards__item">
+          <SectionCards :id="card.section.id" :key="card.id" :card="card" @clickTag="($event) => clickTag($event, card.section.id)" />
+        </div>
+      </transitiongroup>
       <client-only>
         <n-lazy-pagination
-          v-if="cards.length > 0"
           @lazyPagination="lazyPagination"
         />
       </client-only>
@@ -14,22 +15,18 @@
   </n-intro>
 </template>
 <script>
-import { ref, useContext, useAsync, useRouter } from '@nuxtjs/composition-api'
+import { ref, useContext, useAsync, useRouter, useRoute } from '@nuxtjs/composition-api'
 import { pagination } from '~/plugins/pagination'
 export default {
   name: 'IndexPage',
+  transition: 'home',
   setup () {
     const { store } = useContext()
     const router = useRouter()
-    // const page = ref(1)
+    const route = useRoute()
     const cards = ref([])
+    const totalPage = ref(0)
 
-    const introTitle = ref({
-      title: 'Главная',
-      subtitle: 'творческое объединение',
-      background: ''
-    })
-    // store.commit('content/changeState', { key: 'logoBg', value: 'main' })
     const fetch = (currentPage) => {
       const params = {
         page: currentPage
@@ -37,25 +34,33 @@ export default {
       const response = store.dispatch('main/getData', params)
       return response
     }
-
-    const { page, getData } = pagination(fetch, cards.value)
-
-    const lazyPagination = ($state) => {
-      getData($state)
-    }
-    const clickTag = (tag, section) => {
-      router.push({ path: 'tags', query: { tag, id: section } })
-      console.log(tag, section)
-    }
-    store.commit('content/clearBgIntro')
     cards.value = useAsync(async () => {
       try {
         const response = await fetch()
-        return response.data.data
+        totalPage.value = response?.data.last_page
+        return response.data
       } catch (e) {
         console.log(e)
       }
+    }, route.value.path)
+
+    const introTitle = ref({
+      title: 'Главная',
+      subtitle: 'творческое объединение',
+      background: ''
     })
+    store.commit('content/clearBgIntro')
+
+    const { page, getData, dataPagination } = pagination(fetch)
+
+    const lazyPagination = ($state) => {
+      getData($state, cards.value.value.last_page)
+      cards.value.value.data = [...cards.value.value.data, ...dataPagination.value]
+      // console.log(dataPagination.value, cards.value.value)
+    }
+    const clickTag = (tag) => {
+      router.push({ path: 'tags', query: { tag } })
+    }
 
     return {
       introTitle,
@@ -64,7 +69,8 @@ export default {
       lazyPagination,
       clickTag
     }
-  }
+  },
+  watchQuery: ['page']
 }
 </script>
 <style lang="scss" module>

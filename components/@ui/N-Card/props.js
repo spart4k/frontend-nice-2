@@ -13,6 +13,14 @@ export default {
       type: String,
       default: ''
     },
+    withVideo: {
+      type: Boolean,
+      default: false
+    },
+    withAuthor: {
+      type: Boolean,
+      default: false
+    },
     title: {
       type: String,
       default: ''

@@ -11,6 +11,7 @@ import { ref, useContext, useFetch } from '@nuxtjs/composition-api'
 
 export default {
   name: 'DefaultLayout',
+  transition: 'home',
   setup () {
     const headerItems = ref([])
     const { $axios, store } = useContext()
