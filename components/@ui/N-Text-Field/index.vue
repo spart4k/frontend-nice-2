@@ -13,7 +13,6 @@
         v-model="proxyVal"
         v-mask="$props.mask"
         :type="$props.type"
-        :maxlength="$props.maxlength"
         :max="$props.max"
         :placeholder="$props.placeholder"
         @keydown.enter="$emit('keydown', $event)"
@@ -46,10 +45,6 @@ export default {
     type: {
       type: String,
       default: 'text'
-    },
-    maxlength: {
-      type: Number,
-      default: 0
     },
     max: {
       type: Number,
@@ -108,6 +103,14 @@ export default {
     border: none;
     font-weight: 600;
     @include text-md;
+  }
+  &.input-error {
+    h3 {
+      color: red;
+    }
+    input {
+      border-color: red;
+    }
   }
 }
 </style>

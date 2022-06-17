@@ -1,26 +1,39 @@
-export const state = () => ({})
+export const state = () => ({
+  user: {},
+  token: ''
+})
 
-export const mutations = {}
+export const mutations = {
+  setUserData (state, user) {
+    localStorage.setItem('user', JSON.stringify(user))
+    state.user = user
+  },
+  setToken (state, token) {
+    localStorage.setItem('token', token)
+    state.token = token
+  }
+}
 
 export const actions = {
-  async getSms (state, params) {
+  async getSms ({ commit }, params) {
     try {
-      console.log(params)
       const data = await this.$axios.post('api/v1/user/auth', { phone: params })
-      console.log(data)
       return data
     } catch (e) {
-      console.log(e)
+      return e.response.data.message
     }
   },
-  async sendCode (state, params) {
+  async sendCode ({ commit }, params) {
     try {
       console.log(params)
-      const data = await this.$axios.post('api/v1/user/auth', { code: params })
-      console.log(data)
-      return data
+      const res = await this.$axios.post('api/v1/user/sms_code', params)
+      console.log(res)
+      console.log(res.data.access_token)
+      commit('setToken', res.data.access_token)
+      commit('setUserData', res.data.user)
+      return res
     } catch (e) {
-      console.log(e)
+      return e.response.data
     }
   }
 }

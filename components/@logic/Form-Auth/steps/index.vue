@@ -46,7 +46,6 @@ export default {
     })
     const saveTel = (tel) => {
       titleTel.value = tel
-      console.log('test')
     }
     const getActivePopup = computed({
       get () {
