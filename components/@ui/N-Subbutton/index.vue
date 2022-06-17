@@ -29,19 +29,9 @@ export default {
     @include text;
     transition: background-color .2s;
     max-width: 100%;
-    transition: .2s;
     &:hover {
       background-color: rgba($blueBlack, .9);
     }
-  }
-  .sub {
-    background: transparent;
-    border: 2px solid $blueBlack2;
-    color: $blueBlack2;
-  }
-  .disable {
-    opacity: 0.5;
-    point-events: none;
   }
   .transparent {
     background-color: transparent;
