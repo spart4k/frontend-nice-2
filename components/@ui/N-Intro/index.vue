@@ -11,12 +11,10 @@
         </h1>
 
         <div :class="[isHomePage && $style.intro__logo_subtitle_wrapper]">
-          <div v-if="description.subtitle" :class="[isHomePage && $style.intro__subtitle_homePage ,$style.intro__subtitle]">
+          <h1 v-if="description.subtitle" :class="[isHomePage && $style.intro__subtitle_homePage ,$style.intro__subtitle]">
             {{ description.subtitle }}
-          </div>
-          <div v-if="isHomePage" :class="$style.intro__logo">
-            <n-logo size="big" />
-          </div>
+          </h1>
+          <n-logo v-if="isHomePage" size="big" :class="$style.intro__logo" />
         </div>
       </div>
       <div :class="$style.shim" />
@@ -34,7 +32,7 @@
 </template>
 
 <script>
-import { computed, onMounted, ref, useRoute } from '@nuxtjs/composition-api'
+import { computed, nextTick, onMounted, ref, useRoute } from '@nuxtjs/composition-api'
 import { scrollBy } from 'seamless-scroll-polyfill'
 
 export default {
@@ -70,29 +68,33 @@ export default {
     })
 
     onMounted(() => {
-      const options = {
-        root: null,
-        threshold: 0.04,
-        rootMargin: '0px'
-      }
-
-      const callback = (entries) => {
-        if (entries[0].isIntersecting) {
-          scrollingContent.value = true
-          $store.commit('content/changeLogo', true)
-        } else {
-          scrollingContent.value = false
-          $store.commit('content/changeLogo', false)
+      nextTick(() => {
+        const options = {
+          root: null,
+          threshold: 0.04,
+          rootMargin: '0px'
         }
-      }
 
-      const observer = new IntersectionObserver(callback, options)
-      observer.observe(content.value)
+        const callback = (entries) => {
+          if (entries[0].isIntersecting) {
+            scrollingContent.value = true
+            $store.commit('content/changeLogo', true)
+          } else {
+            scrollingContent.value = false
+            $store.commit('content/changeLogo', false)
+          }
+        }
+
+        const observer = new IntersectionObserver(callback, options)
+        observer.observe(content.value)
+      })
     })
 
     const scrollTo = () => {
+      const body = document.querySelector('.body')
+
       const contentBounding = content.value.getBoundingClientRect()
-      scrollBy(window, { behavior: 'smooth', top: contentBounding.top - 90 })
+      scrollBy(body, { behavior: 'smooth', top: contentBounding.top - 90 })
     }
     return {
       anchor,
@@ -112,8 +114,11 @@ export default {
 .intro {
   width: 100%;
   color: $white;
-  padding-top: $headerHeight;
   overflow: auto;
+  .visually-hidden {
+    position: fixed;
+    transform: scale(0);
+  }
   .bg {
     position: fixed;
     top: 0;
@@ -173,7 +178,7 @@ export default {
   }
   &__container {
     @include container;
-    margin-top: calc(7.9rem  + var(--header-height));
+    margin-top: 7.9rem;
     position: fixed;
     z-index: 1;
     transition: opacity 0.3s ease-in-out;

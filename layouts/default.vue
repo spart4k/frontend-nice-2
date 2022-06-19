@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <the-header :header-items="headerItems" />
+  <div :class="$style.wrapper" class="body">
+    <the-header :header-items="headerItems" class="header" />
     <Nuxt />
     <the-footer />
   </div>
 </template>
 
 <script>
-import { ref, useContext, useFetch } from '@nuxtjs/composition-api'
+import { ref, useContext, useFetch, onMounted } from '@nuxtjs/composition-api'
 
 export default {
   name: 'DefaultLayout',
@@ -15,12 +15,28 @@ export default {
   setup () {
     const headerItems = ref([])
     const { $axios, store } = useContext()
+
+    const setCssVarriable = () => {
+      const vh = window.innerHeight * 0.01
+      document.documentElement.style.setProperty('--vh', `${vh}px`)
+
+      window.addEventListener('resize', () => {
+        const vh = window.innerHeight * 0.01
+        document.documentElement.style.setProperty('--vh', `${vh}px`)
+      })
+    }
+
     useFetch(async () => {
       headerItems.value = []
       const response = await $axios('api/v1/sections')
       headerItems.value = response.data
       store.commit('content/changeSections', response.data)
     })
+
+    onMounted(() => {
+      setCssVarriable()
+    })
+
     return {
       headerItems
     }
@@ -29,7 +45,10 @@ export default {
 </script>
 
 <style scoped module lang="scss">
-.main {
-
+.wrapper {
+  margin-top: var(--header-height);
+  height: 100vh; /* Use vh as a fallback for browsers that do not support Custom Properties */
+  height: calc((var(--vh, 1vh) * 100) - var(--header-height));
+  overflow: auto;
 }
 </style>

@@ -28,17 +28,38 @@ export default {
     const cards = ref([])
     const totalPage = ref([])
     const id = computed(() => Number(route.value.query.id))
-    const tagId = computed(() => route.value.query.tag)
+    const tagId = computed(() => Number(route.value.query.tag))
     const loading = ref(false)
 
-    const introTitle = ref({
-      title: 'ВИДЕО2',
-      subtitle: 'чето там про видео про видео про видео',
-      background: route.value.params.slug
+    const introTitle = computed(() => {
+      if (id.value) {
+        const findSection = store?.state?.content.sections.find((item) => {
+          return Number(item.id) === id.value
+        })
+        return {
+          title: findSection.title,
+          subtitle: 'test',
+          background: route.value.params.slug
+        }
+      } else if (tagId.value && cards.value.value && cards.value?.value.length > 0) {
+          const findTags = cards.value?.value[0]?.tags?.find((item) => {
+            return Number(item.id) === tagId.value
+          })
+          return {
+            title: findTags?.title,
+            subtitle: '',
+            background: route.value.params.slug
+          }
+        } else {
+        return {
+          title: '',
+          subtitle: '',
+          background: route.value.params.slug
+        }
+      }
     })
 
     const fetchData = (currentPage) => {
-      console.log(tagId.value, 'fetch')
       const params = {
         page: currentPage,
         section_id: id.value ? id.value : '',
@@ -47,12 +68,11 @@ export default {
       const response = store.dispatch('pages/getData', params)
       return response
     }
-    const { page, getData, dataPagination } = pagination(fetch)
+    const { getData, dataPagination } = pagination(fetch)
 
     const lazyPagination = ($state) => {
       getData($state, cards.value.value.last_page)
       cards.value.value.data = [...cards.value.value.data, ...dataPagination.value]
-      // console.log(dataPagination.value, cards.value.value)
     }
 
     const clickTag = async (value) => {
@@ -66,7 +86,9 @@ export default {
       cards.value.value = _.cloneDeep(response.data.data)
       loading.value = false
     }
+
     store.commit('content/changeBgIntro', route.value.params.slug)
+
     cards.value = useAsync(async () => {
       try {
         const response = await fetchData()
@@ -82,7 +104,6 @@ export default {
       totalPage,
       id,
       loading,
-      page,
       clickTag,
       lazyPagination
     }
