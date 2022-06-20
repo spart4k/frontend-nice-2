@@ -1,5 +1,5 @@
 <template>
-  <NPopup v-model="getActivePopup" :title="getTitle">
+  <NPopup class="auth" v-model="getActivePopup" :title="getTitle">
     <div class="wrapper">
       <components
         :is="getComponent"
@@ -19,7 +19,7 @@ export default {
   props: {
     value: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   setup (props, ctx) {
@@ -78,8 +78,10 @@ export default {
 <style lang="scss" scoped>
   h2 {
       margin-bottom: 1rem;
+      color: $fontColorDefault;
   }
   .wrapper {
     margin-top: 2.7rem;
   }
+
 </style>

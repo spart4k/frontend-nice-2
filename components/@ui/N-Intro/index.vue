@@ -153,7 +153,7 @@ export default {
     margin-top: 7.9rem;
     width: 100%;
     position: relative;
-    z-index: 10;
+    z-index: 1;
   }
   img {
     max-width: 100%;

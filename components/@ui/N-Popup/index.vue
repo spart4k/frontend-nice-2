@@ -67,6 +67,7 @@ export default {
     .hat {
       display: flex;
       align-items: center;
+      color: $fontColorDefault;
     }
     .close {
       margin-left: auto;

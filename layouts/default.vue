@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { ref, useContext, useFetch } from '@nuxtjs/composition-api'
+import { ref, useContext, useFetch, onMounted } from '@nuxtjs/composition-api'
 
 export default {
   name: 'DefaultLayout',
@@ -20,6 +20,12 @@ export default {
       headerItems.value = response.data
       store.commit('content/changeSections', response.data)
     })
+    onMounted(() => {
+      console.log('unmounted')
+      store.commit('auth/setUserData')
+      store.commit('auth/setToken')
+    })
+
     return {
       headerItems
     }

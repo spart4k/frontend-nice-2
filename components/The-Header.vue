@@ -1,11 +1,11 @@
 <template>
   <!--  <div :class="$style.headerHolder">-->
-  <header :class="$style.header" :style="{backgroundImage: backgroundImage}">
+  <header :class="$style.header" :style="{ backgroundImage: backgroundImage }">
     <ul :class="[$style.headerUser__list, active && $style.hideElement]">
       <li :class="$style.headerUser__item">
         <n-icon name="telegram" />
       </li>
-      <li :class="$style.headerUser__item">
+      <li @click="openProfile" :class="$style.headerUser__item">
         <n-icon name="user" />
       </li>
     </ul>
@@ -13,7 +13,7 @@
       <nav v-if="active" :class="[$style.headerNav, active && $style.active]">
         <div :class="[$style.linkHome]" @click="active = false">
           <transition name="fade-fast">
-            <nuxt-link v-if="!isHomePage" :to="{path: '/'}">
+            <nuxt-link v-if="!isHomePage" :to="{ path: '/' }">
               <n-icon name="arrow" :class="$style.icon" />
               <span>На главную</span>
             </nuxt-link>
@@ -24,13 +24,16 @@
             <n-icon name="basket" :class="$style.icon" />
             <span>Корзина</span>
           </div>
-          <div :class="$style.basket__price">
-            3 товара на 3880р
-          </div>
+          <div :class="$style.basket__price">3 товара на 3880р</div>
         </div>
         <div :class="$style.headerNav__inner">
           <ul :class="$style.headerMenu__list">
-            <li v-for="item in headerItems" :key="item.title" :class="$style.headerMenu__item" @click.stop="toggleMenu">
+            <li
+              v-for="item in headerItems"
+              :key="item.title"
+              :class="$style.headerMenu__item"
+              @click.stop="toggleMenu"
+            >
               <nuxt-link :to="{ path: item.slug, params: { id: item.id } }">
                 {{ item.title }}
               </nuxt-link>
@@ -41,7 +44,11 @@
     </transition>
 
     <transition name="fade-fast">
-      <nuxt-link v-if="isHomePage ? showLogo : true" to="/" :class="[$style.logo, active && $style.hideElement]">
+      <nuxt-link
+        v-if="isHomePage ? showLogo : true"
+        to="/"
+        :class="[$style.logo, active && $style.hideElement]"
+      >
         <div>творческое объединение</div>
         <n-logo size="lg" />
       </nuxt-link>
@@ -49,7 +56,7 @@
 
     <n-button
       type-button="transparent"
-      :class="[active && $style.open,$style.deviceMenu]"
+      :class="[active && $style.open, $style.deviceMenu]"
       @click="openMenu"
     >
       <div :class="$style.deviceMenu__inner">
@@ -58,8 +65,9 @@
         <span />
       </div>
     </n-button>
+    <FormAuthSteps v-model="activeAuthSteps" />
   </header>
-<!--  </div>-->
+  <!--  </div>-->
 </template>
 
 <script lang="js">
@@ -77,6 +85,7 @@ export default {
     const { $store } = ctx.root
     const hasOpenMenu = ref(false)
     const active = ref(false)
+    const activeAuthSteps = ref(false)
     const route = useRoute()
     const router = useRouter()
     const isHomePage = computed(() => route.value.name === 'index')
@@ -99,6 +108,14 @@ export default {
     const openTestPage = (num) => {
       router.push({ path: `${num}` })
     }
+    const openProfile = () => {
+      if ($store.state.auth.authorizated) {
+        router.push({ path: '/profile' })
+      } else {
+        activeAuthSteps.value = true
+        console.log('non auth')
+      }
+    }
     const showLogo = computed(() => $store.state.content.showLogo)
 
     return {
@@ -110,7 +127,9 @@ export default {
       active,
       hasOpenMenu,
       openTestPage,
-      bgName
+      bgName,
+      openProfile,
+      activeAuthSteps
     }
   }
 }
