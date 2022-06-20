@@ -21,6 +21,10 @@ export default {
       type: Boolean,
       default: false
     },
+    detailPage: {
+      type: Boolean,
+      default: false
+    },
     title: {
       type: String,
       default: ''

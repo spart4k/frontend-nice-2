@@ -2,9 +2,7 @@
   <main>
     <div :class="$style.intro">
       <!--      :style="{ backgroundImage: backgroundImage}"-->
-      <div :class="$style.bg" :style="{ backgroundImage: backgroundImage}">
-        <img v-if="!isHomePage && image" :src="image">
-      </div>
+      <N-Background :description="description" />
       <div :class="[$style.intro__container, scrollingContent && $style.scrolling]">
         <h1 v-if="!isHomePage" :class="$style.intro__title">
           {{ description.title }}
@@ -32,7 +30,7 @@
 </template>
 
 <script>
-import { computed, nextTick, onMounted, ref, useRoute } from '@nuxtjs/composition-api'
+import { computed, nextTick, onMounted, ref, useRoute, watch } from '@nuxtjs/composition-api'
 import { scrollBy } from 'seamless-scroll-polyfill'
 
 export default {
@@ -50,22 +48,6 @@ export default {
     const scrollingContent = ref(null)
     const route = useRoute()
     const isHomePage = computed(() => route.value.name === 'index')
-
-    const backgroundImage = computed(() => {
-      if (props.description.background) {
-        return `url(${require('@/assets/img/background/' + `${props.description.background}-background.jpg`)})`
-      } else {
-        return `url(${require('@/assets/img/background/index-background.jpg')})`
-      }
-    })
-
-    const image = computed(() => {
-      if (props.description.background) {
-        return `${require('@/assets/img/background/' + `${props.description.background}.png`)}`
-      } else {
-        return require('@/assets/img/background/odezda.png')
-      }
-    })
 
     onMounted(() => {
       nextTick(() => {
@@ -96,17 +78,22 @@ export default {
       const contentBounding = content.value.getBoundingClientRect()
       scrollBy(body, { behavior: 'smooth', top: contentBounding.top - 90 })
     }
+    watch(() => route.value.fullPath, () => {
+      const body = document.querySelector('.body')
+
+      const contentBounding = content.value.getBoundingClientRect()
+      scrollBy(body, { behavior: 'smooth', top: contentBounding.top - 90 })
+    })
     return {
       anchor,
       content,
       wrapper,
       scrollingContent,
-      image,
       isHomePage,
-      backgroundImage,
       scrollTo
     }
-  }
+  },
+  watchQuery: true
 }
 </script>
 

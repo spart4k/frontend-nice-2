@@ -20,6 +20,7 @@ html, #app {
 
 html {
   //font-size: calc((10 / 1280) * 100vw);
+  height: 100%;
   font-size: 10px;
   background-color: $blueBlack3;
 
@@ -34,8 +35,10 @@ html {
 
 body {
   line-height: 1.1666666667;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
   height: 100%;
+  width: 100%;
   background-color: $blueBlack3;
   @include montserratMedium;
   @include text-sm;

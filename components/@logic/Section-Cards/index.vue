@@ -4,19 +4,20 @@
       <N-Card-MusicDetail :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
     </template>
     <template v-else-if="id === 2">
-      <N-Card-Default with-video :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
+      <N-Card-Default :detail-page="detailPage" with-video :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
     </template>
     <template v-else-if="id === 3">
-      <N-Card-Read :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
+      <N-Card-Read :detail-page="detailPage" :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
     </template>
     <template v-else-if="id === 4">
-      <N-Card-Default :data="card" :hat-height="12.4" @clickTag="($event) => $emit('clickTag', $event)" />
+      <N-Card-Default :detail-page="detailPage" :data="card" :hat-height="12.4" @clickTag="($event) => $emit('clickTag', $event)" />
     </template>
     <template v-else-if="id === 7">
-      <N-Card-Default with-author :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
+      <N-Card-Default :detail-page="detailPage" with-author :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
     </template>
     <template v-else>
       <N-Card-Default
+        :detail-page="detailPage"
         :data="card"
         @clickTag="($event) => $emit('clickTag', $event)"
       />
@@ -30,11 +31,16 @@ export default {
   props: {
     id: {
       type: Number,
-      required: true
+      required: true,
+      default: 0
     },
     card: {
       type: [Array, Object],
       required: true
+    },
+    detailPage: {
+      type: Boolean,
+      required: false
     }
   }
 }

@@ -1,8 +1,8 @@
 <template>
   <div :class="$style.wrapper" class="body">
-    <the-header :header-items="headerItems" class="header" />
-    <Nuxt />
-    <the-footer />
+    <the-header :header-items="headerItems" class="header" :class="$style.header" />
+    <Nuxt :class="$style.content" />
+    <the-footer :class="$style.footer" />
   </div>
 </template>
 
@@ -50,5 +50,16 @@ export default {
   height: 100vh; /* Use vh as a fallback for browsers that do not support Custom Properties */
   height: calc((var(--vh, 1vh) * 100) - var(--header-height));
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  flex: 0 0 auto;
+}
+.content {
+  flex: 1 0 auto;
+}
+.footer {
+  flex: 0 0 auto;
 }
 </style>

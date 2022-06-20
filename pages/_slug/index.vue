@@ -38,7 +38,7 @@ export default {
         })
         return {
           title: findSection.title,
-          subtitle: 'test',
+          subtitle: findSection?.description,
           background: route.value.params.slug
         }
       } else if (tagId.value && cards.value.value && cards.value?.value.length > 0) {
@@ -47,7 +47,7 @@ export default {
           })
           return {
             title: findTags?.title,
-            subtitle: '',
+            subtitle: findTags?.description,
             background: route.value.params.slug
           }
         } else {

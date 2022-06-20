@@ -1,33 +1,47 @@
 <template>
   <div :class="$style.card">
-    <template v-if="data.images.length && data.images.length > 1">
-      <N-Slider :slider-item="$props.images" />
+    <template v-if="data.images.length">
+      <template v-if="$props.detailPage && data.images.length > 1">
+        <N-Slider :slider-item="data.images" />
+      </template>
+      <template v-else>
+        <div
+          :class="[
+            $style.hat,
+          ]"
+          :style="{
+            height: `${$props.hatHeight || 23.6}rem`
+          }"
+        >
+          <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+        </div>
+      </template>
     </template>
     <!--    v-else-if="$props.images && $props.images.length === 1"-->
-    <template v-if="data.images.length === 1">
-      <!--      <div-->
-      <!--        v-for="item in $props.images"-->
-      <!--        :key="item.src"-->
-      <!--        :class="[-->
-      <!--          $style.hat,-->
-      <!--        ]"-->
-      <!--        :style="{-->
-      <!--          backgroundImage: `url('${item.src}')`,-->
-      <!--          height: `${$props.hatHeight || 23.6}rem`-->
-      <!--        }"-->
-      <!--      />-->
-      <!--      backgroundImage: `url(${$axios.defaults.baseURL}${data.images[0].src})`,-->
-      <div
-        :class="[
-          $style.hat,
-        ]"
-        :style="{
-          height: `${$props.hatHeight || 23.6}rem`
-        }"
-      >
-        <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
-      </div>
-    </template>
+    <!--    <template v-if="data.images.length === 1">-->
+    <!--      &lt;!&ndash;      <div&ndash;&gt;-->
+    <!--      &lt;!&ndash;        v-for="item in $props.images"&ndash;&gt;-->
+    <!--      &lt;!&ndash;        :key="item.src"&ndash;&gt;-->
+    <!--      &lt;!&ndash;        :class="[&ndash;&gt;-->
+    <!--      &lt;!&ndash;          $style.hat,&ndash;&gt;-->
+    <!--      &lt;!&ndash;        ]"&ndash;&gt;-->
+    <!--      &lt;!&ndash;        :style="{&ndash;&gt;-->
+    <!--      &lt;!&ndash;          backgroundImage: `url('${item.src}')`,&ndash;&gt;-->
+    <!--      &lt;!&ndash;          height: `${$props.hatHeight || 23.6}rem`&ndash;&gt;-->
+    <!--      &lt;!&ndash;        }"&ndash;&gt;-->
+    <!--      &lt;!&ndash;      />&ndash;&gt;-->
+    <!--      &lt;!&ndash;      backgroundImage: `url(${$axios.defaults.baseURL}${data.images[0].src})`,&ndash;&gt;-->
+    <!--      <div-->
+    <!--        :class="[-->
+    <!--          $style.hat,-->
+    <!--        ]"-->
+    <!--        :style="{-->
+    <!--          height: `${$props.hatHeight || 23.6}rem`-->
+    <!--        }"-->
+    <!--      >-->
+    <!--        <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />-->
+    <!--      </div>-->
+    <!--    </template>-->
     <template v-else-if="$props.withVideo">
       <video ref="videoRef" playsinline controls muted>
         <source :src="videoUrl" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
@@ -43,14 +57,17 @@
         <p>Автор: {{ data.author }}</p>
       </template>
       <template v-else>
-        <NuxtLink :class="$style.body__top" tag="div" to="/">
+        <NuxtLink :class="$style.body__top" tag="div" :to="`cards/${data.id}`">
           <h2 :class="$style.title">
             {{ data.title }}
           </h2>
+          <div v-if="data.price" :class="$style.price">
+            {{ data.price }}р.
+          </div>
           <div v-if="data.date_event" :class="$style.time">
             {{ dateFormat }}
           </div>
-          <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" />
+          <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
         </NuxtLink>
         <div :class="$style.body__bottom">
           <N-Chip
@@ -75,7 +92,7 @@
   </div>
 </template>
 <script lang="js">
-import { computed, onMounted, ref, useContext } from '@nuxtjs/composition-api'
+import { computed, nextTick, onMounted, ref, useContext } from '@nuxtjs/composition-api'
 import dataProps from '../props'
 
 export default {
@@ -94,11 +111,13 @@ export default {
     })
     const videoUrl = ref()
     onMounted(() => {
-      if (props.withVideo) {
-        // videoUrl.value = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`
-        videoRef.value.src = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`
-        videoRef.value.load()
-      }
+      nextTick(() => {
+        if (props.withVideo) {
+          videoUrl.value = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`
+          videoRef.value.src = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`
+          videoRef.value.load()
+        }
+      })
     })
     const dateFormat = computed(() => {
       return props.data.date_event?.replace(/:(\w+)/, '')?.replace(/\s/, ' / ') ?? ''
@@ -126,6 +145,16 @@ export default {
       max-height: 24rem;
     }
   }
+  .parser {
+    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-height: 16px;
+    max-height: 62px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
   .hat {
     //height: 23.6rem;
     width: 100%;
@@ -139,6 +168,11 @@ export default {
     //background-size: cover;
     //background-position: center;
     //background-repeat: no-repeat;
+  }
+  .price {
+    color: $black;
+    @include montserratBold;
+    @include text-sm;
   }
   .body {
     padding: 2.7rem 1.697rem 1.823rem;

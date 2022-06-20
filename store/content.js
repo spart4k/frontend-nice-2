@@ -8,7 +8,6 @@ export const state = () => ({
 
 export const mutations = {
   changeBgIntro (state, value) {
-    console.log(value)
     state.bgIntro = value
   },
   clearBgIntro (state) {

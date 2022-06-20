@@ -3,7 +3,7 @@
     <div v-if="cards.value && cards.value.data" :class="$style.cards">
       <TransitionGroup name="home">
         <div v-for="(card) in cards.value.data" :key="card.id" :class="$style.cards__item">
-          <SectionCards :id="card.section.id" :key="card.id" :card="card" @clickTag="($event) => clickTag($event, card.section.id)" />
+          <section-cards :id="card.section.id" :key="card.id" :card="card" @clickTag="($event) => clickTag($event, card.section.id)" />
         </div>
       </transitiongroup>
       <client-only>

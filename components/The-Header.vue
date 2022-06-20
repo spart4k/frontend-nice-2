@@ -106,6 +106,7 @@ export default {
     //     })
     //   })
     // })
+
     const backgroundImage = computed(() => {
       if (isHomePage.value) {
         return `url(${require('@/assets/img/background/index-background.jpg')})`
@@ -113,6 +114,7 @@ export default {
         return `url(${require('@/assets/img/background/' + `${route.value.params.slug}-background.jpg`)})`
       }
     })
+
     const toggleMenu = () => {
       active.value = false
     }
@@ -130,11 +132,11 @@ export default {
       backgroundImage,
       openMenu,
       toggleMenu,
+      openTestPage,
       showLogo,
       isHomePage,
       active,
       hasOpenMenu,
-      openTestPage,
       header,
       bgName
     }
