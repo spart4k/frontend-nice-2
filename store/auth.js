@@ -1,17 +1,23 @@
 export const state = () => ({
   user: {},
-  token: ''
+  token: '',
+  authorizated: false
 })
 
 export const mutations = {
-  setUserData (state, user) {
-    localStorage.setItem('user', JSON.stringify(user))
-    state.user = user
+  setUserData (state) {
+    const user = localStorage.getItem('user')
+    if (user) {
+      state.user = JSON.parse(user)
+    }
   },
-  setToken (state, token) {
-    localStorage.setItem('token', token)
-    this.$axios.defaults.headers.common.Authorization = `Bearer ${token}`
-    state.token = token
+  setToken (state) {
+    const token = localStorage.getItem('token')
+    if (token) {
+      this.$axios.defaults.headers.common.Authorization = `Bearer ${token}`
+      state.authorizated = true
+      state.token = token
+    }
   }
 }
 
@@ -27,6 +33,8 @@ export const actions = {
   async sendCode ({ commit }, params) {
     try {
       const res = await this.$axios.post('api/v1/user/sms_code', params)
+      localStorage.setItem('token', res.data.access_token)
+      localStorage.setItem('user', JSON.stringify(res.data.user))
       commit('setToken', res.data.access_token)
       commit('setUserData', res.data.user)
       return res

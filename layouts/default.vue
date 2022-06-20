@@ -41,6 +41,12 @@ export default {
       setCssVarriable()
     })
 
+    onMounted(() => {
+      console.log('unmounted')
+      store.commit('auth/setUserData')
+      store.commit('auth/setToken')
+    })
+
     return {
       headerItems,
       body
