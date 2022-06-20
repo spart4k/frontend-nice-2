@@ -19,13 +19,14 @@
 </template>
 
 <script>
-import { ref, useAsync, useContext } from '@nuxtjs/composition-api'
+import { ref, useAsync, useContext, useRouter } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NShop',
   setup (_, ctx) {
     const { $store } = ctx.root
     const { route } = useContext()
+    const router = useRouter()
 
     const cards = ref([])
     const loading = ref(false)
@@ -42,8 +43,8 @@ export default {
     const lazyPagination = () => {
       console.log(222)
     }
-    const clickTag = () => {
-      console.log(222)
+    const clickTag = (value) => {
+      router.push({ path: '/tags', query: { tag: value } })
     }
 
     cards.value = useAsync(fetchData, route.value.path)

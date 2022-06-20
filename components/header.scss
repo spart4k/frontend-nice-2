@@ -136,6 +136,8 @@
 .basket {
   width: 100%;
   margin-bottom: 3rem;
+  display: block;
+  color: $white;
   //margin-top: 3rem;
 
   .icon {
@@ -152,6 +154,7 @@
   z-index: 11;
   display: block;
   align-self: flex-start;
+  position: relative;
 }
 
 .deviceMenu .deviceMenu__inner {
@@ -201,4 +204,17 @@
 }
 .hideElement {
   opacity: 0;
+}
+.basketCount {
+  position: absolute;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 100%;
+  top: -1.5rem;
+  right: -1rem;
+  background-color: $orange2;
+  @include text-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

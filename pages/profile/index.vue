@@ -27,7 +27,6 @@ export default {
     overflow: auto;
   }
   .profile {
-    height: 100vh;
     padding-top: var(--header-height);
     margin-bottom: 3.2rem;
     &__basket {

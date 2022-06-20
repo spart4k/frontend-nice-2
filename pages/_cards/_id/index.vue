@@ -1,49 +1,47 @@
 <template>
   <div :class="$style.wrapper">
     <N-Background :description="description" />
-    <SectionCards
-      v-if="card"
-      :id="card.section_id"
-      :key="card.id"
-      detail-page
-      :card="card"
-      @clickTag="clickTag"
-    />
-    <div :class="$style.button__add_basket">
-      <N-Button>Добавить в корзину</N-Button>
-    </div>
+    <template v-if="card">
+      <SectionCards
+        :id="card.section_id"
+        :key="card.id"
+        detail-page
+        :card="card"
+        @clickTag="clickTag"
+      />
+      <div v-if="card.is_product" :class="$style.button__add_basket">
+        <N-Button :disabled="isAddedBasket" @click="addBasket">
+          {{ !isAddedBasket ? 'Добавить в корзину' : 'Добавлено' }}
+        </N-Button>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
-import { ref, useAsync, useContext, defineComponent } from '@nuxtjs/composition-api'
+import { ref, useAsync, useContext, defineComponent, useRouter } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: 'DetailCards',
   layout: 'default',
   setup () {
     const introTitle = ref({
-      title: 'Главная1233',
+      title: 'Test',
       subtitle: 'творческое объединение',
       background: ''
     })
+    const isAddedBasket = ref(false)
     const { route, store } = useContext()
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await store.dispatch('detailPage/getData', route.value.params.id)
-    //     return response.data
-    //   } catch (e) {
-    //     console.log(e)
-    //   }
-    // }
+    const router = useRouter()
+
     const description = ref({
       background: ''
     })
     const lazyPagination = () => {
-      console.log(222)
+      console.log(4)
     }
-    const clickTag = () => {
-      console.log(222)
+    const clickTag = (value) => {
+      router.push({ path: '/tags', query: { tag: value } })
     }
 
     const card = useAsync(async (ctx) => {
@@ -54,13 +52,23 @@ export default defineComponent({
         console.log(e)
       }
     }, route.value.params.id)
+    const addBasket = () => {
+      isAddedBasket.value = true
+      const params = {
+        card_id: route.value.params.id,
+        quantity: 1
+      }
+      store.dispatch('basket/addBasket', params)
+    }
 
     return {
       introTitle,
       card,
       lazyPagination,
+      addBasket,
       clickTag,
-      description
+      description,
+      isAddedBasket
     }
   }
 })

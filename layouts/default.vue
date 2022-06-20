@@ -27,9 +27,12 @@ export default {
       })
     }
 
+    store.dispatch('basket/getBasket')
+
     useFetch(async () => {
       headerItems.value = []
       const response = await $axios('api/v1/sections')
+
       headerItems.value = response.data
       store.commit('content/changeSections', response.data)
     })

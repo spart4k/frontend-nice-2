@@ -6,7 +6,7 @@
       <li :class="$style.headerUser__item">
         <n-icon name="telegram" />
       </li>
-      <li @click="openProfile" :class="$style.headerUser__item">
+      <li :class="$style.headerUser__item" @click="openProfile">
         <n-icon name="user" />
       </li>
     </ul>
@@ -20,13 +20,18 @@
             </nuxt-link>
           </transition>
         </div>
-        <div :class="[$style.basket, $style.headerMenu__item]">
-          <div :class="$style.basket__title">
-            <n-icon name="basket" :class="$style.icon" />
-            <span>Корзина</span>
-          </div>
-          <div :class="$style.basket__price">3 товара на 3880р</div>
+        <div :class="[$style.basket, $style.headerMenu__item]" @click="active = false">
+          <nuxt-link to="/basket">
+            <div :class="$style.basket__title">
+              <n-icon name="basket" :class="$style.icon" />
+              <span>Корзина</span>
+            </div>
+            <div :class="$style.basket__price">
+              {{ basketCount.calcBasketCard }} {{ basketCount.text }} на сумму {{ basketCount.cardSum }}р
+            </div>
+          </nuxt-link>
         </div>
+
         <div :class="$style.headerNav__inner">
           <ul :class="$style.headerMenu__list">
             <li v-for="item in headerItems" :key="item.title" :class="$style.headerMenu__item" @click.stop="toggleMenu">
@@ -60,6 +65,9 @@
         <span />
         <span />
       </div>
+      <div v-if="basketCount && !active" :class="$style.basketCount">
+        {{ basketCount.calcBasketCard }}
+      </div>
     </n-button>
     <FormAuthSteps v-model="activeAuthSteps" />
   </header>
@@ -68,6 +76,7 @@
 
 <script lang="js">
 import { computed, ref, useRouter, useRoute } from '@nuxtjs/composition-api'
+import { numWord } from '~/helpers/compositions/declination'
 
 export default {
   name: 'TheHeader',
@@ -87,25 +96,17 @@ export default {
     const header = ref(null)
     const isHomePage = computed(() => route.value.name === 'index')
     const bgName = computed(() => $store.state.content.bgIntro)
-    // onMounted(() => {
-    //   window.addEventListener('scroll', () => {
-    //     const content = document.querySelector('.content')
-    //     nextTick(() => {
-    //       const boundingContent = content.getBoundingClientRect()
-    //       const boundingHeader = header.value.getBoundingClientRect()
-    //       console.log(boundingContent.top)
-    //       if (boundingHeader.bottom >= boundingContent.top) {
-    //         if (isHomePage.value) {
-    //           if (header.value.style.backgroundImage !== '') { return }
-    //           header.value.style.backgroundImage = `url(${require('@/assets/img/background/index-background.jpg')})`
-    //         } else {
-    //           if (header.value.style.backgroundImage !== '') { return }
-    //           header.value.style.backgroundImage = `url(${require('@/assets/img/background/' + `${route.value.params.slug}-background.jpg`)})`
-    //         }
-    //       }
-    //     })
-    //   })
-    // })
+    const basketCount = computed(() => {
+      const calcBasketCard = $store.state.basket.basket?.data?.cards.reduce((acc, value) => {
+         acc += value.pivot.quantity
+        return acc
+      }, 0)
+      return {
+        calcBasketCard,
+        cardSum: $store.state.basket.basket?.data?.cards_sum,
+        text: numWord(calcBasketCard, ['товар', 'товара', 'товаров'])
+      }
+    })
 
     const backgroundImage = computed(() => {
       if (isHomePage.value) {
@@ -148,6 +149,7 @@ export default {
       openTestPage,
       bgName,
       openProfile,
+      basketCount,
       activeAuthSteps
     }
   }
