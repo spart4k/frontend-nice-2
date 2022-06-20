@@ -10,6 +10,7 @@ export const mutations = {
   },
   setToken (state, token) {
     localStorage.setItem('token', token)
+    this.$axios.defaults.headers.common.Authorization = `Bearer ${token}`
     state.token = token
   }
 }
