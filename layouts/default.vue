@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.wrapper" class="body">
+  <div ref="body" :class="$style.wrapper" class="body">
     <the-header :header-items="headerItems" class="header" :class="$style.header" />
     <Nuxt :class="$style.content" />
     <the-footer :class="$style.footer" />
@@ -7,14 +7,15 @@
 </template>
 
 <script>
-import { ref, useContext, useFetch, onMounted } from '@nuxtjs/composition-api'
+import { ref, useContext, useFetch, onMounted, watch } from '@nuxtjs/composition-api'
 
 export default {
   name: 'DefaultLayout',
-  transition: 'home',
+  // transition: 'home',
   setup () {
     const headerItems = ref([])
-    const { $axios, store } = useContext()
+    const body = ref(null)
+    const { $axios, store, route } = useContext()
 
     const setCssVarriable = () => {
       const vh = window.innerHeight * 0.01
@@ -32,13 +33,17 @@ export default {
       headerItems.value = response.data
       store.commit('content/changeSections', response.data)
     })
+    watch(() => route.value.path, () => {
+      body.value.scroll(0, 0)
+    })
 
     onMounted(() => {
       setCssVarriable()
     })
 
     return {
-      headerItems
+      headerItems,
+      body
     }
   }
 }

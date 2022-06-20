@@ -9,6 +9,9 @@
       :card="card"
       @clickTag="clickTag"
     />
+    <div :class="$style.button__add_basket">
+      <N-Button>Добавить в корзину</N-Button>
+    </div>
   </div>
 </template>
 
@@ -65,7 +68,25 @@ export default defineComponent({
 
 <style scoped module lang="scss">
 .wrapper {
-  background-image: url('@/assets/img/background/ctivo-background.jpg');
-  margin-top: var(--header-height);
+@include container;
+  margin-bottom: 2rem;
+}
+.button__add_basket {
+  background-color: rgba($black, 0.8);
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.4rem 0;
+  button {
+    background-color: $yellow2;
+    color: $black;
+    @include montserratMedium;
+    @include text;
+  }
 }
 </style>

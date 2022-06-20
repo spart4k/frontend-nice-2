@@ -48,7 +48,6 @@ export default {
     background-color: $blueBlack3;
     padding: 3.9rem 2rem;
     position: relative;
-    z-index: 10;
     .container {
       @include container;
       @include text-sm;

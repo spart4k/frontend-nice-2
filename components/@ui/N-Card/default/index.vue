@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.card">
-    <template v-if="data.images.length">
+    <template v-if="data.images.length && !$props.withVideo">
       <template v-if="$props.detailPage && data.images.length > 1">
         <N-Slider :slider-item="data.images" />
       </template>
@@ -43,7 +43,7 @@
     <!--      </div>-->
     <!--    </template>-->
     <template v-else-if="$props.withVideo">
-      <video ref="videoRef" playsinline controls muted>
+      <video ref="videoRef" playsinline controls muted type="video/mp4">
         <source :src="videoUrl" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
       </video>
     </template>
@@ -57,11 +57,11 @@
         <p>Автор: {{ data.author }}</p>
       </template>
       <template v-else>
-        <NuxtLink :class="$style.body__top" tag="div" :to="`cards/${data.id}`">
+        <NuxtLink :class="$style.body__top" tag="div" :to="`/cards/${data.id}`">
           <h2 :class="$style.title">
             {{ data.title }}
           </h2>
-          <div v-if="data.price" :class="$style.price">
+          <div v-if="data.price && $props.detailPage" :class="$style.price">
             {{ data.price }}р.
           </div>
           <div v-if="data.date_event" :class="$style.time">
@@ -159,15 +159,6 @@ export default {
     //height: 23.6rem;
     width: 100%;
     background-color: #e7dddd;
-    //img {
-    //  width: 100%;
-    //  height: 100%;
-    //  object-fit: cover;
-    //  object-position: center;
-    //}
-    //background-size: cover;
-    //background-position: center;
-    //background-repeat: no-repeat;
   }
   .price {
     color: $black;
