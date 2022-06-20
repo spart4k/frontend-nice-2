@@ -34,6 +34,9 @@ export default {
     padding-bottom: 15px;
     border-bottom: 1px solid rgba(0,0,0,.2);
     margin-bottom: 1.6rem;
+    &:last-child {
+      border-bottom: 0;
+    }
     &__head {
       display: flex;
       margin-bottom: .7rem;

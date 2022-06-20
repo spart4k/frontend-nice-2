@@ -3,30 +3,53 @@
     <form>
       <n-text-field v-model="formData.firstName" :class="$style.input" title="Имя" />
       <n-text-field v-model="formData.lastName" :class="$style.input" title="Фамилия" />
+      <n-text-field v-model="formData.lastName" :class="$style.input" title="Email" />
       <n-text-area v-model="formData.address" :class="$style.input" title="Адрес с городом и индексом" />
       <n-button :class="$style.button" type="submit">
         Сохранить изменения
       </n-button>
-      <small @click="closeProfile">Выйти из профиля</small>
     </form>
   </n-contain>
 </template>
 <script>
-import { ref } from '@nuxtjs/composition-api'
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
+import { ref, useContext } from '@nuxtjs/composition-api'
 export default {
   name: 'FormProfileDefault',
   setup () {
+    const { store } = useContext()
     const formData = ref({
-      firstName: '',
-      lastName: ''
+      name: '',
+      lastName: '',
+      address: '',
+      email: 'test@test.ru'
     })
-    const closeProfile = () => {
+    const rules = {
+      firstName: { required },
+      lastName: { required },
+      address: { required }
+    }
+    const v$ = useVuelidate(rules, formData)
+    const onSubmit = () => {
+      loading.value = true
+      v$.value.$touch()
 
+      if (v$.value.$invalid) {
+        return
+      }
+      store.dispatch('user/changeUserInfo', formData )
+      .then((res) => {
+        console.log(res)
+        loading.value = false
+      })
     }
 
     return {
       formData,
-      closeProfile
+      loading,
+      onSubmit,
+      v$
     }
   }
 }

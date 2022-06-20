@@ -24,10 +24,8 @@ export default {
 <style lang="scss" module>
   .container {
     padding: 20px;
-    overflow: auto;
   }
   .profile {
-    height: 100vh;
     padding-top: var(--header-height);
     margin-bottom: 3.2rem;
     &__basket {
