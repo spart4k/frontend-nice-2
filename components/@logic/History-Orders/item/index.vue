@@ -11,7 +11,7 @@
     <div>
       <div v-for="(item) in $props.order.basket.cards" :key="item.key" :class="$style.item__info">
         <div>{{ item.title }}</div>
-        <div>{{ item.price }}</div>
+        <div>{{ item.price }}р.</div>
       </div>
     </div>
   </div>

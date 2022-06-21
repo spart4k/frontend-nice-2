@@ -27,7 +27,7 @@
               <span>Корзина</span>
             </div>
             <div :class="$style.basket__price">
-              {{ basketCount.calcBasketCard }} {{ basketCount.text }} на сумму {{ basketCount.cardSum }}р
+              {{ basketCount.calcBasketCard }} {{ basketCount.text }} на {{ basketCount.cardSum }}р
             </div>
           </nuxt-link>
         </div>

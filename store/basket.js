@@ -27,7 +27,7 @@ export const actions = {
   },
   async getBasket ({ commit, rootState }) {
     try {
-      if (rootState.auth.authorizated) {
+      if (rootState.authentication.authorizated) {
         const data = await this.$axios('api/v1/basket')
         commit('setBasket', data)
         return data

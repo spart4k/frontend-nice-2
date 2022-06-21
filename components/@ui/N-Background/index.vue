@@ -10,7 +10,14 @@ import { computed } from '@nuxtjs/composition-api'
 export default {
   name: 'NBackground',
   props: {
-    description: Object,
+    description: {
+      type: Object,
+      default: () => {
+        return {
+          background: ''
+        }
+      }
+    },
     isHomePage: Boolean
   },
   setup (props) {

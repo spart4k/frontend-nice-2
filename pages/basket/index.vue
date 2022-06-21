@@ -16,7 +16,7 @@
           ИТОГО
         </div>
         <div :class="$style.total__sum_price">
-          {{ row.cards_sum }}
+          {{ row.cards_sum }}р.
         </div>
       </div>
       <div :class="$style.last_view">
@@ -103,6 +103,7 @@ export default {
 }
 .rows {
   position: relative;
+  margin-bottom: 3rem;
 }
 .list {
   padding: 0;
@@ -147,6 +148,7 @@ export default {
 .last_view_title {
   margin-bottom: 1.25rem;
   @include text-md;
+  @include montserratSemiBold;
 }
 .last_view_list {
   display: flex;

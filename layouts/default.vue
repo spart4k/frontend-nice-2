@@ -2,7 +2,7 @@
   <div ref="body" :class="$style.wrapper" class="body">
     <the-header :header-items="headerItems" class="header" :class="$style.header" />
     <Nuxt :class="$style.content" />
-    <the-footer :class="$style.footer" />
+    <!--    <the-footer :class="$style.footer" />-->
   </div>
 </template>
 
@@ -26,7 +26,6 @@ export default {
         document.documentElement.style.setProperty('--vh', `${vh}px`)
       })
     }
-    store.dispatch('basket/getBasket')
 
     const fetchData = async () => {
       const response = await $axios('api/v1/sections')
@@ -50,9 +49,9 @@ export default {
     })
 
     onMounted(() => {
-      console.log('unmounted')
       store.commit('authentication/setUserData')
       store.commit('authentication/setToken')
+      store.dispatch('basket/getBasket')
     })
 
     return {

@@ -18,6 +18,9 @@ export default {
 <style scoped lang="scss" module>
 .button__add_basket {
   background-color: rgba($black, 0.8);
+  padding-top: 2.4rem;
+  padding-bottom: 2.4rem;
+  @include container;
   position: fixed;
   z-index: 10;
   bottom: 0;
@@ -26,7 +29,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2.4rem 0;
   button {
     background-color: $yellow2;
     color: $black;

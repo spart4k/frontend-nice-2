@@ -19,31 +19,6 @@
         </nuxt-link>
       </template>
     </template>
-    <!--    v-else-if="$props.images && $props.images.length === 1"-->
-    <!--    <template v-if="data.images.length === 1">-->
-    <!--      &lt;!&ndash;      <div&ndash;&gt;-->
-    <!--      &lt;!&ndash;        v-for="item in $props.images"&ndash;&gt;-->
-    <!--      &lt;!&ndash;        :key="item.src"&ndash;&gt;-->
-    <!--      &lt;!&ndash;        :class="[&ndash;&gt;-->
-    <!--      &lt;!&ndash;          $style.hat,&ndash;&gt;-->
-    <!--      &lt;!&ndash;        ]"&ndash;&gt;-->
-    <!--      &lt;!&ndash;        :style="{&ndash;&gt;-->
-    <!--      &lt;!&ndash;          backgroundImage: `url('${item.src}')`,&ndash;&gt;-->
-    <!--      &lt;!&ndash;          height: `${$props.hatHeight || 23.6}rem`&ndash;&gt;-->
-    <!--      &lt;!&ndash;        }"&ndash;&gt;-->
-    <!--      &lt;!&ndash;      />&ndash;&gt;-->
-    <!--      &lt;!&ndash;      backgroundImage: `url(${$axios.defaults.baseURL}${data.images[0].src})`,&ndash;&gt;-->
-    <!--      <div-->
-    <!--        :class="[-->
-    <!--          $style.hat,-->
-    <!--        ]"-->
-    <!--        :style="{-->
-    <!--          height: `${$props.hatHeight || 23.6}rem`-->
-    <!--        }"-->
-    <!--      >-->
-    <!--        <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />-->
-    <!--      </div>-->
-    <!--    </template>-->
     <template v-else-if="$props.withVideo">
       <video ref="videoRef" playsinline controls muted type="video/mp4">
         <source :src="videoUrl" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
@@ -56,7 +31,9 @@
       ]"
     >
       <template v-if="$props.withAuthor">
-        <p>Автор: {{ data.author }}</p>
+        <p>
+          Автор: {{ data.author }}
+        </p>
       </template>
       <template v-else>
         <NuxtLink :class="$style.body__top" tag="div" :to="`/cards/${data.id}`">
@@ -80,11 +57,6 @@
           >
             {{ item.title }}
           </N-Chip>
-          <!--          <N-Comment-->
-          <!--            v-if="$props.amountComment"-->
-          <!--            :class="$style.comment"-->
-          <!--            :current="$props.amountComment"-->
-          <!--          />-->
         </div>
       </template>
       <div v-if="$slots.footer" :class="$style.body__footer">
@@ -177,12 +149,17 @@ export default {
         color: $fontColorDefault;
         font-weight: 600;
         @include text-md;
+        @include montserratSemiBold;
       }
     }
-    .title, .time {
+    .title {
       margin-bottom: .8rem;
       @include montserratSemiBold;
       @include text;
+    }
+    .time {
+      @include text-sm;
+      margin-bottom: .8rem;
     }
     &__top {
       border-bottom: solid 1px rgba($black, .1);
@@ -194,7 +171,8 @@ export default {
         @include text;
       }
       p {
-        margin-top: 1.03rem;
+        //margin-top: 1.03rem;
+        @include text-md;
       }
     }
     &__bottom {

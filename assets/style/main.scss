@@ -29,7 +29,7 @@ html {
     //font-size: calc((10 / 400) * 100vw);
   }
   @media (max-width: $mobileWidth) {
-    font-size: calc((10 / 400) * 100vw);
+    font-size: calc((10 / 375) * 100vw);
   }
 }
 
@@ -40,7 +40,8 @@ body {
   height: 100%;
   width: 100%;
   background-color: $blueBlack3;
-  @include montserratMedium;
+  overflow: hidden;
+  @include montserratRegular;
   @include text-sm;
 
   &:global(.popup-opened) {

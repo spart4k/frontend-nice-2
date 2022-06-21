@@ -41,9 +41,7 @@ export default defineComponent({
     const description = ref({
       background: ''
     })
-    const lazyPagination = () => {
-      console.log(4)
-    }
+
     const clickTag = (value) => {
       router.push({ path: '/tags', query: { tag: value } })
     }
@@ -51,7 +49,6 @@ export default defineComponent({
     const card = useAsync(async (ctx) => {
       try {
         const response = await store.dispatch('detailPage/getData', route.value.params.id)
-        console.log(response, route.value.params.id)
         return response.data
       } catch (e) {
         console.log(e)
@@ -73,7 +70,6 @@ export default defineComponent({
     return {
       introTitle,
       card,
-      lazyPagination,
       addBasket,
       clickTag,
       description,

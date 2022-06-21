@@ -24,12 +24,12 @@ export default {
     border-radius: .4rem;
     background-color: $blueBlack;
     padding: 1.565rem 5.5rem;
+    //width: 100%;
     color: $white;
     font-weight: 600;
     @include text;
     transition: background-color .2s;
     max-width: 100%;
-    transition: .2s;
     //&:hover {
     //  background-color: rgba($blueBlack, .9);
     //}

@@ -59,6 +59,7 @@ export default {
   }
   h3 {
     //@include h3Header;
+    @include montserratBold;
     margin: 0;
     margin-bottom: 2rem;
   }

@@ -10,6 +10,14 @@ export const actions = {
     } catch (e) {
       console.log(e)
     }
+  },
+  async getDataForShop (state, params) {
+    try {
+      const data = await this.$axios('api/v1/sections/forshop', { params })
+      return data
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 

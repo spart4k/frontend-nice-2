@@ -64,8 +64,8 @@ $bgWidth: 570px;
 }
 
 @mixin container {
-  padding-left: 1.95rem;
-  padding-right: 1.95rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
 @mixin title {
@@ -93,13 +93,19 @@ $bgWidth: 570px;
 
 @mixin text {
   font-size: 1.8rem;
-  line-height: 1.0088888889;
+  line-height: 1.2;
 }
 
 @mixin text-md {
   font-size: 1.4rem;
-  line-height: 1.2192857143;
+  line-height: 1.5;
 }
+
+@mixin text-md-2 {
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+
 
 @mixin text-sm {
   font-size: 1.2rem;
