@@ -18,6 +18,10 @@ export const mutations = {
       state.authorizated = true
       state.token = token
     }
+  },
+  setLogout (state) {
+    state.user = {}
+    state.authorizated = false
   }
 }
 
@@ -48,6 +52,16 @@ export const actions = {
       localStorage.setItem('user', JSON.stringify(res.data))
       commit('setUserData', res.data)
       return res
+    } catch (e) {
+      return e.response.data.message
+    }
+  },
+  async logout ({ commit }) {
+    try {
+      // const res = await this.$axios.get('api/v1/user', params)
+      await localStorage.removeItem('token')
+      await localStorage.removeItem('user')
+      commit('setLogout')
     } catch (e) {
       return e.response.data.message
     }

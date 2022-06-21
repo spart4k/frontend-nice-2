@@ -9,18 +9,20 @@
         <n-loading v-if="loading" />
         <template v-else>Сохранить изменения</template>
       </n-button>
+      <small @click="logout">Выйти из профиля</small>
     </form>
   </n-contain>
 </template>
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-import { ref, useContext } from '@nuxtjs/composition-api'
+import { ref, useContext, useRouter } from '@nuxtjs/composition-api'
 import { useToast } from 'vue-toastification/composition'
 export default {
   name: 'FormProfileDefault',
   setup () {
     const { store, $toast } = useContext()
+    const router = useRouter()
     const loading = ref(false)
     const toast = useToast()
     const formData = ref({
@@ -49,12 +51,18 @@ export default {
         loading.value = false
       })
     }
+    const logout = () => {
+      store.dispatch('authentication/logout')
+      // .then(() => { this.router.push('/') })
+      router.push('/')
+    }
     return {
       formData,
       onSubmit,
       loading,
       v$,
-      toast
+      toast,
+      logout
     }
   }
 }
