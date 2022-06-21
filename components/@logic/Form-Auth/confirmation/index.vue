@@ -51,7 +51,7 @@ export default {
         return
       }
       loading.value = true
-      store.dispatch('auth/sendCode', {
+      store.dispatch('authentication/sendCode', {
         phone: props.titleTel,
         sms_code: +formData.code
       })

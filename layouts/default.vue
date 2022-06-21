@@ -46,8 +46,8 @@ export default {
 
     onMounted(() => {
       console.log('unmounted')
-      store.commit('auth/setUserData')
-      store.commit('auth/setToken')
+      store.commit('authentication/setUserData')
+      store.commit('authentication/setToken')
     })
 
     return {
