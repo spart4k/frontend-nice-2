@@ -1,12 +1,13 @@
 <template>
   <n-contain>
-    <form>
-      <n-text-field v-model="formData.firstName" :class="$style.input" title="Имя" />
-      <n-text-field v-model="formData.lastName" :class="$style.input" title="Фамилия" />
-      <n-text-field v-model="formData.lastName" :class="$style.input" title="Email" />
+    <form @submit.prevent="onSubmit">
+      <n-text-field v-model="formData.name" :class="$style.input" title="Имя" />
+      <n-text-field v-model="formData.surname" :class="$style.input" title="Фамилия" />
+      <n-text-field :readOnly="true" v-model="formData.email" :class="$style.input" title="Email" />
       <n-text-area v-model="formData.address" :class="$style.input" title="Адрес с городом и индексом" />
       <n-button :class="$style.button" type="submit">
-        Сохранить изменения
+        <n-loading v-if="loading" />
+        <template v-else>Сохранить изменения</template>
       </n-button>
     </form>
   </n-contain>
@@ -19,16 +20,18 @@ export default {
   name: 'FormProfileDefault',
   setup () {
     const { store } = useContext()
+    const loading = ref(false)
     const formData = ref({
       name: '',
-      lastName: '',
+      surname: '',
       address: '',
       email: 'test@test.ru'
     })
     const rules = {
-      firstName: { required },
-      lastName: { required },
-      address: { required }
+      name: { required },
+      surname: { required },
+      address: { required },
+      email: { required }
     }
     const v$ = useVuelidate(rules, formData)
     const onSubmit = () => {
@@ -38,17 +41,15 @@ export default {
       if (v$.value.$invalid) {
         return
       }
-      store.dispatch('user/changeUserInfo', formData )
+      store.dispatch('user/changeUserInfo', formData)
       .then((res) => {
-        console.log(res)
         loading.value = false
       })
     }
-
     return {
       formData,
-      loading,
       onSubmit,
+      loading,
       v$
     }
   }

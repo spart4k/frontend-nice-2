@@ -3,7 +3,7 @@
     <h3 v-if="$props.title" :class="$style.title">
       {{ $props.title }}
     </h3>
-    <div :class="$style.wrapperInput">
+    <div :class="[$style.wrapperInput, $props.readOnly ? $style.readonly : '' ]">
       <span class="input-error" v-if="error">
         {{ errMessage }}
       </span>
@@ -15,6 +15,7 @@
         v-mask="$props.mask"
         :type="$props.type"
         :max="$props.max"
+        :readonly="readOnly"
         :placeholder="$props.placeholder"
         @keydown.enter="$emit('keydown', $event)"
       />
@@ -58,6 +59,10 @@ export default {
     errCustom: {
       type: String,
       default: ''
+    },
+    readOnly: {
+      type: Boolean,
+      default: false
     }
   },
   setup (props, ctx) {
@@ -134,6 +139,9 @@ export default {
       bottom: -1.8rem;
       left: 0;
       color: red;
+    }
+    &.readonly {
+      opacity: 0.3
     }
   }
   input {
