@@ -26,7 +26,7 @@
               <n-icon name="basket" :class="$style.icon" />
               <span>Корзина</span>
             </div>
-            <div :class="$style.basket__price">
+            <div v-if="$store.state.auth.authorizated" :class="$style.basket__price">
               {{ basketCount.calcBasketCard }} {{ basketCount.text }} на сумму {{ basketCount.cardSum }}р
             </div>
           </nuxt-link>
@@ -65,7 +65,7 @@
         <span />
         <span />
       </div>
-      <div v-if="basketCount && !active" :class="$style.basketCount">
+      <div v-if="basketCount && !active && $store.state.auth.authorizated" :class="$style.basketCount">
         {{ basketCount.calcBasketCard }}
       </div>
     </n-button>
