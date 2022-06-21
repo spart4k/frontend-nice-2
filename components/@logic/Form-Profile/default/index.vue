@@ -1,32 +1,56 @@
 <template>
   <n-contain>
-    <form>
-      <n-text-field v-model="formData.firstName" :class="$style.input" title="Имя" />
-      <n-text-field v-model="formData.lastName" :class="$style.input" title="Фамилия" />
+    <form @submit.prevent="onSubmit">
+      <n-text-field v-model="formData.name" :class="$style.input" title="Имя" />
+      <n-text-field v-model="formData.surname" :class="$style.input" title="Фамилия" />
+      <n-text-field :readOnly="true" v-model="formData.email" :class="$style.input" title="Email" />
       <n-text-area v-model="formData.address" :class="$style.input" title="Адрес с городом и индексом" />
       <n-button :class="$style.button" type="submit">
-        Сохранить изменения
+        <n-loading v-if="loading" />
+        <template v-else>Сохранить изменения</template>
       </n-button>
-      <small @click="closeProfile">Выйти из профиля</small>
     </form>
   </n-contain>
 </template>
 <script>
-import { ref } from '@nuxtjs/composition-api'
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
+import { ref, useContext } from '@nuxtjs/composition-api'
 export default {
   name: 'FormProfileDefault',
   setup () {
+    const { store } = useContext()
+    const loading = ref(false)
     const formData = ref({
-      firstName: '',
-      lastName: ''
+      name: '',
+      surname: '',
+      address: '',
+      email: 'test@test.ru'
     })
-    const closeProfile = () => {
-
+    const rules = {
+      name: { required },
+      surname: { required },
+      address: { required },
+      email: { required }
     }
+    const v$ = useVuelidate(rules, formData)
+    const onSubmit = () => {
+      loading.value = true
+      v$.value.$touch()
 
+      if (v$.value.$invalid) {
+        return
+      }
+      store.dispatch('user/changeUserInfo', formData)
+      .then((res) => {
+        loading.value = false
+      })
+    }
     return {
       formData,
-      closeProfile
+      onSubmit,
+      loading,
+      v$
     }
   }
 }

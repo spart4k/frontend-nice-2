@@ -4,7 +4,7 @@
       v-model="formData.name"
       :error="v$.name.$errors"
       :class="$style.input"
-      title="Никнем"
+      title="Никнейм"
     />
     <n-text-field
       v-model="formData.email"

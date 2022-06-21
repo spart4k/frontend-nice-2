@@ -24,7 +24,6 @@ export default {
 <style lang="scss" module>
   .container {
     padding: 20px;
-    overflow: auto;
   }
   .profile {
     padding-top: var(--header-height);
