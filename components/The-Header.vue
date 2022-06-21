@@ -65,7 +65,8 @@
         <span />
         <span />
       </div>
-      <div v-if="basketCount && !active && $store.state.auth.authorizated" :class="$style.basketCount">
+      <!--      basketData.cards.length-->
+      <div v-if="!active && isAuth" :class="$style.basketCount">
         {{ basketCount.calcBasketCard }}
       </div>
     </n-button>
@@ -96,14 +97,16 @@ export default {
     const header = ref(null)
     const isHomePage = computed(() => route.value.name === 'index')
     const bgName = computed(() => $store.state.content.bgIntro)
+    const basketData = computed(() => $store.state.basket.basket?.data)
+    const isAuth = computed(() => $store.state.auth.authorizated)
     const basketCount = computed(() => {
-      const calcBasketCard = $store.state.basket.basket?.data?.cards.reduce((acc, value) => {
+      const calcBasketCard = basketData.value?.cards?.reduce((acc, value) => {
          acc += value.pivot.quantity
         return acc
       }, 0)
       return {
         calcBasketCard,
-        cardSum: $store.state.basket.basket?.data?.cards_sum,
+        cardSum: basketData.value?.cards_sum,
         text: numWord(calcBasketCard, ['товар', 'товара', 'товаров'])
       }
     })
@@ -138,19 +141,22 @@ export default {
     const showLogo = computed(() => $store.state.content.showLogo)
 
     return {
-      backgroundImage,
       openMenu,
       toggleMenu,
+      openTestPage,
+      openProfile,
+
+      basketData,
+      backgroundImage,
       showLogo,
       isHomePage,
       active,
       hasOpenMenu,
       header,
-      openTestPage,
       bgName,
-      openProfile,
       basketCount,
-      activeAuthSteps
+      activeAuthSteps,
+      isAuth
     }
   }
 }

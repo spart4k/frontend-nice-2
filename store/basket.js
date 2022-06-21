@@ -22,7 +22,16 @@ export const actions = {
   async getBasket ({ commit }) {
     try {
       const data = await this.$axios('api/v1/basket')
-      console.log(data)
+      console.log(data, 'getVas')
+      commit('setBasket', data)
+      return data
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  async sendBasket ({ commit }, params) {
+    try {
+      const data = await this.$axios.post('api/v1/basket/send', params)
       commit('setBasket', data)
       return data
     } catch (e) {

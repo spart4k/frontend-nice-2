@@ -10,6 +10,9 @@
         />
       </li>
     </ul>
+    <N-Fixed-Button @clickButton="sendBasket">
+      Заказать
+    </N-Fixed-Button>
   </div>
 </template>
 
@@ -38,11 +41,16 @@ export default {
       }
       store.dispatch('basket/addBasket', params)
     }
+    const sendBasket = async () => {
+     await store.dispatch('basket/sendBasket', row.value)
+     await store.dispatch('basket/getBasket')
+    }
     return {
       description,
       row,
       incrementBasket,
-      decrementBasket
+      decrementBasket,
+      sendBasket
     }
   }
 }
