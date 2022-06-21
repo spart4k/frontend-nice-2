@@ -4,7 +4,7 @@
       История заказов
     </div>
     <div>
-      <History-Orders-Item v-for="(item, index) in 8" :key='index'></History-Orders-Item>
+      <History-Orders-Item v-for="(item) in orders.value" :order="item" :key='item.id'></History-Orders-Item>
     </div>
   </div>
 </template>

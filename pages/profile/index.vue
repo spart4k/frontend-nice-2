@@ -4,10 +4,10 @@
       <h1 :class="$style.profile__title">
         Мой профиль
       </h1>
-      <div :class="$style.profile__basket">
+      <nuxt-link to="/basket" :class="$style.profile__basket">
         <n-icon name="basket" :class="$style.icon" />
-        <span>Корзина</span>
-      </div>
+        <span>Корзина ({{qtyBasket}})</span>
+      </nuxt-link>
 
       <Form-Profile-Default :class="$style.profile__form" />
       <History-Orders-Default />
@@ -16,8 +16,17 @@
 </template>
 
 <script>
+import { ref, useContext } from '@nuxtjs/composition-api'
 export default {
-  name: 'ProfilePage'
+  name: 'ProfilePage',
+  setup () {
+    const { store } = useContext()
+    const qtyBasket = ref(0)
+    qtyBasket.value = store.state.basket.basketLength
+    return {
+      qtyBasket
+    }
+  }
 }
 </script>
 

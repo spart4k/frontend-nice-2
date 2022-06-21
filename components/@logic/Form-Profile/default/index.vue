@@ -56,6 +56,9 @@ export default {
 }
 </script>
 <style lang="scss" module>
+.button {
+  width: 100%;
+}
 form {
   & > .input + .input {
     margin-top: 1.6rem;
