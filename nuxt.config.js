@@ -36,7 +36,7 @@ export default {
     { src: '@plugins/infiniteloading.js', ssr: false },
     { src: '@plugins/vualidate.js' },
     '@plugins/v-mask.js',
-    '@plugins/v-tooltip.js',
+    '@plugins/v-tooltip.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -61,7 +61,8 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth-next',
+    'vue-toastification/nuxt'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

@@ -9,7 +9,7 @@
         :card="card"
         @clickTag="clickTag"
       />
-      <N-Fixed-Button @clickButton="addBasket">
+      <N-Fixed-Button v-if="card.is_product" @clickButton="addBasket">
         {{ !isAddedBasket ? 'Добавить в корзину' : 'Добавлено' }}
       </N-Fixed-Button>
       <!--      <div v-if="card.is_product" :class="$style.button__add_basket">-->

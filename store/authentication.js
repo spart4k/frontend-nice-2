@@ -41,6 +41,16 @@ export const actions = {
     } catch (e) {
       return e.response.data
     }
+  },
+  async getUserInfo ({ commit }, params) {
+    try {
+      const res = await this.$axios.get('api/v1/user', params)
+      localStorage.setItem('user', JSON.stringify(res.data))
+      commit('setUserData', res.data)
+      return res
+    } catch (e) {
+      return e.response.data.message
+    }
   }
 }
 
