@@ -98,7 +98,7 @@ export default {
     const isHomePage = computed(() => route.value.name === 'index')
     const bgName = computed(() => $store.state.content.bgIntro)
     const basketData = computed(() => $store.state.basket.basket?.data)
-    const isAuth = computed(() => $store.state.auth.authorizated)
+    const isAuth = computed(() => $store.state.authentication.authorizated)
     const basketCount = computed(() => {
       const calcBasketCard = basketData.value?.cards?.reduce((acc, value) => {
          acc += value.pivot.quantity
@@ -131,7 +131,7 @@ export default {
       router.push({ path: `${num}` })
     }
     const openProfile = () => {
-      if ($store.state.auth.authorizated) {
+      if ($store.state.authentication.authorizated) {
         router.push({ path: '/profile' })
       } else {
         activeAuthSteps.value = true

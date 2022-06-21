@@ -76,9 +76,6 @@ export default {
       '~/assets/style/_variables.scss'
     ]
   },
-  auth: {
-    // Options
-  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }

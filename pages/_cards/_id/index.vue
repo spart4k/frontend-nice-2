@@ -51,6 +51,7 @@ export default defineComponent({
     const card = useAsync(async (ctx) => {
       try {
         const response = await store.dispatch('detailPage/getData', route.value.params.id)
+        console.log(response, route.value.params.id)
         return response.data
       } catch (e) {
         console.log(e)

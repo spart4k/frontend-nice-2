@@ -60,8 +60,8 @@ export default {
     const { store } = useContext()
     const row = computed(() => store.state?.basket?.basket?.data)
     const cards = computed(() => row.value?.cards)
-    const userInfo = computed(() => store.state.auth.user.last_views)
-    store.dispatch('auth/getUserInfo')
+    const userInfo = computed(() => store.state.authentication.user.last_views)
+    store.dispatch('authentication/getUserInfo')
 
     const incrementBasket = (value) => {
       const params = {
