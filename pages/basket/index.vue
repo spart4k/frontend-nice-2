@@ -59,7 +59,7 @@ export default {
     const row = computed(() => store.state?.basket?.basket?.data)
     const cards = computed(() => row.value?.cards)
     const userInfo = computed(() => store.state.authentication.user.last_views)
-    store.dispatch('auth/getUserInfo')
+    store.dispatch('authentication/getUserInfo')
 
     const incrementBasket = (value) => {
       const params = {

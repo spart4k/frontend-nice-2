@@ -41,7 +41,7 @@ export default {
   }
   .disable {
     opacity: 0.5;
-    point-events: none;
+    pointer-events: none;
   }
   .transparent {
     background-color: transparent;

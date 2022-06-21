@@ -3,8 +3,11 @@
     <div :class="$style.history__title">
       История заказов
     </div>
-    <div>
+    <div v-if="orders.value">
       <History-Orders-Item v-for="(item) in orders.value" :order="item" :key='item.id'></History-Orders-Item>
+    </div>
+    <div v-else :class="$style.history__empty">
+      Заказы отсутствуют
     </div>
   </div>
 </template>
@@ -43,6 +46,11 @@ export default {
       font-size: 1.8rem;
       margin-bottom: 2.8rem;
       font-weight: 600;
+    }
+    &__empty {
+      font-size: 2.4rem;
+      font-weight: 600;
+      text-align: center;
     }
   }
 </style>

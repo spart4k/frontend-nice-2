@@ -5,7 +5,7 @@
       <n-text-field v-model="formData.surname" :class="$style.input" title="Фамилия" />
       <n-text-field :readOnly="true" v-model="formData.email" :class="$style.input" title="Email" />
       <n-text-area v-model="formData.address" :class="$style.input" title="Адрес с городом и индексом" />
-      <n-button :class="$style.button" type="submit">
+      <n-button :class="$style.button" :type-button="v$.$invalid ? 'disable' : '' " type="submit">
         <n-loading v-if="loading" />
         <template v-else>Сохранить изменения</template>
       </n-button>
@@ -16,11 +16,13 @@
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { ref, useContext } from '@nuxtjs/composition-api'
+import { useToast } from 'vue-toastification/composition'
 export default {
   name: 'FormProfileDefault',
   setup () {
-    const { store } = useContext()
+    const { store, $toast } = useContext()
     const loading = ref(false)
+    const toast = useToast()
     const formData = ref({
       name: '',
       surname: '',
@@ -43,6 +45,7 @@ export default {
       }
       store.dispatch('user/changeUserInfo', formData)
       .then((res) => {
+        $toast.success('Информация сохранена', { position: 'bottom-right', icon: true })
         loading.value = false
       })
     }
@@ -50,7 +53,8 @@ export default {
       formData,
       onSubmit,
       loading,
-      v$
+      v$,
+      toast
     }
   }
 }
