@@ -15,7 +15,6 @@
         v-mask="$props.mask"
         :type="$props.type"
         :max="$props.max"
-        :readonly="readOnly"
         :placeholder="$props.placeholder"
         @keydown.enter="$emit('keydown', $event)"
       />
@@ -72,7 +71,9 @@ export default {
     watch(proxyVal, () => {
       emit('input', proxyVal.value)
     })
-
+     watch(props, () => {
+      proxyVal.value = props.value
+     })
     const errMessage = computed(() => {
       if (props.error[0]) {
         const text = props.error[0].$message
@@ -91,6 +92,7 @@ export default {
         return newText
       }
     })
+
     // const getValue = computed({
     //   get () {
     //     return props.value

@@ -97,6 +97,7 @@ export default {
   width: 100%;
   font-weight: 600;
   margin-bottom: 1.8rem;
+  color: $fontColorDefault;
   @include text;
 }
 </style>

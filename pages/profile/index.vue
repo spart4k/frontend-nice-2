@@ -16,13 +16,14 @@
 </template>
 
 <script>
-import { ref, useContext } from '@nuxtjs/composition-api'
+import { useContext, computed } from '@nuxtjs/composition-api'
 export default {
   name: 'ProfilePage',
   setup () {
     const { store } = useContext()
-    const qtyBasket = ref(0)
-    qtyBasket.value = store.state.basket.basketLength
+    const qtyBasket = computed(() => {
+      return store.state.basket.basketLength
+    })
     return {
       qtyBasket
     }

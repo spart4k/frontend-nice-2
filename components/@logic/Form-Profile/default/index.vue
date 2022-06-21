@@ -4,6 +4,7 @@
       <n-text-field v-model="formData.name" :class="$style.input" title="Имя" />
       <n-text-field v-model="formData.surname" :class="$style.input" title="Фамилия" />
       <n-text-field :readOnly="true" v-model="formData.email" :class="$style.input" title="Email" />
+      <n-text-field :readOnly="true" v-model="formData.phone" :value="formData.phone" :class="$style.input" title="Телефон" />
       <n-text-area v-model="formData.address" :class="$style.input" title="Адрес с городом и индексом" />
       <n-button :class="$style.button" :type-button="v$.$invalid ? 'disable' : '' " type="submit">
         <n-loading v-if="loading" />
@@ -16,7 +17,7 @@
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-import { ref, useContext, useRouter } from '@nuxtjs/composition-api'
+import { ref, useContext, useRouter, computed, watch } from '@nuxtjs/composition-api'
 import { useToast } from 'vue-toastification/composition'
 export default {
   name: 'FormProfileDefault',
@@ -29,13 +30,13 @@ export default {
       name: '',
       surname: '',
       address: '',
-      email: 'test@test.ru'
+      email: 'test@test.ru',
+      phone: ''
     })
     const rules = {
       name: { required },
       surname: { required },
-      address: { required },
-      email: { required }
+      address: { required }
     }
     const v$ = useVuelidate(rules, formData)
     const onSubmit = () => {
@@ -56,13 +57,27 @@ export default {
       // .then(() => { this.router.push('/') })
       router.push('/')
     }
+    store.dispatch('authentication/getUserInfo')
+    const userData = computed(() => {
+      const user = store.state.authentication.user
+      return user
+    })
+
+    watch(userData, (currentValue, oldValue) => {
+      formData.value.name = currentValue.name
+      formData.value.email = currentValue.email
+      formData.value.phone = currentValue.phone
+      formData.value.address = currentValue.address
+    })
+
     return {
       formData,
       onSubmit,
       loading,
       v$,
       toast,
-      logout
+      logout,
+      userData
     }
   }
 }

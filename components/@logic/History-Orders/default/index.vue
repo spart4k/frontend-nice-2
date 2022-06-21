@@ -3,7 +3,7 @@
     <div :class="$style.history__title">
       История заказов
     </div>
-    <div v-if="orders.value">
+    <div v-if="hasCards">
       <History-Orders-Item v-for="(item) in orders.value" :order="item" :key='item.id'></History-Orders-Item>
     </div>
     <div v-else :class="$style.history__empty">
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { ref, useAsync, useContext } from '@nuxtjs/composition-api'
+import { ref, useAsync, useContext, computed } from '@nuxtjs/composition-api'
 export default {
   name: 'HistoryOrders',
   setup () {
@@ -28,8 +28,18 @@ export default {
       }
     })
 
+    const hasCards = computed(() => {
+      console.log(orders.value)
+      if (orders.value.length !== 0) {
+        return true
+      } else {
+        return false
+      }
+    })
+
     return {
-      orders
+      orders,
+      hasCards
     }
   }
 }

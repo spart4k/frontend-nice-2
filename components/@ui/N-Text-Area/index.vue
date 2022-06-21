@@ -57,4 +57,7 @@ textarea {
   outline: none;
   resize: none;
 }
+h3 {
+  margin-bottom: 0.75rem
+}
 </style>
