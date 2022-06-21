@@ -10,13 +10,14 @@
         @clickTag="clickTag"
       />
       <N-Fixed-Button v-if="card.is_product" @clickButton="addBasket">
-        {{ !isAddedBasket ? 'Добавить в корзину' : 'Добавлено' }}
+        <template v-if="!isAddedBasket">
+          Добавить в корзину
+        </template>
+        <template v-else>
+          Перейти в корзину
+        </template>
+        <!--        {{ !isAddedBasket ? 'Добавить в корзину' : 'Добавлено' }}-->
       </N-Fixed-Button>
-      <!--      <div v-if="card.is_product" :class="$style.button__add_basket">-->
-      <!--        <N-Button :disabled="isAddedBasket" @click="addBasket">-->
-      <!--          {{ !isAddedBasket ? 'Добавить в корзину' : 'Добавлено' }}-->
-      <!--        </N-Button>-->
-      <!--      </div>-->
     </template>
   </div>
 </template>
@@ -56,12 +57,16 @@ export default defineComponent({
       }
     }, route.value.params.id)
     const addBasket = () => {
-      isAddedBasket.value = true
-      const params = {
-        card_id: route.value.params.id,
-        quantity: 1
+      if (!isAddedBasket.value) {
+        isAddedBasket.value = true
+        const params = {
+          card_id: route.value.params.id,
+          quantity: 1
+        }
+        store.dispatch('basket/addBasket', params)
+      } else {
+        router.push('/basket')
       }
-      store.dispatch('basket/addBasket', params)
     }
 
     return {

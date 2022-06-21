@@ -20,13 +20,13 @@
             </nuxt-link>
           </transition>
         </div>
-        <div :class="[$style.basket, $style.headerMenu__item]" @click="active = false">
+        <div v-if="isAuth && basketCount.calcBasketCard > 0" :class="[$style.basket, $style.headerMenu__item]" @click="active = false">
           <nuxt-link to="/basket">
             <div :class="$style.basket__title">
               <n-icon name="basket" :class="$style.icon" />
               <span>Корзина</span>
             </div>
-            <div v-if="$store.state.auth.authorizated" :class="$style.basket__price">
+            <div :class="$style.basket__price">
               {{ basketCount.calcBasketCard }} {{ basketCount.text }} на сумму {{ basketCount.cardSum }}р
             </div>
           </nuxt-link>
@@ -66,7 +66,7 @@
         <span />
       </div>
       <!--      basketData.cards.length-->
-      <div v-if="!active && isAuth" :class="$style.basketCount">
+      <div v-if="!active && isAuth && basketCount.calcBasketCard > 0" :class="$style.basketCount">
         {{ basketCount.calcBasketCard }}
       </div>
     </n-button>

@@ -19,11 +19,13 @@ export const actions = {
       console.log(e)
     }
   },
-  async getBasket ({ commit }) {
+  async getBasket ({ commit, rootState }) {
     try {
-      const data = await this.$axios('api/v1/basket')
-      commit('setBasket', data)
-      return data
+      if (rootState.auth.authorizated) {
+        const data = await this.$axios('api/v1/basket')
+        commit('setBasket', data)
+        return data
+      }
     } catch (e) {
       console.dir(e)
     }

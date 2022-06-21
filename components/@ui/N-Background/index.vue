@@ -26,7 +26,7 @@ export default {
       if (props.description.background) {
         return `${require('@/assets/img/background/' + `${props.description.background}.png`)}`
       } else {
-        return require('@/assets/img/background/odezda.png')
+        return null
       }
     })
     return {

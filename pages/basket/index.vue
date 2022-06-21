@@ -26,9 +26,11 @@
         <div :class="$style.last_view_items">
           <ul v-if="userInfo && userInfo.length" :class="$style.last_view_list">
             <li v-for="views in userInfo" :key="views.id" :class="$style.last_view_item">
-              <template v-if="views.card.images.length">
-                <n-lazy-img :src="`${$axios.defaults.baseURL}${views.card.images[0].src}`" />
-              </template>
+              <nuxt-link :to="`/card/${views.card_id}`">
+                <template v-if="views.card.images.length">
+                  <n-lazy-img :src="`${$axios.defaults.baseURL}${views.card.images[0].src}`" :alt="views.card.title" />
+                </template>
+              </nuxt-link>
             </li>
           </ul>
         </div>
@@ -142,15 +144,20 @@ export default {
     @include title;
   }
 }
+.last_view_title {
+  margin-bottom: 1.25rem;
+  @include text-md;
+}
 .last_view_list {
   display: flex;
   padding: 0;
   width: 100%;
-  overflow: auto;
+  height: 10.1rem;
+  overflow-x: auto;
+  margin: 0;
 }
 .last_view_item {
   width: 7.5rem;
-  max-height: 10.1rem;
   flex-shrink: 0;
   list-style: none;
   & + & {

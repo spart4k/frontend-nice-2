@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { ref, useAsync, useContext, useRouter } from '@nuxtjs/composition-api'
+import { computed, ref, useAsync, useContext, useRouter } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NShop',
@@ -30,10 +30,30 @@ export default {
 
     const cards = ref([])
     const loading = ref(false)
-    const introTitle = ref({
-      title: 'Главная3',
-      subtitle: 'творческое объединение',
-      background: ''
+    const id = computed(() => Number(route.value.query.id))
+    // const introTitle = ref({
+    //   title: 'Главная3',
+    //   subtitle: 'творческое объединение',
+    //   background: 'magazin'
+    // })
+
+    const introTitle = computed(() => {
+      if (id.value) {
+        const findSection = $store?.state?.content.sections.find((item) => {
+          return Number(item.id) === id.value
+        })
+        return {
+          title: findSection?.title ?? '',
+          subtitle: findSection?.description,
+          background: 'magazin'
+        }
+      } else {
+        return {
+          title: '',
+          subtitle: '',
+          background: route.value.params.slug
+        }
+      }
     })
 
     const fetchData = async () => {

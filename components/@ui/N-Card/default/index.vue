@@ -5,16 +5,18 @@
         <N-Slider :slider-item="data.images" />
       </template>
       <template v-else>
-        <div
-          :class="[
-            $style.hat,
-          ]"
-          :style="{
-            height: `${$props.hatHeight || 23.6}rem`
-          }"
-        >
-          <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
-        </div>
+        <nuxt-link :to="`card/${data.id}`">
+          <div
+            :class="[
+              $style.hat,
+            ]"
+            :style="{
+              height: `${$props.hatHeight || 23.6}rem`
+            }"
+          >
+            <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+          </div>
+        </nuxt-link>
       </template>
     </template>
     <!--    v-else-if="$props.images && $props.images.length === 1"-->
@@ -179,6 +181,8 @@ export default {
     }
     .title, .time {
       margin-bottom: .8rem;
+      @include montserratSemiBold;
+      @include text;
     }
     &__top {
       border-bottom: solid 1px rgba($black, .1);
