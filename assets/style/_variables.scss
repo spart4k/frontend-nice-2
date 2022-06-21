@@ -81,6 +81,10 @@ $bgWidth: 570px;
   font-size: 2.2rem;
   line-height: 1.2190909091;
 }
+@mixin subtitle-big {
+  font-size: 2.4rem;
+  line-height: 1.2190909091;
+}
 
 @mixin subtitle-sm {
   font-size: 2rem;

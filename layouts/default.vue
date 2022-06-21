@@ -26,12 +26,17 @@ export default {
         document.documentElement.style.setProperty('--vh', `${vh}px`)
       })
     }
-
     store.dispatch('basket/getBasket')
 
+    const fetchData = async () => {
+      const response = await $axios('api/v1/sections')
+      return response
+    }
+
+    // store.dispatch('basket/getBasket')
     useFetch(async () => {
       headerItems.value = []
-      const response = await $axios('api/v1/sections')
+      const response = await fetchData()
 
       headerItems.value = response.data
       store.commit('content/changeSections', response.data)
