@@ -81,6 +81,7 @@ export default {
      await store.dispatch('basket/sendBasket', row.value)
      await store.dispatch('basket/getBasket')
     }
+
     return {
       description,
       row,

@@ -9,7 +9,8 @@
         :card="card"
         @clickTag="clickTag"
       />
-      <N-Fixed-Button v-if="card.is_product" @clickButton="addBasket">
+      <div class="">asdas</div>
+      <N-Fixed-Button :checkAuth="true" :isAuth="!isAuth" v-if="card.is_product" @clickButton="addBasket">
         {{ !isAddedBasket ? 'Добавить в корзину' : 'Добавлено' }}
       </N-Fixed-Button>
       <!--      <div v-if="card.is_product" :class="$style.button__add_basket">-->
@@ -22,7 +23,7 @@
 </template>
 
 <script>
-import { ref, useAsync, useContext, defineComponent, useRouter } from '@nuxtjs/composition-api'
+import { ref, useAsync, useContext, defineComponent, useRouter, computed } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: 'DetailCards',
@@ -65,6 +66,10 @@ export default defineComponent({
       store.dispatch('basket/addBasket', params)
     }
 
+    const isAuth = computed(() => {
+      return store.state.authentication.authorizated
+    })
+
     return {
       introTitle,
       card,
@@ -72,7 +77,8 @@ export default defineComponent({
       addBasket,
       clickTag,
       description,
-      isAddedBasket
+      isAddedBasket,
+      isAuth
     }
   }
 })

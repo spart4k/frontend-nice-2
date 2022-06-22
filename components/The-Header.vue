@@ -119,6 +119,12 @@ export default {
       }
     })
 
+    // watch(() => showLoginFromStore, (newValue) => {
+    //  if (newValue === true) {
+    //    activeAuthSteps.value = true
+    //  }
+    // })
+
     const toggleMenu = () => {
       active.value = false
     }
@@ -157,6 +163,7 @@ export default {
       basketCount,
       activeAuthSteps,
       isAuth
+
     }
   }
 }

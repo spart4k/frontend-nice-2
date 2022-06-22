@@ -1,16 +1,40 @@
 <template>
-  <div :class="$style.button__add_basket">
-    <N-Button :disabled="disabled" @click="$emit('clickButton')">
+  <div :class="[$style.button__add_basket, checkAuth && isAuth ? $style.disabled : '']">
+    <div v-if="checkAuth && isAuth"
+    @click="showLogin"
+    :class="$style.noAuth">
+      <span>Войдите</span> или <span>зарегистрируйтесь,</span>
+      чтобы сделать заказ
+    </div>
+    <N-Button :disabled="disabled" :class="checkAuth && isAuth ? $style.disable : '' " @click="$emit('clickButton')">
       <slot />
     </N-Button>
   </div>
 </template>
 
 <script>
+import { useContext } from '@nuxtjs/composition-api'
 export default {
   name: 'NFixedButton',
   props: {
-    disabled: Boolean
+    disabled: Boolean,
+    checkAuth: {
+      type: Boolean,
+      default: false
+    },
+    isAuth: {
+      type: Boolean,
+      default: false
+    }
+  },
+  setup () {
+    const { store } = useContext()
+    const showLogin = () => {
+      store.commit('authentication/showLogin', true)
+    }
+    return {
+      showLogin
+    }
   }
 }
 </script>
@@ -24,14 +48,34 @@ export default {
   left: 0;
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2.4rem 0;
+  padding: 2.4rem 2.4rem;
+  &.disabled {
+    background-color: #000000;
+    color: #ffffff;
+  }
   button {
+    width: 100%;
     background-color: $yellow2;
     color: $black;
     @include montserratMedium;
     @include text;
+    &.disable {
+      background-color: #DADADA;
+      color: rgba(0,0,0,.3);
+      pointer-events: none;
+    }
+  }
+  .noAuth {
+    width: 100%;
+    font-size: 1.8rem;
+    color: $white;
+    margin-bottom: 1.2rem;
+    span {
+      color: $yellow2;
+    }
   }
 }
 </style>
