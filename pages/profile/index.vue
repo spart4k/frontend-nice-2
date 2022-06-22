@@ -1,31 +1,39 @@
 <template>
-  <div :class="$style.container">
-    <n-background />
-    <div :class="$style.profile">
-      <h1 :class="$style.profile__title">
-        Мой профиль
-      </h1>
-      <nuxt-link to="/basket" :class="$style.profile__basket">
-        <n-icon name="basket" :class="$style.icon" />
-        <span>Корзина ({{ qtyBasket }})</span>
-      </nuxt-link>
+  <div class="">
+    <N-Background :description="description" />
+    <div :class="$style.container">
+      <div :class="$style.profile">
+        <h1 :class="$style.profile__title">
+          Мой профиль
+        </h1>
+        <nuxt-link to="/basket" :class="$style.profile__basket">
+          <n-icon name="basket" :class="$style.icon" />
+          <span>Корзина ({{qtyBasket}})</span>
+        </nuxt-link>
 
-      <Form-Profile-Default :class="$style.profile__form" />
-      <History-Orders-Default />
+        <Form-Profile-Default :class="$style.profile__form" />
+        <History-Orders-Default />
+      </div>
     </div>
   </div>
+
 </template>
 
 <script>
-import { ref, useContext } from '@nuxtjs/composition-api'
+import { useContext, computed, ref } from '@nuxtjs/composition-api'
 export default {
   name: 'ProfilePage',
   setup () {
     const { store } = useContext()
-    const qtyBasket = ref(0)
-    qtyBasket.value = store.state.basket.basketLength
+    const qtyBasket = computed(() => {
+      return store.state.basket.basketLength
+    })
+     const description = ref({
+      background: ''
+     })
     return {
-      qtyBasket
+      qtyBasket,
+      description
     }
   }
 }

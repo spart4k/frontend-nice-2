@@ -7,6 +7,7 @@
       ref="textAreaRef"
       v-model="getVal"
       @input="resizeTextarea"
+      :placeholder="$props.placeholder"
     />
   </div>
 </template>
@@ -18,6 +19,10 @@ export default {
   props: {
     value: undefined,
     title: {
+      type: String,
+      default: ''
+    },
+    placeholder: {
       type: String,
       default: ''
     }
@@ -58,6 +63,16 @@ textarea {
   border: none;
   outline: none;
   resize: none;
+  border: 1px solid transparent;
+  &:focus {
+    border: 1px solid $fontColorDefault;
+  }
+  &:not(:placeholder-shown) {
+    border: 1px solid $fontColorDefault;
+  }
+}
+h3 {
+  margin-bottom: 0.75rem
 }
 .wrapper {
   .title {

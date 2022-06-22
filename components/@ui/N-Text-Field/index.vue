@@ -1,9 +1,9 @@
 <template>
-  <label :class="[$style.textField, $props.mdFz && $style.mdFz, $props.error.length || $props.errCustom ? $style.error : '']">
+  <label :class="[$style.textField, $props.mdFz && $style.mdFz, $props.error.length || $props.errCustom ? $style.error : '', $props.readOnly ? $style.readonly : '']">
     <h3 v-if="$props.title" :class="$style.title">
       {{ $props.title }}
     </h3>
-    <div :class="[$style.wrapperInput, $props.readOnly ? $style.readonly : '' ]">
+    <div :class="[$style.wrapperInput]">
       <span class="input-error" v-if="error">
         {{ errMessage }}
       </span>
@@ -15,7 +15,7 @@
         v-mask="$props.mask"
         :type="$props.type"
         :max="$props.max"
-        :readonly="readOnly"
+        :readOnly="readOnly"
         :placeholder="$props.placeholder"
         @keydown.enter="$emit('keydown', $event)"
       />
@@ -27,7 +27,7 @@ import { ref, watch, computed } from '@nuxtjs/composition-api'
 export default {
   name: 'NTextField',
   props: {
-    value: undefined,
+    valueInfo: undefined,
     title: {
       type: String,
       default: ''
@@ -42,7 +42,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: ''
+      default: ' '
     },
     type: {
       type: String,
@@ -72,7 +72,7 @@ export default {
     watch(proxyVal, () => {
       emit('input', proxyVal.value)
     })
-
+    watch(() => props.valueInfo, (newValue, oldValue) => { proxyVal.value = newValue })
     const errMessage = computed(() => {
       if (props.error[0]) {
         const text = props.error[0].$message
@@ -91,6 +91,7 @@ export default {
         return newText
       }
     })
+
     // const getValue = computed({
     //   get () {
     //     return props.value
@@ -110,6 +111,13 @@ export default {
 <style lang="scss" module>
 .textField {
   display: block;
+  &.readonly {
+    pointer-events: none;
+    .wrapperInput {
+      opacity: 0.3;
+
+    }
+  }
   &.error {
     .wrapperInput {
       border: red 1px solid;
@@ -128,8 +136,6 @@ export default {
   .wrapperInput {
     position: relative;
     height: 5.1rem;
-    padding-left: 1.478rem;
-    padding-right: 1.478rem;
     background-color: $gray2;
     border: 1px solid $gray2;
     border-radius: 0.4rem;
@@ -140,17 +146,25 @@ export default {
       left: 0;
       color: red;
     }
-    &.readonly {
-      opacity: 0.3
-    }
   }
   input {
+    padding-left: 1.478rem;
+    padding-right: 1.478rem;
     width: 100%;
     height: 100%;
     background-color: transparent;
     outline: none;
     border: none;
     font-weight: 600;
+    border-radius: inherit;
+    transition: .4s;
+    border: 1px solid transparent;
+    &:focus {
+      border: 1px solid $fontColorDefault;
+    }
+    &:not(:placeholder-shown) {
+      border: 1px solid $fontColorDefault;
+    }
     @include text-md;
   }
 
