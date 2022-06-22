@@ -3,22 +3,26 @@
     <div :class="$style.history__title">
       История заказов
     </div>
-    <div v-if="hasCards">
-      <History-Orders-Item v-for="(item) in orders.value" :order="item" :key='item.id'></History-Orders-Item>
+    <div class="">
+      <div v-if="hasCards">
+        <History-Orders-Item v-for="(item) in orders.value" :order="item" :key='item.id'></History-Orders-Item>
+      </div>
+      <div v-else :class="$style.history__empty">
+        Заказы отсутствуют
+      </div>
     </div>
-    <div v-else :class="$style.history__empty">
-      Заказы отсутствуют
-    </div>
+
   </div>
 </template>
 
 <script>
-import { ref, useAsync, useContext, computed } from '@nuxtjs/composition-api'
+import { ref, useAsync, useContext, computed, watch } from '@nuxtjs/composition-api'
 export default {
   name: 'HistoryOrders',
   setup () {
     const { store } = useContext()
     const orders = ref([])
+    const cardsLength = ref(0)
     orders.value = useAsync(async () => {
       try {
         const data = await store.dispatch('orders/getOrders')
@@ -36,10 +40,12 @@ export default {
         return false
       }
     })
-
+    console.log(orders.value.length)
+    watch(() => orders.value, (newValue) => { cardsLength.value = newValue.length })
     return {
       orders,
-      hasCards
+      hasCards,
+      cardsLength
     }
   }
 }

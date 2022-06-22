@@ -11,6 +11,7 @@
       :errCustom="errResponse"
       :error="v$.code.$errors"
       v-model="formData.code"
+      placeholder="Введите код"
       type="number"
       title="Код из СМС" />
       <n-button :typeButton="v$.$invalid ? 'disable' : '' "  :class="$style.button" type="submit">
