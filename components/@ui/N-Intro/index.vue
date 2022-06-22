@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div :class="$style.intro">
+    <div :class="[$style.intro]">
       <!--      :style="{ backgroundImage: backgroundImage}"-->
       <N-Background :description="description" />
       <div :class="[$style.intro__container, scrollingContent && $style.scrolling]">
@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <div ref="content" :class="$style.content" class="content">
+    <div ref="content" :class="[$style.content, setHeight && $style.setHeight]" class="content">
       <slot />
     </div>
   </main>
@@ -38,6 +38,9 @@ export default {
   props: {
     description: {
       type: Object
+    },
+    setHeight: {
+      type: Boolean
     }
   },
   setup (props, ctx) {
@@ -183,10 +186,14 @@ export default {
   align-items: center;
   position: relative;
   z-index: 10;
+  //min-height: 100vh;
   & > * + * {
     margin-top: 2rem;
   }
   margin-bottom: 2rem;
+  &.setHeight {
+    min-height: calc(100vh - var(--header-height));
+  }
 }
 .linkAnchor {
   position: fixed;

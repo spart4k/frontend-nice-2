@@ -8,7 +8,8 @@
         @beforeChange="syncSliders"
       >
         <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
-          <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="1">
+          <n-lazy-img :src="`${$axios.defaults.baseURL}${item.src}`" :alt="item.title" />
+          <!--          <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="1">-->
         </div>
       </VueSlickCarousel>
     </div>
@@ -24,7 +25,9 @@
       >
         <div v-for="(item, index) in sliderItem" :key="index">
           <div :class="$style.item">
-            <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="1">
+            <n-lazy-img :src="`${$axios.defaults.baseURL}${item.src}`" :alt="item.title" />
+
+            <!--            <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="1">-->
           </div>
         </div>
       </VueSlickCarousel>

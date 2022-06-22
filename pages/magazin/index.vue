@@ -1,8 +1,9 @@
 <template>
-  <n-intro :description="introTitle">
+  <n-intro :description="introTitle" :set-height="!!(cards.value && cards.value.data.length)">
+    <!--    <div :class="$style.wrapper">-->
     <n-preloader v-if="loading" />
     <template v-if="cards.value">
-      <div ref="sortRef" :class="[isScrollingTop && $style.scrollTop, $style.sorting]">
+      <div :class="[isScrollingTop && $style.scrollTop, $style.sorting]">
         <N-Dropdown
           :item="selectItemForShop"
           placeholder="Все товары"
@@ -19,6 +20,7 @@
         v-for="card in cards.value.data"
         :id="card.section_id"
         :key="card.id"
+        ref="card"
         :card="card"
         @clickTag="clickTag"
       />
@@ -28,11 +30,13 @@
         @lazyPagination="lazyPagination"
       />
     </client-only>
+    <!--    </div>-->
   </n-intro>
 </template>
 
 <script>
-import { computed, nextTick, onMounted, ref, useAsync, useContext, useRouter } from '@nuxtjs/composition-api'
+import { computed, ref, useAsync, useContext, useRouter } from '@nuxtjs/composition-api'
+import { scrollBy } from 'seamless-scroll-polyfill'
 
 const SORTING_SELECT_DATE = [
   { title: 'по новизне', sorting: 'id_asc' }
@@ -46,7 +50,7 @@ export default {
     const router = useRouter()
     const sorting = ref({})
     const isScrollingTop = ref(false)
-    const sortRef = ref(null)
+    const card = ref(null)
 
     const cards = ref([])
     const loading = ref(false)
@@ -88,43 +92,52 @@ export default {
     const clickTag = (value) => {
       router.push({ path: '/tags', query: { tag: value } })
     }
+    // изменение select и scroll вверх
     const select = async (value, typeSelect) => {
+      const body = document.querySelector('.body')
+      const content = document.querySelector('.content')
       if (typeSelect === 'date') {
-        sorting.value.sort = value.sorting
+        sorting.value.sort = value?.sorting
       }
       if (typeSelect === 'product') {
-        if (value.id === 'all') {
+        if (value?.id === 'all') {
           sorting.value.section_id = ''
         } else {
-          sorting.value.section_id = value.id
+          sorting.value.section_id = value?.id
         }
       }
       loading.value = true
       cards.value.value = await fetchData(value)
+      if (cards.value.value?.data?.length) {
+        const contentBounding = content.getBoundingClientRect()
+        scrollBy(body, { behavior: 'smooth', top: contentBounding.top - 80 })
+      }
       loading.value = false
     }
 
-    const scroll = (boundingHeader) => {
-      const boundingSort = sortRef.value.getBoundingClientRect()
-      if (boundingSort.top <= boundingHeader.bottom) {
-        isScrollingTop.value = true
-      } else {
-        isScrollingTop.value = false
-      }
-    }
-
-    onMounted(() => {
-      nextTick(() => {
-        const bodyElement = document.querySelector('.body')
-        const headerElement = document.querySelector('.header')
-        if (headerElement) {
-          const boundingHeader = headerElement.getBoundingClientRect()
-          bodyElement.addEventListener('scroll', () => {
-            scroll(boundingHeader)
-          })
-        }
-      })
-    })
+    // const scroll = (boundingHeader) => {
+    //     const boundingSort = sortRef.value.getBoundingClientRect()
+    //     if (boundingSort.top <= boundingHeader.bottom) {
+    //       isScrollingTop.value = true
+    //     } else {
+    //       isScrollingTop.value = false
+    //     }
+    // }
+    //
+    // onMounted(() => {
+    //   nextTick(() => {
+    //     const bodyElement = document.querySelector('.body')
+    //     const headerElement = document.querySelector('.header')
+    //     if (headerElement) {
+    //       const boundingHeader = headerElement.getBoundingClientRect()
+    //       bodyElement.addEventListener('scroll', () => {
+    //         if (boundingHeader) {
+    //           scroll(boundingHeader)
+    //         }
+    //       })
+    //     }
+    //   })
+    // })
 
     cards.value = useAsync(fetchData, route.value.path)
 
@@ -133,11 +146,11 @@ export default {
       cards,
       loading,
       selectItemForShop,
-      sortRef,
       SORTING_SELECT_DATE,
       clickTag,
       lazyPagination,
       select,
+      card,
       isScrollingTop
     }
   }
@@ -145,6 +158,9 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
+.wrapper {
+  min-height: 100vh;
+}
 .sorting {
   width: 100%;
   display: flex;
@@ -155,8 +171,8 @@ export default {
   .dropdown__left {
     margin-left: 1.1rem;
   }
-  &.scrollTop {
-    background-color: white;
-  }
+  //&.scrollTop {
+  //  background-color: white;
+  //}
 }
 </style>

@@ -1,18 +1,20 @@
 <template>
   <multiselect
-    v-model="v"
+    v-model="selectedElement"
     :placeholder="placeholder"
     :options="item"
     :class="$style.dropdown"
     :show-labels="false"
+    :searchable="false"
     label="title"
-    @select="selectItem"
+    @input="selectItem"
   />
 </template>
 
 <script>
 import Multiselect from 'vue-multiselect'
-import { ref } from '@nuxtjs/composition-api'
+import { ref, watch } from '@nuxtjs/composition-api'
+import props from '~/components/@ui/N-Card/props'
 
 export default {
   name: 'NDropdown',
@@ -24,21 +26,17 @@ export default {
     placeholder: String
   },
   setup (_, { emit }) {
-    const v = ref(null)
-    const data = ref([
-      { name: 'Vue.js', language: 'JavaScript' },
-      { name: 'Rails', language: 'Ruby' },
-      { name: 'Sinatra', language: 'Ruby' },
-      { name: 'Laravel', language: 'PHP', $isDisabled: true },
-      { name: 'Phoenix', language: 'Elixir' }
-    ])
-    const selectItem = (value) => {
-      emit('select', value)
+    const selectedElement = ref('')
+    const selectItem = () => {
+      emit('select', selectedElement.value)
     }
+    watch(() => props.item, () => {
+      selectedElement.value = props.item[0].title
+      console.log(selectedElement.value)
+    }, { deep: true })
     return {
-      data,
       selectItem,
-      v
+      selectedElement
     }
   }
 }
@@ -48,9 +46,20 @@ export default {
 <style scoped module lang="scss">
 .dropdown {
   :global(.multiselect__single) {
-    color: $black;
+    color: $white;
     @include text-md;
     @include montserratSemiBold;
+    background-color: inherit;
+  }
+  :global(.multiselect__select:before) {
+    border-color: $white transparent transparent;
+  }
+  :global(.multiselect__tags) {
+    background: $blueBlack3;
+  }
+  :global(.multiselect__content-wrapper) {
+    background: $blueBlack3;
+    color: $white
   }
 }
 </style>

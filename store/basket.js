@@ -19,7 +19,9 @@ export const actions = {
     try {
       const data = await this.$axios.post('api/v1/basket/add', params)
       commit('setBasket', data)
-      this.$toast.success('Товар добавлен в корзину', { position: 'bottom-right', icon: true })
+      if (!params.calc) {
+        this.$toast.success('Товар добавлен в корзину', { position: 'bottom-right', icon: true })
+      }
       return data
     } catch (e) {
       console.log(e)

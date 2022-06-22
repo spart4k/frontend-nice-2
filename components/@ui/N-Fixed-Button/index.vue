@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.button__add_basket">
+  <div :class="[$style.button__add_basket, $style[`fz_${fz}`]]">
     <N-Button :disabled="disabled" @click="$emit('clickButton')">
       <slot />
     </N-Button>
@@ -10,7 +10,8 @@
 export default {
   name: 'NFixedButton',
   props: {
-    disabled: Boolean
+    disabled: Boolean,
+    fz: String
   }
 }
 </script>
@@ -34,6 +35,9 @@ export default {
     color: $black;
     @include montserratMedium;
     @include text;
+  }
+  .fz_md {
+    @include text-md;
   }
 }
 </style>

@@ -42,8 +42,8 @@
         Корзина пуста
       </h1>
     </div>
-    <N-Fixed-Button v-if="cards && cards.length" @clickButton="sendBasket">
-      Заказать
+    <N-Fixed-Button v-if="cards && cards.length" fz="md" @clickButton="sendBasket">
+      Заказать за {{ row.cards_sum }}
     </N-Fixed-Button>
   </div>
 </template>
@@ -66,7 +66,8 @@ export default {
     const incrementBasket = (value) => {
       const params = {
         card_id: value,
-        quantity: 1
+        quantity: 1,
+        calc: true
       }
       store.dispatch('basket/addBasket', params)
     }
@@ -74,7 +75,8 @@ export default {
     const decrementBasket = (value) => {
       const params = {
         card_id: value,
-        quantity: -1
+        quantity: -1,
+        calc: true
       }
       store.dispatch('basket/addBasket', params)
     }
