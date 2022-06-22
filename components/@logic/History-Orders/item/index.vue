@@ -5,17 +5,13 @@
         24.03.22
       </div>
       <div :class="$style.item__status">
-        Ждет отправки
+        {{ $props.order.statusRu }}
       </div>
     </div>
     <div>
-      <div :class="$style.item__info">
-        <div>Наименование 1</div>
-        <div>1838р</div>
-      </div>
-      <div :class="$style.item__info">
-        <div>Наименование 1</div>
-        <div>1838р</div>
+      <div v-for="(item) in $props.order.basket.cards" :key="item.key" :class="$style.item__info">
+        <div>{{ item.title }}</div>
+        <div>{{ item.price }}</div>
       </div>
     </div>
   </div>
@@ -23,7 +19,16 @@
 
 <script>
 export default {
-  name: 'HistoryOrdersItem'
+  name: 'HistoryOrdersItem',
+  props: {
+    order: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  setup (props) {
+
+  }
 }
 </script>
 

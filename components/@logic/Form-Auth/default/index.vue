@@ -4,12 +4,14 @@
       v-model="formData.name"
       :error="v$.name.$errors"
       :class="$style.input"
+      placeholder="Никнейм"
       title="Никнейм"
     />
     <n-text-field
       v-model="formData.email"
       :error="v$.email.$errors"
       :class="$style.input"
+      placeholder="Email"
       title="Email"
     />
     <n-text-field
@@ -18,6 +20,7 @@
       :error="v$.tel.$errors"
       md-fz
       :class="$style.input"
+      placeholder="Телефон"
       title="Телефон"
     />
     <n-button :class="$style.button" :type-button="v$.$invalid ? 'disable' : '' " type="submit">
@@ -63,7 +66,7 @@ export default {
       }
       loading.value = true
       const number = '+' + formData.tel.replace(/\D/g, '')
-      store.dispatch('auth/getSms', number)
+      store.dispatch('authentication/getSms', number)
       .then((res) => {
         emit('saveTel', formData.tel)
         loading.value = false

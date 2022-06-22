@@ -1,10 +1,16 @@
 export const state = () => ({
-  basket: []
+  basket: [],
+  basketLength: 0
 })
 
 export const mutations = {
   setBasket (state, value) {
     state.basket = value
+    let qty = 0
+    value.data.cards.forEach((card) => {
+      qty += card.pivot.quantity
+    })
+    state.basketLength = qty
   }
 }
 

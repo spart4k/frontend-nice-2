@@ -11,6 +11,7 @@
       :errCustom="errResponse"
       :error="v$.code.$errors"
       v-model="formData.code"
+      placeholder="Введите код"
       type="number"
       title="Код из СМС" />
       <n-button :typeButton="v$.$invalid ? 'disable' : '' "  :class="$style.button" type="submit">
@@ -51,7 +52,7 @@ export default {
         return
       }
       loading.value = true
-      store.dispatch('auth/sendCode', {
+      store.dispatch('authentication/sendCode', {
         phone: props.titleTel,
         sms_code: +formData.code
       })
@@ -97,6 +98,7 @@ export default {
   width: 100%;
   font-weight: 600;
   margin-bottom: 1.8rem;
+  color: $fontColorDefault;
   @include text;
 }
 </style>
