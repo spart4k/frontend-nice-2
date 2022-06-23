@@ -110,6 +110,7 @@ export default defineComponent({
   justify-content: center;
   padding: 2.4rem 0;
   button {
+    height: 5.1rem;
     background-color: $yellow2;
     color: $black;
     @include montserratMedium;
