@@ -24,7 +24,6 @@ html {
   font-size: 10px;
   background-color: $blueBlack3;
   height: -webkit-fill-available;
-  overflow: hidden;
 
   @media (max-width: $tabletWidth) {
     font-size: calc((10 / 685) * 100vw);
@@ -36,17 +35,11 @@ html {
 }
 
 body {
-  line-height: 1.1666666667;
-  display: flex;
-  flex-direction: column;
-  //height: 100%;
   width: 100%;
   background-color: $blueBlack3;
-  overflow: hidden;
   @include montserratRegular;
   @include text-sm;
   min-height: 100vh;
-  /* mobile viewport bug fix */
   min-height: -webkit-fill-available;
   &:global(.popup-opened) {
     overflow: hidden;

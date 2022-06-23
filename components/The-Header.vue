@@ -113,20 +113,6 @@ export default {
 
     const randomColor = () => COLORS[Math.floor(Math.random() * COLORS.length)]
 
-    const backgroundImage = computed(() => {
-      if (isHomePage.value) {
-        return `url(${require('@/assets/img/background/index-background.jpg')})`
-      } else {
-        return `url(${require('@/assets/img/background/' + `${route.value.params.slug}-background.jpg`)})`
-      }
-    })
-
-    // watch(() => showLoginFromStore, (newValue) => {
-    //  if (newValue === true) {
-    //    activeAuthSteps.value = true
-    //  }
-    // })
-
     const toggleMenu = () => {
       active.value = false
     }
@@ -150,7 +136,7 @@ export default {
       return $store.state.authentication.showLogin
     })
 
-    watch(() => stateShowLogin, (newValue) => {
+    watch(() => stateShowLogin.value, (newValue) => {
       if (newValue === true) {
         openProfile()
       }
@@ -161,9 +147,9 @@ export default {
       toggleMenu,
       openTestPage,
       openProfile,
+      randomColor,
 
       basketData,
-      backgroundImage,
       showLogo,
       isHomePage,
       active,
@@ -173,7 +159,6 @@ export default {
       basketCount,
       activeAuthSteps,
       isAuth,
-      randomColor,
       stateShowLogin
 
     }
