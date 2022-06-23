@@ -120,7 +120,9 @@ export default {
   }
   &.error {
     .wrapperInput {
-      border: red 1px solid;
+      input {
+        border: red 1px solid
+      }
     }
   }
   &.mdFz {
@@ -137,7 +139,6 @@ export default {
     position: relative;
     height: 5.1rem;
     background-color: $gray2;
-    border: 1px solid $gray2;
     border-radius: 0.4rem;
     transition: .2s;
     span {

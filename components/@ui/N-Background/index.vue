@@ -65,7 +65,7 @@ export default {
   background-size: 100% 100vh;
 }
 img {
-  max-height: 53rem;
+  max-height: 35rem;
 }
 }
 </style>

@@ -4,8 +4,8 @@
       v-model="formData.name"
       :error="v$.name.$errors"
       :class="$style.input"
-      placeholder="Никнейм"
-      title="Никнейм"
+      placeholder="Имя"
+      title="Имя"
     />
     <n-text-field
       v-model="formData.email"
@@ -18,7 +18,6 @@
       v-model="formData.tel"
       mask="+7 (###) ###-##-##"
       :error="v$.tel.$errors"
-      md-fz
       :class="$style.input"
       placeholder="Телефон"
       title="Телефон"

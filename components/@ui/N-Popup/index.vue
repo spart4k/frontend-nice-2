@@ -61,8 +61,9 @@ export default {
     padding-left: 2.2rem;
     padding-right: 2.2rem;
     padding-bottom: 3.5rem;
+    overflow: auto;
     .popup {
-      margin-top: 14.7rem;
+      margin-top: 10.7rem;
     }
     .hat {
       display: flex;
