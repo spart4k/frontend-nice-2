@@ -45,6 +45,7 @@ export const actions = {
       localStorage.setItem('user', JSON.stringify(res.data.user))
       commit('setToken', res.data.access_token)
       commit('setUserData', res.data.user)
+      this.$toast.success('Вы успешно вошли', { position: 'bottom-right', icon: true })
       return res
     } catch (e) {
       return e.response.data
