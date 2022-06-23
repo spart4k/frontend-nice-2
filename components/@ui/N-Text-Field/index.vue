@@ -166,6 +166,7 @@ export default {
     &:not(:placeholder-shown) {
       border: 1px solid $fontColorDefault;
     }
+    @include montserratSemiBold;
     @include text-md;
   }
 
