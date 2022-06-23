@@ -83,6 +83,7 @@ export default {
     .button {
       margin-top: 2.7rem;
       width: 100%;
+      height: 5.1rem;
     }
   }
 </style>

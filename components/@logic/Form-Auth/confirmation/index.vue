@@ -91,6 +91,7 @@ export default {
 }
 .button {
   width: 100%;
+  height: 5.1rem;
   margin-top: 2.3rem;
 }
 .title {
