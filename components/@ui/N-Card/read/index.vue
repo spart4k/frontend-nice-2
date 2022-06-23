@@ -84,7 +84,7 @@ export default {
     padding-bottom: 1rem;
     margin-bottom: .7rem;
     margin-top: 1.9rem;
-    @include text-md;
+    @include text-sm;
     @include montserratRegular;
   }
   .author {
@@ -102,7 +102,7 @@ export default {
   }
   h3 {
     font-weight: 700;
-    @include text-sm;
+    @include text-md;
     margin-bottom: .73rem;
   }
   .chip {
