@@ -76,7 +76,7 @@
   @include montserratSemiBold;
   @include subtitle-sm;
   :global(.nuxt-link-exact-active) {
-    color: $activeLink;
+    color: $white;
   }
   a {
     width: 100%;
