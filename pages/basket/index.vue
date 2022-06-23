@@ -16,7 +16,7 @@
           ИТОГО
         </div>
         <div :class="$style.total__sum_price">
-          {{ row.cards_sum }}
+          {{ row.cards_sum }}р.
         </div>
       </div>
       <div :class="$style.last_view">
@@ -26,9 +26,11 @@
         <div :class="$style.last_view_items">
           <ul v-if="userInfo && userInfo.length" :class="$style.last_view_list">
             <li v-for="views in userInfo" :key="views.id" :class="$style.last_view_item">
-              <template v-if="views.card.images.length">
-                <n-lazy-img :src="`${$axios.defaults.baseURL}${views.card.images[0].src}`" />
-              </template>
+              <nuxt-link :to="`/card/${views.card_id}`">
+                <template v-if="views.card.images.length">
+                  <n-lazy-img :src="`${$axios.defaults.baseURL}${views.card.images[0].src}`" :alt="views.card.title" />
+                </template>
+              </nuxt-link>
             </li>
           </ul>
         </div>
@@ -40,8 +42,8 @@
         Корзина пуста
       </h1>
     </div>
-    <N-Fixed-Button v-if="cards && cards.length" @clickButton="sendBasket">
-      Заказать
+    <N-Fixed-Button v-if="cards && cards.length" fz="md" @clickButton="sendBasket">
+      Заказать за {{ row.cards_sum }}
     </N-Fixed-Button>
   </div>
 </template>
@@ -64,7 +66,8 @@ export default {
     const incrementBasket = (value) => {
       const params = {
         card_id: value,
-        quantity: 1
+        quantity: 1,
+        calc: true
       }
       store.dispatch('basket/addBasket', params)
     }
@@ -72,7 +75,8 @@ export default {
     const decrementBasket = (value) => {
       const params = {
         card_id: value,
-        quantity: -1
+        quantity: -1,
+        calc: true
       }
       store.dispatch('basket/addBasket', params)
     }
@@ -102,6 +106,7 @@ export default {
 }
 .rows {
   position: relative;
+  margin-bottom: 3rem;
 }
 .list {
   padding: 0;
@@ -143,15 +148,24 @@ export default {
     @include title;
   }
 }
+.last_view_title {
+  margin-bottom: 1.25rem;
+  @include text-md;
+  @include montserratSemiBold;
+}
+.last_view {
+  margin-bottom: 13rem;
+}
 .last_view_list {
   display: flex;
   padding: 0;
   width: 100%;
-  overflow: auto;
+  height: 10.1rem;
+  overflow-x: auto;
+  margin: 0;
 }
 .last_view_item {
   width: 7.5rem;
-  max-height: 10.1rem;
   flex-shrink: 0;
   list-style: none;
   & + & {

@@ -1,6 +1,6 @@
 <template>
-  <N-Card-Default v-bind="$props" @clickTag="($event) => $emit('clickTag', $event)">
-    <template v-if="data.files" #footer>
+  <N-Card-Default v-bind="$props" :detail-page="detailPage" @clickTag="($event) => $emit('clickTag', $event)">
+    <template v-if="data.files && detailPage" #footer>
       <div v-for="item in data.files" :key="item.id" :class="$style.row">
         <h2>
           {{ item.title }}
@@ -19,10 +19,15 @@ export default {
     audio: {
       type: Array,
       default: null
+    },
+    detailPage: {
+      type: Boolean,
+      default: false
     }
   }
 }
 </script>
+
 <style lang="scss" module>
 .row {
   border-bottom: 1px $gray solid;

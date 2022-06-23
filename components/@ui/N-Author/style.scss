@@ -3,6 +3,7 @@
   align-items: center;
   &__name {
     @include text;
+    @include montserratSemiBold;
     width: 100%;
   }
   &__img {

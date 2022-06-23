@@ -41,18 +41,19 @@ export default {
 
 <style lang="scss" module>
   .container {
-    padding: 20px;
-    position: relative;
+    @include container;
   }
   .profile {
-    // padding-top: var(--header-height);
+    padding-top: 2.2rem;
     margin-bottom: 3.2rem;
+    position: relative;
     &__basket {
       display: flex;
       align-items: center;
       color: $white;
       font-size: 2rem;
       margin-bottom: 2.4rem;
+      @include montserratSemiBold;
       span {
         text-decoration: underline;
       }
@@ -69,7 +70,7 @@ export default {
       font-size: 3.3rem;
       color:  $white;
       margin-bottom: 1.5rem;
-      font-family: 'Montserrat-Black', sans-serif;
+      @include montserratBlack;
     }
   }
 

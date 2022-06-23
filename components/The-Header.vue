@@ -20,21 +20,21 @@
             </nuxt-link>
           </transition>
         </div>
-        <div :class="[$style.basket, $style.headerMenu__item]" @click="active = false">
+        <div v-if="isAuth && basketCount.calcBasketCard > 0" :class="[$style.basket, $style.headerMenu__item]" @click="active = false">
           <nuxt-link to="/basket">
             <div :class="$style.basket__title">
               <n-icon name="basket" :class="$style.icon" />
               <span>Корзина</span>
             </div>
-            <div v-if="$store.state.authentication.authorizated" :class="$style.basket__price">
-              {{ basketCount.calcBasketCard }} {{ basketCount.text }} на сумму {{ basketCount.cardSum }}р
+            <div :class="$style.basket__price">
+              {{ basketCount.calcBasketCard }} {{ basketCount.text }} на {{ basketCount.cardSum }}р
             </div>
           </nuxt-link>
         </div>
 
         <div :class="$style.headerNav__inner">
           <ul :class="$style.headerMenu__list">
-            <li v-for="item in headerItems" :key="item.title" :class="$style.headerMenu__item" @click.stop="toggleMenu">
+            <li v-for="item in headerItems" :key="item.title" :style="{color: randomColor()}" :class="$style.headerMenu__item" @click.stop="toggleMenu">
               <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
                 {{ item.title }}
               </nuxt-link>
@@ -66,7 +66,7 @@
         <span />
       </div>
       <!--      basketData.cards.length-->
-      <div v-if="!active && isAuth" :class="$style.basketCount">
+      <div v-if="!active && isAuth && basketCount.calcBasketCard > 0" :class="$style.basketCount">
         {{ basketCount.calcBasketCard }}
       </div>
     </n-button>
@@ -78,7 +78,7 @@
 <script lang="js">
 import { computed, ref, useRouter, useRoute } from '@nuxtjs/composition-api'
 import { numWord } from '~/helpers/compositions/declination'
-
+const COLORS = ['#489430', '#00B4B5', '#FF4F00', '#ded037']
 export default {
   name: 'TheHeader',
   props: {
@@ -110,6 +110,8 @@ export default {
         text: numWord(calcBasketCard, ['товар', 'товара', 'товаров'])
       }
     })
+
+    const randomColor = () => COLORS[Math.floor(Math.random() * COLORS.length)]
 
     const backgroundImage = computed(() => {
       if (isHomePage.value) {
@@ -162,7 +164,8 @@ export default {
       bgName,
       basketCount,
       activeAuthSteps,
-      isAuth
+      isAuth,
+      randomColor
 
     }
   }

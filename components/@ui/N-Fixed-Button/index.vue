@@ -1,14 +1,20 @@
 <template>
-  <div :class="[$style.button__add_basket, checkAuth && isAuth ? $style.disabled : '']">
-    <div v-if="checkAuth && isAuth"
-    @click="showLogin"
-    :class="$style.noAuth">
-      <span>Войдите</span> или <span>зарегистрируйтесь,</span>
-      чтобы сделать заказ
-    </div>
-    <N-Button :disabled="disabled" :class="checkAuth && isAuth ? $style.disable : '' " @click="$emit('clickButton')">
-      <slot />
-    </N-Button>
+  <div :class="[$style.button__add_basket, $style[`fz_${fz}`]]">
+    <N-Button :disabled="disabled" @click="$emit('clickButton')">
+      <div :class="[$style.button__add_basket, checkAuth && isAuth ? $style.disabled : '']">
+        <div
+          v-if="checkAuth && isAuth"
+          :class="$style.noAuth"
+          @click="showLogin"
+        >
+          <span>Войдите</span> или <span>зарегистрируйтесь,</span>
+          чтобы сделать заказ
+        </div>
+        <N-Button :disabled="disabled" :class="checkAuth && isAuth ? $style.disable : '' " @click="$emit('clickButton')">
+          <slot />
+        </N-Button>
+      </div>
+    </n-button>
   </div>
 </template>
 
@@ -18,6 +24,7 @@ export default {
   name: 'NFixedButton',
   props: {
     disabled: Boolean,
+    fz: String,
     checkAuth: {
       type: Boolean,
       default: false
@@ -42,6 +49,9 @@ export default {
 <style scoped lang="scss" module>
 .button__add_basket {
   background-color: rgba($black, 0.8);
+  //padding-top: 2.4rem;
+  //padding-bottom: 2.4rem;
+  @include container;
   position: fixed;
   z-index: 10;
   bottom: 0;
@@ -62,6 +72,7 @@ export default {
     color: $black;
     @include montserratMedium;
     @include text;
+    width: 100%;
     &.disable {
       background-color: #DADADA;
       color: rgba(0,0,0,.3);
@@ -76,6 +87,9 @@ export default {
     span {
       color: $yellow2;
     }
+  }
+  .fz_md {
+    @include text-md;
   }
 }
 </style>

@@ -68,7 +68,7 @@ export default {
       const response = store.dispatch('pages/getData', params)
       return response
     }
-    const { getData, dataPagination } = pagination(fetch)
+    const { getData, dataPagination } = pagination(fetchData)
 
     const lazyPagination = ($state) => {
       getData($state, cards.value.value.last_page)

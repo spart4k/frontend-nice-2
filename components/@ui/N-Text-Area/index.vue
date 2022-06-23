@@ -1,6 +1,8 @@
 <template>
   <div :class="$style.wrapper">
-    <h3>{{ $props.title }}</h3>
+    <h3 :class="$style.title">
+      {{ $props.title }}
+    </h3>
     <textarea
       ref="textAreaRef"
       v-model="getVal"
@@ -51,7 +53,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" module>
+<style lang="scss" module scoped>
 textarea {
   padding: 1rem;
   min-height: 13rem;
@@ -72,4 +74,12 @@ textarea {
 h3 {
   margin-bottom: 0.75rem
 }
+.wrapper {
+  .title {
+    color: $fontColorDefault;
+    @include text-md;
+    margin-bottom: 0.75rem;
+  }
+}
+
 </style>

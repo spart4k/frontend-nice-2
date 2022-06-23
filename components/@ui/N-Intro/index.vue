@@ -1,8 +1,8 @@
 <template>
   <main>
-    <div :class="$style.intro">
+    <div :class="[$style.intro]">
       <!--      :style="{ backgroundImage: backgroundImage}"-->
-      <N-Background :description="description" />
+      <N-Background :description="description" :hide-image="scrollingContent" :is-home-page="isHomePage" />
       <div :class="[$style.intro__container, scrollingContent && $style.scrolling]">
         <h1 v-if="!isHomePage" :class="$style.intro__title">
           {{ description.title }}
@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <div ref="content" :class="$style.content" class="content">
+    <div ref="content" :class="[$style.content, setHeight && $style.setHeight]" class="content">
       <slot />
     </div>
   </main>
@@ -38,6 +38,9 @@ export default {
   props: {
     description: {
       type: Object
+    },
+    setHeight: {
+      type: Boolean
     }
   },
   setup (props, ctx) {
@@ -118,9 +121,9 @@ export default {
     justify-content: flex-end;
     height: -webkit-fill-available;
     background-size: cover;
-    @media (max-width: $bgWidth) {
-      background-size: 100% 100vh;
-    }
+    //@media (max-width: $bgWidth) {
+    //  background-size: 100% 100vh;
+    //}
     img {
       max-height: 53rem;
     }
@@ -168,7 +171,7 @@ export default {
     margin-top: 7.9rem;
     position: fixed;
     z-index: 1;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
     //top: 10rem;
     width: 100%;
   }
@@ -183,10 +186,14 @@ export default {
   align-items: center;
   position: relative;
   z-index: 10;
+  //min-height: 100vh;
   & > * + * {
     margin-top: 2rem;
   }
   margin-bottom: 2rem;
+  &.setHeight {
+    min-height: calc(100vh - var(--header-height));
+  }
 }
 .linkAnchor {
   position: fixed;

@@ -1,11 +1,26 @@
 <template>
-  <n-intro :description="introTitle">
+  <n-intro :description="introTitle" :set-height="!!(cards.value && cards.value.data.length)">
+    <!--    <div :class="$style.wrapper">-->
     <n-preloader v-if="loading" />
     <template v-if="cards.value">
+      <div :class="[isScrollingTop && $style.scrollTop, $style.sorting]">
+        <N-Dropdown
+          :item="selectItemForShop"
+          placeholder="Все товары"
+          @select="($event) => select($event, 'product')"
+        />
+        <N-Dropdown
+          :item="SORTING_SELECT_DATE"
+          placeholder="По новизне"
+          :class="$style.dropdown__left"
+          @select="($event) => select($event, 'date')"
+        />
+      </div>
       <SectionCards
         v-for="card in cards.value.data"
         :id="card.section_id"
         :key="card.id"
+        ref="card"
         :card="card"
         @clickTag="clickTag"
       />
@@ -15,37 +30,130 @@
         @lazyPagination="lazyPagination"
       />
     </client-only>
+    <!--    </div>-->
   </n-intro>
 </template>
 
 <script>
-import { ref, useAsync, useContext, useRouter } from '@nuxtjs/composition-api'
+import { computed, ref, useAsync, useContext, useRouter } from '@nuxtjs/composition-api'
+import { pagination } from '~/plugins/pagination'
+
+const SORTING_SELECT_DATE = [
+  { title: 'по новизне', sorting: 'id_asc' }
+]
 
 export default {
   name: 'NShop',
   setup (_, ctx) {
     const { $store } = ctx.root
-    const { route } = useContext()
+    const { route, store } = useContext()
     const router = useRouter()
+    const sorting = ref({})
+    const isScrollingTop = ref(false)
+    const card = ref(null)
 
     const cards = ref([])
     const loading = ref(false)
-    const introTitle = ref({
-      title: 'Главная3',
-      subtitle: 'творческое объединение',
-      background: ''
+    const id = computed(() => Number(route.value.query.id))
+
+    const introTitle = computed(() => {
+      if (id.value) {
+        const findSection = $store?.state?.content.sections.find((item) => {
+          return Number(item.id) === id.value
+        })
+        return {
+          title: findSection?.title ?? '',
+          subtitle: findSection?.description,
+          background: 'magazin'
+        }
+      } else {
+        return {
+          title: '',
+          subtitle: '',
+          background: route.value.params.slug
+        }
+      }
+    })
+    const selectItemForShop = useAsync(async () => {
+      const response = await store.dispatch('shop/getDataForShop')
+      if (response.data.length) {
+        response.data.push({ title: 'Все товары', id: 'all' })
+      }
+      return response.data
     })
 
-    const fetchData = async () => {
-      const response = await $store.dispatch('shop/getData')
-       return response.data
+    // const fetchData = (currentPage) => {
+    //   const params = {
+    //     page: currentPage,
+    //     section_id: id.value ? id.value : '',
+    //     tag_id: tagId.value ? tagId.value : ''
+    //   }
+    //   const response = store.dispatch('pages/getData', params)
+    //   return response
+    // }
+    // const lazyPagination = () => {
+    //   console.log(222)
+    // }
+    const fetchData = async (value = {}) => {
+      const response = await $store.dispatch('shop/getData', sorting.value)
+      return response.data
     }
-    const lazyPagination = () => {
-      console.log(222)
+
+    const { getData, dataPagination } = pagination(fetchData)
+    const lazyPagination = ($state) => {
+      getData($state, cards.value.value.last_page)
+      cards.value.value.data = [...cards.value.value.data, ...dataPagination.value]
     }
+
     const clickTag = (value) => {
       router.push({ path: '/tags', query: { tag: value } })
     }
+    // изменение select и scroll вверх
+    const select = async (value, typeSelect) => {
+      // const body = document.querySelector('.body')
+      // const content = document.querySelector('.content')
+      if (typeSelect === 'date') {
+        sorting.value.sort = value?.sorting
+      }
+      if (typeSelect === 'product') {
+        if (value?.id === 'all') {
+          sorting.value.section_id = ''
+        } else {
+          sorting.value.section_id = value?.id
+        }
+      }
+      loading.value = true
+      cards.value.value = await fetchData(value)
+      // if (cards.value.value?.data?.length) {
+        // const contentBounding = content.getBoundingClientRect()
+        // scrollBy(body, { behavior: 'smooth', top: contentBounding.top - 88 })
+      // }
+      loading.value = false
+    }
+
+    // const scroll = (boundingHeader) => {
+    //     const boundingSort = sortRef.value.getBoundingClientRect()
+    //     if (boundingSort.top <= boundingHeader.bottom) {
+    //       isScrollingTop.value = true
+    //     } else {
+    //       isScrollingTop.value = false
+    //     }
+    // }
+    //
+    // onMounted(() => {
+    //   nextTick(() => {
+    //     const bodyElement = document.querySelector('.body')
+    //     const headerElement = document.querySelector('.header')
+    //     if (headerElement) {
+    //       const boundingHeader = headerElement.getBoundingClientRect()
+    //       bodyElement.addEventListener('scroll', () => {
+    //         if (boundingHeader) {
+    //           scroll(boundingHeader)
+    //         }
+    //       })
+    //     }
+    //   })
+    // })
 
     cards.value = useAsync(fetchData, route.value.path)
 
@@ -53,13 +161,34 @@ export default {
       introTitle,
       cards,
       loading,
+      selectItemForShop,
+      SORTING_SELECT_DATE,
       clickTag,
-      lazyPagination
+      lazyPagination,
+      select,
+      card,
+      isScrollingTop
     }
   }
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss" module>
+.wrapper {
+  min-height: 100vh;
+}
+.sorting {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  //position: sticky;
+  //top: 0;
+  z-index: 10;
+  .dropdown__left {
+    margin-left: 1.1rem;
+  }
+  //&.scrollTop {
+  //  background-color: white;
+  //}
+}
 </style>
