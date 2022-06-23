@@ -114,7 +114,8 @@ export default {
     -webkit-mask-image: -webkit-radial-gradient(white, black);
     overflow: hidden;
     video {
-      width: 100%;
+      width: calc(100% + 2px);
+      margin-left: -1px;
       height: 100%;
       max-height: 24rem;
     }

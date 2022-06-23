@@ -9,7 +9,7 @@
         :card="card"
         @clickTag="clickTag"
       />
-      <N-Fixed-Button v-if="card.is_product" @clickButton="addBasket">
+      <N-Fixed-Button :isAuth="isAuth" :checkAuth="true" v-if="card.is_product" @clickButton="addBasket">
         <template v-if="!isAddedBasket">
           Добавить в корзину
         </template>
