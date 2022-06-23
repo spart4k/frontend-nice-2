@@ -20,10 +20,13 @@ export default {
 <style scoped lang="scss" module>
   .btn{
     cursor: pointer;
-    border: none;
+    border: 1px solid $blueBlack;
     border-radius: .4rem;
     background-color: $blueBlack;
-    padding: 1.565rem 5.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5.1rem;
     color: $white;
     font-weight: 600;
     @include text;
@@ -36,7 +39,7 @@ export default {
   }
   .sub {
     background: transparent;
-    border: 2px solid $blueBlack2;
+    border: 1px solid $blueBlack2;
     color: $blueBlack2;
   }
   .disable {
