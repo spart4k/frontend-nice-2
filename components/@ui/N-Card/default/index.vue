@@ -10,19 +10,21 @@
             :class="[
               $style.hat,
             ]"
-            :style="{
-              height: `${$props.hatHeight || 23.6}rem`
-            }"
           >
             <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
           </div>
+          <!--          :style="{-->
+          <!--          height: `${$props.hatHeight || 23.6}rem`-->
+          <!--          }"-->
         </nuxt-link>
       </template>
     </template>
     <template v-else-if="$props.withVideo">
-      <video ref="videoRef" playsinline controls muted type="video/mp4">
-        <source :src="videoUrl" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
-      </video>
+      <div :class="$style.wrapperVideo">
+        <video ref="videoRef" playsinline controls muted type="video/mp4">
+          <source :src="videoUrl" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
+        </video>
+      </div>
     </template>
     <div
       :class="[
@@ -113,12 +115,28 @@ export default {
     border-radius: $border-radius-1;
     -webkit-mask-image: -webkit-radial-gradient(white, black);
     overflow: hidden;
-    video {
-      width: calc(100% + 2px);
-      margin-left: -1px;
-      height: 100%;
-      max-height: 24rem;
+    .wrapperVideo {
+      position: relative;
+      &:after {
+        display: block;
+        content: '';
+        /* 16:9 aspect ratio */
+        padding-bottom: 56.25%;
+      }
+      video {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+      }
     }
+    //video {
+    //  width: calc(100% + 2px);
+    //  margin-left: -1px;
+    //  height: 100%;
+    //  max-height: 24rem;
+    //}
   }
   .parser {
     word-break: break-word;

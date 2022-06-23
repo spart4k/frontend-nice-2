@@ -14,13 +14,12 @@
 
 <script>
 import { ref, useRoute, useRouter, useAsync, useContext, computed } from '@nuxtjs/composition-api'
-import _ from 'lodash'
 import { pagination } from '~/plugins/pagination'
 
 export default {
   name: 'NMusic',
   layout: 'default',
-  transition: 'home',
+  // transition: 'home',
   setup () {
     const route = useRoute()
     const router = useRouter()
@@ -83,7 +82,7 @@ export default {
         tag_id: value
       }
       const response = await store.dispatch('pages/getData', params)
-      cards.value.value = _.cloneDeep(response.data.data)
+      cards.value.value = [...response.data.data]
       loading.value = false
     }
 
@@ -111,7 +110,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss" module>
-.wrapper {
-}
-</style>
+<style scoped lang="scss" module></style>

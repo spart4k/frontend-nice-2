@@ -37,6 +37,14 @@ export default {
     })
 
     onMounted(() => {
+      const vh = window.innerHeight * 0.01
+// Then we set the value in the --vh custom property to the root of the document
+      document.documentElement.style.setProperty('--vh', `${vh}px`)
+      window.addEventListener('resize', () => {
+        // We execute the same script as before
+        const vh = window.innerHeight * 0.01
+        document.documentElement.style.setProperty('--vh', `${vh}px`)
+      })
       store.commit('authentication/setUserData')
       store.commit('authentication/setToken')
       store.dispatch('basket/getBasket')
@@ -53,23 +61,13 @@ export default {
 <style scoped module lang="scss">
 .wrapper {
   margin-top: var(--header-height);
+  //min-height: -webkit-fill-available;
+  width: 100%;
   height: calc(100% - var(--header-height));
+  height: calc(var(--vh, 1vh) * 100 - var(--header-height));
   position: absolute;
   top: 0;
   left: 0;
-  bottom: 0;
-  width: 100%;
   overflow: auto;
-  display: flex;
-  flex-direction: column;
-}
-.header {
-  flex: 0 0 auto;
-}
-.content {
-  flex: 1 0 auto;
-}
-.footer {
-  flex: 0 0 auto;
 }
 </style>

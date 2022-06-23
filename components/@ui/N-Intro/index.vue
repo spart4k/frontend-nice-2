@@ -2,7 +2,13 @@
   <main>
     <div :class="[$style.intro]">
       <!--      :style="{ backgroundImage: backgroundImage}"-->
-      <N-Background :description="description" :hide-image="scrollingContent" :is-home-page="isHomePage" />
+      <N-Background
+        :hide-image="scrollingContent"
+        :is-home-page="isHomePage"
+        :description="description"
+        :color="color"
+      />
+      <!--      :description="description"-->
       <div :class="[$style.intro__container, scrollingContent && $style.scrolling]">
         <h1 v-if="!isHomePage" :class="$style.intro__title">
           {{ description.title }}
@@ -30,8 +36,9 @@
 </template>
 
 <script>
-import { computed, nextTick, onMounted, ref, useRoute } from '@nuxtjs/composition-api'
+import { computed, nextTick, onMounted, ref, useRoute, watch } from '@nuxtjs/composition-api'
 import { scrollBy } from 'seamless-scroll-polyfill'
+import { BLAND_COLOR } from '~/const/blandColor'
 
 export default {
   name: 'NIntro',
@@ -81,19 +88,26 @@ export default {
       const contentBounding = content.value.getBoundingClientRect()
       scrollBy(body, { behavior: 'smooth', top: contentBounding.top - 90 })
     }
-    // watch(() => route.value.fullPath, () => {
-    //   const body = document.querySelector('.body')
-    //
-    //   const contentBounding = content.value.getBoundingClientRect()
-    //   scrollBy(body, { behavior: 'smooth', top: contentBounding.top - 90 })
-    // })
+    console.log(route.value)
+    const color = computed(() => {
+      const paramsColor = BLAND_COLOR[route.value.params?.slug] || BLAND_COLOR[route.value.name]
+      if (paramsColor) {
+        return paramsColor
+      } else {
+        return ''
+      }
+    })
+    watch(() => route.value.path, () => {
+      console.log(route.value.query, 2131231)
+    })
     return {
       anchor,
       content,
       wrapper,
       scrollingContent,
       isHomePage,
-      scrollTo
+      scrollTo,
+      color
     }
   },
   watchQuery: true
@@ -189,7 +203,7 @@ export default {
   & > * + * {
     margin-top: 2rem;
   }
-  margin-bottom: 2rem;
+  //margin-bottom: 2rem;
   &.setHeight {
     min-height: calc(100vh - var(--header-height));
   }

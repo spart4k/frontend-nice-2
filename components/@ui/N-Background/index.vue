@@ -1,8 +1,10 @@
 <template>
-  <div :class="$style.bg" :style="{ backgroundImage: setBackgroundImage}">
-    <!--    <transition name="fade-fast">-->
-    <img v-if="!isHomePage && setImage && !hideImage" :src="setImage">
-    <!--    </transition>-->
+  <div>
+    <div :class="$style.wrapper">
+      <img v-if="!isHomePage && setImage && !hideImage" :class="$style.heroImage" :src="setImage">
+      <div :class="$style.overlay" :style="{backgroundColor: color}" />
+      <div :class="$style.bg" />
+    </div>
   </div>
 </template>
 
@@ -21,17 +23,18 @@ export default {
       }
     },
     hideImage: Boolean,
-    isHomePage: Boolean
+    isHomePage: Boolean,
+    color: Boolean
   },
   setup (props) {
-    const setBackgroundImage = computed(() => {
-      if (props.isHomePage) {
-        return `url(${require('@/assets/img/background/index-background.jpg')})`
-      }
-      if (props.description.background) {
-        return `url(${require('@/assets/img/background/' + `${props.description.background}-background.jpg`)})`
-      }
-    })
+    // const setBackgroundImage = computed(() => {
+    //   if (props.isHomePage) {
+    //     return `url(${require('@/assets/img/background/index-background.jpg')})`
+    //   }
+    //   if (props.description.background) {
+    //     return `url(${require('@/assets/img/background/' + `${props.description.background}-background.jpg`)})`
+    //   }
+    // })
 
     const setImage = computed(() => {
       if (props.description.background) {
@@ -41,7 +44,7 @@ export default {
       }
     })
     return {
-      setBackgroundImage,
+      // setBackgroundImage,
       setImage
     }
   }
@@ -49,23 +52,48 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
-.bg {
+.wrapper{
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   width: 100%;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  height: -webkit-fill-available;
-  background-size: cover;
-@media (max-width: $bgWidth) {
-  background-size: 100% 100vh;
 }
-img {
+.overlay {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  height: 100%;
+  //background-color: rgba(red, 0.5);
+  opacity: 0.5;
+  z-index: 2;
+  mix-blend-mode: color;
+}
+.heroImage {
+  position: absolute;
   max-height: 35rem;
+  z-index: 3;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  animation: fadeImage 0.1s ease;
 }
+@keyframes fadeImage {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.bg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-image: url('@/assets/img/background/index-background.jpg');
+  background-size: cover;
+  z-index: 1;
 }
 </style>

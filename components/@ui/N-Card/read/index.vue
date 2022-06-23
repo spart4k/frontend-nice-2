@@ -83,7 +83,8 @@ export default {
     padding-bottom: 1rem;
     margin-bottom: .7rem;
     margin-top: 1.9rem;
-    @include text-sm;
+    @include text-md;
+
     @include montserratRegular;
   }
   .author {

@@ -1,7 +1,7 @@
 <template>
   <n-intro :description="introTitle">
     <div v-if="cards.value && cards.value.data" :class="$style.cards">
-      <TransitionGroup name="home">
+      <TransitionGroup name="home" tag="div">
         <div v-for="(card) in cards.value.data" :key="card.id" :class="$style.cards__item">
           <section-cards :id="card.section.id" :key="card.id" :card="card" @clickTag="($event) => clickTag($event, card.section.id)" />
         </div>
