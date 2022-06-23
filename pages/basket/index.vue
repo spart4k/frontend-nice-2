@@ -82,8 +82,9 @@ export default {
     }
 
     const sendBasket = async () => {
-     await store.dispatch('basket/sendBasket', row.value)
-     await store.dispatch('basket/getBasket')
+      console.log('1')
+      await store.dispatch('basket/sendBasket', row.value)
+      await store.dispatch('basket/getBasket')
     }
 
     return {

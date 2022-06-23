@@ -1,16 +1,16 @@
 <template>
   <div :class="[$style.button__add_basket, $style[`fz_${fz}`]]">
     <N-Button :disabled="disabled" @click="$emit('clickButton')">
-      <div :class="[$style.button__add_basket, checkAuth && isAuth ? $style.disabled : '']">
+      <div :class="[$style.button__add_basket, checkAuth && !isAuth ? $style.disabled : '']">
         <div
-          v-if="checkAuth && isAuth"
+          v-if="checkAuth && !isAuth"
           :class="$style.noAuth"
           @click="showLogin"
         >
           <span>Войдите</span> или <span>зарегистрируйтесь,</span>
           чтобы сделать заказ
         </div>
-        <N-Button :disabled="disabled" :class="checkAuth && isAuth ? $style.disable : '' " @click="$emit('clickButton')">
+        <N-Button :disabled="disabled" :class="checkAuth && !isAuth ? $style.disable : '' " @click="$emit('clickButton')">
           <slot />
         </N-Button>
       </div>

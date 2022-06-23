@@ -120,7 +120,9 @@ export default {
   }
   &.error {
     .wrapperInput {
-      border: red 1px solid;
+      input {
+        border: red 1px solid
+      }
     }
   }
   &.mdFz {
