@@ -153,6 +153,9 @@ export default {
   @include text-md;
   @include montserratSemiBold;
 }
+.last_view {
+  margin-bottom: 13rem;
+}
 .last_view_list {
   display: flex;
   padding: 0;

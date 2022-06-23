@@ -1,6 +1,8 @@
 <template>
   <div :class="$style.bg" :style="{ backgroundImage: setBackgroundImage}">
-    <img v-if="!isHomePage && setImage" :src="setImage">
+    <transition name="fade-fast">
+      <img v-if="!isHomePage && setImage && !hideImage" :src="setImage">
+    </transition>
   </div>
 </template>
 
@@ -18,14 +20,16 @@ export default {
         }
       }
     },
+    hideImage: Boolean,
     isHomePage: Boolean
   },
   setup (props) {
     const setBackgroundImage = computed(() => {
+      if (props.isHomePage) {
+        return `url(${require('@/assets/img/background/index-background.jpg')})`
+      }
       if (props.description.background) {
         return `url(${require('@/assets/img/background/' + `${props.description.background}-background.jpg`)})`
-      } else {
-        return `url(${require('@/assets/img/background/index-background.jpg')})`
       }
     })
 

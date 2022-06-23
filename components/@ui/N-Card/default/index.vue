@@ -132,7 +132,8 @@ export default {
   .hat {
     //height: 23.6rem;
     width: 100%;
-    background-color: #e7dddd;
+    //background-color: #e7dddd;
+    border: none;
   }
   .price {
     color: $black;

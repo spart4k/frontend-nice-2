@@ -36,7 +36,7 @@
 
 <script>
 import { computed, ref, useAsync, useContext, useRouter } from '@nuxtjs/composition-api'
-import { scrollBy } from 'seamless-scroll-polyfill'
+import { pagination } from '~/plugins/pagination'
 
 const SORTING_SELECT_DATE = [
   { title: 'по новизне', sorting: 'id_asc' }
@@ -82,20 +82,36 @@ export default {
       return response.data
     })
 
+    // const fetchData = (currentPage) => {
+    //   const params = {
+    //     page: currentPage,
+    //     section_id: id.value ? id.value : '',
+    //     tag_id: tagId.value ? tagId.value : ''
+    //   }
+    //   const response = store.dispatch('pages/getData', params)
+    //   return response
+    // }
+    // const lazyPagination = () => {
+    //   console.log(222)
+    // }
     const fetchData = async (value = {}) => {
       const response = await $store.dispatch('shop/getData', sorting.value)
-       return response.data
+      return response.data
     }
-    const lazyPagination = () => {
-      console.log(222)
+
+    const { getData, dataPagination } = pagination(fetchData)
+    const lazyPagination = ($state) => {
+      getData($state, cards.value.value.last_page)
+      cards.value.value.data = [...cards.value.value.data, ...dataPagination.value]
     }
+
     const clickTag = (value) => {
       router.push({ path: '/tags', query: { tag: value } })
     }
     // изменение select и scroll вверх
     const select = async (value, typeSelect) => {
-      const body = document.querySelector('.body')
-      const content = document.querySelector('.content')
+      // const body = document.querySelector('.body')
+      // const content = document.querySelector('.content')
       if (typeSelect === 'date') {
         sorting.value.sort = value?.sorting
       }
@@ -108,10 +124,10 @@ export default {
       }
       loading.value = true
       cards.value.value = await fetchData(value)
-      if (cards.value.value?.data?.length) {
-        const contentBounding = content.getBoundingClientRect()
-        scrollBy(body, { behavior: 'smooth', top: contentBounding.top - 80 })
-      }
+      // if (cards.value.value?.data?.length) {
+        // const contentBounding = content.getBoundingClientRect()
+        // scrollBy(body, { behavior: 'smooth', top: contentBounding.top - 88 })
+      // }
       loading.value = false
     }
 
@@ -165,8 +181,8 @@ export default {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  position: sticky;
-  top: 0;
+  //position: sticky;
+  //top: 0;
   z-index: 10;
   .dropdown__left {
     margin-left: 1.1rem;

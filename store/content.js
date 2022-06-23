@@ -3,12 +3,16 @@ export const state = () => ({
   logoBg: '',
   bgIntro: '',
   imgIntro: '',
+  bgDetails: '',
   sections: []
 })
 
 export const mutations = {
   changeBgIntro (state, value) {
     state.bgIntro = value
+  },
+  changeBgDetail (state, value) {
+    state.bgDetails = value
   },
   clearBgIntro (state) {
     state.bgIntro = ''

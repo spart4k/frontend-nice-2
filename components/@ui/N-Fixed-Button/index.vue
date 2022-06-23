@@ -1,16 +1,20 @@
 <template>
   <div :class="[$style.button__add_basket, $style[`fz_${fz}`]]">
     <N-Button :disabled="disabled" @click="$emit('clickButton')">
-  <div :class="[$style.button__add_basket, checkAuth && isAuth ? $style.disabled : '']">
-    <div v-if="checkAuth && isAuth"
-    @click="showLogin"
-    :class="$style.noAuth">
-      <span>Войдите</span> или <span>зарегистрируйтесь,</span>
-      чтобы сделать заказ
-    </div>
-    <N-Button :disabled="disabled" :class="checkAuth && isAuth ? $style.disable : '' " @click="$emit('clickButton')">
-      <slot />
-    </N-Button>
+      <div :class="[$style.button__add_basket, checkAuth && isAuth ? $style.disabled : '']">
+        <div
+          v-if="checkAuth && isAuth"
+          :class="$style.noAuth"
+          @click="showLogin"
+        >
+          <span>Войдите</span> или <span>зарегистрируйтесь,</span>
+          чтобы сделать заказ
+        </div>
+        <N-Button :disabled="disabled" :class="checkAuth && isAuth ? $style.disable : '' " @click="$emit('clickButton')">
+          <slot />
+        </N-Button>
+      </div>
+    </n-button>
   </div>
 </template>
 
@@ -68,6 +72,7 @@ export default {
     color: $black;
     @include montserratMedium;
     @include text;
+    width: 100%;
     &.disable {
       background-color: #DADADA;
       color: rgba(0,0,0,.3);

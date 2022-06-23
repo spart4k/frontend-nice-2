@@ -23,6 +23,7 @@ html {
   height: 100%;
   font-size: 10px;
   background-color: $blueBlack3;
+  overflow: hidden;
 
   @media (max-width: $tabletWidth) {
     font-size: calc((10 / 685) * 100vw);

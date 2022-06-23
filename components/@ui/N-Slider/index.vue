@@ -13,25 +13,24 @@
         </div>
       </VueSlickCarousel>
     </div>
-    <div>
-      <VueSlickCarousel
-        ref="c2"
-        :class="$style.slider_bottom"
-        :arrows="false"
-        :slides-to-show="3"
-        :as-nav-for="$refs.c1"
-        :focus-on-select="true"
-        @beforeChange="syncSlidersBottom"
-      >
-        <div v-for="(item, index) in sliderItem" :key="index">
-          <div :class="$style.item">
-            <n-lazy-img :src="`${$axios.defaults.baseURL}${item.src}`" :alt="item.title" />
-
-            <!--            <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="1">-->
-          </div>
+    <VueSlickCarousel
+      ref="c2"
+      :class="$style.slider_bottom"
+      :arrows="false"
+      :slides-to-show="3"
+      :as-nav-for="$refs.c1"
+      :focus-on-select="true"
+      :adaptive-height="true"
+      true,
+      @beforeChange="syncSlidersBottom"
+    >
+      <!--      <n-lazy-img v-for="(item, index) in sliderItem" :key="index" :src="`${$axios.defaults.baseURL}${item.src}`" :alt="item.title" />-->
+      <div v-for="(item, index) in sliderItem" :key="index" :class="$style.list">
+        <div :class="$style.item">
+          <n-lazy-img :src="`${$axios.defaults.baseURL}${item.src}`" :alt="item.title" />
         </div>
-      </VueSlickCarousel>
-    </div>
+      </div>
+    </VueSlickCarousel>
   </div>
 </template>
 
@@ -105,6 +104,7 @@ export default {
 
   .slider_top {
     :global(.slick-slider) {
+
       .item {
         height: 32.5rem;
       }
@@ -116,17 +116,34 @@ export default {
   }
 
   .slider_bottom {
-    padding: 0 2rem;
+    & > div {
+      height: 100%;
+    }
+
+    :global(.slick-slide) {
+      height: inherit !important;
+    }
+    padding: 0 1rem;
     :global(.slick-list) {
       margin-top: 1.42rem;
       width: calc(100% + 1.2rem);
       margin-left: -.6rem;
     }
-    :global(.slick-slide) {}
+    :global(.slick-current) {
+      box-shadow: inset 0 0 0 1px $gray2;
+    }
+    .list {
+      height: 100%;
+    }
     .item {
       //width: 6.5rem;
       //height: 6.5rem;
+      height: 100%;
       margin: 0 .6rem;
+      img {
+        height: 100px;
+        padding: 5px;
+      }
     }
   }
 }

@@ -2,7 +2,7 @@
   <main>
     <div :class="[$style.intro]">
       <!--      :style="{ backgroundImage: backgroundImage}"-->
-      <N-Background :description="description" />
+      <N-Background :description="description" :hide-image="scrollingContent" :is-home-page="isHomePage" />
       <div :class="[$style.intro__container, scrollingContent && $style.scrolling]">
         <h1 v-if="!isHomePage" :class="$style.intro__title">
           {{ description.title }}
@@ -121,9 +121,9 @@ export default {
     justify-content: flex-end;
     height: -webkit-fill-available;
     background-size: cover;
-    @media (max-width: $bgWidth) {
-      background-size: 100% 100vh;
-    }
+    //@media (max-width: $bgWidth) {
+    //  background-size: 100% 100vh;
+    //}
     img {
       max-height: 53rem;
     }
@@ -171,7 +171,7 @@ export default {
     margin-top: 7.9rem;
     position: fixed;
     z-index: 1;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
     //top: 10rem;
     width: 100%;
   }

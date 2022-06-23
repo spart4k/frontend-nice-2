@@ -46,20 +46,20 @@ export default {
 <style scoped module lang="scss">
 .dropdown {
   :global(.multiselect__single) {
-    color: $white;
+    color: $black;
     @include text-md;
     @include montserratSemiBold;
     background-color: inherit;
   }
-  :global(.multiselect__select:before) {
-    border-color: $white transparent transparent;
-  }
-  :global(.multiselect__tags) {
-    background: $blueBlack3;
-  }
-  :global(.multiselect__content-wrapper) {
-    background: $blueBlack3;
-    color: $white
-  }
+  //:global(.multiselect__select:before) {
+  //  border-color: $white transparent transparent;
+  //}
+  //:global(.multiselect__tags) {
+  //  background: $blueBlack3;
+  //}
+  //:global(.multiselect__content-wrapper) {
+  //  background: $blueBlack3;
+  //  color: $white
+  //}
 }
 </style>

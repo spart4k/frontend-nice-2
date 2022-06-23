@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.wrapper">
-    <N-Background :description="description" />
+    <N-Background :description="description" hide-image />
     <template v-if="card">
       <SectionCards
         :id="card.section_id"
@@ -28,25 +28,27 @@ import { ref, useAsync, useContext, defineComponent, useRouter, computed } from 
 export default defineComponent({
   name: 'DetailCards',
   layout: 'default',
+  middleware: 'background',
+  transition: 'home',
   setup () {
-    const introTitle = ref({
-      title: 'Test',
-      subtitle: 'творческое объединение',
-      background: ''
-    })
     const isAddedBasket = ref(false)
     const { route, store } = useContext()
     const router = useRouter()
+    // const paramsId = computed(() => Number(route.value.params.id))
+    const sections = computed(() => store?.state.content.sections)
 
-    const description = ref({
-      background: ''
+    const description = computed(() => {
+      return {
+        background: bgName?.value?.slug
+      }
+      // title: bgName.value
     })
 
     const clickTag = (value) => {
       router.push({ path: '/tags', query: { tag: value } })
     }
 
-    const card = useAsync(async (ctx) => {
+    const card = useAsync(async () => {
       try {
         const response = await store.dispatch('detailPage/getData', route.value.params.id)
         return response.data
@@ -54,6 +56,12 @@ export default defineComponent({
         console.log(e)
       }
     }, route.value.params.id)
+
+    const bgName = computed(() => {
+      const find = sections.value?.find(item => Number(item.id) === +card.value?.section_id)
+      return find
+    })
+
     const addBasket = () => {
       if (!isAddedBasket.value) {
         isAddedBasket.value = true
@@ -72,13 +80,14 @@ export default defineComponent({
     })
 
     return {
-      introTitle,
       card,
       addBasket,
       clickTag,
       description,
       isAddedBasket,
+      bgName,
       isAuth
+
     }
   }
 })
