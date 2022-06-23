@@ -16,10 +16,10 @@
         </div>
       </div>
       <div :class="$style.shim" />
-      <div ref="anchor" :class="[$style.linkAnchor, scrollingContent && $style.scrolling]">
-        <div @click="scrollTo">
-          <n-icon name="arrow-top" />
-        </div>
+      <div ref="anchor" :class="[$style.linkAnchor, scrollingContent && $style.scrolling]" @click="scrollTo">
+        <!--        <div @click="scrollTo">-->
+        <n-icon name="arrow-top" />
+        <!--        </div>-->
       </div>
     </div>
 
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { computed, nextTick, onMounted, ref, useRoute, watch } from '@nuxtjs/composition-api'
+import { computed, nextTick, onMounted, ref, useRoute } from '@nuxtjs/composition-api'
 import { scrollBy } from 'seamless-scroll-polyfill'
 
 export default {
@@ -81,12 +81,12 @@ export default {
       const contentBounding = content.value.getBoundingClientRect()
       scrollBy(body, { behavior: 'smooth', top: contentBounding.top - 90 })
     }
-    watch(() => route.value.fullPath, () => {
-      const body = document.querySelector('.body')
-
-      const contentBounding = content.value.getBoundingClientRect()
-      scrollBy(body, { behavior: 'smooth', top: contentBounding.top - 90 })
-    })
+    // watch(() => route.value.fullPath, () => {
+    //   const body = document.querySelector('.body')
+    //
+    //   const contentBounding = content.value.getBoundingClientRect()
+    //   scrollBy(body, { behavior: 'smooth', top: contentBounding.top - 90 })
+    // })
     return {
       anchor,
       content,
@@ -136,7 +136,6 @@ export default {
   .shim {
     min-height: -webkit-fill-available;
     height: calc(100vh - var(--header-height));
-    margin-top: 7.9rem;
     width: 100%;
     position: relative;
     z-index: 1;

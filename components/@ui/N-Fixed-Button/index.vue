@@ -10,11 +10,8 @@
           <span>Войдите</span> или <span>зарегистрируйтесь,</span>
           чтобы сделать заказ
         </div>
-        <N-Button :disabled="disabled" :class="checkAuth && !isAuth ? $style.disable : '' " @click="$emit('clickButton')">
-          <slot />
-        </N-Button>
-      </div>
-    </n-button>
+      </n-button>
+    </div>
   </div>
 </template>
 
@@ -47,6 +44,10 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
+.copyButton {
+  width: 100%;
+  height: 15rem;
+}
 .button__add_basket {
   background-color: rgba($black, 0.8);
   //padding-top: 2.4rem;

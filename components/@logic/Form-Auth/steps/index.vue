@@ -1,10 +1,10 @@
 <template>
-  <NPopup class="auth" v-model="getActivePopup" :title="getTitle">
+  <NPopup v-model="getActivePopup" class="auth" :title="getTitle">
     <div class="wrapper">
       <components
         :is="getComponent"
-        :titleTel="titleTel"
         v-model="step"
+        :title-tel="titleTel"
         @closePopup="closePopup"
         @saveTel="saveTel"
       />

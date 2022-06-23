@@ -79,8 +79,7 @@ export default {
     padding-left: 1rem;
   }
   p {
-
-    border-bottom: solid 1px rgba($black, .1);
+    //border-bottom: solid 1px rgba($black, .1);
     padding-bottom: 1rem;
     margin-bottom: .7rem;
     margin-top: 1.9rem;

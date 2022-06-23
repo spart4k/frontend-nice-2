@@ -22,12 +22,10 @@
   }
 }
 .headerUser__item {
-  .icon {
-    svg {
-      width: 2.7rem;
-      height: 2.7rem;
-    }
-  }
+  width: 2.7rem;
+  height: 2.7rem;
+  line-height: 0;
+  transform: translate3d(0, 0, 0);
 }
 .linkHome {
   position: absolute;

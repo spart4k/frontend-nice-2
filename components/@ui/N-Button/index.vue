@@ -26,7 +26,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 5.1rem;
+    //height: 5.1rem;
     color: $white;
     font-weight: 600;
     @include text;

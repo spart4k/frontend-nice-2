@@ -2,7 +2,6 @@
   <div ref="body" :class="$style.wrapper" class="body">
     <the-header :header-items="headerItems" class="header" :class="$style.header" />
     <Nuxt :class="$style.content" />
-    <!--    <the-footer :class="$style.footer" />-->
   </div>
 </template>
 
@@ -11,21 +10,10 @@ import { ref, useContext, useFetch, onMounted, watch } from '@nuxtjs/composition
 
 export default {
   name: 'DefaultLayout',
-  // transition: 'home',
   setup () {
     const headerItems = ref([])
     const body = ref(null)
     const { $axios, store, route } = useContext()
-
-    const setCssVarriable = () => {
-      const vh = window.innerHeight * 0.01
-      document.documentElement.style.setProperty('--vh', `${vh}px`)
-
-      window.addEventListener('resize', () => {
-        const vh = window.innerHeight * 0.01
-        document.documentElement.style.setProperty('--vh', `${vh}px`)
-      })
-    }
 
     const fetchData = async () => {
       const response = await $axios('api/v1/sections')
@@ -45,10 +33,6 @@ export default {
     })
 
     onMounted(() => {
-      setCssVarriable()
-    })
-
-    onMounted(() => {
       store.commit('authentication/setUserData')
       store.commit('authentication/setToken')
       store.dispatch('basket/getBasket')
@@ -65,8 +49,11 @@ export default {
 <style scoped module lang="scss">
 .wrapper {
   margin-top: var(--header-height);
-  height: 100vh; /* Use vh as a fallback for browsers that do not support Custom Properties */
-  height: calc((var(--vh, 1vh) * 100) - var(--header-height));
+  height: calc(100% - var(--header-height));
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   overflow: auto;
   display: flex;
   flex-direction: column;

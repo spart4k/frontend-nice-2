@@ -5,13 +5,12 @@
     </div>
     <div class="">
       <div v-if="hasCards">
-        <History-Orders-Item v-for="(item) in orders.value" :order="item" :key='item.id'></History-Orders-Item>
+        <History-Orders-Item v-for="(item) in orders.value" :key="item.id" :order="item" />
       </div>
       <div v-else :class="$style.history__empty">
         Заказы отсутствуют
       </div>
     </div>
-
   </div>
 </template>
 
