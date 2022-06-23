@@ -59,6 +59,7 @@ export default {
       .then((res) => {
           loading.value = false
           if (res.status === 200) {
+            store.commit('authentication/showLogin', false)
             emit('closePopup')
           } else {
             console.log(res.message)

@@ -136,7 +136,7 @@ export default {
       return $store.state.authentication.showLogin
     })
 
-    watch(() => stateShowLogin, (newValue) => {
+    watch(() => stateShowLogin.value, (newValue) => {
       if (newValue === true) {
         openProfile()
       }

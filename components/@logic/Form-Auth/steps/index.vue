@@ -12,7 +12,7 @@
   </NPopup>
 </template>
 <script lang="js">
-import { computed, ref } from '@nuxtjs/composition-api'
+import { computed, ref, useContext } from '@nuxtjs/composition-api'
 
 export default {
   name: 'AuthSteps',
@@ -24,6 +24,7 @@ export default {
   },
   setup (props, ctx) {
     const { emit } = ctx
+    const { store } = useContext()
     const step = ref(0)
     const titleTel = ref('')
     const getComponent = computed(() => {
@@ -58,6 +59,7 @@ export default {
 
     const closePopup = () => {
       step.value = 0
+      store.commit('authentication/showLogin', false)
       emit('input', false)
     }
 
