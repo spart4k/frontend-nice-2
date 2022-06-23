@@ -24,8 +24,12 @@ export default {
     useFetch(async () => {
       headerItems.value = []
       const response = await fetchData()
-
-      headerItems.value = response.data
+      if (response.data.length) {
+        headerItems.value = response.data.filter((item) => {
+          return item.slug !== 'efir'
+        })
+      }
+      // headerItems.value = response.data
       store.commit('content/changeSections', response.data)
     })
     watch(() => route.value.path, () => {

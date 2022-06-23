@@ -1,8 +1,8 @@
 <template>
   <div :class="$style.bg" :style="{ backgroundImage: setBackgroundImage}">
-    <transition name="fade-fast">
-      <img v-if="!isHomePage && setImage && !hideImage" :src="setImage">
-    </transition>
+    <!--    <transition name="fade-fast">-->
+    <img v-if="!isHomePage && setImage && !hideImage" :src="setImage">
+    <!--    </transition>-->
   </div>
 </template>
 

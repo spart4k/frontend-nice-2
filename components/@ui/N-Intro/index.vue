@@ -152,7 +152,7 @@ export default {
     @include Bankir-Retro;
     @include text;
     color: rgba($white, .85);
-    width: 15.5rem;
+    width: 20.5rem;
     line-height: 2.9rem;
   }
   &__subtitle_homePage {
