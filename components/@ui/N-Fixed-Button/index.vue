@@ -2,21 +2,19 @@
   <div :class="$style.wrapper">
     <div :class="$style.copyButton" />
     <div :class="[$style.button__add_basket, $style[`fz_${fz}`]]">
-      <N-Button :disabled="disabled">
-        <div :class="[$style.button__add_basket, checkAuth && !isAuth ? $style.disabled : '']">
-          <div
-            v-if="checkAuth && !isAuth"
-            :class="$style.noAuth"
-            @click="showLogin"
-          >
-            <span>Войдите</span> или <span>зарегистрируйтесь,</span>
-            чтобы сделать заказ
-          </div>
-          <N-Button :disabled="disabled" :class="checkAuth && !isAuth ? $style.disable : '' " @click="$emit('clickButton')">
-            <slot />
-          </N-Button>
+      <div :class="[$style.button__add_basket, checkAuth && !isAuth ? $style.disabled : '']">
+        <div
+          v-if="checkAuth && !isAuth"
+          :class="$style.noAuth"
+          @click="showLogin"
+        >
+          <span>Войдите</span> или <span>зарегистрируйтесь,</span>
+          чтобы сделать заказ
         </div>
-      </n-button>
+        <N-Button :disabled="disabled" :class="checkAuth && !isAuth ? $style.disable : '' " @click="$emit('clickButton')">
+          <slot />
+        </N-Button>
+      </div>
     </div>
   </div>
 </template>
@@ -40,6 +38,7 @@ export default {
   setup () {
     const { store } = useContext()
     const showLogin = () => {
+      console.log('showlogin')
       store.commit('authentication/showLogin', true)
     }
     return {

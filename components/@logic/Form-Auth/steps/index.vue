@@ -5,14 +5,16 @@
         :is="getComponent"
         v-model="step"
         :title-tel="titleTel"
+        :receivedCode="receivedCode"
         @closePopup="closePopup"
         @saveTel="saveTel"
+        @saveCode="saveCode"
       />
     </div>
   </NPopup>
 </template>
 <script lang="js">
-import { computed, ref } from '@nuxtjs/composition-api'
+import { computed, ref, useContext } from '@nuxtjs/composition-api'
 
 export default {
   name: 'AuthSteps',
@@ -20,12 +22,18 @@ export default {
     value: {
       type: Boolean,
       default: true
+    },
+    savedCode: {
+      type: String,
+      default: ''
     }
   },
   setup (props, ctx) {
     const { emit } = ctx
+    const { store } = useContext()
     const step = ref(0)
     const titleTel = ref('')
+    const receivedCode = ref('')
     const getComponent = computed(() => {
       if (step.value === 0) {
         return 'FormAuthDefault'
@@ -47,17 +55,26 @@ export default {
     const saveTel = (tel) => {
       titleTel.value = tel
     }
+    const saveCode = (code) => {
+      receivedCode.value = code.toString()
+    }
     const getActivePopup = computed({
       get () {
         return props.value
       },
       set (val) {
+        if (!val) {
+          step.value = 0
+          store.commit('authentication/showLogin', false)
+        }
         emit('input', val)
       }
     })
 
     const closePopup = () => {
       step.value = 0
+      console.log('close')
+      store.commit('authentication/showLogin', false)
       emit('input', false)
     }
 
@@ -68,7 +85,9 @@ export default {
       closePopup,
       getTitle,
       titleTel,
-      saveTel
+      receivedCode,
+      saveTel,
+      saveCode
     }
   }
 }
