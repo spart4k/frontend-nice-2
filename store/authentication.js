@@ -22,6 +22,9 @@ export const mutations = {
   setLogout (state) {
     state.user = {}
     state.authorizated = false
+  },
+  showLogin (state, value) {
+    state.showLogin = value
   }
 }
 

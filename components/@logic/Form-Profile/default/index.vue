@@ -2,7 +2,7 @@
   <n-contain>
     <form @submit.prevent="onSubmit">
       <n-text-field v-model="formData.name" :valueInfo="formData.name" placeholder="Имя" :class="$style.input" title="Имя" />
-      <n-text-field v-model="formData.surname" :class="$style.input" placeholder="Фамилия" title="Фамилия" />
+      <n-text-field v-model="formData.surname" :valueInfo="formData.surname" :class="$style.input" placeholder="Фамилия" title="Фамилия" />
       <n-text-field :readOnly="true" v-model="formData.email" :class="$style.input" placeholder="Email"  title="Email" />
       <n-text-field
       :readOnly="true"
@@ -73,6 +73,7 @@ export default {
 
     watch(userData, (currentValue, oldValue) => {
       formData.value.name = currentValue.name
+      formData.value.surname = currentValue.surname
       formData.value.email = currentValue.email
       formData.value.phone = currentValue.phone
       formData.value.address = currentValue.address

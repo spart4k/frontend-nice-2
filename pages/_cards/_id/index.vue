@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { ref, useAsync, useContext, defineComponent, useRouter } from '@nuxtjs/composition-api'
+import { ref, useAsync, useContext, defineComponent, useRouter, computed } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: 'DetailCards',
@@ -67,13 +67,18 @@ export default defineComponent({
       }
     }
 
+    const isAuth = computed(() => {
+      return store.state.authentication.authorizated
+    })
+
     return {
       introTitle,
       card,
       addBasket,
       clickTag,
       description,
-      isAddedBasket
+      isAddedBasket,
+      isAuth
     }
   }
 })
