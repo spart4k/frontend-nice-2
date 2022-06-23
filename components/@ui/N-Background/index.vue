@@ -78,15 +78,6 @@ export default {
   top: 50%;
   right: 0;
   transform: translateY(-50%);
-  animation: fadeImage 0.1s ease;
-}
-@keyframes fadeImage {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 .bg {
   position: relative;

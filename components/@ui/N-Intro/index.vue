@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { computed, nextTick, onMounted, ref, useRoute, watch } from '@nuxtjs/composition-api'
+import { computed, nextTick, onMounted, ref, useRoute } from '@nuxtjs/composition-api'
 import { scrollBy } from 'seamless-scroll-polyfill'
 import { BLAND_COLOR } from '~/const/blandColor'
 
@@ -88,7 +88,6 @@ export default {
       const contentBounding = content.value.getBoundingClientRect()
       scrollBy(body, { behavior: 'smooth', top: contentBounding.top - 90 })
     }
-    console.log(route.value)
     const color = computed(() => {
       const paramsColor = BLAND_COLOR[route.value.params?.slug] || BLAND_COLOR[route.value.name]
       if (paramsColor) {
@@ -96,9 +95,6 @@ export default {
       } else {
         return ''
       }
-    })
-    watch(() => route.value.path, () => {
-      console.log(route.value.query, 2131231)
     })
     return {
       anchor,
