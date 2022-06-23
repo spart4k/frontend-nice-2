@@ -11,6 +11,7 @@
       :errCustom="errResponse"
       :error="v$.code.$errors"
       v-model="formData.code"
+      :valueInfo="formData.code"
       placeholder="Введите код"
       type="number"
       title="Код из СМС" />
@@ -24,12 +25,16 @@
 <script lang="js">
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-import { reactive, ref, useContext } from '@nuxtjs/composition-api'
+import { reactive, ref, useContext, onMounted } from '@nuxtjs/composition-api'
 
 export default {
   name: 'FormAuthConfirmation',
   props: {
     titleTel: {
+      type: String,
+      default: ''
+    },
+    receivedCode: {
       type: String,
       default: ''
     }
@@ -74,6 +79,11 @@ export default {
         errResponse.value = ''
       }
     }
+    onMounted(() => {
+      console.log(formData.code)
+      console.log(props.receivedCode)
+      formData.code = props.receivedCode
+    })
 
     return {
       formData,

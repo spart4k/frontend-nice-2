@@ -5,7 +5,7 @@
         :is="getComponent"
         v-model="step"
         :title-tel="titleTel"
-        :title-code="titleCode"
+        :receivedCode="receivedCode"
         @closePopup="closePopup"
         @saveTel="saveTel"
         @saveCode="saveCode"
@@ -22,6 +22,10 @@ export default {
     value: {
       type: Boolean,
       default: true
+    },
+    savedCode: {
+      type: String,
+      default: ''
     }
   },
   setup (props, ctx) {
@@ -29,7 +33,7 @@ export default {
     const { store } = useContext()
     const step = ref(0)
     const titleTel = ref('')
-    const titleCode = ref('')
+    const receivedCode = ref('')
     const getComponent = computed(() => {
       if (step.value === 0) {
         return 'FormAuthDefault'
@@ -52,19 +56,24 @@ export default {
       titleTel.value = tel
     }
     const saveCode = (code) => {
-      titleCode.value = code
+      receivedCode.value = code.toString()
     }
     const getActivePopup = computed({
       get () {
         return props.value
       },
       set (val) {
+        if (!val) {
+          step.value = 0
+          store.commit('authentication/showLogin', false)
+        }
         emit('input', val)
       }
     })
 
     const closePopup = () => {
       step.value = 0
+      console.log('close')
       store.commit('authentication/showLogin', false)
       emit('input', false)
     }
@@ -76,6 +85,7 @@ export default {
       closePopup,
       getTitle,
       titleTel,
+      receivedCode,
       saveTel,
       saveCode
     }

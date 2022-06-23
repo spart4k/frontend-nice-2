@@ -3,7 +3,7 @@
     <form @submit.prevent="onSubmit">
       <n-text-field v-model="formData.name" :valueInfo="formData.name" placeholder="Имя" :class="$style.input" title="Имя" />
       <n-text-field v-model="formData.surname" :valueInfo="formData.surname" :class="$style.input" placeholder="Фамилия" title="Фамилия" />
-      <n-text-field :readOnly="true" v-model="formData.email" :class="$style.input" placeholder="Email"  title="Email" />
+      <n-text-field v-model="formData.email" :valueInfo="formData.email" :class="$style.input" placeholder="Email"  title="Email" />
       <n-text-field
       :readOnly="true"
       mask="+7 (###) ###-##-##"
@@ -24,7 +24,7 @@
 </template>
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
+import { required, email } from '@vuelidate/validators'
 import { ref, useContext, useRouter, computed, watch } from '@nuxtjs/composition-api'
 import { useToast } from 'vue-toastification/composition'
 export default {
@@ -44,6 +44,7 @@ export default {
     const rules = {
       name: { required },
       surname: { required },
+      email: { required, email },
       address: { required }
     }
     const v$ = useVuelidate(rules, formData)
