@@ -76,7 +76,7 @@
 </template>
 
 <script lang="js">
-import { computed, ref, useRouter, useRoute } from '@nuxtjs/composition-api'
+import { computed, ref, useRouter, useRoute, watch } from '@nuxtjs/composition-api'
 import { numWord } from '~/helpers/compositions/declination'
 const COLORS = ['#489430', '#00B4B5', '#FF4F00', '#ded037']
 export default {
@@ -143,10 +143,18 @@ export default {
         router.push({ path: '/profile' })
       } else {
         activeAuthSteps.value = true
-        console.log('non auth')
       }
     }
     const showLogo = computed(() => $store.state.content.showLogo)
+    const stateShowLogin = computed(() => {
+      return $store.state.authentication.showLogin
+    })
+
+    watch(() => stateShowLogin, (newValue) => {
+      if (newValue === true) {
+        openProfile()
+      }
+    })
 
     return {
       openMenu,
@@ -165,7 +173,8 @@ export default {
       basketCount,
       activeAuthSteps,
       isAuth,
-      randomColor
+      randomColor,
+      stateShowLogin
 
     }
   }

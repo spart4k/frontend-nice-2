@@ -32,7 +32,6 @@ export default {
     }
     watch(() => props.item, () => {
       selectedElement.value = props.item[0].title
-      console.log(selectedElement.value)
     }, { deep: true })
     return {
       selectItem,

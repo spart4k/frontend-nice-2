@@ -91,6 +91,7 @@ form {
   .button {
     width: 100%;
     margin-top: 2.7rem;
+    height: 5.1rem;
   }
 }
 </style>

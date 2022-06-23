@@ -11,7 +11,7 @@ export default {
   name: 'NTooltip',
   setup () {
     const isOpen = () => {
-      console.log(true)
+
     }
     return {
       isOpen

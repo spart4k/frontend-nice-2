@@ -94,6 +94,7 @@ export default {
 <style lang="scss" module>
 .button {
   width: 100%;
+  height: 5.1rem;
 }
 form {
   & > .input + .input {

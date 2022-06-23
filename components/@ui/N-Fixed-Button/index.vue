@@ -2,7 +2,7 @@
   <div :class="$style.wrapper">
     <div :class="$style.copyButton" />
     <div :class="[$style.button__add_basket, $style[`fz_${fz}`]]">
-      <N-Button :disabled="disabled" @click="$emit('clickButton')">
+      <N-Button :disabled="disabled">
         <div :class="[$style.button__add_basket, checkAuth && !isAuth ? $style.disabled : '']">
           <div
             v-if="checkAuth && !isAuth"
@@ -75,6 +75,7 @@ export default {
   }
   button {
     width: 100%;
+    height: 5.1rem;
     background-color: $yellow2;
     color: $black;
     @include montserratMedium;
