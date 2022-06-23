@@ -1,20 +1,23 @@
 <template>
-  <div :class="[$style.button__add_basket, $style[`fz_${fz}`]]">
-    <N-Button :disabled="disabled" @click="$emit('clickButton')">
-      <div :class="[$style.button__add_basket, checkAuth && !isAuth ? $style.disabled : '']">
-        <div
-          v-if="checkAuth && !isAuth"
-          :class="$style.noAuth"
-          @click="showLogin"
-        >
-          <span>Войдите</span> или <span>зарегистрируйтесь,</span>
-          чтобы сделать заказ
+  <div :class="$style.wrapper">
+    <div :class="$style.copyButton" />
+    <div :class="[$style.button__add_basket, $style[`fz_${fz}`]]">
+      <N-Button :disabled="disabled" @click="$emit('clickButton')">
+        <div :class="[$style.button__add_basket, checkAuth && !isAuth ? $style.disabled : '']">
+          <div
+            v-if="checkAuth && !isAuth"
+            :class="$style.noAuth"
+            @click="showLogin"
+          >
+            <span>Войдите</span> или <span>зарегистрируйтесь,</span>
+            чтобы сделать заказ
+          </div>
+          <N-Button :disabled="disabled" :class="checkAuth && !isAuth ? $style.disable : '' " @click="$emit('clickButton')">
+            <slot />
+          </N-Button>
         </div>
-        <N-Button :disabled="disabled" :class="checkAuth && !isAuth ? $style.disable : '' " @click="$emit('clickButton')">
-          <slot />
-        </N-Button>
-      </div>
-    </n-button>
+      </n-button>
+    </div>
   </div>
 </template>
 
@@ -47,6 +50,10 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
+.copyButton {
+  width: 100%;
+  height: 15rem;
+}
 .button__add_basket {
   background-color: rgba($black, 0.8);
   //padding-top: 2.4rem;
