@@ -57,7 +57,6 @@ export default {
         sms_code: +formData.code
       })
       .then((res) => {
-        console.log(res)
           loading.value = false
           if (res.status === 200) {
             emit('closePopup')

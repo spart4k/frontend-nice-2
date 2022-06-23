@@ -33,14 +33,12 @@ export default {
     })
 
     const hasCards = computed(() => {
-      console.log(orders.value)
       if (orders.value.length !== 0) {
         return true
       } else {
         return false
       }
     })
-    console.log(orders.value.length)
     watch(() => orders.value, (newValue) => { cardsLength.value = newValue.length })
     return {
       orders,

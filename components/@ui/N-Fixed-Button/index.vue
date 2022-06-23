@@ -37,7 +37,6 @@ export default {
   setup () {
     const { store } = useContext()
     const showLogin = () => {
-      console.log('show')
       store.commit('authentication/showLogin', true)
     }
     return {

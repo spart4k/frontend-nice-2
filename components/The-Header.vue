@@ -143,7 +143,6 @@ export default {
         router.push({ path: '/profile' })
       } else {
         activeAuthSteps.value = true
-        console.log('non auth')
       }
     }
     const showLogo = computed(() => $store.state.content.showLogo)
@@ -153,7 +152,6 @@ export default {
 
     watch(() => stateShowLogin, (newValue) => {
       if (newValue === true) {
-        console.log(1)
         openProfile()
       }
     })
