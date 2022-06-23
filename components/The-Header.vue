@@ -4,7 +4,9 @@
   <header :class="$style.header">
     <ul :class="[$style.headerUser__list, active && $style.hideElement]">
       <li :class="$style.headerUser__item">
-        <n-icon name="telegram" />
+        <a href="mailto:tisthenice@gmail.com">
+          <n-icon name="telegram" />
+        </a>
       </li>
       <li :class="$style.headerUser__item" @click="openProfile">
         <n-icon name="user" />

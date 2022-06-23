@@ -5,8 +5,10 @@
         :is="getComponent"
         v-model="step"
         :title-tel="titleTel"
+        :title-code="titleCode"
         @closePopup="closePopup"
         @saveTel="saveTel"
+        @saveCode="saveCode"
       />
     </div>
   </NPopup>
@@ -27,6 +29,7 @@ export default {
     const { store } = useContext()
     const step = ref(0)
     const titleTel = ref('')
+    const titleCode = ref('')
     const getComponent = computed(() => {
       if (step.value === 0) {
         return 'FormAuthDefault'
@@ -47,6 +50,9 @@ export default {
     })
     const saveTel = (tel) => {
       titleTel.value = tel
+    }
+    const saveCode = (code) => {
+      titleCode.value = code
     }
     const getActivePopup = computed({
       get () {
@@ -70,7 +76,8 @@ export default {
       closePopup,
       getTitle,
       titleTel,
-      saveTel
+      saveTel,
+      saveCode
     }
   }
 }

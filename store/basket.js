@@ -43,6 +43,7 @@ export const actions = {
       console.log(params)
       const data = await this.$axios.post('api/v1/basket/send')
       commit('setBasket', data)
+      console.log('успешно')
       this.$toast.success('Успешно', { position: 'bottom-right', icon: true })
       return data
     } catch (e) {

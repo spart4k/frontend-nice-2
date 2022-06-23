@@ -56,7 +56,7 @@ export default {
       const number = '+' + formData.tel.replace(/\D/g, '')
       store.dispatch('authentication/getSms', number)
       .then((res) => {
-        emit('saveCode', res.data)
+        emit('saveCode', res.data[0])
         loading.value = false
         emit('input', 2)
       })
