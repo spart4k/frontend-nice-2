@@ -11,14 +11,16 @@
       @enter="enter"
       @leave="leave"
     >
-      <li v-for="(item, index) in $props.headerItems"
-      :data-index="index"
-      :key="item.title"
-      :style="{backgroundColor: randomColor()}"
-      :class="$style.headerMenu__item"
-      ref="itemRefs"
-      @click.stop="hideMenu">
-        <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
+      <li
+        v-for="(item, index) in $props.headerItems"
+        :key="item.title"
+        ref="itemRefs"
+        :data-index="index"
+        :style="{backgroundColor: randomColor()}"
+        :class="$style.headerMenu__item"
+        @click.stop="hideMenu"
+      >
+        <nuxt-link :style="{color: BLAND_COLOR[item.slug]}" :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
           {{ item.title }}
         </nuxt-link>
       </li>
@@ -28,6 +30,7 @@
 
 <script>
 import { onMounted, onUnmounted, useContext } from '@nuxtjs/composition-api'
+import { BLAND_COLOR } from '~/const/blandColor'
 
 const COLORS = ['#489430', '#00B4B5', '#FF4F00', '#ded037']
 export default {
@@ -90,6 +93,7 @@ export default {
       hideMenu,
       beforeEnter,
       enter,
+      BLAND_COLOR,
       leave
     }
   }

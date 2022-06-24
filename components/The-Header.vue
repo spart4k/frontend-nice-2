@@ -14,7 +14,6 @@
     </ul>
     <transition name="fade-fast">
       <nav v-if="active" :class="[$style.headerNav, active && $style.active]">
-
         <div :class="[$style.linkHome]" @click="active = false">
           <transition name="fade-fast">
             <nuxt-link v-if="!isHomePage" :to="{ path: '/' }">
@@ -25,15 +24,16 @@
         </div>
 
         <transition
-        appear
-        v-bind="$attrs"
-        @before-enter="beforeEnter"
-        @enter="enter"
-        @leave="leave" >
+          appear
+          v-bind="$attrs"
+          @before-enter="beforeEnter"
+          @enter="enter"
+          @leave="leave"
+        >
           <div
-          v-if="isAuth && basketCount.calcBasketCard > 0 && active"
-          :class="[$style.basket, $style.headerMenu__item]"
-          @click="active = false"
+            v-if="isAuth && basketCount.calcBasketCard > 0 && active"
+            :class="[$style.basket, $style.headerMenu__item]"
+            @click="active = false"
           >
             <nuxt-link to="/basket">
               <div :class="$style.basket__title">
@@ -48,16 +48,15 @@
         </transition>
 
         <div :class="$style.headerNav__inner">
-          <ul :class="$style.headerMenu__list">
-            <li v-for="item in headerItems" :key="item.title" :style="{color: BLAND_COLOR[item.slug]}" :class="$style.headerMenu__item" @click.stop="toggleMenu">
-              <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
-                {{ item.title }}
-              </nuxt-link>
-            </li>
-          </ul>
-          <n-nav-menu @hideNavMenu=" active = false" :showNavMenu="active" :headerItems="headerItems" :class="$style.headerMenu__list"></n-nav-menu>
+          <!--          <ul :class="$style.headerMenu__list">-->
+          <!--            <li v-for="item in headerItems" :key="item.title" :style="{color: BLAND_COLOR[item.slug]}" :class="$style.headerMenu__item" @click.stop="toggleMenu">-->
+          <!--              <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">-->
+          <!--                {{ item.title }}-->
+          <!--              </nuxt-link>-->
+          <!--            </li>-->
+          <!--          </ul>-->
+          <n-nav-menu :show-nav-menu="active" :header-items="headerItems" :class="$style.headerMenu__list" @hideNavMenu=" active = false" />
         </div>
-
       </nav>
     </transition>
 
