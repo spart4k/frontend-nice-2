@@ -1,4 +1,5 @@
 <template>
+<n-intro no-preview>
   <div :class="$style.wrapper">
     <N-Background :description="description" />
     <div v-if="cards && cards.length" :class="$style.rows">
@@ -46,6 +47,7 @@
       Заказать за {{ row.cards_sum }}
     </N-Fixed-Button>
   </div>
+</n-intro>
 </template>
 
 <script>
@@ -101,8 +103,9 @@ export default {
 
 <style scoped lang="scss" module>
 .wrapper {
-  @include container;
-  color: $white
+  color: $white;
+  width: 100%;
+  // margin-top: $headerHeight;
 }
 .rows {
   position: relative;
@@ -152,9 +155,6 @@ export default {
   margin-bottom: 1.25rem;
   @include text-md;
   @include montserratSemiBold;
-}
-.last_view {
-  margin-bottom: 13rem;
 }
 .last_view_list {
   display: flex;

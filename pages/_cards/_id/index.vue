@@ -1,5 +1,5 @@
 <template>
-  <N-Intro is-detail-page>
+  <N-Intro no-preview>
     <div :class="$style.wrapper">
       <N-Background :description="description" hide-image />
       <template v-if="card">

@@ -1,17 +1,19 @@
 <template>
-  <div
-    v-if="$props.value"
-    :class="$style.wrapper"
-    @click="close"
-  >
-    <N-Contain :class="$style.popup" @click.stop>
-      <div :class="$style.hat">
-        <h2>{{ title }}</h2>
-        <n-icon :class="$style.close" name="close" @click.stop="close" />
-      </div>
-      <slot />
-    </N-Contain>
-  </div>
+  <transition name='fade-fast'>
+    <div
+      v-if="$props.value"
+      :class="$style.wrapper"
+      @click="close"
+    >
+      <N-Contain :class="$style.popup" @click.stop>
+        <div :class="$style.hat">
+          <h2>{{ title }}</h2>
+          <n-icon :class="$style.close" name="close" @click.stop="close" />
+        </div>
+        <slot />
+      </N-Contain>
+    </div>
+  </transition>
 </template>
 <script lang="js">
 import { watch } from '@nuxtjs/composition-api'

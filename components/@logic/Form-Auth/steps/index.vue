@@ -1,15 +1,17 @@
 <template>
   <NPopup v-model="getActivePopup" class="auth" :title="getTitle">
     <div class="wrapper">
-      <components
-        :is="getComponent"
-        v-model="step"
-        :title-tel="titleTel"
-        :receivedCode="receivedCode"
-        @closePopup="closePopup"
-        @saveTel="saveTel"
-        @saveCode="saveCode"
-      />
+      <transition name="component-fade" mode="out-in">
+        <components
+          :is="getComponent"
+          v-model="step"
+          :title-tel="titleTel"
+          :receivedCode="receivedCode"
+          @closePopup="closePopup"
+          @saveTel="saveTel"
+          @saveCode="saveCode"
+        />
+      </transition>
     </div>
   </NPopup>
 </template>
@@ -99,6 +101,15 @@ export default {
   }
   .wrapper {
     margin-top: 2.7rem;
+    overflow: hidden
+  }
+  .component-fade-enter-active, .component-fade-leave-active {
+    transition: .35s ease;
+  }
+  .component-fade-enter, .component-fade-leave-to
+  /* .component-fade-leave-active до версии 2.1.8 */ {
+    opacity: 0;
+    // transform: translateX(100%);
   }
 
 </style>

@@ -125,7 +125,8 @@ export default {
         position: absolute;
         left: 0;
         top: 0;
-        width: 100%;
+        width: 100.5%;
+        object-fit: cover;
         height: 100%;
       }
     }

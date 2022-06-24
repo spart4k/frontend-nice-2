@@ -1,6 +1,6 @@
 <template>
   <main ref="main" :class="$style.main">
-    <div v-if="!isDetailPage" :class="[$style.intro]">
+    <div v-if="!noPreview" :class="[$style.intro]">
       <!--      :style="{ backgroundImage: backgroundImage}"-->
       <N-Background
         :hide-image="scrollingContent"
@@ -47,7 +47,7 @@ export default {
     setHeight: {
       type: Boolean
     },
-    isDetailPage: {
+    noPreview: {
       type: Boolean
     }
   },
@@ -209,6 +209,7 @@ export default {
   position: relative;
   z-index: 10;
   padding-bottom: 5rem;
+  width: 100%;
   //min-height: 100vh;
   & > * + * {
     margin-top: 2rem;
