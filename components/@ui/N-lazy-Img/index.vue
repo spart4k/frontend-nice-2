@@ -1,8 +1,8 @@
 <template>
   <img
     v-if="ready"
-    :class="$style.img"
     :src="src"
+    :class="$style.img"
     :alt="alt"
   >
   <N-Loader v-else img />
@@ -18,7 +18,8 @@ export default {
     alt: String
   },
   setup (props, { emit }) {
-    const ready = ref(false)
+    const ready = ref(true)
+
     onMounted(() => {
       const image = new Image()
       image.onload = () => {

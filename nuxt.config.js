@@ -10,7 +10,7 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1, user-scalable=no' },
       { hid: 'description', name: 'description', content: '' },
-      { name: 'format-detection', content: 'telephone=no' },
+      { name: 'format-detection', content: 'telephone=no' }
 
     ],
     link: [
@@ -78,9 +78,7 @@ export default {
     scss: [
       '~/assets/style/_variables.scss'
     ]
-  },
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-    standalone: true
   }
+  // Build Configuration: https://go.nuxtjs.dev/config-build
+
 }
