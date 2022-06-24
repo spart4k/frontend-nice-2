@@ -80,8 +80,6 @@ export default {
       }
     }
     onMounted(() => {
-      console.log(formData.code)
-      console.log(props.receivedCode)
       formData.code = props.receivedCode
     })
 

@@ -14,6 +14,7 @@
     </ul>
     <transition name="fade-fast">
       <nav v-if="active" :class="[$style.headerNav, active && $style.active]">
+
         <div :class="[$style.linkHome]" @click="active = false">
           <transition name="fade-fast">
             <nuxt-link v-if="!isHomePage" :to="{ path: '/' }">
@@ -22,27 +23,34 @@
             </nuxt-link>
           </transition>
         </div>
-        <div v-if="isAuth && basketCount.calcBasketCard > 0" :class="[$style.basket, $style.headerMenu__item]" @click="active = false">
-          <nuxt-link to="/basket">
-            <div :class="$style.basket__title">
-              <n-icon name="basket" :class="$style.icon" />
-              <span>Корзина</span>
-            </div>
-            <div :class="$style.basket__price">
-              {{ basketCount.calcBasketCard }} {{ basketCount.text }} на {{ basketCount.cardSum }}р
-            </div>
-          </nuxt-link>
-        </div>
+
+        <transition
+        appear
+        v-bind="$attrs"
+        @before-enter="beforeEnter"
+        @enter="enter"
+        @leave="leave" >
+          <div
+          v-if="isAuth && basketCount.calcBasketCard > 0 && active"
+          :class="[$style.basket, $style.headerMenu__item]"
+          @click="active = false"
+          >
+            <nuxt-link to="/basket">
+              <div :class="$style.basket__title">
+                <n-icon name="basket" :class="$style.icon" />
+                <span>Корзина</span>
+              </div>
+              <div :class="$style.basket__price">
+                {{ basketCount.calcBasketCard }} {{ basketCount.text }} на {{ basketCount.cardSum }}р
+              </div>
+            </nuxt-link>
+          </div>
+        </transition>
 
         <div :class="$style.headerNav__inner">
-          <ul :class="$style.headerMenu__list">
-            <li v-for="item in headerItems" :key="item.title" :style="{color: randomColor()}" :class="$style.headerMenu__item" @click.stop="toggleMenu">
-              <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
-                {{ item.title }}
-              </nuxt-link>
-            </li>
-          </ul>
+          <n-nav-menu @hideNavMenu=" active = false" :showNavMenu="active" :headerItems="headerItems" :class="$style.headerMenu__list"></n-nav-menu>
         </div>
+
       </nav>
     </transition>
 
@@ -78,7 +86,7 @@
 </template>
 
 <script lang="js">
-import { computed, ref, useRouter, useRoute, watch } from '@nuxtjs/composition-api'
+import { computed, ref, useRouter, useRoute, watch, onMounted, useContext } from '@nuxtjs/composition-api'
 import { numWord } from '~/helpers/compositions/declination'
 const COLORS = ['#489430', '#00B4B5', '#FF4F00', '#ded037']
 export default {
@@ -90,6 +98,7 @@ export default {
     }
   },
   setup (_, ctx) {
+    const { $gsap } = useContext()
     const { $store } = ctx.root
     const hasOpenMenu = ref(false)
     const active = ref(false)
@@ -137,11 +146,31 @@ export default {
     const stateShowLogin = computed(() => {
       return $store.state.authentication.showLogin
     })
+    const beforeEnter = (el) => {
+      el.style.opacity = 0
+      el.style.transform = 'translateY(30px)'
+    }
+    const enter = (el, done) => {
+      // Each element requires a data-index attribute in order for the transition to work properly
+       $gsap.to(el, {
+        opacity: 1,
+        transform: 'translateY(0)',
+        delay: el.dataset.index * 0.03,
+        onComplete: done
+       })
+    }
+    const leave = (el, done) => {
+
+    }
 
     watch(() => stateShowLogin.value, (newValue) => {
       if (newValue === true) {
         openProfile()
       }
+    })
+
+    onMounted(() => {
+
     })
 
     return {
@@ -161,11 +190,24 @@ export default {
       basketCount,
       activeAuthSteps,
       isAuth,
-      stateShowLogin
+      stateShowLogin,
+      beforeEnter,
+      enter,
+      leave
 
     }
   }
 }
 </script>
 
-<style scoped lang="scss" module src="./header.scss"></style>
+<style scoped lang="scss" module src="./header.scss">
+  .list-enter-active,
+  .list-leave-active {
+    transition: all 0.5s ease;
+  }
+  .list-enter-from,
+  .list-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+</style>

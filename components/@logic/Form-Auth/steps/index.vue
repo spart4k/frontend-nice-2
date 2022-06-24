@@ -73,7 +73,6 @@ export default {
 
     const closePopup = () => {
       step.value = 0
-      console.log('close')
       store.commit('authentication/showLogin', false)
       emit('input', false)
     }

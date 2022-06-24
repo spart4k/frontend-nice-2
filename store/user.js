@@ -8,7 +8,6 @@ export const mutations = {
 
 export const actions = {
   async changeUserInfo ({ commit }, params) {
-    console.log(params)
     try {
       const data = await this.$axios.put('api/v1/user', params.value)
       return data

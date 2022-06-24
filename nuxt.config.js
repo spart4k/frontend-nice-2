@@ -55,7 +55,8 @@ export default {
     '@nuxtjs/eslint-module',
     '@nuxtjs/composition-api/module',
     '@nuxtjs/svg',
-    '@nuxt/image'
+    '@nuxt/image',
+    'nuxt-gsap-module'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
