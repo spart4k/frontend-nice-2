@@ -66,6 +66,7 @@ export const actions = {
       // const res = await this.$axios.get('api/v1/user', params)
       await localStorage.removeItem('token')
       await localStorage.removeItem('user')
+      this.$toast.success('Вы вышли из аккаунта', { position: 'bottom-right', icon: true })
       commit('setLogout')
     } catch (e) {
       return e.response.data.message
