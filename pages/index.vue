@@ -19,7 +19,6 @@ import { ref, useContext, useAsync, useRouter, useRoute } from '@nuxtjs/composit
 import { pagination } from '~/plugins/pagination'
 export default {
   name: 'IndexPage',
-  transition: 'home',
   setup () {
     const { store } = useContext()
     const router = useRouter()

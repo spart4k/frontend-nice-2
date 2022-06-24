@@ -5,17 +5,15 @@
         <N-Slider :slider-item="data.images" />
       </template>
       <template v-else>
-        <nuxt-link :to="`card/${data.id}`">
-          <div
-            :class="[
-              $style.hat,
-            ]"
-          >
+        <div v-if="$props.detailPage">
+          <div :class="[$style.hat]">
             <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
           </div>
-          <!--          :style="{-->
-          <!--          height: `${$props.hatHeight || 23.6}rem`-->
-          <!--          }"-->
+        </div>
+        <nuxt-link v-else :to="`card/${data.id}`">
+          <div :class="[$style.hat]">
+            <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+          </div>
         </nuxt-link>
       </template>
     </template>

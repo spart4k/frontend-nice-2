@@ -1,25 +1,27 @@
 <template>
-  <div :class="$style.wrapper">
-    <N-Background :description="description" hide-image />
-    <template v-if="card">
-      <SectionCards
-        :id="card.section_id"
-        :key="card.id"
-        detail-page
-        :card="card"
-        @clickTag="clickTag"
-      />
-      <N-Fixed-Button :isAuth="isAuth" :checkAuth="true" v-if="card.is_product" @clickButton="addBasket">
-        <template v-if="!isAddedBasket">
-          Добавить в корзину
-        </template>
-        <template v-else>
-          Перейти в корзину
-        </template>
+  <N-Intro is-detail-page>
+    <div :class="$style.wrapper">
+      <N-Background :description="description" hide-image />
+      <template v-if="card">
+        <SectionCards
+          :id="card.section_id"
+          :key="card.id"
+          detail-page
+          :card="card"
+          @clickTag="clickTag"
+        />
+        <N-Fixed-Button v-if="card.is_product" :is-auth="isAuth" :check-auth="true" @clickButton="addBasket">
+          <template v-if="!isAddedBasket">
+            Добавить в корзину
+          </template>
+          <template v-else>
+            Перейти в корзину
+          </template>
         <!--        {{ !isAddedBasket ? 'Добавить в корзину' : 'Добавлено' }}-->
-      </N-Fixed-Button>
-    </template>
-  </div>
+        </N-Fixed-Button>
+      </template>
+    </div>
+  </N-Intro>
 </template>
 
 <script>
@@ -95,8 +97,7 @@ export default defineComponent({
 
 <style scoped module lang="scss">
 .wrapper {
-@include container;
-  margin-bottom: 2rem;
+  width: 100%;
 }
 .button__add_basket {
   background-color: rgba($black, 0.8);
@@ -108,7 +109,7 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2.4rem 0;
+  //padding: 2.4rem 0;
   button {
     height: 5.1rem;
     background-color: $yellow2;

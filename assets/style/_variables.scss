@@ -24,9 +24,9 @@ $footerHeight: 13.3rem;
 $bgWidth: 570px;
 
 :root {
-  --mobile-width: $mobileWidth;
+  --mobile-width: #{$mobileWidth};
   --footer-height: 13.3rem;
-  --header-height: 8.8rem;
+  --header-height: #{$headerHeight};
   --vh: 10rem;
 }
 

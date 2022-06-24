@@ -1,5 +1,5 @@
 <template>
-  <n-intro :description="introTitle">
+  <n-intro :description="introTitle" :set-height="cards.value && cards.value.length === 1">
     <n-preloader v-if="loading" />
     <template v-for="card in cards.value">
       <SectionCards :id="id" :key="card.id" :card="card" @clickTag="clickTag" />
@@ -17,7 +17,7 @@ import { ref, useRoute, useRouter, useAsync, useContext, computed } from '@nuxtj
 import { pagination } from '~/plugins/pagination'
 
 export default {
-  name: 'NMusic',
+  name: 'SlugCard',
   layout: 'default',
   // transition: 'home',
   setup () {

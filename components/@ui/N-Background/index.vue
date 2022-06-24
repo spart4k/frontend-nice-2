@@ -24,18 +24,9 @@ export default {
     },
     hideImage: Boolean,
     isHomePage: Boolean,
-    color: Boolean
+    color: String
   },
   setup (props) {
-    // const setBackgroundImage = computed(() => {
-    //   if (props.isHomePage) {
-    //     return `url(${require('@/assets/img/background/index-background.jpg')})`
-    //   }
-    //   if (props.description.background) {
-    //     return `url(${require('@/assets/img/background/' + `${props.description.background}-background.jpg`)})`
-    //   }
-    // })
-
     const setImage = computed(() => {
       if (props.description.background) {
         return `${require('@/assets/img/background/' + `${props.description.background}.png`)}`
@@ -44,7 +35,6 @@ export default {
       }
     })
     return {
-      // setBackgroundImage,
       setImage
     }
   }
@@ -66,7 +56,6 @@ export default {
   left: 0;
   top: 0;
   height: 100%;
-  //background-color: rgba(red, 0.5);
   opacity: 0.5;
   z-index: 2;
   mix-blend-mode: color;

@@ -6,14 +6,14 @@
 </template>
 
 <script>
-import { ref, useContext, useFetch, onMounted, watch } from '@nuxtjs/composition-api'
+import { ref, useContext, useFetch, onMounted } from '@nuxtjs/composition-api'
 
 export default {
   name: 'DefaultLayout',
   setup () {
     const headerItems = ref([])
     const body = ref(null)
-    const { $axios, store, route } = useContext()
+    const { $axios, store } = useContext()
 
     const fetchData = async () => {
       const response = await $axios('api/v1/sections')
@@ -32,13 +32,10 @@ export default {
       // headerItems.value = response.data
       store.commit('content/changeSections', response.data)
     })
-    watch(() => route.value.path, () => {
-      body.value.scroll(0, 0)
-    })
 
     onMounted(() => {
       const vh = window.innerHeight * 0.01
-// Then we set the value in the --vh custom property to the root of the document
+      // Then we set the value in the --vh custom property to the root of the document
       document.documentElement.style.setProperty('--vh', `${vh}px`)
       window.addEventListener('resize', () => {
         // We execute the same script as before
@@ -59,15 +56,5 @@ export default {
 </script>
 
 <style scoped module lang="scss">
-.wrapper {
-  margin-top: var(--header-height);
-  //min-height: -webkit-fill-available;
-  width: 100%;
-  height: calc(100% - var(--header-height));
-  height: calc(var(--vh, 1vh) * 100 - var(--header-height));
-  position: absolute;
-  top: 0;
-  left: 0;
-  overflow: auto;
-}
+.wrapper {}
 </style>

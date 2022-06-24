@@ -1,5 +1,5 @@
 <template>
-  <n-intro :description="introTitle" :set-height="!!(cards.value && cards.value.data.length)">
+  <n-intro :description="introTitle" :set-height="cardsLength">
     <!--    <div :class="$style.wrapper">-->
     <n-preloader v-if="loading" />
     <template v-if="cards.value">
@@ -53,6 +53,9 @@ export default {
     const card = ref(null)
 
     const cards = ref([])
+    const cardsLength = computed(() => {
+      return cards?.value?.length > 0
+    })
     const loading = ref(false)
     const id = computed(() => Number(route.value.query.id))
 
@@ -82,18 +85,6 @@ export default {
       return response.data
     })
 
-    // const fetchData = (currentPage) => {
-    //   const params = {
-    //     page: currentPage,
-    //     section_id: id.value ? id.value : '',
-    //     tag_id: tagId.value ? tagId.value : ''
-    //   }
-    //   const response = store.dispatch('pages/getData', params)
-    //   return response
-    // }
-    // const lazyPagination = () => {
-    //   console.log(222)
-    // }
     const fetchData = async (value = {}) => {
       const response = await $store.dispatch('shop/getData', sorting.value)
       return response.data
@@ -165,6 +156,7 @@ export default {
       SORTING_SELECT_DATE,
       clickTag,
       lazyPagination,
+      cardsLength,
       select,
       card,
       isScrollingTop

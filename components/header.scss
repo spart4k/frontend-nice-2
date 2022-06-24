@@ -17,9 +17,6 @@
   color: $white;
   background-position: top center;
   background-size: cover;
-  @media (max-width: $bgWidth) {
-    background-size: 100% 100vh;;
-  }
 }
 .headerUser__item {
   width: 2.7rem;

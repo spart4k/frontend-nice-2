@@ -36,7 +36,7 @@
 
         <div :class="$style.headerNav__inner">
           <ul :class="$style.headerMenu__list">
-            <li v-for="item in headerItems" :key="item.title" :style="{color: randomColor()}" :class="$style.headerMenu__item" @click.stop="toggleMenu">
+            <li v-for="item in headerItems" :key="item.title" :style="{color: BLAND_COLOR[item.slug]}" :class="$style.headerMenu__item" @click.stop="toggleMenu">
               <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
                 {{ item.title }}
               </nuxt-link>
@@ -80,6 +80,7 @@
 <script lang="js">
 import { computed, ref, useRouter, useRoute, watch } from '@nuxtjs/composition-api'
 import { numWord } from '~/helpers/compositions/declination'
+import { BLAND_COLOR } from '~/const/blandColor'
 const COLORS = ['#489430', '#00B4B5', '#FF4F00', '#ded037']
 export default {
   name: 'TheHeader',
@@ -150,6 +151,7 @@ export default {
       openTestPage,
       openProfile,
       randomColor,
+      BLAND_COLOR,
 
       basketData,
       showLogo,

@@ -51,7 +51,10 @@ export default {
 <style scoped lang="scss" module>
 .copyButton {
   width: 100%;
-  height: 15rem;
+  height: 9.3rem;
+  &.big {
+    height: 15rem;
+  }
 }
 .button__add_basket {
   background-color: rgba($black, 0.8);

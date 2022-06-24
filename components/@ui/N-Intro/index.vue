@@ -1,6 +1,6 @@
 <template>
-  <main>
-    <div :class="[$style.intro]">
+  <main ref="main" :class="$style.main">
+    <div v-if="!isDetailPage" :class="[$style.intro]">
       <!--      :style="{ backgroundImage: backgroundImage}"-->
       <N-Background
         :hide-image="scrollingContent"
@@ -23,9 +23,7 @@
       </div>
       <div :class="$style.shim" />
       <div ref="anchor" :class="[$style.linkAnchor, scrollingContent && $style.scrolling]" @click="scrollTo">
-        <!--        <div @click="scrollTo">-->
         <n-icon name="arrow-top" />
-        <!--        </div>-->
       </div>
     </div>
 
@@ -48,12 +46,16 @@ export default {
     },
     setHeight: {
       type: Boolean
+    },
+    isDetailPage: {
+      type: Boolean
     }
   },
   setup (props, ctx) {
     const { $store } = ctx.root
     const anchor = ref(null)
     const content = ref(null)
+    const main = ref(null)
     const wrapper = ref(null)
     const scrollingContent = ref(null)
     const route = useRoute()
@@ -63,18 +65,19 @@ export default {
       nextTick(() => {
         const options = {
           root: null,
-          threshold: 0.04,
-          rootMargin: '0px'
+          threshold: 0.05,
+          rootMargin: '100px'
         }
 
         const callback = (entries) => {
-          if (entries[0].isIntersecting) {
-            scrollingContent.value = true
-            $store.commit('content/changeLogo', true)
-          } else {
-            scrollingContent.value = false
-            $store.commit('content/changeLogo', false)
-          }
+          // console.log(entries[0], 'test')
+            if (entries[0].isIntersecting) {
+              scrollingContent.value = true
+              $store.commit('content/changeLogo', true)
+            } else {
+              scrollingContent.value = false
+              $store.commit('content/changeLogo', false)
+            }
         }
 
         const observer = new IntersectionObserver(callback, options)
@@ -83,10 +86,8 @@ export default {
     })
 
     const scrollTo = () => {
-      const body = document.querySelector('.body')
-
       const contentBounding = content.value.getBoundingClientRect()
-      scrollBy(body, { behavior: 'smooth', top: contentBounding.top - 90 })
+      scrollBy(main.value, { behavior: 'smooth', top: contentBounding.top - 90 })
     }
     const color = computed(() => {
       const paramsColor = BLAND_COLOR[route.value.params?.slug] || BLAND_COLOR[route.value.name]
@@ -101,6 +102,7 @@ export default {
       content,
       wrapper,
       scrollingContent,
+      main,
       isHomePage,
       scrollTo,
       color
@@ -111,6 +113,17 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
+.main {
+  margin-top: var(--header-height);
+  //min-height: -webkit-fill-available;
+  width: 100%;
+  height: calc(100% - var(--header-height)) ;
+  height: calc(var(--vh, 1vh) * 100 - var(--header-height)) ;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: auto;
+}
 .intro {
   width: 100%;
   color: $white;
@@ -145,7 +158,7 @@ export default {
   }
   .shim {
     min-height: -webkit-fill-available;
-    height: calc(100vh - var(--header-height));
+    height: calc(105vh - var(--header-height));
     width: 100%;
     position: relative;
     z-index: 1;
@@ -195,13 +208,14 @@ export default {
   align-items: center;
   position: relative;
   z-index: 10;
+  padding-bottom: 5rem;
   //min-height: 100vh;
   & > * + * {
     margin-top: 2rem;
   }
   //margin-bottom: 2rem;
   &.setHeight {
-    min-height: calc(100vh - var(--header-height));
+    min-height: 100%;
   }
 }
 .linkAnchor {
