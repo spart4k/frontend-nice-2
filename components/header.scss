@@ -65,10 +65,11 @@
 }
 
 .headerMenu__item {
-  padding: 1.2rem .749rem;
+  padding: 1.5rem 1.5rem;
   width: 100%;
   height: 10.5rem;
-  color: #fff;
+  color: rgb(255, 255, 255);
+  border-radius: 10px;
   @include montserratSemiBold;
   @include subtitle-sm;
   :global(.nuxt-link-exact-active) {
@@ -132,6 +133,7 @@
   margin-bottom: 3rem;
   display: block;
   color: $white;
+  background-color: grey;
   //margin-top: 3rem;
   &__price {
     @include text-md-2;

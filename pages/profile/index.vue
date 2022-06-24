@@ -1,7 +1,6 @@
 <template>
-  <div class="">
+  <n-intro no-preview>
     <N-Background :description="description" />
-    <div :class="$style.container">
       <div :class="$style.profile">
         <h1 :class="$style.profile__title">
           Мой профиль
@@ -14,8 +13,7 @@
         <Form-Profile-Default :class="$style.profile__form" />
         <History-Orders-Default />
       </div>
-    </div>
-  </div>
+  </n-intro>
 
 </template>
 
@@ -40,10 +38,8 @@ export default {
 </script>
 
 <style lang="scss" module>
-  .container {
-    @include container;
-  }
   .profile {
+    width: 100%;
     padding-top: 2.2rem;
     margin-bottom: 3.2rem;
     position: relative;

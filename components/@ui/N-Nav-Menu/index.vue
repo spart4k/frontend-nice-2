@@ -16,11 +16,11 @@
         :key="item.title"
         ref="itemRefs"
         :data-index="index"
-        :style="{backgroundColor: randomColor()}"
+        :style="{backgroundColor: BLAND_COLOR[item.slug]}"
         :class="$style.headerMenu__item"
         @click.stop="hideMenu"
       >
-        <nuxt-link :style="{color: BLAND_COLOR[item.slug]}" :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
+        <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
           {{ item.title }}
         </nuxt-link>
       </li>

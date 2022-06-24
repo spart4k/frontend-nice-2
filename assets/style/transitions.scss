@@ -26,7 +26,7 @@
 }
 
 .fade-fast-enter-active, .fade-fast-leave-active {
-  //transition: opacity .2s ease, transform .2s ease;
+  transition: opacity .2s ease, transform .2s ease;
 }
 .fade-fast-enter, .fade-fast-leave-to {
   opacity: 0;
