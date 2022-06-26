@@ -2,7 +2,7 @@
   <n-intro :description="introTitle" :set-height="cardsLength">
     <!--    <div :class="$style.wrapper">-->
     <n-preloader v-if="loading" />
-    <template v-if="cards.value">
+    <template v-if="cards.value && cards.value.data.length">
       <div :class="[isScrollingTop && $style.scrollTop, $style.sorting]">
         <N-Dropdown
           :item="selectItemForShop"
@@ -45,7 +45,6 @@ const SORTING_SELECT_DATE = [
 
 export default defineComponent({
   name: 'NShop',
-  head: {},
   setup (_, ctx) {
     const { $store } = ctx.root
     const { route, store } = useContext()
@@ -56,7 +55,7 @@ export default defineComponent({
 
     const cards = ref([])
     const cardsLength = computed(() => {
-      return cards?.value?.length > 0
+      return cards?.value && cards?.value?.length > 0
     })
     const loading = ref(false)
     const id = computed(() => Number(route.value.query.id))
@@ -81,7 +80,6 @@ export default defineComponent({
     })
 
     const getPageInfo = computed(() => {
-      console.log()
       const sections = $store.state.content.sections
       const result = sections.filter(section => section.slug === route.value.name)
       return result[0]
@@ -90,11 +88,15 @@ export default defineComponent({
     head(useMeta, getPageInfo.value)
 
     const selectItemForShop = useAsync(async () => {
-      const response = await store.dispatch('shop/getDataForShop')
-      if (response.data.length) {
-        response.data.push({ title: 'Все товары', id: 'all' })
+      try {
+        const response = await store.dispatch('shop/getDataForShop')
+        if (response.data && response.data.length) {
+          response.data.push({ title: 'Все товары', id: 'all' })
+        }
+        return response.data
+      } catch (e) {
+        console.log(e)
       }
-      return response.data
     })
 
     const fetchData = async (value = {}) => {
@@ -134,30 +136,6 @@ export default defineComponent({
       loading.value = false
     }
 
-    // const scroll = (boundingHeader) => {
-    //     const boundingSort = sortRef.value.getBoundingClientRect()
-    //     if (boundingSort.top <= boundingHeader.bottom) {
-    //       isScrollingTop.value = true
-    //     } else {
-    //       isScrollingTop.value = false
-    //     }
-    // }
-    //
-    // onMounted(() => {
-    //   nextTick(() => {
-    //     const bodyElement = document.querySelector('.body')
-    //     const headerElement = document.querySelector('.header')
-    //     if (headerElement) {
-    //       const boundingHeader = headerElement.getBoundingClientRect()
-    //       bodyElement.addEventListener('scroll', () => {
-    //         if (boundingHeader) {
-    //           scroll(boundingHeader)
-    //         }
-    //       })
-    //     }
-    //   })
-    // })
-
     cards.value = useAsync(fetchData, route.value.path)
 
     return {
@@ -174,7 +152,8 @@ export default defineComponent({
       isScrollingTop,
       getPageInfo
     }
-  }
+  },
+  head: {}
 })
 </script>
 

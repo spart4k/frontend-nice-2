@@ -18,14 +18,13 @@ export default {
     src: String,
     alt: String
   },
-  setup (props, { emit }) {
+  setup (props) {
     const ready = ref(true)
 
     onMounted(() => {
       const image = new Image()
       image.onload = () => {
         ready.value = true
-        emit('resize')
       }
       image.src = props.src
     })

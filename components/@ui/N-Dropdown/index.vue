@@ -50,15 +50,5 @@ export default {
     @include montserratSemiBold;
     background-color: inherit;
   }
-  //:global(.multiselect__select:before) {
-  //  border-color: $white transparent transparent;
-  //}
-  //:global(.multiselect__tags) {
-  //  background: $blueBlack3;
-  //}
-  //:global(.multiselect__content-wrapper) {
-  //  background: $blueBlack3;
-  //  color: $white
-  //}
 }
 </style>

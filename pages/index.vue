@@ -58,7 +58,6 @@ export default defineComponent({
     //    descrp: pageInfo.value.value.seo_description,
     //  })
     // ))
-    console.log(pageInfo.value)
     const metaInfo = pageInfo.value
     head(useMeta, metaInfo.value)
 
@@ -70,7 +69,6 @@ export default defineComponent({
         totalPage.value = response?.data.last_page
         return response.data
       } catch (e) {
-        console.log('s')
         console.log(e)
       }
     }, route.value.path)

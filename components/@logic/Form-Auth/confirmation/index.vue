@@ -67,7 +67,6 @@ export default {
             store.commit('authentication/showLogin', false)
             emit('closePopup')
           } else {
-            console.log(res.message)
             if (res.message === 'Wrong sms code') {
               errResponse.value = 'Неверный код'
             }

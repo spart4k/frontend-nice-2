@@ -5,6 +5,7 @@
         ref="c1"
         :as-nav-for="$refs.c2"
         :focus-on-select="true"
+        :adaptive-height="true"
         @beforeChange="syncSliders"
       >
         <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
@@ -20,8 +21,6 @@
       :slides-to-show="3"
       :as-nav-for="$refs.c1"
       :focus-on-select="true"
-      :adaptive-height="true"
-      true,
       @beforeChange="syncSlidersBottom"
     >
       <!--      <n-lazy-img v-for="(item, index) in sliderItem" :key="index" :src="`${$axios.defaults.baseURL}${item.src}`" :alt="item.title" />-->
@@ -96,25 +95,17 @@ export default {
       right: 2rem;
     }
   }
-  img {
-    width: 100%;
-    object-position: center;
-    object-fit: cover;
-  }
+  //img {
+  //  width: 100%;
+  //  object-position: center;
+  //  object-fit: cover;
+  //}
 
-  .slider_top {
-    :global(.slick-slider) {
-
-      .item {
-        height: 32.5rem;
-      }
-    }
-    img {
-     height: 100%;
-      //border-radius: 1rem;
-    }
-  }
-
+  //.slider_top {
+  //  :global(.slick-list) {
+  //    transition: height 0.2s ease;
+  //  }
+  //}
   .slider_bottom {
     & > div {
       height: 100%;

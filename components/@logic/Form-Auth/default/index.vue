@@ -4,8 +4,8 @@
       v-model="formData.name"
       :error="v$.name.$errors"
       :class="$style.input"
-      placeholder="Имя"
-      title="Имя"
+      placeholder="Никнейм"
+      title="Никнейм"
     />
     <n-text-field
       v-model="formData.email"

@@ -16,6 +16,7 @@ export default {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
+
   },
   // transition: {
   //   mode: 'in-out'
@@ -52,6 +53,7 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/eslint
+    'nuxt-font-loader',
     '@nuxtjs/eslint-module',
     '@nuxtjs/composition-api/module',
     '@nuxtjs/svg',
@@ -78,6 +80,12 @@ export default {
     scss: [
       '~/assets/style/_variables.scss'
     ]
+  },
+  fontLoader: {
+    url: '/fonts/_fonts.css',
+
+    prefetch: true,
+    preconnect: true
   }
   // Build Configuration: https://go.nuxtjs.dev/config-build
 

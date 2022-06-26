@@ -1,5 +1,4 @@
 export const head = (useMeta, pageInfo) => {
-  console.log(pageInfo)
     if (pageInfo) {
       useMeta(() => ({
         title: pageInfo.seo_title,

@@ -30,7 +30,6 @@ import { head } from '@/components/scripts/head.js'
 
 export default defineComponent({
   name: 'DetailCards',
-  head: {},
   layout: 'default',
   middleware: 'background',
   transition: 'home',
@@ -93,13 +92,15 @@ export default defineComponent({
       isAuth
 
     }
-  }
+  },
+  head: {}
 })
 </script>
 
 <style scoped module lang="scss">
 .wrapper {
   width: 100%;
+  padding-top: 5rem;
 }
 .button__add_basket {
   background-color: rgba($black, 0.8);
