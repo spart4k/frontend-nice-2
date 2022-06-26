@@ -13,11 +13,13 @@
 </template>
 
 <script>
-import { ref, useRoute, useRouter, useAsync, useContext, computed } from '@nuxtjs/composition-api'
+import { ref, defineComponent, useRoute, useRouter, useAsync, useContext, computed, useMeta } from '@nuxtjs/composition-api'
 import { pagination } from '~/plugins/pagination'
+import { head } from '@/components/scripts/head.js'
 
-export default {
+export default defineComponent({
   name: 'SlugCard',
+  head: {},
   layout: 'default',
   // transition: 'home',
   setup () {
@@ -67,6 +69,14 @@ export default {
       const response = store.dispatch('pages/getData', params)
       return response
     }
+    const getPageInfo = computed(() => {
+      const sections = store.state.content.sections
+      const result = sections.filter(section => section.slug === route.value.params.slug)
+      return result[0]
+    })
+
+    head(useMeta, getPageInfo.value)
+
     const { getData, dataPagination } = pagination(fetchData)
 
     const lazyPagination = ($state) => {
@@ -104,10 +114,11 @@ export default {
       id,
       loading,
       clickTag,
-      lazyPagination
+      lazyPagination,
+      getPageInfo
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss" module></style>

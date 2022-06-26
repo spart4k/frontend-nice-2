@@ -35,15 +35,17 @@
 </template>
 
 <script>
-import { computed, ref, useAsync, useContext, useRouter } from '@nuxtjs/composition-api'
+import { computed, ref, useAsync, useContext, useRouter, defineComponent, useMeta } from '@nuxtjs/composition-api'
 import { pagination } from '~/plugins/pagination'
+import { head } from '@/components/scripts/head.js'
 
 const SORTING_SELECT_DATE = [
   { title: 'по новизне', sorting: 'id_asc' }
 ]
 
-export default {
+export default defineComponent({
   name: 'NShop',
+  head: {},
   setup (_, ctx) {
     const { $store } = ctx.root
     const { route, store } = useContext()
@@ -77,6 +79,16 @@ export default {
         }
       }
     })
+
+    const getPageInfo = computed(() => {
+      console.log()
+      const sections = $store.state.content.sections
+      const result = sections.filter(section => section.slug === route.value.name)
+      return result[0]
+    })
+
+    head(useMeta, getPageInfo.value)
+
     const selectItemForShop = useAsync(async () => {
       const response = await store.dispatch('shop/getDataForShop')
       if (response.data.length) {
@@ -159,10 +171,11 @@ export default {
       cardsLength,
       select,
       card,
-      isScrollingTop
+      isScrollingTop,
+      getPageInfo
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss" module>
