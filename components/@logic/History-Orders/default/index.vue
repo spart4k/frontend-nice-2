@@ -56,8 +56,8 @@ export default {
     background-color: #ffffff;
     &__title {
       color: $fontColorDefault;
-      font-size: 1.8rem;
       margin-bottom: 2.8rem;
+      font-size: 1.8rem;
       font-weight: 600;
     }
     &__empty {
