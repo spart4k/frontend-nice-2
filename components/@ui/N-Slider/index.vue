@@ -121,7 +121,9 @@ export default {
       margin-left: -.6rem;
     }
     :global(.slick-current) {
-      box-shadow: inset 0 0 0 1px $gray2;
+      .item {
+        box-shadow: inset 0 0 0 1px $gray2;
+      }
     }
     .list {
       height: 100%;
@@ -129,6 +131,7 @@ export default {
     .item {
       //width: 6.5rem;
       //height: 6.5rem;
+      //box-shadow: inset 0 0 0 1px $gray2;
       height: 100%;
       margin: 0 .6rem;
       img {

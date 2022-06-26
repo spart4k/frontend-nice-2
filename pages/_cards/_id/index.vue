@@ -31,7 +31,7 @@ import { head } from '@/components/scripts/head.js'
 export default defineComponent({
   name: 'DetailCards',
   layout: 'default',
-  middleware: 'background',
+  // middleware: 'background',
   transition: 'home',
   setup () {
     const isAddedBasket = ref(false)

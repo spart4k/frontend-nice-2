@@ -7,17 +7,20 @@
 
     <form @submit.prevent="onSubmit">
       <n-text-field
-      @input="checkValue"
-      :errCustom="errResponse"
-      :error="v$.code.$errors"
-      v-model="formData.code"
-      :valueInfo="formData.code"
-      placeholder="Введите код"
-      type="number"
-      title="Код из СМС" />
-      <n-button :typeButton="v$.$invalid ? 'disable' : '' "  :class="$style.button" type="submit">
-        <n-loading v-if="loading"></n-loading>
-        <template v-else>Подтвердить</template>
+        v-model="formData.code"
+        :err-custom="errResponse"
+        :error="v$.code.$errors"
+        :value-info="formData.code"
+        placeholder="Введите код"
+        type="number"
+        title="Код из СМС"
+        @input="checkValue"
+      />
+      <n-button :type-button="v$.$invalid ? 'disable' : '' " :class="$style.button" type="submit">
+        <n-loading v-if="loading" />
+        <template v-else>
+          Подтвердить
+        </template>
       </n-button>
     </form>
   </div>
@@ -66,11 +69,11 @@ export default {
           if (res.status === 200) {
             store.commit('authentication/showLogin', false)
             emit('closePopup')
-          } else {
-            if (res.message === 'Wrong sms code') {
+          } else if (res.message === 'Wrong sms code') {
               errResponse.value = 'Неверный код'
+            } else {
+              console.log('true')
             }
-          }
       })
     }
     const checkValue = () => {
