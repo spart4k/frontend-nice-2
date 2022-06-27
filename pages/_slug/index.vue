@@ -2,7 +2,7 @@
   <n-intro :description="introTitle" :set-height="cards.value && cards.value.length === 1">
     <n-preloader v-if="loading" />
     <template v-for="card in cards.value">
-      <SectionCards :id="id" :key="card.id" :card="card" @clickTag="clickTag" />
+      <SectionCards :id="id || card.section_id" :key="card.id" :card="card" @clickTag="clickTag" />
     </template>
     <client-only>
       <n-lazy-pagination

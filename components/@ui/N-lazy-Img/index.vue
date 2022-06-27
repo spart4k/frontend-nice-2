@@ -1,6 +1,7 @@
 <template>
   <img
     v-if="ready"
+    loading="lazy"
     :src="src"
     :class="$style.img"
     :alt="alt"
