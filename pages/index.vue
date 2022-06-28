@@ -29,10 +29,12 @@
   </n-intro>
 </template>
 <script>
-import { ref, useContext, useAsync } from '@nuxtjs/composition-api'
+import { ref, defineComponent, useContext, useAsync, useMeta } from '@nuxtjs/composition-api'
 import { pagination } from '~/plugins/pagination'
-export default {
+import { head } from '@/components/scripts/head.js'
+export default defineComponent({
   name: 'IndexPage',
+  head: {},
   setup () {
     const { store } = useContext()
     // const page = ref(1)
@@ -43,8 +45,10 @@ export default {
       subtitle: 'творческое объединение',
       background: ''
     })
+
+    const pageInfo = ref({})
     // store.commit('content/changeState', { key: 'logoBg', value: 'main' })
-    const fetch = (currentPage) => {
+    const fetchData = (currentPage) => {
       const params = {
         page: currentPage
       }
@@ -52,6 +56,21 @@ export default {
       return response
     }
 
+    pageInfo.value = useAsync(async () => {
+      try {
+        const response = await fetchData()
+        return response.data
+      } catch (e) {
+        console.log(e)
+      }
+    })
+    // useMeta(() => (
+    //  head({
+    //    title: pageInfo.value.value.seo_title,
+    //    descrp: pageInfo.value.value.seo_description,
+    //  })
+    // ))
+    head(useMeta, pageInfo.value)
     const { page, getData } = pagination(fetch, cards.value)
 
     const lazyPagination = ($state) => {
@@ -60,9 +79,10 @@ export default {
     store.commit('content/clearBgIntro')
     cards.value = useAsync(async () => {
       try {
-        const response = await fetch()
+        const response = await fetchData()
         return response.data.data
       } catch (e) {
+        console.log('s')
         console.log(e)
       }
     })
@@ -71,10 +91,11 @@ export default {
       introTitle,
       cards,
       page,
-      lazyPagination
+      lazyPagination,
+      pageInfo
     }
   }
-}
+})
 </script>
 <style lang="scss" module>
 .cards {
