@@ -6,7 +6,20 @@
       :class="$style.author"
     />
     <!--    <h2>{{ data.title }}</h2>-->
-    <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" />
+    <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" with-styles />
+    <N-Chip
+      v-for="item in data.tags"
+      :key="item.id"
+      :class="$style.chip"
+      @click="$emit('clickTag', item.id)"
+    >
+      {{ item.title }}
+    </N-Chip>
+    <!--          <N-Comment-->
+    <!--            v-if="$props.amountComment"-->
+    <!--            :class="$style.comment"-->
+    <!--            :current="$props.amountComment"-->
+    <!--          />-->
     <!--    <p>-->
     <!--      {{ $props.description }}-->
     <!--    </p>-->
@@ -66,10 +79,13 @@ export default {
     padding-left: 1rem;
   }
   p {
-    border-bottom: solid 1px rgba($black, .1);
+    //border-bottom: solid 1px rgba($black, .1);
     padding-bottom: 1rem;
     margin-bottom: .7rem;
     margin-top: 1.9rem;
+    @include text-md;
+
+    @include montserratRegular;
   }
   .author {
     margin-bottom: 3.2rem;
@@ -86,8 +102,14 @@ export default {
   }
   h3 {
     font-weight: 700;
-    @include text-sm;
+    @include text-md;
     margin-bottom: .73rem;
+  }
+  .chip {
+    margin-top: 1.36rem;
+    & + .chip {
+      margin-left: 1rem;
+    }
   }
 }
 </style>

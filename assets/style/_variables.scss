@@ -1,7 +1,7 @@
 $tabletWidth: 900px;
 $mobileWidth: 450px;
 
-$border-radius-1: 1rem;
+$border-radius-1: 1.5rem;
 $border-radius-2: .6rem;
 
 $fontColorDefault: #1C262E;
@@ -10,9 +10,12 @@ $white: #ffffff;
 $gray: #EBEBEB;
 $gray2: #E6E6E6;
 $orange: #FF4F02;
+$orange2: #FF5000;
 $yellow: #F6DA65;
+$yellow2: #FADD66;
 $pink: #FFC8C8;
 $blue: #BBD6FF;
+$activeLink: #699b69;
 $blueBlack: #3E5366;
 $blueBlack2: #2F2E4D;
 $blueBlack3: #2E3E4D;
@@ -21,48 +24,48 @@ $footerHeight: 13.3rem;
 $bgWidth: 570px;
 
 :root {
-  --mobile-width: $mobileWidth;
+  --mobile-width: #{$mobileWidth};
   --footer-height: 13.3rem;
-  --header-height: 8.8rem;
+  --header-height: #{$headerHeight};
   --vh: 10rem;
 }
 
 @mixin montserratRegular {
   font-family: 'Montserrat-Regular', sans-serif;
-  font-weight: 400;
+  font-weight: normal;
 }
 @mixin montserratMedium {
   font-family: 'Montserrat-Medium', sans-serif;
-  font-weight: 500;
+  font-weight: normal;
 }
 @mixin montserratSemiBold {
   font-family: 'Montserrat-SemiBold', sans-serif;
-  font-weight: 600;
+  font-weight: normal;
 }
 @mixin montserratBold {
   font-family: 'Montserrat-Bold', sans-serif;
-  font-weight: 700;
+  font-weight: normal;
 }
 @mixin montserratExtraBold {
   font-family: 'Montserrat-ExtraBold', sans-serif;
-  font-weight: 800;
+  font-weight: normal;
 }
 @mixin montserratBlack {
   font-family: 'Montserrat-Black', sans-serif;
-  font-weight: 900;
+  font-weight: normal;
 }
 @mixin montserratBlack {
   font-family: 'Montserrat-Black', sans-serif;
-  font-weight: 900;
+  font-weight: normal;
 }
 @mixin Bankir-Retro {
   font-family: 'Bankir-Retro', sans-serif;
-  font-weight: 400;
+  font-weight: normal;
 }
 
 @mixin container {
-  padding-left: 1.95rem;
-  padding-right: 1.95rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
 @mixin title {
@@ -78,6 +81,10 @@ $bgWidth: 570px;
   font-size: 2.2rem;
   line-height: 1.2190909091;
 }
+@mixin subtitle-big {
+  font-size: 2.4rem;
+  line-height: 1.2190909091;
+}
 
 @mixin subtitle-sm {
   font-size: 2rem;
@@ -86,13 +93,19 @@ $bgWidth: 570px;
 
 @mixin text {
   font-size: 1.8rem;
-  line-height: 1.0088888889;
+  line-height: 1.2;
 }
 
 @mixin text-md {
   font-size: 1.4rem;
-  line-height: 1.2192857143;
+  line-height: 1.5;
 }
+
+@mixin text-md-2 {
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+
 
 @mixin text-sm {
   font-size: 1.2rem;

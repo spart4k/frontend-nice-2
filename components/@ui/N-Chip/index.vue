@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.chip">
+  <div :class="$style.chip" v-on="$listeners">
     <slot />
   </div>
 </template>
@@ -10,12 +10,16 @@ export default {
 </script>
 <style lang="scss" module>
 .chip {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
   padding: .8rem 1.2rem;
+  max-height: 3.1rem;
   border: solid 2px $blueBlack2;
   border-radius: $border-radius-2;
   color: $blueBlack2;
-  font-weight: 600;
   @include text-md;
+  @include montserratMedium;
 }
 </style>

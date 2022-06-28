@@ -1,35 +1,21 @@
 <template>
   <n-intro :description="introTitle">
-    <div :class="$style.cards">
-      <!--      <template v-for="card in cards">-->
-      <!--        <component-->
-      <!--          :is="componentsName[card.section.slug]"-->
-      <!--          :key="card.id"-->
-      <!--          :data="card"-->
-      <!--          :amount-comment="32"-->
-      <!--        />-->
-      <!--        :author="{ src: require('~/assets/img/testPlug.jpg') }"-->
-      <div v-for="(card) in cards.value" :key="card.id" :class="$style.cards__item">
-        <template v-if="card.section.id === 1">
-          <N-Card-MusicDetail :data="card" />
-        </template>
-        <template v-if="card.section.id === 3">
-          <N-Card-Read
-            :data="card"
-            :author="{ src: require('~/assets/img/testPlug.jpg') }"
-            :amount-comment="32"
-          />
-        </template>
-      </div>
-      <n-lazy-pagination
-        v-if="cards.length > 0"
-        @lazyPagination="lazyPagination"
-      />
+    <div v-if="cards.value && cards.value.data" :class="$style.cards">
+      <TransitionGroup name="home" tag="div">
+        <div v-for="(card) in cards.value.data" :key="card.id" :class="$style.cards__item">
+          <section-cards :id="card.section.id" :key="card.id" :card="card" @clickTag="($event) => clickTag($event, card.section.id)" />
+        </div>
+      </transitiongroup>
+      <client-only>
+        <n-lazy-pagination
+          @lazyPagination="lazyPagination"
+        />
+      </client-only>
     </div>
   </n-intro>
 </template>
 <script>
-import { ref, defineComponent, useContext, useAsync, useMeta } from '@nuxtjs/composition-api'
+import { ref, defineComponent, useContext, useRoute, useRouter, useAsync, useMeta } from '@nuxtjs/composition-api'
 import { pagination } from '~/plugins/pagination'
 import { head } from '@/components/scripts/head.js'
 export default defineComponent({
@@ -37,8 +23,10 @@ export default defineComponent({
   head: {},
   setup () {
     const { store } = useContext()
-    // const page = ref(1)
+    const router = useRouter()
+    const route = useRoute()
     const cards = ref([])
+    const totalPage = ref(0)
 
     const introTitle = ref({
       title: 'Главная',
@@ -70,31 +58,45 @@ export default defineComponent({
     //    descrp: pageInfo.value.value.seo_description,
     //  })
     // ))
-    head(useMeta, pageInfo.value)
-    const { page, getData } = pagination(fetch, cards.value)
+    console.log(pageInfo.value)
+    const metaInfo = pageInfo.value
+    head(useMeta, metaInfo.value)
 
-    const lazyPagination = ($state) => {
-      getData($state)
-    }
     store.commit('content/clearBgIntro')
+
     cards.value = useAsync(async () => {
       try {
         const response = await fetchData()
-        return response.data.data
+        totalPage.value = response?.data.last_page
+        return response.data
       } catch (e) {
         console.log('s')
         console.log(e)
       }
-    })
+    }, route.value.path)
+
+    store.commit('content/clearBgIntro')
+
+    const { page, getData, dataPagination } = pagination(fetchData)
+
+    const lazyPagination = ($state) => {
+      getData($state, cards.value.value.last_page)
+      cards.value.value.data = [...cards.value.value.data, ...dataPagination.value]
+    }
+    const clickTag = (tag) => {
+      router.push({ path: 'tags', query: { tag } })
+    }
 
     return {
       introTitle,
       cards,
       page,
       lazyPagination,
-      pageInfo
+      pageInfo,
+      clickTag
     }
-  }
+  },
+  watchQuery: ['page']
 })
 </script>
 <style lang="scss" module>

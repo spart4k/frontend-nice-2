@@ -1,15 +1,17 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'frontend-nice-nuxt3',
+    title: 'Найс',
     htmlAttrs: {
       lang: 'ru'
     },
+    transition: 'home',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1, user-scalable=no' },
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' }
+
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -33,6 +35,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '@plugins/infiniteloading.js', ssr: false },
+    { src: '@plugins/vualidate.js' },
     '@plugins/v-mask.js',
     '@plugins/v-tooltip.js'
   ],
@@ -45,13 +48,15 @@ export default {
       '~/components/@logic'
     ]
   },
-
+  loading: false,
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     '@nuxtjs/composition-api/module',
-    '@nuxtjs/svg'
+    '@nuxtjs/svg',
+    '@nuxt/image',
+    'nuxt-gsap-module'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -59,7 +64,8 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth-next',
+    'vue-toastification/nuxt'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -72,11 +78,7 @@ export default {
     scss: [
       '~/assets/style/_variables.scss'
     ]
-  },
-  auth: {
-    // Options
-  },
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
   }
+  // Build Configuration: https://go.nuxtjs.dev/config-build
+
 }

@@ -1,14 +1,14 @@
 <template>
   <div :class="$style.product">
     <div :class="$style.product__img">
-      <img :src="item.img" alt="изоображение товара">
+      <N-Lazy-Img :src="`${$axios.defaults.baseURL}${item.images[0].src}`" alt="изоображение товара" />
     </div>
     <div :class="$style.product__description">
       <h3 :class="$style.product__title">
         {{ item.title }}
       </h3>
       <div :class="$style.product__title">
-        {{ item.price }}
+        {{ item.price }}р.
       </div>
       <div :class="$style.product__change_count">
         <div :class="$style.product__buttons">
@@ -16,7 +16,7 @@
             <n-icon name="minus" />
           </n-button>
           <div :class="$style.product__count">
-            {{ countProducts }}
+            {{ item.pivot.quantity }}
           </div>
           <n-button type-button="transparent" @click="increment">
             <n-icon name="plus" />
@@ -44,16 +44,13 @@ export default {
   setup (props, { emit }) {
     const countProducts = ref(0)
     const decrement = () => {
-      if (countProducts.value === 0) { return }
-      countProducts.value -= 1
-      emit('changeCount', countProducts.value)
+      // if (countProducts.value === 0) { return }
+      emit('decrement', props.item.pivot.card_id)
     }
     const increment = () => {
-      countProducts.value += 1
-      emit('changeCount', countProducts.value)
+      emit('increment', props.item.pivot.card_id)
     }
-
-    const totalPrice = computed(() => props.item.price * countProducts.value)
+    const totalPrice = computed(() => props.item?.pivot?.price * props?.item?.pivot?.quantity)
     return {
       countProducts,
       totalPrice,

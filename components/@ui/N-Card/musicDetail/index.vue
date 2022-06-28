@@ -1,13 +1,11 @@
 <template>
-  <N-Card-Default v-bind="$props">
-    <template v-if="data.files" #footer>
+  <N-Card-Default v-bind="$props" :detail-page="detailPage" @clickTag="($event) => $emit('clickTag', $event)">
+    <template v-if="data.files && detailPage" #footer>
       <div v-for="item in data.files" :key="item.id" :class="$style.row">
         <h2>
-          W$BfS7LnBr7C
-
           {{ item.title }}
         </h2>
-        <N-Audio :src="`https://nice.c.roky.rocks/${item.src}`" />
+        <N-Audio v-if="item.src" :src="`https://nice.c.roky.rocks/${item.src}`" />
       </div>
     </template>
   </N-Card-Default>
@@ -21,10 +19,15 @@ export default {
     audio: {
       type: Array,
       default: null
+    },
+    detailPage: {
+      type: Boolean,
+      default: false
     }
   }
 }
 </script>
+
 <style lang="scss" module>
 .row {
   border-bottom: 1px $gray solid;
