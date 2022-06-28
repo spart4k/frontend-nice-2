@@ -25,10 +25,12 @@
 </template>
 
 <script>
-import { ref, useAsync, useContext, defineComponent, useRouter, computed } from '@nuxtjs/composition-api'
+import { ref, useAsync, useContext, defineComponent, useRouter, computed, useMeta } from '@nuxtjs/composition-api'
+import { head } from '@/components/scripts/head.js'
 
 export default defineComponent({
   name: 'DetailCards',
+  head: {},
   layout: 'default',
   middleware: 'background',
   transition: 'home',
@@ -58,7 +60,7 @@ export default defineComponent({
         console.log(e)
       }
     }, route.value.params.id)
-
+    head(useMeta, card.value)
     const bgName = computed(() => {
       const find = sections.value?.find(item => Number(item.id) === +card.value?.section_id)
       return find

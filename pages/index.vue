@@ -15,10 +15,12 @@
   </n-intro>
 </template>
 <script>
-import { ref, useContext, useAsync, useRouter, useRoute } from '@nuxtjs/composition-api'
+import { ref, defineComponent, useContext, useRoute, useRouter, useAsync, useMeta } from '@nuxtjs/composition-api'
 import { pagination } from '~/plugins/pagination'
-export default {
+import { head } from '@/components/scripts/head.js'
+export default defineComponent({
   name: 'IndexPage',
+  head: {},
   setup () {
     const { store } = useContext()
     const router = useRouter()
@@ -26,31 +28,56 @@ export default {
     const cards = ref([])
     const totalPage = ref(0)
 
-    const fetch = (currentPage) => {
+    const introTitle = ref({
+      title: 'Главная',
+      subtitle: 'творческое объединение',
+      background: ''
+    })
+
+    const pageInfo = ref({})
+    // store.commit('content/changeState', { key: 'logoBg', value: 'main' })
+    const fetchData = (currentPage) => {
       const params = {
         page: currentPage
       }
       const response = store.dispatch('main/getData', params)
       return response
     }
-    cards.value = useAsync(async () => {
+
+    pageInfo.value = useAsync(async () => {
       try {
-        const response = await fetch()
-        totalPage.value = response?.data.last_page
+        const response = await fetchData()
         return response.data
       } catch (e) {
         console.log(e)
       }
-    }, route.value.path)
-
-    const introTitle = ref({
-      title: 'Главная',
-      subtitle: 'творческое объединение',
-      background: ''
     })
+    // useMeta(() => (
+    //  head({
+    //    title: pageInfo.value.value.seo_title,
+    //    descrp: pageInfo.value.value.seo_description,
+    //  })
+    // ))
+    console.log(pageInfo.value)
+    const metaInfo = pageInfo.value
+    head(useMeta, metaInfo.value)
+
     store.commit('content/clearBgIntro')
 
-    const { page, getData, dataPagination } = pagination(fetch)
+    cards.value = useAsync(async () => {
+      try {
+        const response = await fetchData()
+        totalPage.value = response?.data.last_page
+        return response.data
+      } catch (e) {
+        console.log('s')
+        console.log(e)
+      }
+    }, route.value.path)
+
+    store.commit('content/clearBgIntro')
+
+    const { page, getData, dataPagination } = pagination(fetchData)
 
     const lazyPagination = ($state) => {
       getData($state, cards.value.value.last_page)
@@ -65,11 +92,12 @@ export default {
       cards,
       page,
       lazyPagination,
+      pageInfo,
       clickTag
     }
   },
   watchQuery: ['page']
-}
+})
 </script>
 <style lang="scss" module>
 .cards {
