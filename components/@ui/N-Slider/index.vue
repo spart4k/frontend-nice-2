@@ -9,7 +9,8 @@
         @beforeChange="syncSliders"
       >
         <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
-          <n-lazy-img :src="`${$axios.defaults.baseURL}${item.src}`" :alt="item.title" />
+          <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="">
+          <!--          <n-lazy-img :src="`${$axios.defaults.baseURL}${item.src}`" :alt="item.title" />-->
           <!--          <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="1">-->
         </div>
       </VueSlickCarousel>
@@ -95,11 +96,11 @@ export default {
       right: 2rem;
     }
   }
-  //img {
-  //  width: 100%;
-  //  object-position: center;
-  //  object-fit: cover;
-  //}
+  img {
+    width: 100%;
+    object-position: center;
+    object-fit: cover;
+  }
 
   //.slider_top {
   //  :global(.slick-list) {

@@ -148,7 +148,7 @@ export default {
     -webkit-box-orient: vertical;
   }
   .hat {
-    //height: 23.6rem;
+    min-height: 23.6rem;
     width: 100%;
     //background-color: #e7dddd;
     border: none;
