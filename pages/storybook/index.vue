@@ -14,6 +14,13 @@
       <N-Icon name="message" />
       <N-Icon name="minus" />
     </Row>
+    <Row>
+      <N-Card-New
+        :data="NCard"
+        v-bind="NCard"
+        @clickTag="clickTag"
+      />
+    </Row>
     <Row title="title">
       <div :class="$style.slider">
         <N-Slider :slider-item="sliderItem" />
@@ -35,16 +42,16 @@
         :amount-comment="32"
       />
     </Row> -->
-    <!-- <Row
+    <Row
       title="Карточка Default3"
     >
-      <N-Card-Default
+      <!-- <N-Card-Default
         v-bind="
           NCard"
         :amount-comment="32"
         :images="[{ src: require('~/assets/img/testPlug.jpg') }, { src: require('~/assets/img/testPlug.jpg') }]"
-      />
-    </Row> -->
+      /> -->
+    </Row>
     <!-- <Row title="Карточка с видео">
       <N-Card-Default
         v-bind="NCard"
@@ -74,7 +81,7 @@
     <Row title="Chip">
       <N-Chip>искусство</N-Chip>
     </Row>
-    <Row title="ROW-BASKET">
+    <!-- <Row title="ROW-BASKET">
       <div :class="$style.bakset">
         <n-basket-row
           v-for="(basketItem, index) in basketRow"
@@ -84,7 +91,7 @@
         />
         {{ countAll }}
       </div>
-    </Row>
+    </Row> -->
     <Row title="Audio">
       <N-Audio />
     </Row>
@@ -150,16 +157,10 @@
   </div>
 </template>
 <script>
-import { computed, ref } from '@nuxtjs/composition-api'
-import Row from './components/row/index'
-import NButton from '~/components/@ui/N-Button'
+import { computed, ref, useRouter } from '@nuxtjs/composition-api'
 
 export default {
   name: 'StoryBook',
-  components: {
-    NButton,
-    Row
-  },
   setup () {
     const activePopup = ref(false)
     const activeAuthSteps = ref(false)
@@ -169,10 +170,11 @@ export default {
     const NCard = ref({
       images: [{ src: require('~/assets/img/testPlug.jpg') }],
       video: require('~/assets/video/testPlug.mp4'),
-      title: 'Название альбома',
-      description: 'Фамилия Обломов не связана со словом «облом». 5 фактов о литературе из школьной программы, которых вы не знал',
-      chips: ['музыка'],
+      title: 'Название поста',
+      text: 'Фамилия Обломов не связана со словом «облом». 5 фактов о литературе из школьной программы, которых вы не знал',
+      chips: ['музыка', 'хэштег', 'видео', 'искусство'],
       amountComment: 0,
+      amountLike: 0,
       audio: [
         { title: 'Название композиции', src: '/media/cc0-audio/t-rex-roar.mp3', id: '123' },
         { title: 'Название композиции', src: '/media/cc0-audio/t-rex-roar.mp3', id: '1233' },
@@ -189,6 +191,11 @@ export default {
     const author = {
       name: 'Адрюша Евкакий',
       src: ''
+    }
+
+    const router = useRouter()
+    const clickTag = (value) => {
+      router.push({ path: '/tags', query: { tag: value } })
     }
 
     const cardRead = {
@@ -253,7 +260,8 @@ export default {
       test,
       activeAuthSteps,
       openPopup,
-      changeCount
+      changeCount,
+      clickTag
     }
   }
 }
@@ -285,7 +293,7 @@ export default {
   width: 29rem;
 }
 .rows {
-  //display: flex;
-  //flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 </style>

@@ -19,7 +19,6 @@ import { head } from '@/components/scripts/head.js'
 
 export default defineComponent({
   name: 'SlugCard',
-  head: {},
   layout: 'default',
   // transition: 'home',
   setup () {
@@ -117,7 +116,8 @@ export default defineComponent({
       lazyPagination,
       getPageInfo
     }
-  }
+  },
+  head: {}
 })
 </script>
 

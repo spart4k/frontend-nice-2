@@ -1,0 +1,357 @@
+<template>
+  <div :class="$style.card">
+    <template v-if="data.images.length && !$props.withVideo">
+      <template v-if="$props.detailPage && data.images.length > 1">
+        <N-Slider :slider-item="data.images" />
+      </template>
+      <template v-else>
+        <div v-if="$props.detailPage">
+          <div :class="[$style.hat]">
+            <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+          </div>
+        </div>
+        <nuxt-link v-else :to="`cards/${data.id}`">
+          <div :class="[$style.hat]">
+            <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+          </div>
+        </nuxt-link>
+      </template>
+    </template>
+    <template v-else-if="$props.withVideo">
+      <div :class="$style.wrapperVideo">
+        <video ref="videoRef" playsinline controls muted type="video/mp4">
+          <source :src="videoUrl" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
+        </video>
+      </div>
+    </template>
+    <div
+      :class="[
+        $style.body,
+        $props.withAuthor && $style.author
+      ]"
+    >
+      <template>
+        <NuxtLink :class="$style.body__top" tag="div" :to="`/cards/${data.id}`">
+          <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
+            {{ data.title }}
+          </h2>
+          <template v-if="$props.detailPage && data.author.length>0">
+            <p :class="$style.authorName">
+              автор {{ data.author }}
+            </p>
+          </template>
+          <div v-if="data.price && $props.detailPage" :class="$style.price">
+            {{ data.price }}р.
+          </div>
+          <div v-if="data.price && $props.detailPage" :class="$style.buyButton">
+            Купить
+          </div>
+          <div v-if="isJsonString" :class="$style.cardText">
+            <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
+          </div>
+        </NuxtLink>
+        <div :class="$style.socials" :style="{ marginBottom: !$props.detailPage ? '3rem' : '0.906rem' }">
+          <div>
+            <N-Like v-model="like" />
+            <div :class="$style.parser">
+              {{ !$props.detailPage ? '0' : 'Нравиться' }}
+            </div>
+          </div>
+          <div @click="showComments = !showComments">
+            <N-Icon name="comments" />
+            <div :class="$style.parser">
+              {{ !$props.detailPage ? '0' : 'Комментировать' }}
+            </div>
+          </div>
+        </div>
+        <div v-if="!$props.detailPage" :class="$style.body__bottom">
+          <N-Chip
+            v-for="item in data.tags"
+            :key="item.id"
+            ref="chipsArray"
+            :class="$style.chip"
+            @click="$emit('clickTag', item.id)"
+          >
+            {{ item.title }}
+          </N-Chip>
+          <N-Chip
+            v-if="chipsCounter > 0"
+            :class="$style.chip"
+          >
+            +{{ chipsCounter }}
+          </N-Chip>
+        </div>
+      </template>
+      <!--  -->
+      <transition name="fadeHeight">
+        <div ref="commentBox"
+             :class="[$style.comments,showComments ? $style.show : '']"
+             :style="{maxHeight: showComments ? commentHeight : '0'}">
+          <p :class="$style.comments__title">
+            {{ commentCounter }} комментари{{ commentEnding }}
+          </p>
+          <N-Input />
+          <N-Comment />
+          <N-Comment />
+          <N-Comment />
+          <N-Comment />
+        </div>
+      </transition>
+      <!--  -->
+      <div v-if="$slots.footer" :class="$style.body__footer">
+        <slot name="footer" />
+      </div>
+    </div>
+  </div>
+</template>
+<script lang="js">
+import { computed, nextTick, onMounted, ref, useContext } from '@nuxtjs/composition-api'
+import dataProps from '../props'
+
+export default {
+  name: 'NCardNew',
+  props: { ...dataProps.props },
+  setup (props) {
+    const videoRef = ref(null)
+    const showComments = ref(true)
+    const like = ref(false)
+    const chipsCounter = ref(0)
+    const chipsWidth = ref(-10)
+    const chipsArray = ref()
+    const commentHeight = ref()
+    const commentBox = ref()
+    const commentEnding = ref('ев')
+    const commentCounter = ref(1)
+    const { $axios } = useContext()
+    const isJsonString = computed(() => {
+      try {
+        JSON.parse(props?.data?.text)
+      } catch (e) {
+        return false
+      }
+      return true
+    })
+    const videoUrl = ref()
+    const screenChange = () => {
+      showComments.value = true
+      commentHeight.value = '9999999px'
+      setTimeout(() => {
+        commentHeight.value = commentBox.value.getBoundingClientRect().height + 'px'
+      }, 50)
+      if (showComments.value === false) {
+        showComments.value = true
+        commentHeight.value = '9999999px'
+        setTimeout(() => {
+          commentHeight.value = commentBox.value.getBoundingClientRect().height + 'px'
+        }, 50)
+        showComments.value = false
+      }
+    }
+    onMounted(() => {
+      commentHeight.value = '9999999px'
+      setTimeout(() => {
+        commentHeight.value = commentBox.value.getBoundingClientRect().height + 'px'
+        showComments.value = false
+      }, 100)
+      window.addEventListener('resize', screenChange)
+      if (!props.detailPage) {
+        for (let i = 0; i < chipsArray.value.length; i++) {
+          chipsWidth.value += chipsArray.value[i].$el.offsetWidth + 10
+        }
+        if (chipsWidth.value > 315) {
+          for (let i = chipsArray.value.length - 1; chipsWidth.value > 258; i--) {
+              chipsWidth.value = chipsWidth.value - (chipsArray.value[i].$el.offsetWidth + 10)
+              chipsArray.value[i].$el.style.display = 'none'
+              chipsCounter.value++
+          }
+        }
+      }
+      const string = commentCounter.value.toString()
+      const lastElem = string[string.length - 1]
+      if (!(string[string.length - 2] === '1')) {
+        if (lastElem === '2' || lastElem === '3' || lastElem === '4') {
+          commentEnding.value = 'я'
+        } else if (lastElem === '1') {
+          commentEnding.value = 'й'
+        }
+      }
+      nextTick(() => {
+        if (props.withVideo) {
+          videoUrl.value = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`
+          videoRef.value.src = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`
+          videoRef.value.load()
+        }
+      })
+    })
+    const dateFormat = computed(() => {
+      return props.data.date_event?.replace(/:(\w+)/, '')?.replace(/\s/, ' / ') ?? ''
+    })
+    return {
+      like,
+      chipsCounter,
+      showComments,
+      chipsArray,
+      isJsonString,
+      chipsWidth,
+      dateFormat,
+      commentCounter,
+      commentEnding,
+      commentHeight,
+      commentBox,
+      videoRef,
+      videoUrl,
+      screenChange
+    }
+  }
+}
+</script>
+<style lang="scss" module>
+  .card {
+    background-color: $white;
+    //width: 36rem;
+    width: 100%;
+    border-radius: 2rem;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    overflow: hidden;
+    .wrapperVideo {
+      position: relative;
+      &:after {
+        display: block;
+        content: '';
+        /* 16:9 aspect ratio */
+        padding-bottom: 56.25%;
+      }
+      video {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100.5%;
+        object-fit: cover;
+        height: 100%;
+      }
+    }
+    //video {
+    //  width: calc(100% + 2px);
+    //  margin-left: -1px;
+    //  height: 100%;
+    //  max-height: 24rem;
+    //}
+  }
+  .parser {
+    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-height: 16px;
+    max-height: 34px;
+    opacity: 0.8;
+    @include regular-text;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+  .hat {
+    min-height: 23.6rem;
+    width: 100%;
+    //background-color: #e7dddd;
+    border: none;
+  }
+  .price {
+    color: $fontColorDefault;
+    @include regular-text-bold;
+    margin-bottom:2rem;
+  }
+  .buyButton {
+    display: inline-block;
+    @include button;
+    color: $white;
+    padding: 1.4rem 3.6rem;
+    margin-bottom: 2rem;
+    background: #C83F8E;
+    border-radius: 25px;
+  }
+  .socials {
+    display: flex;
+    width: auto;
+    gap: 3rem;
+    margin-top: 2rem;
+  div {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    }
+  }
+  .body {
+    padding: 1.4rem 1.5rem 2.094rem;
+    color: $fontColorDefault;
+    @include regular-text;
+    &.author {
+      padding: .8rem 1rem 1.3rem;
+      p {
+        opacity: .4;
+        color: $fontColorDefault;
+        font-weight: 600;
+        @include text-md;
+        @include montserratSemiBold;
+      }
+    }
+    .title {
+      text-decoration: none;
+      @include text-style-h2;
+    }
+    .time {
+      @include text-sm;
+      margin-bottom: .8rem;
+    }
+    &__top {
+      cursor: pointer;
+      .cardText {
+        p {
+          line-height: 17px;
+        }
+        *+* {
+          margin-top: 15px;
+        }
+      }
+      h2 {
+        text-decoration-line: underline;
+        font-weight: 600;
+        @include text;
+      }
+      p {
+        //margin-top: 1.03rem;
+        @include text-md;
+      }
+      .authorName{
+        margin-bottom: 1.5rem;
+        @include regular-text-bold
+      }
+    }
+    &__bottom {
+      display: flex;
+    }
+    &__footer {
+      margin-top: 3rem;
+    }
+    .comment {
+      margin-left: auto;
+    }
+    .chip {
+      & + .chip {
+        margin-left: 1.039rem;
+      }
+    }
+    .comments {
+      margin-top: 2.094rem;
+      transition: all .8s;
+      overflow: hidden;
+      opacity: 0;
+    &__title {
+      color: $fontColorDefault;
+      @include regular-text-bold;
+      }
+    }
+    .show {
+      opacity: 1;
+    }
+  }
+</style>

@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.wrapper">
-    <template v-if="id === 1">
+    <!-- <template v-if="id === 1">
       <N-Card-MusicDetail :detail-page="detailPage" :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
     </template>
     <template v-else-if="id === 2">
@@ -14,9 +14,16 @@
     </template>
     <template v-else-if="id === 7">
       <N-Card-Default :detail-page="detailPage" :with-author="!detailPage" :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
-    </template>
-    <template v-else>
+    </template> -->
+    <!-- <template v-else>
       <N-Card-Default
+        :detail-page="detailPage"
+        :data="card"
+        @clickTag="($event) => $emit('clickTag', $event)"
+      />
+    </template> -->
+    <template>
+      <N-Card-New
         :detail-page="detailPage"
         :data="card"
         @clickTag="($event) => $emit('clickTag', $event)"
