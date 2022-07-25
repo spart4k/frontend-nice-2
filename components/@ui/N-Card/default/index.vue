@@ -1,66 +1,68 @@
 <template>
-  <div :class="$style.card">
-    <template v-if="data.images.length && !$props.withVideo">
-      <template v-if="$props.detailPage && data.images.length > 1">
-        <N-Slider :slider-item="data.images" />
+  <div :class="$style.container">
+    <div :class="$style.card">
+      <template v-if="data.images.length && !$props.withVideo">
+        <template v-if="$props.detailPage && data.images.length > 1">
+          <N-Slider :slider-item="data.images" />
+        </template>
+        <template v-else>
+          <div v-if="$props.detailPage">
+            <div :class="[$style.hat]">
+              <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+            </div>
+          </div>
+          <nuxt-link v-else :to="`card/${data.id}`">
+            <div :class="[$style.hat]">
+              <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+            </div>
+          </nuxt-link>
+        </template>
       </template>
-      <template v-else>
-        <div v-if="$props.detailPage">
-          <div :class="[$style.hat]">
-            <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
-          </div>
-        </div>
-        <nuxt-link v-else :to="`card/${data.id}`">
-          <div :class="[$style.hat]">
-            <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
-          </div>
-        </nuxt-link>
-      </template>
-    </template>
-    <template v-else-if="$props.withVideo">
-      <div :class="$style.wrapperVideo">
-        <video ref="videoRef" playsinline controls muted type="video/mp4">
-          <source :src="videoUrl" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
-        </video>
-      </div>
-    </template>
-    <div
-      :class="[
-        $style.body,
-        $props.withAuthor && $style.author
-      ]"
-    >
-      <template v-if="$props.withAuthor">
-        <p>
-          Автор: {{ data.author }}
-        </p>
-      </template>
-      <template v-else>
-        <NuxtLink :class="$style.body__top" tag="div" :to="`/cards/${data.id}`">
-          <h2 :class="$style.title">
-            {{ data.title }}
-          </h2>
-          <div v-if="data.price && $props.detailPage" :class="$style.price">
-            {{ data.price }}р.
-          </div>
-          <div v-if="data.date_event" :class="$style.time">
-            {{ dateFormat }}
-          </div>
-          <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
-        </NuxtLink>
-        <div :class="$style.body__bottom">
-          <N-Chip
-            v-for="item in data.tags"
-            :key="item.id"
-            :class="$style.chip"
-            @click="$emit('clickTag', item.id)"
-          >
-            {{ item.title }}
-          </N-Chip>
+      <template v-else-if="$props.withVideo">
+        <div :class="$style.wrapperVideo">
+          <video ref="videoRef" playsinline controls muted type="video/mp4">
+            <source :src="videoUrl" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
+          </video>
         </div>
       </template>
-      <div v-if="$slots.footer" :class="$style.body__footer">
-        <slot name="footer" />
+      <div
+        :class="[
+          $style.body,
+          $props.withAuthor && $style.author
+        ]"
+      >
+        <template v-if="$props.withAuthor">
+          <p>
+            Автор: {{ data.author }}
+          </p>
+        </template>
+        <template v-else>
+          <NuxtLink :class="$style.body__top" tag="div" :to="`/cards/${data.id}`">
+            <h2 :class="$style.title">
+              {{ data.title }}
+            </h2>
+            <div v-if="data.price && $props.detailPage" :class="$style.price">
+              {{ data.price }}р.
+            </div>
+            <div v-if="data.date_event" :class="$style.time">
+              {{ dateFormat }}
+            </div>
+            <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
+          </NuxtLink>
+          <div :class="$style.body__bottom">
+            <N-Chip
+              v-for="item in data.tags"
+              :key="item.id"
+              :class="$style.chip"
+              @click="$emit('clickTag', item.id)"
+            >
+              {{ item.title }}
+            </N-Chip>
+          </div>
+        </template>
+        <div v-if="$slots.footer" :class="$style.body__footer">
+          <slot name="footer" />
+        </div>
       </div>
     </div>
   </div>
@@ -106,13 +108,15 @@ export default {
 }
 </script>
 <style lang="scss" module>
+.container {
+  border-radius: $border-radius-1;
+  background-color: $white;
+  position: relative;
+  overflow: hidden;
+  transform: translate3d(0,0,0);
+}
   .card {
-    background-color: $white;
-    //width: 32.5rem;
     width: 100%;
-    border-radius: $border-radius-1;
-    -webkit-mask-image: -webkit-radial-gradient(white, black);
-    overflow: hidden;
     .wrapperVideo {
       position: relative;
       &:after {
