@@ -22,6 +22,7 @@
     "lodash": "^4.17.21",
     "nuxt": "^2.15.8",
     "nuxt-font-loader": "^1.1.5",
+    "portal-vue": "^2.1.7",
     "seamless-scroll-polyfill": "^2.1.8",
     "v-mask": "^2.3.0",
     "v-tooltip": "^2.1.3",

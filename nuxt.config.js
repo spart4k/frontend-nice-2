@@ -67,7 +67,8 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
     '@nuxtjs/auth-next',
-    'vue-toastification/nuxt'
+    'vue-toastification/nuxt',
+    ['portal-vue/nuxt']
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

@@ -50,7 +50,26 @@
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div>
         </NuxtLink>
-        <div :class="$style.socials" :style="{ marginBottom: !$props.detailPage ? '3rem' : '0.906rem' }">
+        <div v-if="$props.detailPage" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '1.5rem' : '' }">
+          <N-Chip
+            v-for="item in data.tags"
+            :key="item.id"
+            ref="chipsArray"
+            :class="$style.chip"
+            @click="$emit('clickTag', item.id)"
+          >
+            {{ item.title }}
+          </N-Chip>
+          <N-Chip
+            v-if="chipsCounter > 0"
+            ref="chipExtra"
+            :class="$style.chip"
+            @click="extraTagShow()"
+          >
+            +{{ chipsCounter }}
+          </N-Chip>
+        </div>
+        <div :class="$style.socials" :style="{ marginTop: $props.detailPage ? '3rem' : '2rem' }">
           <div>
             <N-Like v-model="like" />
             <div :class="$style.parser">
@@ -64,7 +83,7 @@
             </div>
           </div>
         </div>
-        <div v-if="!$props.detailPage" :class="$style.body__bottom">
+        <div v-if="!$props.detailPage" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '3rem' : '' }">
           <N-Chip
             v-for="item in data.tags"
             :key="item.id"
@@ -82,22 +101,20 @@
           </N-Chip>
         </div>
       </template>
-      <!--  -->
-      <transition name="fadeHeight">
-        <div ref="commentBox"
-             :class="[$style.comments,showComments ? $style.show : '']"
-             :style="{maxHeight: showComments ? commentHeight : '0'}">
-          <p :class="$style.comments__title">
-            {{ commentCounter }} комментари{{ commentEnding }}
-          </p>
-          <N-Input />
-          <N-Comment />
-          <N-Comment />
-          <N-Comment />
-          <N-Comment />
-        </div>
-      </transition>
-      <!--  -->
+      <div
+        ref="commentBox"
+        :class="[$style.comments,showComments ? $style.show : '']"
+        :style="{maxHeight: showComments ? commentHeight : '0'}"
+      >
+        <p :class="$style.comments__title">
+          {{ commentCounter }} комментари{{ commentEnding }}
+        </p>
+        <N-Input />
+        <N-Comment />
+        <N-Comment />
+        <N-Comment />
+        <N-Comment />
+      </div>
       <div v-if="$slots.footer" :class="$style.body__footer">
         <slot name="footer" />
       </div>
@@ -105,7 +122,7 @@
   </div>
 </template>
 <script lang="js">
-import { computed, nextTick, onMounted, ref, useContext } from '@nuxtjs/composition-api'
+import { computed, nextTick, onMounted, onUnmounted, ref, useContext } from '@nuxtjs/composition-api'
 import dataProps from '../props'
 
 export default {
@@ -115,6 +132,7 @@ export default {
     const videoRef = ref(null)
     const showComments = ref(true)
     const like = ref(false)
+    const chipExtra = ref()
     const chipsCounter = ref(0)
     const chipsWidth = ref(-10)
     const chipsArray = ref()
@@ -147,25 +165,35 @@ export default {
         showComments.value = false
       }
     }
-    onMounted(() => {
+    const commentHeightSet = () => {
       commentHeight.value = '9999999px'
       setTimeout(() => {
         commentHeight.value = commentBox.value.getBoundingClientRect().height + 'px'
         showComments.value = false
-      }, 100)
-      window.addEventListener('resize', screenChange)
-      if (!props.detailPage) {
+      }, 150)
+    }
+    const extraTagHide = () => {
         for (let i = 0; i < chipsArray.value.length; i++) {
           chipsWidth.value += chipsArray.value[i].$el.offsetWidth + 10
         }
         if (chipsWidth.value > 315) {
-          for (let i = chipsArray.value.length - 1; chipsWidth.value > 258; i--) {
+          for (let i = chipsArray.value.length - 1; chipsWidth.value > 251; i--) {
               chipsWidth.value = chipsWidth.value - (chipsArray.value[i].$el.offsetWidth + 10)
               chipsArray.value[i].$el.style.display = 'none'
               chipsCounter.value++
           }
         }
       }
+    const extraTagShow = () => {
+        chipsArray.value.forEach(function (item) {
+          item.$el.style.display = 'flex'
+        })
+        chipExtra.value.$el.style.display = 'none'
+      }
+    onMounted(() => {
+      extraTagHide()
+      commentHeightSet()
+      window.addEventListener('resize', screenChange)
       const string = commentCounter.value.toString()
       const lastElem = string[string.length - 1]
       if (!(string[string.length - 2] === '1')) {
@@ -183,6 +211,9 @@ export default {
         }
       })
     })
+    onUnmounted(() => {
+      window.addEventListener('resize', screenChange)
+    })
     const dateFormat = computed(() => {
       return props.data.date_event?.replace(/:(\w+)/, '')?.replace(/\s/, ' / ') ?? ''
     })
@@ -193,12 +224,16 @@ export default {
       chipsArray,
       isJsonString,
       chipsWidth,
+      chipExtra,
       dateFormat,
       commentCounter,
       commentEnding,
       commentHeight,
       commentBox,
       videoRef,
+      commentHeightSet,
+      extraTagHide,
+      extraTagShow,
       videoUrl,
       screenChange
     }
@@ -212,7 +247,6 @@ export default {
     width: 100%;
     border-radius: 2rem;
     -webkit-mask-image: -webkit-radial-gradient(white, black);
-    overflow: hidden;
     .wrapperVideo {
       position: relative;
       &:after {
@@ -273,7 +307,6 @@ export default {
     display: flex;
     width: auto;
     gap: 3rem;
-    margin-top: 2rem;
   div {
     display: flex;
     gap: 1rem;
@@ -326,8 +359,10 @@ export default {
         @include regular-text-bold
       }
     }
-    &__bottom {
+    &__tags {
       display: flex;
+      flex-wrap: wrap;
+      gap: 1.039rem;
     }
     &__footer {
       margin-top: 3rem;
@@ -335,13 +370,12 @@ export default {
     .comment {
       margin-left: auto;
     }
-    .chip {
-      & + .chip {
-        margin-left: 1.039rem;
-      }
-    }
+    // .chip {
+    //   & + .chip {
+    //     margin-left: 1.039rem;
+    //   }
+    // }
     .comments {
-      margin-top: 2.094rem;
       transition: all .8s;
       overflow: hidden;
       opacity: 0;
@@ -352,6 +386,7 @@ export default {
     }
     .show {
       opacity: 1;
+      margin-top: 2.094rem;
     }
   }
 </style>

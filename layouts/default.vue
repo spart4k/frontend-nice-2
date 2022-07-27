@@ -2,6 +2,7 @@
   <div ref="body" :class="$style.wrapper" class="body">
     <the-header :header-items="headerItems" class="header" :class="$style.header" />
     <Nuxt :class="$style.content" />
+    <portal-target name="sliderPopup" />
   </div>
 </template>
 
