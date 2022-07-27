@@ -1,0 +1,8 @@
+.list {
+  width: 100%;
+  overflow: auto;
+  display: flex;
+  li + li {
+    margin-left: .5rem;
+  }
+}

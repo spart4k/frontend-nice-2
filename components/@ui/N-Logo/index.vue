@@ -13,7 +13,6 @@
 export default {
   name: 'NLogo',
   props: {
-
     size: {
       type: String,
       default: ''
@@ -32,6 +31,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   img {
     width: 100%;
   }
@@ -40,12 +40,10 @@ export default {
   width: 7.2rem;
 }
 .md {
-  width: 13.7rem;
+  width: 16.3rem;
 }
-.big {
-  img {
-    width: 20.3rem;
-  }
-}
+//.big {
+//    width: 35.5rem;
+//}
 
 </style>

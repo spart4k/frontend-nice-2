@@ -1,11 +1,23 @@
 <template>
   <n-intro :description="introTitle">
     <div v-if="cards.value && cards.value.data" :class="$style.cards">
-      <TransitionGroup name="home" tag="div">
-        <div v-for="(card) in cards.value.data" :key="card.id" :class="$style.cards__item">
+      <!--      <TransitionGroup name="home" tag="div">-->
+      <!--        <div v-for="(card) in cards.value.data" :key="card.id" :class="$style.cards__item">-->
+      <!--          <section-cards :id="card.section.id" :key="card.id" :card="card" @clickTag="($event) => clickTag($event, card.section.id)" />-->
+      <!--        </div>-->
+      <!--      </transitiongroup>-->
+      <!--      <TransitionGroup name="home" tag="div">-->
+      <div :class="$style.col">
+        <div v-for="(card) in cards.value.data.slice(0, cards.value.data.length / 2)" :key="card.id" :class="$style.cards__item">
           <section-cards :id="card.section.id" :key="card.id" :card="card" @clickTag="($event) => clickTag($event, card.section.id)" />
         </div>
-      </transitiongroup>
+      </div>
+      <div :class="$style.col">
+        <div v-for="(card) in cards.value.data.slice(cards.value.data.length / 2, -1)" :key="card.id" :class="$style.cards__item">
+          <section-cards :id="card.section.id" :key="card.id" :card="card" @clickTag="($event) => clickTag($event, card.section.id)" />
+        </div>
+      </div>
+      <!--      </transitiongroup>-->
       <client-only>
         <n-lazy-pagination
           @lazyPagination="lazyPagination"
@@ -20,7 +32,6 @@ import { pagination } from '~/plugins/pagination'
 import { head } from '@/components/scripts/head.js'
 export default defineComponent({
   name: 'IndexPage',
-  head: {},
   setup () {
     const { store } = useContext()
     const router = useRouter()
@@ -94,12 +105,17 @@ export default defineComponent({
       clickTag
     }
   },
+  head: {},
   watchQuery: ['page']
 })
 </script>
 <style lang="scss" module>
 .cards {
   width: 100%;
+  display: flex;
+  .col {
+    width: 53.2rem;
+  }
   &__item {
     margin-bottom: 2rem;
   }
