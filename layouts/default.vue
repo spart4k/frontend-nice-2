@@ -3,6 +3,7 @@
     <the-header :header-items="headerItems" class="header" :class="$style.header" />
     <n-tabs :class="$style.tabs" />
     <Nuxt :class="$style.content" />
+    <portal-target name="sliderPopup" />
   </div>
 </template>
 

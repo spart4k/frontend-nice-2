@@ -148,9 +148,9 @@ export default {
     -webkit-box-orient: vertical;
   }
   .hat {
-    min-height: 23.6rem;
+    // min-height: 23.6rem;
     width: 100%;
-    //background-color: #e7dddd;
+    // background-color: #e7dddd;
     border: none;
   }
   .price {

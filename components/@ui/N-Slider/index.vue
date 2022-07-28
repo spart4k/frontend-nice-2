@@ -3,34 +3,35 @@
     <div :class="$style.slider_top">
       <VueSlickCarousel
         ref="c1"
-        :as-nav-for="$refs.c2"
+        :dots="true"
+        :infinite="true"
         :focus-on-select="true"
         :adaptive-height="true"
         @beforeChange="syncSliders"
       >
         <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
-          <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="">
-          <!--          <n-lazy-img :src="`${$axios.defaults.baseURL}${item.src}`" :alt="item.title" />-->
-          <!--          <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="1">-->
+          <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="" @click="popupChange">
         </div>
       </VueSlickCarousel>
-    </div>
-    <VueSlickCarousel
-      ref="c2"
-      :class="$style.slider_bottom"
-      :arrows="false"
-      :slides-to-show="3"
-      :as-nav-for="$refs.c1"
-      :focus-on-select="true"
-      @beforeChange="syncSlidersBottom"
-    >
-      <!--      <n-lazy-img v-for="(item, index) in sliderItem" :key="index" :src="`${$axios.defaults.baseURL}${item.src}`" :alt="item.title" />-->
-      <div v-for="(item, index) in sliderItem" :key="index" :class="$style.list">
-        <div :class="$style.item">
-          <n-lazy-img :src="`${$axios.defaults.baseURL}${item.src}`" :alt="item.title" />
+      <portal v-if="popup" to="sliderPopup">
+        <div :class="$style.overlay" @click="popupChange">
+          <N-Button-Close />
+          <div :class="$style.popupSlider" @click.stop>
+            <VueSlickCarousel
+              ref="c2"
+              :infinite="true"
+              :focus-on-select="true"
+              :adaptive-height="true"
+              @beforeChange="syncSlidersBottom"
+            >
+              <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
+                <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="">
+              </div>
+            </VueSlickCarousel>
+          </div>
         </div>
-      </div>
-    </VueSlickCarousel>
+      </portal>
+    </div>
   </div>
 </template>
 
@@ -39,6 +40,7 @@ import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import { ref } from '@nuxtjs/composition-api'
+
 export default {
   name: 'NSlider',
   components: {
@@ -53,18 +55,33 @@ export default {
   setup () {
     const c1 = ref(null)
     const c2 = ref(null)
-    const syncSliders = () => {
-      c1.value.next()
-      c2.value.next()
+    const popup = ref(false)
+    const currentSlide = ref(0)
+    const popupChange = () => {
+      popup.value = !popup.value
+      if (popup.value === true) {
+      //   setTimeout(() => {
+      //   if (c2.value) {
+      //     c2.value.goTo(currentSlide.value)
+      //   }
+      // }, 0)
+      }
     }
-
-    const syncSlidersBottom = (value, v2) => {
-      c1.value.goTo(v2)
+    const syncSliders = (value, sliderOne) => {
+    currentSlide.value = sliderOne
+      // c1.value.next()
+      // c2.value.next()
+    }
+    const syncSlidersBottom = (value, sliderTwo) => {
+      c1.value.goTo(sliderTwo)
     }
     return {
       c1,
       c2,
+      popup,
+      popupChange,
       syncSliders,
+      currentSlide,
       syncSlidersBottom
     }
   }
@@ -72,16 +89,22 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
-
 .wrapper {
   width: 100%;
+  margin-bottom: 3rem;
+
+  .item{
+    z-index: 5;
+  }
+
   :global(.slick-initialized) {
     & > :global(.slick-prev), & > :global(.slick-next) {
-      background-image: url('@/static/icon/icon-arrow-right-slider.png');
-      background-size: contain;
+      background: url('@/static/icon/icon-arrow-slider.svg') center;
+      background-color: rgba(255,255,255,0.2);
       background-repeat: no-repeat;
-      width: 20px;
-      height: 20px;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
       z-index: 5;
       &::before {
         content: "";
@@ -89,11 +112,11 @@ export default {
       }
     }
     & > :global(.slick-prev) {
-      transform: rotate(180deg) translateY(50%);
-      left: 2rem;
+      left: 1.5rem;
     }
     & > :global(.slick-next) {
-      right: 2rem;
+      transform: rotate(180deg) translateY(50%);
+      right: 1.5rem;
     }
   }
   img {
@@ -102,44 +125,95 @@ export default {
     object-fit: cover;
   }
 
-  //.slider_top {
-  //  :global(.slick-list) {
-  //    transition: height 0.2s ease;
-  //  }
-  //}
-  .slider_bottom {
-    & > div {
-      height: 100%;
-    }
+  :global(.slick-dots li button:before) {
+      content: '';
+      border: 1.5px solid #222222;
+      border-radius: 3px;
+      line-height: 0px;
+      position: absolute;
+      width: 10px;
+      height: 0px;
+      transition: all .6s ease;
+  }
 
-    :global(.slick-slide) {
-      height: inherit !important;
+  :global(.slick-dots) {
+    :global(li) {
+      width: 10px;
+      height: 3px;
+      transition: all .6s ease;
     }
-    padding: 0 1rem;
-    :global(.slick-list) {
-      margin-top: 1.42rem;
-      width: calc(100% + 1.2rem);
-      margin-left: -.6rem;
+    :global(.slick-active) {
+      width: 35px;
     }
-    :global(.slick-current) {
-      .item {
-        box-shadow: inset 0 0 0 1px $gray2;
+    :global(.slick-active button:before) {
+      width: 35px;
+      height: 0;
+    }
+  }
+}
+
+  .overlay{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background-color: rgba(51, 51, 51, 0.9);
+    .popupSlider {
+      z-index: 102;
+      width: 100%;
+      height: 100%;
+      :global(.slick-slider) {
+        height: inherit !important;
+        display: flex;
+        padding: 10px 10px;
+        :global(.slick-list) {
+          height: 100% !important;
+          margin: auto 0;
+            :global(.slick-track) {
+              height: 100%;
+              :global(.slick-slide) {
+                height: 100%;
+                :global(div) {
+                  height: 100%;
+                  img {
+                    display: inline-block;
+                    object-fit: contain;
+                    height: 100%;
+                    width: 100%;
+                    z-index: 100;
+                  }
+                }
+              }
+            }
+        }
       }
     }
-    .list {
-      height: 100%;
-    }
-    .item {
-      //width: 6.5rem;
-      //height: 6.5rem;
-      //box-shadow: inset 0 0 0 1px $gray2;
-      height: 100%;
-      margin: 0 .6rem;
-      img {
-        height: 100px;
-        padding: 5px;
+    :global(.slick-initialized) {
+    & > :global(.slick-prev), & > :global(.slick-next) {
+      background: url('@/static/icon/icon-arrow-slider.svg') center;
+      background-color: rgba(255,255,255,0.2);
+      background-repeat: no-repeat;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      z-index: 105;
+      &::before {
+        content: "";
+        display: none;
       }
+    }
+    & > :global(.slick-prev) {
+      left: 2.5rem;
+    }
+    & > :global(.slick-next) {
+      transform: rotate(180deg) translateY(50%);
+      right: 2.5rem;
     }
   }
 }
 </style>
+
+//slick-list
+//slick-slider

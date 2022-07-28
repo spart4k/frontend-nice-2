@@ -1,0 +1,66 @@
+<template>
+  <div :class="$style.container">
+    <input v-model="letters"
+           type="text"
+           maxlength="200"
+           :class="$style.input"
+           placeholder="Написать комментарий ...">
+    <div :class="$style.emoji">
+      <N-Icon name="smile" />
+      <div :class="$style.send">
+        <div :class="$style.letterCounter">
+          {{ letters.length }}/200
+        </div>
+        <N-Icon name="send" />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { ref } from '@nuxtjs/composition-api'
+
+export default {
+  name: 'NInput',
+  props: {
+  },
+  setup () {
+  const letters = ref('')
+  return {
+    letters
+  }
+  }
+}
+</script>
+
+<style scoped lang="scss" module>
+.container{
+    margin-top: 2rem;
+    margin-bottom: 3.5rem;
+    .input {
+        width: 100%;
+        @include regular-text;
+        color: $fontColorDefault;
+        padding: 1rem 0;
+        border: none;
+        border-bottom: 2px solid #D46D33;
+        outline: none;
+    }
+    .emoji {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    .send {
+        display: flex;
+        gap: 15px;
+        .letterCounter {
+            @include regular-text-small;
+            color: $fontColorDefault;
+            display: flex;
+            align-items: center;
+            opacity: 0.5;
+            }
+        }
+    }
+}
+</style>
