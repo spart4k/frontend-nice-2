@@ -1,6 +1,7 @@
 <template>
   <div ref="body" :class="$style.wrapper" class="body">
     <the-header :header-items="headerItems" class="header" :class="$style.header" />
+    <n-tabs :class="$style.tabs" />
     <Nuxt :class="$style.content" />
   </div>
 </template>
@@ -56,5 +57,20 @@ export default {
 </script>
 
 <style scoped module lang="scss">
-.wrapper {}
+.tabs {
+  margin: 0;
+  position: fixed;
+  top: 17.5rem;
+  z-index: 3;
+  width: 100%;
+  ul {
+    padding: 0 1.5rem;
+  }
+  @media (max-width: $tabletWidth) {
+    top: 23.6rem;
+  }
+  //@media (min-width: $tabletWidth) {
+  //  top: 15.6rem;
+  //}
+}
 </style>

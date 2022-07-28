@@ -10,4 +10,7 @@
   flex-shrink: 0;
   border-radius: $border-radius-3;
   list-style: none;
+  a {
+    color: inherit;
+  }
 }

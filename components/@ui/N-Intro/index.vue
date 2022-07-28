@@ -1,6 +1,6 @@
 <template>
   <main ref="main" :class="$style.main">
-    <div v-if="!noPreview" :class="[$style.intro]">
+    <div v-if="!noPreview" :class="$style.intro">
       <!--      <N-Background-->
       <!--        :hide-image="scrollingContent"-->
       <!--        :is-home-page="isHomePage"-->
@@ -8,7 +8,7 @@
       <!--        :color="color"-->
       <!--      />-->
       <div :class="$style.wrapperBg">
-        <img v-if="!isHomePage && setImage && !hideImage" :class="$style.heroImage" :src="setImage">
+        <!--        <img v-if="!isHomePage && setImage && !hideImage" :class="$style.heroImage" :src="setImage">-->
         <div :class="$style.overlay" :style="{backgroundColor: color}" />
         <div ref="background" :class="$style.bg" />
       </div>
@@ -26,12 +26,12 @@
       </div>
       <div v-else>
         <NLogoTitle
-          ref="logo"
           :is-home-page="isHomePage"
           :description="description"
         />
       </div>
       <div
+        v-if="!isHomePage"
         ref="anchor"
         :class="[$style.linkAnchor, scrollingContent && $style.scrolling]"
         @click="scrollTo"
@@ -39,16 +39,15 @@
         <n-icon name="arrow-top" />
       </div>
     </div>
-    <div
-      ref="content"
-      class="content"
-      :class="[$style.wrapper__content, setHeight && $style.setHeight]"
-    >
-      <n-tabs :class="$style.tabs" />
-      <div :class="$style.content">
-        <slot />
-      </div>
+    <!--    <div-->
+    <!--      ref="content"-->
+    <!--      class="content"-->
+    <!--      :class="[$style.wrapper__content, setHeight && $style.setHeight]"-->
+    <!--    >-->
+    <div :class="$style.content" class="content">
+      <slot />
     </div>
+    <!--    </div>-->
   </main>
 </template>
 
@@ -91,46 +90,46 @@ export default {
 
     onMounted(() => {
       nextTick(() => {
-        $gsap.registerPlugin(ScrollTrigger)
-        boundingLogo.value = logo.value.getBoundingClientRect()
-        ScrollTrigger.addEventListener('refreshInit', () => {
+        if (logo.value) {
+          $gsap.registerPlugin(ScrollTrigger)
           boundingLogo.value = logo.value.getBoundingClientRect()
-        })
-        ScrollTrigger.matchMedia({
-          '(max-width: 900px)' () {
-            const tl = $gsap.timeline({
-              scrollTrigger: {
-                trigger: '.content',
-                start: () => `top ${boundingLogo.value.bottom + 30}px`,
-                transformOrigin: 'center',
-                end: 'top top',
-                scrub: true,
-                markers: true,
-                onEnter: () => {
-                  hideTextLogo.value = true
-                },
-                onLeaveBack: () => {
-                  hideTextLogo.value = false
+          ScrollTrigger.addEventListener('refreshInit', () => {
+            boundingLogo.value = logo.value.getBoundingClientRect()
+          })
+          ScrollTrigger.matchMedia({
+            '(max-width: 900px)' () {
+              const tl = $gsap.timeline({
+                scrollTrigger: {
+                  trigger: '.content',
+                  start: () => `top ${boundingLogo.value.bottom + 30}px`,
+                  transformOrigin: 'center',
+                  end: 'top top',
+                  scrub: true,
+                  markers: true,
+                  onEnter: () => {
+                    hideTextLogo.value = true
+                  },
+                  onLeaveBack: () => {
+                    hideTextLogo.value = false
+                  }
                 }
-              }
-            })
-            tl.to('.logo', {
-              y: () => {
-                return (boundingLogo.value.top) * -1
-              },
-              autoAlpha: 1,
-              scale: 0.5
-            })
-           }
-        })
-        $gsap.to(background.value, {
-          backgroundPosition: `50% ${-window.innerHeight}px`,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '.content',
-            scrub: true
-          }
-        })
+              })
+              tl.to('.logo', {
+                y: () => {
+                  return (boundingLogo.value.top) * -1
+                },
+                scale: 0.5
+              })
+            }
+          })
+          $gsap.to(background.value, {
+            backgroundPosition: `0 ${-window.innerHeight * 0.3}px`,
+            ease: 'none',
+            scrollTrigger: {
+              scrub: true
+            }
+          })
+        }
       })
     })
 
@@ -242,9 +241,6 @@ export default {
     justify-content: flex-end;
     height: -webkit-fill-available;
     background-size: cover;
-    img {
-      max-height: 53rem;
-    }
   }
   .wrapper {
     height: 100%;
@@ -301,10 +297,6 @@ export default {
 }
 .wrapper__content {
   position: relative;
-}
-.tabs {
-  margin-bottom: 4rem;
-  padding-left: 1.5rem;
 }
 .content {
   @include container;

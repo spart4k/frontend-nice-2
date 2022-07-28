@@ -1,7 +1,7 @@
 import { BLAND_COLOR } from '~/const/blandColor'
 
 export default {
-  name: 'N-Tabs-Item',
+  name: 'Tabs-Item',
   props: {
     item: {
       type: Object
