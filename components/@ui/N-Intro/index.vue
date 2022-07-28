@@ -39,15 +39,9 @@
         <n-icon name="arrow-top" />
       </div>
     </div>
-    <!--    <div-->
-    <!--      ref="content"-->
-    <!--      class="content"-->
-    <!--      :class="[$style.wrapper__content, setHeight && $style.setHeight]"-->
-    <!--    >-->
     <div :class="$style.content" class="content">
       <slot />
     </div>
-    <!--    </div>-->
   </main>
 </template>
 

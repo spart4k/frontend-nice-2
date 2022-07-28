@@ -64,9 +64,6 @@ export default {
   top: 17.5rem;
   z-index: 3;
   width: 100%;
-  ul {
-    padding: 0 1.5rem;
-  }
   @media (max-width: $tabletWidth) {
     top: 23.6rem;
   }

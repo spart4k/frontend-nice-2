@@ -2,6 +2,9 @@
   width: 100%;
   overflow: auto;
   display: flex;
+  padding: 0 1.5rem;
+  margin-top: 0;
+  margin-bottom: 0;
   &::-webkit-scrollbar {
     display: none;
   }
