@@ -56,7 +56,7 @@ export default {
     const c1 = ref(null)
     const c2 = ref(null)
     const popup = ref(false)
-    const currentSlide = ref(0)
+    // const currentSlide = ref(0)
     const popupChange = () => {
       popup.value = !popup.value
       if (popup.value === true) {
@@ -68,7 +68,7 @@ export default {
       }
     }
     const syncSliders = (value, sliderOne) => {
-    currentSlide.value = sliderOne
+    // currentSlide.value = sliderOne
       // c1.value.next()
       // c2.value.next()
     }
@@ -81,7 +81,7 @@ export default {
       popup,
       popupChange,
       syncSliders,
-      currentSlide,
+      // currentSlide,
       syncSlidersBottom
     }
   }
