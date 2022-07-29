@@ -15,11 +15,11 @@
       <N-Icon name="minus" />
     </Row>
     <Row>
-      <N-Card-New
+      <!-- <N-Card-New
         :data="NCard"
         v-bind="NCard"
         @clickTag="clickTag"
-      />
+      /> -->
     </Row>
     <Row title="title">
       <div :class="$style.slider">
