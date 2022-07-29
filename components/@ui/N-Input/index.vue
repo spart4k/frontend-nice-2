@@ -14,10 +14,11 @@
         <div :class="$style.letterCounter">
           {{ letters.length }}/200
         </div>
-        <N-Icon name="send" />
+        <N-Icon name="send" @click="sendComment" />
       </div>
     </div>
     <N-Emoji v-if="showContainer" @emojiWrite="emojiWrite" @click="emojiWrite" />
+    <p><span class="textarea" role="textbox" contenteditable></span></p>
   </div>
 </template>
 
@@ -32,6 +33,9 @@ export default {
   const letters = ref('')
   const input = ref()
   const showContainer = ref()
+  const sendComment = () => {
+    console.log(letters.value)
+  }
   const emojiWrite = (emoji) => {
     letters.value += emoji
     input.value.focus()
@@ -40,6 +44,7 @@ export default {
     emojiWrite,
     letters,
     showContainer,
+    sendComment,
     input
   }
   }
@@ -78,5 +83,13 @@ export default {
             }
         }
     }
+}
+.textarea {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  resize: both;
+  min-height: 40px;
+  line-height: 20px;
 }
 </style>
