@@ -18,19 +18,31 @@ html, #app {
   //height: 100%;
 }
 
+.logoTop {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  @media (max-width:$mobileWidth) {
+    top: 7rem;
+  }
+}
+
+
 html {
-  //font-size: calc((10 / 1280) * 100vw);
+  font-size: calc((10 / 1440) * 100vw);
   //height: 100%;
-  font-size: 10px;
+  //font-size: 10px;
   background-color: $blueBlack3;
   height: -webkit-fill-available;
-
-  @media (max-width: $tabletWidth) {
-    font-size: calc((10 / 685) * 100vw);
-    //font-size: calc((10 / 400) * 100vw);
-  }
+  //@media (max-width: $desktopWidth) {
+  //  font-size: calc((10 / 685) * 100vw);
+  //}
+  //@media (max-width: $tabletWidth) {
+  //  font-size: calc((10 / 1440) * 100vw);
+  //}
   @media (max-width: $mobileWidth) {
-    font-size: calc((10 / 375) * 100vw);
+    font-size: calc((10 / 390) * 100vw);
   }
 }
 

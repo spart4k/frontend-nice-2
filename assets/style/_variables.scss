@@ -24,11 +24,13 @@ $blueBlack3: #2E3E4D;
 $headerHeight: 8.8rem;
 $footerHeight: 13.3rem;
 $bgWidth: 570px;
+$paddingTopLog: 2rem;
 
 :root {
   --mobile-width: #{$mobileWidth};
   --footer-height: 13.3rem;
   --header-height: #{$headerHeight};
+  --padding-top-logo: #{$paddingTopLog};
   --vh: 10rem;
 }
 

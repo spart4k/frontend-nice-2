@@ -9,11 +9,11 @@
   color: $white;
   background-position: top center;
   background-size: cover;
-  z-index: 15;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 100;
+  opacity: 0;
   @include container;
 
 }
@@ -157,7 +157,7 @@
 
 .deviceMenu .deviceMenu__inner {
   width: 2.7rem;
-  height: 2rem;
+  height: 1.9rem;
   position: relative;
 }
 

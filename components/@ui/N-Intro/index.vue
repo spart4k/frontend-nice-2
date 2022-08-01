@@ -16,7 +16,7 @@
         v-if="isHomePage"
         ref="logo"
         class="logo"
-        :class="$style.logo"
+        :class="[$style.logo]"
       >
         <NLogoTitle
           :is-home-page="isHomePage"
@@ -39,18 +39,19 @@
         <n-icon name="arrow-top" />
       </div>
     </div>
-    <div :class="$style.content" class="content">
+    <div ref="content" :class="$style.content" class="content">
       <slot />
     </div>
   </main>
 </template>
 
 <script>
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+import { Elastic } from 'gsap'
 import { computed, nextTick, onMounted, ref, useContext, useRoute } from '@nuxtjs/composition-api'
 import { scrollBy } from 'seamless-scroll-polyfill'
 import NLogoTitle from './components/NLogoTitle'
 import { BLAND_COLOR } from '~/const/blandColor'
+import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default {
   name: 'NIntro',
@@ -72,61 +73,33 @@ export default {
     const { $gsap } = useContext()
     const anchor = ref(null)
     const logo = ref(null)
-    const background = ref(null)
+    // const background = ref(null)
     const content = ref(null)
     const main = ref(null)
     const wrapper = ref(null)
     const scrollingContent = ref(null)
     const hideTextLogo = ref(false)
     const route = useRoute()
-    const boundingLogo = ref()
     const isHomePage = computed(() => route.value.name === 'index')
-
+    const {
+      background,
+      animationlogo,
+      animateBackground,
+      animateSubtitle,
+      animateNavbar,
+      animationTimeline
+    } = animationGSAP($gsap, Elastic)
     onMounted(() => {
       nextTick(() => {
         if (logo.value) {
-          $gsap.registerPlugin(ScrollTrigger)
-          boundingLogo.value = logo.value.getBoundingClientRect()
-          ScrollTrigger.addEventListener('refreshInit', () => {
-            boundingLogo.value = logo.value.getBoundingClientRect()
-          })
-          ScrollTrigger.matchMedia({
-            '(max-width: 900px)' () {
-              const tl = $gsap.timeline({
-                scrollTrigger: {
-                  trigger: '.content',
-                  start: () => `top ${boundingLogo.value.bottom + 30}px`,
-                  transformOrigin: 'center',
-                  end: 'top top',
-                  scrub: true,
-                  markers: true,
-                  onEnter: () => {
-                    hideTextLogo.value = true
-                  },
-                  onLeaveBack: () => {
-                    hideTextLogo.value = false
-                  }
-                }
-              })
-              tl.to('.logo', {
-                y: () => {
-                  return (boundingLogo.value.top) * -1
-                },
-                scale: 0.5
-              })
-            }
-          })
-          $gsap.to(background.value, {
-            backgroundPosition: `0 ${-window.innerHeight * 0.3}px`,
-            ease: 'none',
-            scrollTrigger: {
-              scrub: true
-            }
-          })
+          animationlogo(logo.value, content.value)
+          animateBackground(content.value)
+          animateSubtitle(content.value)
+          animateNavbar(content.value)
+          animationTimeline()
         }
       })
     })
-
     const scrollTo = () => {
       const contentBounding = content.value.getBoundingClientRect()
       scrollBy(main.value, { behavior: 'smooth', top: contentBounding.top - 90 })
@@ -164,7 +137,8 @@ export default {
   left: 0;
   bottom: 0;
   width: 100%;
-  min-height: 100vh;
+  //min-height: 100vh;
+  height: 100vh;
   .overlay {
     position: fixed;
     width: 100%;
@@ -187,33 +161,34 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    background-image: url('@/assets/img/background/index-background.png');
-    background-size: cover;
+    background-image: url('@/assets/img/background/index-background.jpg');
+    background-size: contain;
+    background-repeat: repeat;
     z-index: 1;
+    background-position: 0 0;
+    transform: scale(1.2);
   }
 }
 
 .main {
   padding-top: 30.5rem;
   @media (max-width: $mobileWidth){
-    padding-top: 26.6rem;
-  }
-  @media (max-width: $tabletWidth){
-    padding-top: 32.6rem;
+    //padding-top: calc(31.6rem - var(--padding-top-logo));
+    padding-top: 31.6rem;
   }
 }
 .logo {
   position: fixed;
   z-index: 999;
-  top: 0;
+  //top: 0;
   left: 50%;
-  transform: translateX(-50%);
   transform-origin: top center;
-  padding-top: 2rem;
-  @media (max-width: $tabletWidth){
-    top: 7rem;
-    padding-top: 4rem;
-  }
+  padding-top: var(--padding-top-logo);
+  transform: translate(-50%, -50%);
+  top: 50%;
+  //@media (max-width: $tabletWidth){
+  //  top: 7rem;
+  //}
 }
 .intro {
   width: 100%;
@@ -222,19 +197,6 @@ export default {
   .visually-hidden {
     position: fixed;
     transform: scale(0);
-  }
-  .bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    height: -webkit-fill-available;
-    background-size: cover;
   }
   .wrapper {
     height: 100%;
@@ -301,6 +263,8 @@ export default {
   z-index: 10;
   padding-bottom: 5rem;
   width: 100%;
+  opacity: 0;
+  transition: opacity 300ms;
   & > * + * {
     margin-top: 2rem;
   }

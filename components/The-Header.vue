@@ -76,7 +76,6 @@
       </li>
     </ul>
     <FormAuthSteps v-model="activeAuthSteps" />
-    <!--    <n-tabs :class="$style.tabs" />-->
   </header>
   <!--  </div>-->
 </template>

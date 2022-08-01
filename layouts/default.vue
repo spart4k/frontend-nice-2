@@ -1,7 +1,7 @@
 <template>
   <div ref="body" :class="$style.wrapper" class="body">
     <the-header :header-items="headerItems" class="header" :class="$style.header" />
-    <n-tabs :class="$style.tabs" />
+    <n-tabs :class="$style.tabs" class="navbar" />
     <Nuxt :class="$style.content" />
     <portal-target name="sliderPopup" />
   </div>
@@ -64,6 +64,8 @@ export default {
   top: 17.5rem;
   z-index: 3;
   width: 100%;
+  will-change: transform;
+  transform: translateX(100%);
   @media (max-width: $tabletWidth) {
     top: 23.6rem;
   }

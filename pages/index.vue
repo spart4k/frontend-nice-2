@@ -39,7 +39,6 @@ export default defineComponent({
     const pageInfo = ref({})
     // store.commit('content/changeState', { key: 'logoBg', value: 'main' })
     const fetchData = (currentPage) => {
-      console.log(2131312321)
       const params = {
         page: currentPage
       }
@@ -49,7 +48,6 @@ export default defineComponent({
     store.commit('content/clearBgIntro')
 
     cards.value = useAsync(async () => {
-      console.log(2131312321)
       try {
         const response = await fetchData()
         totalPage.value = response?.data.last_page

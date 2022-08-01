@@ -5,16 +5,16 @@
     </h1>
     <div :class="[isHomePage && $style.wrapper]">
       <n-logo v-if="isHomePage" :class="$style.logo" size="md" />
-      <h1
-        v-if="description.subtitle"
-        :class="[
-          isHomePage && $style.intro__subtitle_homePage,
-          $style.subtitle,
-          hideTextLogo && $style.hideTextLogo
-        ]"
-      >
-        {{ description.subtitle }}
-      </h1>
+      <!--      <h1-->
+      <!--        v-if="description.subtitle"-->
+      <!--        :class="[-->
+      <!--          isHomePage && $style.intro__subtitle_homePage,-->
+      <!--          $style.subtitle,-->
+      <!--          hideTextLogo && $style.hideTextLogo-->
+      <!--        ]"-->
+      <!--      >-->
+      <!--        {{ description.subtitle }}-->
+      <!--      </h1>-->
     </div>
   </div>
 </template>
