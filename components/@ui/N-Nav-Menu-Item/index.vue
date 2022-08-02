@@ -2,10 +2,10 @@
   <li
     :style="{
       backgroundColor: BLAND_COLOR[item.slug],
-      backgroundImage: `url(${backgroundURL})`
     }"
-    :class="$style.headerMenu__item"
+    :class="$style.item"
   >
+    <img :src="backgroundURL" alt="" :class="$style.image">
     <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
       {{ item.title }}
     </nuxt-link>
@@ -38,7 +38,7 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
-.headerMenu__item {
+.item {
   padding: 1.5rem 1.5rem;
   width: 100%;
   height: 10.5rem;
@@ -46,17 +46,23 @@ export default {
   border-radius: 10px;
   @include montserratSemiBold;
   @include subtitle-sm;
-  background-repeat: no-repeat;
-  background-position: center right;
   :global(.nuxt-link-exact-active) {
     color: $white;
+  }
+  .image {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10rem;
+    height: 100%;
   }
   a {
     width: 100%;
     height: 100%;
-    display: inline-block;
-    //text-transform: capitalize;
     position: relative;
+    display: flex;
+    align-items: flex-end;
     text-decoration: none;
     transition: color .5s ease-in-out;
     color: inherit;
