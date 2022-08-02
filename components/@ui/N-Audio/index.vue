@@ -3,7 +3,7 @@
     controls
     :src="src"
   >
-    <!--    <code>audio</code> element.-->
+       <!-- <code>audio</code> elemen t. -->
   </audio>
 </template>
 <script lang="js">

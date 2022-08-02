@@ -1,0 +1,11 @@
+.message {
+  display: flex;
+  margin-top: 2rem;
+  .author {
+    @include montserratBold;
+    margin-right: 1rem;
+  }
+  .body {
+    @include montserratMedium;
+  }
+}

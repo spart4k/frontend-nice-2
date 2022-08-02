@@ -1,0 +1,9 @@
+.dialogue {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: auto;
+  .wrap {
+    overflow: auto;
+  }
+}

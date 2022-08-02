@@ -1,29 +1,38 @@
 <template>
   <div :class="$style.card">
-    <template v-if="data.images.length && !$props.withVideo">
-      <template v-if="$props.detailPage && data.images.length > 1">
-        <N-Slider :slider-item="data.images" />
-      </template>
-      <template v-else>
-        <div v-if="$props.detailPage">
-          <div :class="[$style.hat]">
-            <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+    <div :class="$style.gallery">
+      <template v-if="data.images.length && !$props.withVideo">
+        <template v-if="$props.detailPage && data.images.length > 1">
+          <N-Slider :slider-item="data.images" />
+        </template>
+        <template v-else>
+          <div v-if="$props.detailPage">
+            <div :class="[$style.hat]">
+              <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+            </div>
           </div>
+          <nuxt-link v-else :to="`cards/${data.id}`">
+            <div :class="[$style.hat]">
+              <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+            </div>
+          </nuxt-link>
+        </template>
+      </template>
+      <template v-else-if="$props.withVideo">
+        <div :class="$style.wrapperVideo" @click="videoPlayingChange">
+          <N-Button-Play v-if="!videoPlay" />
+          <video
+            ref="videoRef"
+            playsinline
+            :controls="videoPlay"
+            muted
+            type="video/mp4"
+          >
+            <source :src="videoUrl" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
+          </video>
         </div>
-        <nuxt-link v-else :to="`cards/${data.id}`">
-          <div :class="[$style.hat]">
-            <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
-          </div>
-        </nuxt-link>
       </template>
-    </template>
-    <template v-else-if="$props.withVideo">
-      <div :class="$style.wrapperVideo">
-        <video ref="videoRef" playsinline controls muted type="video/mp4">
-          <source :src="videoUrl" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
-        </video>
-      </div>
-    </template>
+    </div>
     <div
       :class="[
         $style.body,
@@ -40,16 +49,30 @@
               автор {{ data.author }}
             </p>
           </template>
-          <div v-if="data.price && $props.detailPage" :class="$style.price">
-            {{ data.price }}р.
+          <div v-if="data.date_event" :class="$style.time">
+            {{ dateFormat }}
           </div>
-          <div v-if="data.price && $props.detailPage" :class="$style.buyButton">
-            Купить
-          </div>
+          <template v-if="data.price && $props.detailPage">
+            <div :class="$style.price">
+              {{ data.price }}р.
+            </div>
+            <N-Wire v-if="false" />
+            <div :class="$style.buyButton">
+              Купить
+            </div>
+          </template>
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div>
         </NuxtLink>
+        <template v-if="data.files && $props.detailPage && !$props.withVideo">
+          <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
+            <p :class="$style.audioName">
+              {{ item.title }}
+            </p>
+            <N-Audio v-if="item.src" :src="`https://nice.c.roky.rocks/${item.src}`" />
+          </div>
+        </template>
         <div v-if="$props.detailPage" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '1.5rem' : '' }">
           <N-Chip
             v-for="item in data.tags"
@@ -102,6 +125,7 @@
         </div>
       </template>
       <div
+        v-if="$props.detailPage"
         ref="commentBox"
         :class="[$style.comments,showComments ? $style.show : '']"
         :style="{maxHeight: showComments ? commentHeight : '0'}"
@@ -110,6 +134,7 @@
           {{ commentCounter }} комментари{{ commentEnding }}
         </p>
         <N-Input />
+        <N-Plug v-if="false" />
         <N-Comment />
         <N-Comment />
         <N-Comment />
@@ -127,6 +152,8 @@ import dataProps from '../props'
 
 export default {
   name: 'NCardNew',
+  components: {
+  },
   props: { ...dataProps.props },
   setup (props) {
     const videoRef = ref(null)
@@ -141,6 +168,15 @@ export default {
     const commentEnding = ref('ев')
     const commentCounter = ref(1)
     const { $axios } = useContext()
+    const videoPlay = ref(false)
+    const videoPlayingChange = () => {
+      videoPlay.value = !videoPlay.value
+      if (videoRef.value.paused === true) {
+        videoRef.value.play()
+      } else {
+        videoRef.value.pause()
+      }
+    }
     const isJsonString = computed(() => {
       try {
         JSON.parse(props?.data?.text)
@@ -235,6 +271,8 @@ export default {
       extraTagHide,
       extraTagShow,
       videoUrl,
+      videoPlay,
+      videoPlayingChange,
       screenChange
     }
   }
@@ -247,6 +285,10 @@ export default {
     width: 100%;
     border-radius: 2rem;
     -webkit-mask-image: -webkit-radial-gradient(white, black);
+    @media (min-width: $tabletWidth) {
+      width: 80%;
+      margin: 0 auto;
+    }
     .wrapperVideo {
       position: relative;
       &:after {
@@ -284,7 +326,7 @@ export default {
     -webkit-box-orient: vertical;
   }
   .hat {
-    min-height: 23.6rem;
+    // min-height: 23.6rem;
     width: 100%;
     //background-color: #e7dddd;
     border: none;
@@ -332,7 +374,7 @@ export default {
       @include text-style-h2;
     }
     .time {
-      @include text-sm;
+      @include regular-text-small;
       margin-bottom: .8rem;
     }
     &__top {
@@ -359,6 +401,12 @@ export default {
         @include regular-text-bold
       }
     }
+    .cardAudio {
+      margin-top: 1.5rem;
+      .audioName {
+      @include regular-text
+      }
+    }
     &__tags {
       display: flex;
       flex-wrap: wrap;
@@ -379,10 +427,10 @@ export default {
       transition: all .8s;
       overflow: hidden;
       opacity: 0;
-    &__title {
-      color: $fontColorDefault;
-      @include regular-text-bold;
-      }
+      &__title {
+        color: $fontColorDefault;
+        @include regular-text-bold;
+        }
     }
     .show {
       opacity: 1;

@@ -38,7 +38,8 @@ export default {
     { src: '@plugins/infiniteloading.js', ssr: false },
     { src: '@plugins/vualidate.js' },
     '@plugins/v-mask.js',
-    '@plugins/v-tooltip.js'
+    '@plugins/v-tooltip.js',
+    { src: '@plugins/vue-bottom-sheet.js', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
