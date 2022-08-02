@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import { computed } from '@nuxtjs/composition-api'
 import { BLAND_COLOR } from '~/const/blandColor'
 
 const COLORS = ['#489430', '#00B4B5', '#FF4F00', '#ded037']
@@ -26,12 +25,10 @@ export default {
   },
   setup (props) {
     const randomColor = () => COLORS[Math.floor(Math.random() * COLORS.length)]
-    const backgroundURL = computed(() => require(`~/assets/img/menu/${props.item.slug}.png`))
 
     return {
       randomColor,
-      BLAND_COLOR,
-      backgroundURL
+      BLAND_COLOR
     }
   }
 }
