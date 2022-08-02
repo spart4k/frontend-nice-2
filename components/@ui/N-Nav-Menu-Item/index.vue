@@ -2,10 +2,10 @@
   <li
     :style="{
       backgroundColor: BLAND_COLOR[item.slug],
+      backgroundImage: `url(${backgroundURL})`,
     }"
     :class="$style.item"
   >
-    <img :src="backgroundURL" alt="" :class="$style.image">
     <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
       {{ item.title }}
     </nuxt-link>
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { computed } from '@nuxtjs/composition-api'
 import { BLAND_COLOR } from '~/const/blandColor'
 
 const COLORS = ['#489430', '#00B4B5', '#FF4F00', '#ded037']
@@ -25,10 +26,12 @@ export default {
   },
   setup (props) {
     const randomColor = () => COLORS[Math.floor(Math.random() * COLORS.length)]
+    const backgroundURL = computed(() => require(`~/assets/img/menu/${props.item.slug}.png`))
 
     return {
       randomColor,
-      BLAND_COLOR
+      BLAND_COLOR,
+      backgroundURL
     }
   }
 }
@@ -43,16 +46,11 @@ export default {
   border-radius: 10px;
   @include montserratSemiBold;
   @include subtitle-sm;
+  background-repeat: no-repeat;
+  background-position: center right;
+  background-size: contain;
   :global(.nuxt-link-exact-active) {
     color: $white;
-  }
-  .image {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 10rem;
-    height: 100%;
   }
   a {
     width: 100%;

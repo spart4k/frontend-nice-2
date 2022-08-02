@@ -18,22 +18,6 @@
       :data-index="index"
       :item="item"
     />
-    <!-- <li
-         v-for="(item, index) in $props.headerItems"
-         :key="item.title"
-         ref="itemRefs"
-         :data-index="index"
-         :style="{
-           backgroundColor: BLAND_COLOR[item.slug],
-           backgroundImage: `url('@/assets/img/menu/coin.png')`
-         }"
-         :class="$style.headerMenu__item"
-         @click.stop="hideMenu"
-       >
-         <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
-           {{ item.title }}
-         </nuxt-link>
-       </li> -->
   </transition-group>
 </template>
 
