@@ -1,0 +1,29 @@
+.radio {
+  width: 100%;
+  max-width: 100%s;
+  border-radius: 20px;
+  padding: 2rem 1rem 2rem 1rem;
+  background-color: #F5F5F5;
+  .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .wrapper {
+      width: 4.2rem;
+      height: 4.2rem;
+    }
+    .name {
+      overflow: hidden;
+      margin: 0 1rem;
+      white-space: nowrap;
+      @include montserratMedium;
+      //-webkit-box-shadow: -25px -1px 8px -8px rgba(28, 29, 30, 0.2) inset;
+      //-moz-box-shadow: -25px -1px 8px -8px rgba(28, 29, 30, 0.2) inset;
+      //box-shadow: -25px -1px 8px -8px rgba(28, 29, 30, 0.2) inset;
+    }
+    .control {
+      margin: 0rem 1rem;
+    }
+  }
+
+}
