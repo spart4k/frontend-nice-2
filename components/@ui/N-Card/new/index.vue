@@ -40,7 +40,8 @@
       ]"
     >
       <template>
-        <NuxtLink :class="$style.body__top" tag="div" :to="`/cards/${data.id}`">
+        <!-- NuxtLink -->
+        <div :class="$style.body__top" tag="div" :to="`/cards/${data.id}`">
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
             {{ data.title }}
           </h2>
@@ -64,7 +65,7 @@
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div>
-        </NuxtLink>
+        </div>
         <template v-if="data.files && $props.detailPage && !$props.withVideo">
           <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
             <p :class="$style.audioName">
@@ -343,7 +344,7 @@ export default {
     padding: 1.4rem 3.6rem;
     margin-bottom: 2rem;
     background: #C83F8E;
-    border-radius: 25px;
+    border-radius: 2.5rem;
   }
   .socials {
     display: flex;
@@ -418,11 +419,6 @@ export default {
     .comment {
       margin-left: auto;
     }
-    // .chip {
-    //   & + .chip {
-    //     margin-left: 1.039rem;
-    //   }
-    // }
     .comments {
       transition: all .8s;
       overflow: hidden;

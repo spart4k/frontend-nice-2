@@ -29,6 +29,8 @@
         @clickTag="($event) => $emit('clickTag', $event)"
       />
     </template>
+    <!-- <N-Card-Author /> -->
+    <!-- <N-Card-Coin /> -->
   </div>
 </template>
 

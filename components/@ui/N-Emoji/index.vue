@@ -57,7 +57,11 @@
           </div>
         </div>
         <div>
-          asafasf
+          <img
+            :class="$style.sticker"
+            src="~/assets/img/sticker.png"
+            alt=""
+          >
         </div>
       </VueSlickCarousel>
     </div>
