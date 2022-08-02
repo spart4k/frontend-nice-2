@@ -16,6 +16,9 @@
     </n-button>
 
     <vue-bottom-sheet ref="menu">
+      <div>
+        <n-icon name="close" />
+      </div>
       <nav :class="[$style.headerNav, active && $style.active]">
         <ul :class="$style.user_list">
           <li :class="$style.user_item">
