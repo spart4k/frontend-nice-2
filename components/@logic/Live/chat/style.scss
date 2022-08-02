@@ -1,0 +1,11 @@
+.chat {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: -webkit-fill-available;
+  max-height: 75%;
+  background-image: url('@/assets/img/live/background-chat.png');
+  margin-top: 1.5rem;
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+}

@@ -8,7 +8,7 @@
       <!--        :color="color"-->
       <!-- /> -->
       <div :class="$style.wrapperBg">
-               <!-- <img v-if="!isHomePage && setImage && !hideImage" :class="$style.heroImage" :src="setImage"> -->
+        <!-- <img v-if="!isHomePage && setImage && !hideImage" :class="$style.heroImage" :src="setImage"> -->
         <div :class="$style.overlay" :style="{backgroundColor: color}" />
         <div ref="background" :class="$style.bg" />
       </div>

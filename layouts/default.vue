@@ -1,8 +1,7 @@
 <template>
-  <div ref="body" :class="$style.wrapper" class="body">
-    <the-header :header-items="headerItems" class="header" :class="$style.header" />
-    <n-tabs :class="$style.tabs" class="navbar" />
-    <Nuxt :class="$style.content" />
+  <div ref="body" class="body">
+    <the-header :header-items="headerItems" class="header" />
+    <Nuxt />
     <portal-target name="sliderPopup" />
   </div>
 </template>
@@ -22,7 +21,6 @@ export default {
       return response
     }
 
-    // store.dispatch('basket/getBasket')
     useFetch(async () => {
       headerItems.value = []
       const response = await fetchData()
@@ -33,17 +31,10 @@ export default {
       }
       // headerItems.value = response.data
       store.commit('content/changeSections', response.data)
+      store.commit('authentication/setToken', '2|TeUVUgPl8axidfScynskYjPgeJRzCdxXcyIqDINY')
     })
 
     onMounted(() => {
-      // const vh = window.innerHeight * 0.01
-      // // Then we set the value in the --vh custom property to the root of the document
-      // document.documentElement.style.setProperty('--vh', `${vh}px`)
-      // window.addEventListener('resize', () => {
-      //   // We execute the same script as before
-      //   const vh = window.innerHeight * 0.01
-      //   document.documentElement.style.setProperty('--vh', `${vh}px`)
-      // })
       store.commit('authentication/setUserData')
       store.commit('authentication/setToken')
       store.dispatch('basket/getBasket')
@@ -56,21 +47,3 @@ export default {
   }
 }
 </script>
-
-<style scoped module lang="scss">
-.tabs {
-  margin: 0;
-  position: fixed;
-  top: 17.5rem;
-  z-index: 3;
-  width: 100%;
-  will-change: transform;
-  transform: translateX(100%);
-  @media (max-width: $tabletWidth) {
-    top: 23.6rem;
-  }
-  //@media (min-width: $tabletWidth) {
-  //  top: 15.6rem;
-  //}
-}
-</style>

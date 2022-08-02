@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="$style.container">
     <h1 v-if="!isHomePage" :class="[$style.title]">
       {{ description.title }}
     </h1>
@@ -40,37 +40,40 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.container {
+position: relative;
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .title {
+      @include title;
+      @include montserratBlack;
+      margin-bottom: 4rem;
+      text-align: center
+  }
+  .subtitle {
+      @include button;
+      margin: 1rem 0;
+      text-align: center
+  }
+  .author {
+    @include regular-text;
+    text-align: center;
+  }
+  // .subtitle {
+  //   @include Bankir-Retro;
+  //   @include text;
+  //   color: rgba($white, .85);
+  //   width: 20.5rem;
+  //   line-height: 2.9rem;
+  //   transition: opacity 0.6s ease;
+  //   text-align: center;
+  //   &.hideTextLogo {
+  //     opacity: 0;
+  //   }
+  // }
 }
-.title {
-    @include title;
-    @include montserratBlack;
-    margin-bottom: 4rem;
-    text-align: center
-}
-.subtitle {
-    @include button;
-    margin: 1rem 0;
-    text-align: center
-}
-.author {
-  @include regular-text;
-  text-align: center;
-}
-// .subtitle {
-//   @include Bankir-Retro;
-//   @include text;
-//   color: rgba($white, .85);
-//   width: 20.5rem;
-//   line-height: 2.9rem;
-//   transition: opacity 0.6s ease;
-//   text-align: center;
-//   &.hideTextLogo {
-//     opacity: 0;
-//   }
-// }
 
 </style>

@@ -22,12 +22,17 @@ const animation = ($gsap, Elastic) => {
           duration: 0.5
         })
 
-      $gsap.to(
+      $gsap.fromTo(
         NAVBAR,
+        {
+          x: 100,
+          visibility: 'visible'
+        },
         {
           x: '0',
           duration: 0.2
-        })
+        }
+        )
 
       $gsap.fromTo(
         `${NAVBAR} > ul > li`,
@@ -81,6 +86,7 @@ const animation = ($gsap, Elastic) => {
       onComplete
     })
     const tlBackground = $gsap.timeline()
+
     tlBackground.fromTo(background.value,
       {
         scale: 1.2
@@ -90,12 +96,9 @@ const animation = ($gsap, Elastic) => {
         duration: 3.5
       }
     )
-    // tl.set(LOGO_WRAPPER, {
-    //   top: '50%',
-    //   transform: 'translate(-50%, -50%)',
-    //   visibility: 'visible'
-    // })
+
     $gsap.set(body, { overflow: 'hidden' }, 'start')
+
     tl.to(LOGO, {
       y: 0,
       duration: 0.3,
@@ -147,10 +150,9 @@ const animation = ($gsap, Elastic) => {
         trigger: TRIGGER,
         start: () => `top ${contentBounding.getBoundingClientRect().top}px`,
         end: () => 100,
-        scrub: true
-        // markers: true
+        scrub: true,
+        markers: true
       },
-      force3D: true,
       opacity: 0
     })
   }
@@ -162,8 +164,7 @@ const animation = ($gsap, Elastic) => {
         trigger: TRIGGER,
         start: `top ${top}`,
         end: 100,
-        scrub: true,
-        force3D: true
+        scrub: true
       },
       y: -60,
       opacity: 0
