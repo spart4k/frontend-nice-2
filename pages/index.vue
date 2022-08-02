@@ -20,7 +20,6 @@ import { pagination } from '~/plugins/pagination'
 import { head } from '@/components/scripts/head.js'
 export default defineComponent({
   name: 'IndexPage',
-  head: {},
   setup () {
     const { store } = useContext()
     const router = useRouter()
@@ -36,11 +35,11 @@ export default defineComponent({
 
     const pageInfo = ref({})
     // store.commit('content/changeState', { key: 'logoBg', value: 'main' })
-    const fetchData = (currentPage) => {
+    const fetchData = async (currentPage) => {
       const params = {
         page: currentPage
       }
-      const response = store.dispatch('main/getData', params)
+      const response = await store.dispatch('main/getData', params)
       return response
     }
 
@@ -94,6 +93,7 @@ export default defineComponent({
       clickTag
     }
   },
+  head: {},
   watchQuery: ['page']
 })
 </script>

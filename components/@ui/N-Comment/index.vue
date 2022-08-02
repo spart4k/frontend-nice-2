@@ -2,7 +2,7 @@
   <div :class="$style.comment">
     <h2 :class="$style.name">LeXa</h2>
     <p :class="$style.time">5 часов назад</p>
-    <p :class="$style.text">Отличный освежающий вкус n n n n n  n n n    n n n n n n n n n n n v nv v v nv nvjffrvfrvfrnvrfnvrnfvmm frkvmfrvkrfmvkofrvfrvfrvrfv hdf bdbhf dhbf d vfdbv bhdfbvbdfbhvf</p>
+    <p :class="$style.text">Отличный освежающий вкус! Приятный цвет и консистенция, очень понравилась мне и мой друзьям, советую всем!!!!!!</p>
   </div>
 </template>
 <script lang="js">

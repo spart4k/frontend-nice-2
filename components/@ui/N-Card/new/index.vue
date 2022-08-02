@@ -40,8 +40,32 @@
       ]"
     >
       <template>
-        <!-- NuxtLink -->
-        <div :class="$style.body__top" tag="div" :to="`/cards/${data.id}`">
+        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`/cards/${data.id}`">
+          <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
+            {{ data.title }}
+          </h2>
+          <template v-if="$props.detailPage && data.author.length>0">
+            <p :class="$style.authorName">
+              автор {{ data.author }}
+            </p>
+          </template>
+          <div v-if="data.date_event" :class="$style.time">
+            {{ dateFormat }}
+          </div>
+          <template v-if="data.price && $props.detailPage">
+            <div :class="$style.price">
+              {{ data.price }}р.
+            </div>
+            <N-Wire v-if="false" />
+            <div :class="$style.buyButton">
+              Купить
+            </div>
+          </template>
+          <div v-if="isJsonString" :class="$style.cardText">
+            <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
+          </div>
+        </NuxtLink>
+        <div v-if="$props.detailPage" :class="$style.body__top" tag="div">
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
             {{ data.title }}
           </h2>
@@ -94,10 +118,10 @@
           </N-Chip>
         </div>
         <div :class="$style.socials" :style="{ marginTop: $props.detailPage ? '3rem' : '2rem' }">
-          <div>
+          <div @click="addLike">
             <N-Like v-model="like" />
             <div :class="$style.parser">
-              {{ !$props.detailPage ? '0' : 'Нравиться' }}
+              {{ !$props.detailPage ? data.like_count : 'Нравиться' }}
             </div>
           </div>
           <div @click="showComments = !showComments">
@@ -134,12 +158,14 @@
         <p :class="$style.comments__title">
           {{ commentCounter }} комментари{{ commentEnding }}
         </p>
-        <N-Input />
+        <N-Input @smilies="commentHeightSet" />
         <N-Plug v-if="false" />
-        <N-Comment />
-        <N-Comment />
-        <N-Comment />
-        <N-Comment />
+        <div v-if="true">
+          <N-Comment />
+          <N-Comment />
+          <N-Comment />
+          <N-Comment />
+        </div>
       </div>
       <div v-if="$slots.footer" :class="$style.body__footer">
         <slot name="footer" />
@@ -158,7 +184,7 @@ export default {
   props: { ...dataProps.props },
   setup (props) {
     const videoRef = ref(null)
-    const showComments = ref(true)
+    const showComments = ref(false)
     const like = ref(false)
     const chipExtra = ref()
     const chipsCounter = ref(0)
@@ -169,7 +195,19 @@ export default {
     const commentEnding = ref('ев')
     const commentCounter = ref(1)
     const { $axios } = useContext()
+    const { store } = useContext()
     const videoPlay = ref(false)
+    // const addLike = () => {
+    //   console.log('addLike')
+    // }
+      const addLike = async (value) => {
+      const params = {
+        card_id: value,
+        quantity: 1,
+        calc: true
+      }
+      await store.dispatch('like/addLike', params)
+    }
     const videoPlayingChange = () => {
       videoPlay.value = !videoPlay.value
       if (videoRef.value.paused === true) {
@@ -187,50 +225,34 @@ export default {
       return true
     })
     const videoUrl = ref()
-    const screenChange = () => {
-      showComments.value = true
-      commentHeight.value = '9999999px'
-      setTimeout(() => {
-        commentHeight.value = commentBox.value.getBoundingClientRect().height + 'px'
-      }, 50)
-      if (showComments.value === false) {
-        showComments.value = true
-        commentHeight.value = '9999999px'
-        setTimeout(() => {
-          commentHeight.value = commentBox.value.getBoundingClientRect().height + 'px'
-        }, 50)
-        showComments.value = false
-      }
-    }
     const commentHeightSet = () => {
-      commentHeight.value = '9999999px'
-      setTimeout(() => {
-        commentHeight.value = commentBox.value.getBoundingClientRect().height + 'px'
-        showComments.value = false
-      }, 150)
+      if (props.detailPage === true) {
+        setTimeout(() => {
+          commentHeight.value = commentBox.value.scrollHeight + 'px'
+        }, 0)
+      }
     }
     const extraTagHide = () => {
+      if (chipsArray.value?.length) {
         for (let i = 0; i < chipsArray.value.length; i++) {
-          chipsWidth.value += chipsArray.value[i].$el.offsetWidth + 10
-        }
-        if (chipsWidth.value > 315) {
-          for (let i = chipsArray.value.length - 1; chipsWidth.value > 251; i--) {
-              chipsWidth.value = chipsWidth.value - (chipsArray.value[i].$el.offsetWidth + 10)
-              chipsArray.value[i].$el.style.display = 'none'
-              chipsCounter.value++
+            chipsWidth.value += chipsArray.value[i].$el.offsetWidth + 10
           }
-        }
+          if (chipsWidth.value > 315) {
+            for (let i = chipsArray.value.length - 1; chipsWidth.value > 251; i--) {
+                chipsWidth.value = chipsWidth.value - (chipsArray.value[i].$el.offsetWidth + 10)
+                chipsArray.value[i].$el.style.display = 'none'
+                chipsCounter.value++
+            }
+          }
       }
+    }
     const extraTagShow = () => {
         chipsArray.value.forEach(function (item) {
           item.$el.style.display = 'flex'
         })
         chipExtra.value.$el.style.display = 'none'
       }
-    onMounted(() => {
-      extraTagHide()
-      commentHeightSet()
-      window.addEventListener('resize', screenChange)
+    const wordEnding = () => {
       const string = commentCounter.value.toString()
       const lastElem = string[string.length - 1]
       if (!(string[string.length - 2] === '1')) {
@@ -240,6 +262,12 @@ export default {
           commentEnding.value = 'й'
         }
       }
+    }
+    onMounted(() => {
+      extraTagHide()
+      commentHeightSet()
+      wordEnding()
+      window.addEventListener('resize', commentHeightSet)
       nextTick(() => {
         if (props.withVideo) {
           videoUrl.value = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`
@@ -249,7 +277,7 @@ export default {
       })
     })
     onUnmounted(() => {
-      window.addEventListener('resize', screenChange)
+      window.addEventListener('resize', commentHeightSet)
     })
     const dateFormat = computed(() => {
       return props.data.date_event?.replace(/:(\w+)/, '')?.replace(/\s/, ' / ') ?? ''
@@ -269,12 +297,13 @@ export default {
       commentBox,
       videoRef,
       commentHeightSet,
+      wordEnding,
       extraTagHide,
       extraTagShow,
+      addLike,
       videoUrl,
       videoPlay,
-      videoPlayingChange,
-      screenChange
+      videoPlayingChange
     }
   }
 }
@@ -420,13 +449,16 @@ export default {
       margin-left: auto;
     }
     .comments {
-      transition: all .8s;
-      overflow: hidden;
+      transition: all .6s;
+      // overflow: hidden;
       opacity: 0;
       &__title {
         color: $fontColorDefault;
         @include regular-text-bold;
         }
+      .commentsBox {
+        // overflow: hidden;
+      }
     }
     .show {
       opacity: 1;
