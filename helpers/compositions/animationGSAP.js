@@ -12,6 +12,7 @@ const animation = ($gsap, Elastic) => {
     const SUBTITLE = '.subtitleLogo'
     const NAVBAR = '.navbar'
     const CONTENT = '.content'
+    const body = document.body
     const onComplete = () => {
       // $gsap.set(LOGO_WRAPPER, { clearProps: 'all', transform: 'translate(-50%, 0)' })
       $gsap.set(LOGO_WRAPPER, { className: 'logoTop' }, 'start')
@@ -73,6 +74,7 @@ const animation = ($gsap, Elastic) => {
           duration: 0.6
         }
       )
+      $gsap.set(body, { overflow: 'auto' }, 'start')
     }
 
     const tl = $gsap.timeline({
@@ -93,6 +95,7 @@ const animation = ($gsap, Elastic) => {
     //   transform: 'translate(-50%, -50%)',
     //   visibility: 'visible'
     // })
+    $gsap.set(body, { overflow: 'hidden' }, 'start')
     tl.to(LOGO, {
       y: 0,
       duration: 0.3,
