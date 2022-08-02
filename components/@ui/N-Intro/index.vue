@@ -89,6 +89,7 @@ export default {
         const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
         if (isPlayAnimation) {
           store.commit('content/setAnimate', false)
+          console.log('test')
         }
         if (logo.value && isHomePage.value && !isPlayAnimation) {
           animationTimeline()
