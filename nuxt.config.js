@@ -67,6 +67,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
     '@nuxtjs/auth-next',
+    'nuxt-mq',
     'vue-toastification/nuxt',
     ['portal-vue/nuxt']
   ],

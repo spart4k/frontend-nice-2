@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <div :class="$style.wrapper">
-      <img v-if="!isHomePage && setImage && !hideImage" :class="$style.heroImage" :src="setImage">
-      <div :class="$style.overlay" :style="{backgroundColor: color}" />
-      <div :class="$style.bg" />
-    </div>
+  <div :class="$style.wrapper">
+    <img v-if="!isHomePage && setImage && !hideImage" :class="$style.heroImage" :src="setImage">
+    <div :class="$style.overlay" :style="{backgroundColor: color}" />
+    <div :class="$style.bg" />
   </div>
 </template>
 

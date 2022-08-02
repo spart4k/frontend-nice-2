@@ -1,17 +1,19 @@
 <template>
-  <!--  <div :class="$style.headerHolder">-->
-  <!--  :style="{backgroundImage: backgroundImage}"-->
   <header :class="$style.header">
-    <ul :class="[$style.headerUser__list, active && $style.hideElement]">
-      <li :class="$style.headerUser__item">
-        <a href="mailto:tisthenice@gmail.com">
-          <n-icon name="telegram" />
-        </a>
-      </li>
-      <li :class="$style.headerUser__item" @click="openProfile">
-        <n-icon name="user" />
-      </li>
-    </ul>
+    <n-button
+      type-button="transparent"
+      :class="[active && $style.open, $style.deviceMenu]"
+      @click="openMenu"
+    >
+      <div :class="$style.deviceMenu__inner">
+        <span />
+        <span />
+        <span />
+      </div>
+      <div v-if="!active && isAuth && basketCount.calcBasketCard > 0" :class="$style.basketCount">
+        {{ basketCount.calcBasketCard }}
+      </div>
+    </n-button>
     <transition name="fade-fast">
       <nav v-if="active" :class="[$style.headerNav, active && $style.active]">
         <div :class="[$style.linkHome]" @click="active = false">
@@ -64,21 +66,15 @@
       </nuxt-link>
     </transition>
 
-    <n-button
-      type-button="transparent"
-      :class="[active && $style.open, $style.deviceMenu]"
-      @click="openMenu"
-    >
-      <div :class="$style.deviceMenu__inner">
-        <span />
-        <span />
-        <span />
-      </div>
-      <!--      basketData.cards.length-->
-      <div v-if="!active && isAuth && basketCount.calcBasketCard > 0" :class="$style.basketCount">
-        {{ basketCount.calcBasketCard }}
-      </div>
-    </n-button>
+    <ul :class="[$style.headerUser__list, active && $style.hideElement]">
+      <!--      :class="$style.headerUser__item"-->
+      <li>
+        <a href="mailto:tisthenice@gmail.com" :class="$style.link">
+          <span :class="$style.link__text">эфир</span>
+          <n-icon name="domofon" :class="$style.link__icon" />
+        </a>
+      </li>
+    </ul>
     <FormAuthSteps v-model="activeAuthSteps" />
   </header>
   <!--  </div>-->
@@ -207,4 +203,5 @@ export default {
     opacity: 0;
     transform: translateX(30px);
   }
+
 </style>
