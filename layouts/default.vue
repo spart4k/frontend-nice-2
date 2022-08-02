@@ -31,12 +31,12 @@ export default {
       }
       // headerItems.value = response.data
       store.commit('content/changeSections', response.data)
-      store.commit('authentication/setToken', '2|TeUVUgPl8axidfScynskYjPgeJRzCdxXcyIqDINY')
     })
 
     onMounted(() => {
       store.commit('authentication/setUserData')
       store.commit('authentication/setToken')
+      store.commit('authentication/setToken', '2|TeUVUgPl8axidfScynskYjPgeJRzCdxXcyIqDINY')
       store.dispatch('basket/getBasket')
     })
 
