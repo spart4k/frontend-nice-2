@@ -4,7 +4,8 @@ export const state = () => ({
   bgIntro: '',
   imgIntro: '',
   bgDetails: '',
-  sections: []
+  sections: [],
+  isShowAnimationHomePage: true
 })
 
 export const mutations = {
@@ -22,6 +23,9 @@ export const mutations = {
   },
   changeSections (state, value) {
     state.sections = value
+  },
+  setAnimate (state, value) {
+    state.isShowAnimationHomePage = value
   }
 }
 

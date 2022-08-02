@@ -1,38 +1,45 @@
 <template>
-  <div v-if="$props.showNavMenu" :class="$style.headerNav__inner">
-    <transition-group
-      :class="$style.headerMenu__list"
-      name="staggered-fade"
-      tag="ul"
-      :css="false"
-      appear
-      v-bind="$attrs"
-      @before-enter="beforeEnter"
-      @enter="enter"
-      @leave="leave"
-    >
-      <li
-        v-for="(item, index) in $props.headerItems"
-        :key="item.title"
-        ref="itemRefs"
-        :data-index="index"
-        :style="{backgroundColor: BLAND_COLOR[item.slug]}"
-        :class="$style.headerMenu__item"
-        @click.stop="hideMenu"
-      >
-        <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
-          {{ item.title }}
-        </nuxt-link>
-      </li>
-    </transition-group>
-  </div>
+  <!--  v-if="$props.showNavMenu"-->
+  <transition-group
+    :class="$style.list"
+    name="staggered-fade"
+    tag="ul"
+    :css="false"
+    appear
+    v-bind="$attrs"
+    @before-enter="beforeEnter"
+    @enter="enter"
+    @leave="leave"
+  >
+    <N-Nav-Menu-Item
+      v-for="(item, index) in $props.headerItems"
+      :key="item.title"
+      ref="itemRefs"
+      :data-index="index"
+      :item="item"
+    />
+    <!--    <li-->
+    <!--      v-for="(item, index) in $props.headerItems"-->
+    <!--      :key="item.title"-->
+    <!--      ref="itemRefs"-->
+    <!--      :data-index="index"-->
+    <!--      :style="{-->
+    <!--        backgroundColor: BLAND_COLOR[item.slug],-->
+    <!--        backgroundImage: `url('@/assets/img/menu/coin.png')`-->
+    <!--      }"-->
+    <!--      :class="$style.headerMenu__item"-->
+    <!--      @click.stop="hideMenu"-->
+    <!--    >-->
+    <!--      <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">-->
+    <!--        {{ item.title }}-->
+    <!--      </nuxt-link>-->
+    <!--    </li>-->
+  </transition-group>
 </template>
 
 <script>
-import { onMounted, onUnmounted, useContext } from '@nuxtjs/composition-api'
-import { BLAND_COLOR } from '~/const/blandColor'
+import { useContext } from '@nuxtjs/composition-api'
 
-const COLORS = ['#489430', '#00B4B5', '#FF4F00', '#ded037']
 export default {
   name: 'NavMenu',
   props: {
@@ -46,22 +53,20 @@ export default {
     },
     duration: {
       type: Number,
-      default: 200 // duration of each element transition
+      default: 200
     }
   },
   setup (props, { emit }) {
-    const randomColor = () => COLORS[Math.floor(Math.random() * COLORS.length)]
-
     const hideMenu = () => {
       emit('hideNavMenu', false)
     }
     const { $gsap } = useContext()
+
     const beforeEnter = (el) => {
       el.style.opacity = 0
       el.style.transform = 'translateY(30px)'
     }
     const enter = (el, done) => {
-      // Each element requires a data-index attribute in order for the transition to work properly
        $gsap.to(el, {
         opacity: 1,
         transform: 'translateY(0)',
@@ -71,7 +76,6 @@ export default {
     }
 
     const leave = (el, done) => {
-      // Each element requires a data-index attribute in order for the transition to work properly
        $gsap.to(el, {
         opacity: 0,
         transform: 'translateY(0)',
@@ -80,25 +84,28 @@ export default {
        })
     }
 
-    onMounted(() => {
-
-    })
-
-    onUnmounted(() => {
-
-    })
-
     return {
-      randomColor,
       hideMenu,
       beforeEnter,
       enter,
-      BLAND_COLOR,
       leave
     }
   }
 }
 </script>
 
-<style scoped lang="scss" module src="@/components/header.scss">
+<style scoped lang="scss" module>
+.list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  justify-content: space-between;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  gap: .85rem;
+  @media (min-width: $tabletWidth) {
+    justify-content: center;
+  }
+}
 </style>

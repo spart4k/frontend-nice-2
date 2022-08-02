@@ -1,28 +1,30 @@
 <template>
   <div :class="[$style.logo, $style[size]]">
     <div
-      :class="$style.wrapperImage"
+      :class="[$style.wrapperImage, showAnimate && $style.animateContent]"
     >
       <img
         v-if="showLogo"
         src="@/assets/img/logo.png"
         alt="Логотип Nice"
         class="logo_image"
-        :class="$style.logoImage"
+        :class="[$style.logoImage, showAnimate && $style.animateContent]"
       >
     </div>
-    <div :class="$style.wrapperImage">
+    <div :class="[$style.wrapperImage, showAnimate && $style.animateContent]">
       <img
         src="@/assets/img/subtitle.png"
         alt="subtitle"
         class="subtitleLogo"
-        :class="$style.imageSubtitle"
+        :class="[$style.imageSubtitle]"
       >
     </div>
   </div>
 </template>
 
 <script>
+
+import { computed, useContext } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NLogo',
@@ -35,7 +37,13 @@ export default {
       type: Boolean,
       default: true
     }
-
+  },
+  setup () {
+    const { store } = useContext()
+    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
+    return {
+      showAnimate
+    }
   }
 }
 </script>
@@ -49,8 +57,10 @@ export default {
   will-change: transform;
   .wrapperImage {
     overflow: hidden;
-    & > img {
-      transform: translateY(-100%);
+    &.animateContent {
+      & > img {
+        transform: translateY(-100%);
+      }
     }
   }
   img {

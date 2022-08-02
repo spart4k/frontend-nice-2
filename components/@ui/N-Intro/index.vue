@@ -1,22 +1,18 @@
 <template>
   <main ref="main" :class="$style.main">
     <div v-if="!noPreview" :class="$style.intro">
-      <!--      <N-Background-->
-      <!--        :hide-image="scrollingContent"-->
-      <!--        :is-home-page="isHomePage"-->
-      <!--        :description="description"-->
-      <!--        :color="color"-->
-      <!--      />-->
+      <n-tabs
+        :class="[$style.tabs, showAnimate && $style.animateContent]"
+        class="navbar"
+      />
       <div :class="$style.wrapperBg">
-        <!--        <img v-if="!isHomePage && setImage && !hideImage" :class="$style.heroImage" :src="setImage">-->
         <div :class="$style.overlay" :style="{backgroundColor: color}" />
         <div ref="background" :class="$style.bg" />
       </div>
       <div
-        v-if="isHomePage"
         ref="logo"
         class="logo"
-        :class="[$style.logo]"
+        :class="[$style.logo, showAnimate && $style.animateContent]"
       >
         <NLogoTitle
           :is-home-page="isHomePage"
@@ -24,22 +20,19 @@
           :hide-text-logo="hideTextLogo"
         />
       </div>
-      <div v-else>
-        <NLogoTitle
-          :is-home-page="isHomePage"
-          :description="description"
-        />
-      </div>
       <div
         v-if="!isHomePage"
         ref="anchor"
         :class="[$style.linkAnchor, scrollingContent && $style.scrolling]"
-        @click="scrollTo"
       >
         <n-icon name="arrow-top" />
       </div>
     </div>
-    <div ref="content" :class="$style.content" class="content">
+    <div
+      ref="content"
+      :class="[$style.content, (!noPreview && showAnimate) && $style.animateContent]"
+      class="content"
+    >
       <slot />
     </div>
   </main>
@@ -48,7 +41,6 @@
 <script>
 import { Elastic } from 'gsap'
 import { computed, nextTick, onMounted, ref, useContext, useRoute } from '@nuxtjs/composition-api'
-import { scrollBy } from 'seamless-scroll-polyfill'
 import NLogoTitle from './components/NLogoTitle'
 import { BLAND_COLOR } from '~/const/blandColor'
 import animationGSAP from '~/helpers/compositions/animationGSAP'
@@ -69,18 +61,20 @@ export default {
       type: Boolean
     }
   },
-  setup (_, ctx) {
-    const { $gsap } = useContext()
+  setup () {
+    const { $gsap, store } = useContext()
     const anchor = ref(null)
     const logo = ref(null)
-    // const background = ref(null)
     const content = ref(null)
     const main = ref(null)
     const wrapper = ref(null)
     const scrollingContent = ref(null)
     const hideTextLogo = ref(false)
     const route = useRoute()
+
     const isHomePage = computed(() => route.value.name === 'index')
+    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
+
     const {
       background,
       animationlogo,
@@ -89,21 +83,24 @@ export default {
       animateNavbar,
       animationTimeline
     } = animationGSAP($gsap, Elastic)
+
     onMounted(() => {
       nextTick(() => {
-        if (logo.value) {
-          animationlogo(logo.value, content.value)
-          animateBackground(content.value)
-          animateSubtitle(content.value)
-          animateNavbar(content.value)
+        const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+        if (isPlayAnimation) {
+          store.commit('content/setAnimate', false)
+        }
+        if (logo.value && isHomePage.value && !isPlayAnimation) {
           animationTimeline()
         }
+        animationlogo(logo.value, content.value)
+        animateSubtitle(content.value)
+        animateBackground(content.value)
+        animateNavbar(content.value)
+        localStorage.setItem('showAnimateHomePage', 'true')
       })
     })
-    const scrollTo = () => {
-      const contentBounding = content.value.getBoundingClientRect()
-      scrollBy(main.value, { behavior: 'smooth', top: contentBounding.top - 90 })
-    }
+
     const color = computed(() => {
       const paramsColor = BLAND_COLOR[route.value.params?.slug] || BLAND_COLOR[route.value.name]
       if (paramsColor) {
@@ -112,6 +109,7 @@ export default {
         return ''
       }
     })
+
     return {
       anchor,
       content,
@@ -121,7 +119,7 @@ export default {
       isHomePage,
       logo,
       background,
-      scrollTo,
+      showAnimate,
       color,
       hideTextLogo
     }
@@ -137,7 +135,6 @@ export default {
   left: 0;
   bottom: 0;
   width: 100%;
-  //min-height: 100vh;
   height: 100vh;
   .overlay {
     position: fixed;
@@ -169,31 +166,45 @@ export default {
     transform: scale(1.2);
   }
 }
-
-.main {
-  padding-top: 30.5rem;
-  @media (max-width: $mobileWidth){
-    //padding-top: calc(31.6rem - var(--padding-top-logo));
-    padding-top: 31.6rem;
+.tabs {
+  margin: 0;
+  position: fixed;
+  top: 17.5rem;
+  z-index: 3;
+  width: 100%;
+  will-change: transform;
+  @media (max-width: $tabletWidth) {
+    top: 23.6rem;
+  }
+  &.animateContent {
+    visibility: hidden;
+    //transform: translateX(100%);
   }
 }
 .logo {
   position: fixed;
-  z-index: 999;
-  //top: 0;
+  z-index: 11;
   left: 50%;
   transform-origin: top center;
   padding-top: var(--padding-top-logo);
-  transform: translate(-50%, -50%);
-  top: 50%;
-  //@media (max-width: $tabletWidth){
-  //  top: 7rem;
-  //}
+  top: 1rem;
+  transform: translateX(-50%);
+  @media (max-width:$mobileWidth) {
+    top: 7rem;
+  }
+  &.animateContent {
+    transform: translate(-50%, -50%);
+    top: 50%;
+  }
 }
 .intro {
   width: 100%;
   color: $white;
   overflow: auto;
+  padding-top: 30.5rem;
+  @media (max-width: $mobileWidth){
+    padding-top: 31.6rem;
+  }
   .visually-hidden {
     position: fixed;
     transform: scale(0);
@@ -263,8 +274,10 @@ export default {
   z-index: 10;
   padding-bottom: 5rem;
   width: 100%;
-  opacity: 0;
   transition: opacity 300ms;
+  &.animateContent {
+    opacity: 0;
+  }
   & > * + * {
     margin-top: 2rem;
   }
