@@ -121,7 +121,8 @@
           <div @click="addLike">
             <N-Like v-model="like" />
             <div :class="$style.parser">
-              {{ !$props.detailPage ? data.like_count : 'Нравиться' }}
+              <!-- likeCounter -->
+              {{ !$props.detailPage ? '0' : 'Нравится' }}
             </div>
           </div>
           <div @click="showComments = !showComments">
@@ -131,7 +132,7 @@
             </div>
           </div>
         </div>
-        <div v-if="!$props.detailPage" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '3rem' : '' }">
+        <div v-if="!$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '3rem' : '' }">
           <N-Chip
             v-for="item in data.tags"
             :key="item.id"
@@ -185,7 +186,8 @@ export default {
   setup (props) {
     const videoRef = ref(null)
     const showComments = ref(false)
-    const like = ref(false)
+    const like = ref(props.data.liked)
+    const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
     const chipsCounter = ref(0)
     const chipsWidth = ref(-10)
@@ -197,16 +199,14 @@ export default {
     const { $axios } = useContext()
     const { store } = useContext()
     const videoPlay = ref(false)
-    // const addLike = () => {
-    //   console.log('addLike')
-    // }
-      const addLike = async (value) => {
-      const params = {
-        card_id: value,
-        quantity: 1,
-        calc: true
+    const addLike = async () => {
+      if (like.value === true) {
+        likeCounter.value++
+        await store.dispatch('like/addLike', props.data.id)
+      } else {
+        likeCounter.value--
+        await store.dispatch('like/removeLike', props.data.id)
       }
-      await store.dispatch('like/addLike', params)
     }
     const videoPlayingChange = () => {
       videoPlay.value = !videoPlay.value
@@ -284,6 +284,7 @@ export default {
     })
     return {
       like,
+      likeCounter,
       chipsCounter,
       showComments,
       chipsArray,

@@ -134,8 +134,8 @@ export default {
       padding: 0.8rem .2rem;
       .sticker {
         display: inline-block;
-        width: 5.9rem;
-        height: 5.9rem;
+        width: 6.2rem;
+        height: 6.2rem;
         user-select: none;
         pointer-events: none;
       }

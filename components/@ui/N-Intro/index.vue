@@ -1,14 +1,14 @@
 <template>
   <main ref="main" :class="$style.main">
     <div v-if="!noPreview" :class="$style.intro">
-      <!--      <N-Background-->
+      <!-- <N-Background-->
       <!--        :hide-image="scrollingContent"-->
       <!--        :is-home-page="isHomePage"-->
       <!--        :description="description"-->
       <!--        :color="color"-->
-      <!--      />-->
+      <!-- /> -->
       <div :class="$style.wrapperBg">
-        <!--        <img v-if="!isHomePage && setImage && !hideImage" :class="$style.heroImage" :src="setImage">-->
+               <!-- <img v-if="!isHomePage && setImage && !hideImage" :class="$style.heroImage" :src="setImage"> -->
         <div :class="$style.overlay" :style="{backgroundColor: color}" />
         <div ref="background" :class="$style.bg" />
       </div>
@@ -263,7 +263,7 @@ export default {
   z-index: 10;
   padding-bottom: 5rem;
   width: 100%;
-  opacity: 0;
+  // opacity: 0;
   transition: opacity 300ms;
   & > * + * {
     margin-top: 2rem;
