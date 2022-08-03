@@ -1,5 +1,5 @@
 <template>
-  <main ref="main" :class="$style.main">
+  <main ref="main" :class="$style.main" :style="{ paddingTop: !isHomePage ? '15.5rem' : '31.6rem' }">
     <div v-if="!noPreview" :class="$style.intro">
       <!-- <N-Background-->
       <!--        :hide-image="scrollingContent"-->
@@ -10,7 +10,7 @@
       <div :class="$style.wrapperBg">
         <!-- <img v-if="!isHomePage && setImage && !hideImage" :class="$style.heroImage" :src="setImage"> -->
         <div :class="$style.overlay" :style="{backgroundColor: color}" />
-        <div ref="background" :class="$style.bg" />
+        <div ref="background" :class="$style.bg" :style="{ backgroundImage: `url(${backgroundImage})` }" />
       </div>
       <div
         v-if="isHomePage"
@@ -28,6 +28,7 @@
         <NLogoTitle
           :is-home-page="isHomePage"
           :description="description"
+          :image="image"
         />
       </div>
       <div
@@ -36,7 +37,7 @@
         :class="[$style.linkAnchor, scrollingContent && $style.scrolling]"
         @click="scrollTo"
       >
-        <n-icon name="arrow-top" />
+        <n-icon name="arrow-bottom" />
       </div>
     </div>
     <div ref="content" :class="$style.content" class="content">
@@ -51,6 +52,7 @@ import { computed, nextTick, onMounted, ref, useContext, useRoute } from '@nuxtj
 import { scrollBy } from 'seamless-scroll-polyfill'
 import NLogoTitle from './components/NLogoTitle'
 import { BLAND_COLOR } from '~/const/blandColor'
+import { BLAND_IMAGE } from '~/const/blandImage'
 import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default {
@@ -81,6 +83,12 @@ export default {
     const hideTextLogo = ref(false)
     const route = useRoute()
     const isHomePage = computed(() => route.value.name === 'index')
+    const backgroundImage = computed(() => {
+      if (!isHomePage.value) {
+        return require('@/assets/img/background/coin-background.png')
+      }
+        return require('@/assets/img/background/index-background.jpg')
+    })
     const {
       background,
       animationlogo,
@@ -112,6 +120,14 @@ export default {
         return ''
       }
     })
+    const image = computed(() => {
+      const paramsImage = BLAND_IMAGE[route.value.params?.slug] || BLAND_IMAGE[route.value.name]
+      if (paramsImage) {
+        return paramsImage
+      } else {
+        return ''
+      }
+    })
     return {
       anchor,
       content,
@@ -123,7 +139,9 @@ export default {
       background,
       scrollTo,
       color,
-      hideTextLogo
+      image,
+      hideTextLogo,
+      backgroundImage
     }
   },
   watchQuery: true
@@ -145,9 +163,9 @@ export default {
     left: 0;
     top: 0;
     height: 100%;
-    opacity: 0.35;
+    opacity: 0.6;
     z-index: 2;
-    mix-blend-mode: hard-light;
+    mix-blend-mode: overlay;
   }
   .heroImage {
     position: absolute;
@@ -161,12 +179,11 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    background-image: url('@/assets/img/background/index-background.jpg');
-    background-size: contain;
+    background-size: cover;
     background-repeat: repeat;
     z-index: 1;
     background-position: 0 0;
-    transform: scale(1.2);
+    // transform: scale(1.2);
   }
 }
 
@@ -174,7 +191,7 @@ export default {
   padding-top: 30.5rem;
   @media (max-width: $mobileWidth){
     //padding-top: calc(31.6rem - var(--padding-top-logo));
-    padding-top: 31.6rem;
+    // padding-top: 31.6rem;
   }
 }
 .logo {

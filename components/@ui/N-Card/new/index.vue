@@ -122,7 +122,7 @@
             <N-Like v-model="like" />
             <div :class="$style.parser">
               <!-- likeCounter -->
-              {{ !$props.detailPage ? likeCounter : 'Нравится' }}
+              {{ !$props.detailPage ? '0' : 'Нравится' }}
             </div>
           </div>
           <div @click="showComments = !showComments">
