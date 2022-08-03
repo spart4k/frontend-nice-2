@@ -1,6 +1,5 @@
 <template>
   <main :class="$style.main">
-    <N-Intro no-preview />
     <div :class="$style.wrapper">
       <n-background ref="background" :description="description" color="#0000" />
       <template v-if="card">
@@ -19,7 +18,6 @@
           <template v-else>
             Перейти в корзину
           </template>
-          <!--        {{ !isAddedBasket ? 'Добавить в корзину' : 'Добавлено' }}-->
         </N-Fixed-Button>
       </template>
     </div>
@@ -46,7 +44,6 @@ export default defineComponent({
       return {
         background: bgName?.value?.slug
       }
-      // title: bgName.value
     })
 
     const clickTag = (value) => {

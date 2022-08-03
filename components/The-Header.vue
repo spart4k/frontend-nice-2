@@ -1,5 +1,6 @@
 <template>
-  <header :class="[$style.header, showAnimate && $style.animateContent]">
+  <!--  , showAnimate && $style.animateContent-->
+  <header :class="[$style.header]">
     <n-button
       type-button="transparent"
       :class="[active && $style.open, $style.deviceMenu]"
@@ -51,19 +52,13 @@
       <n-icon name="close" :class="$style.close" @click="closeMenu" />
     </vue-bottom-sheet>
 
-    <transition name="fade-fast">
-      <nuxt-link
-        v-if="isHomePage ? showLogo : true"
-        to="/"
-        :class="[$style.logo, active && $style.hideElement]"
-      >
-        <div>творческое объединение</div>
-        <n-logo size="lg" />
-      </nuxt-link>
-    </transition>
+    <div
+      :class="[$style.logo]"
+    >
+      <n-logo-title size="lg" />
+    </div>
 
     <ul :class="[$style.headerUser__list, active && $style.hideElement]">
-      <!--      :class="$style.headerUser__item"-->
       <li>
         <a href="mailto:tisthenice@gmail.com" :class="$style.link">
           <span :class="$style.link__text">эфир</span>

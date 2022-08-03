@@ -9,12 +9,12 @@
         ]"
         class="navbar"
       />
-      <n-background ref="background" :color="color" />
       <div
         ref="logo"
         class="logo"
-        :class="[$style.logo, showAnimate && $style.animateContent]"
+        :class="[$style.logo]"
       >
+        <!--        , showAnimate && $style.animateContent-->
         <NLogoTitle
           :is-home-page="isHomePage"
           :hide-text-logo="hideTextLogo"
@@ -28,22 +28,12 @@
         <n-icon name="arrow-top" />
       </div>
     </div>
-    <!--    <div-->
-    <!--      ref="content"-->
-    <!--      :class="[$style.content, (!noPreview && showAnimate) && $style.animateContent]"-->
-    <!--      class="content"-->
-    <!--    >-->
-    <!--      <slot />-->
-    <!--    </div>-->
   </div>
 </template>
 
 <script>
-import { Elastic } from 'gsap'
-import { computed, nextTick, onMounted, ref, useContext, useRoute } from '@nuxtjs/composition-api'
+import { computed, ref, useContext, useRoute } from '@nuxtjs/composition-api'
 import NLogoTitle from './components/NLogoTitle'
-import { BLAND_COLOR } from '~/const/blandColor'
-import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default {
   name: 'NIntro',
@@ -70,11 +60,10 @@ export default {
       type: Boolean
     }
   },
-  setup (props) {
-    const { $gsap, store } = useContext()
+  setup () {
+    const { store } = useContext()
     const anchor = ref(null)
     const logo = ref(null)
-    // const content = ref(null)
     const main = ref(null)
     const wrapper = ref(null)
     const scrollingContent = ref(null)
@@ -84,52 +73,14 @@ export default {
     const isHomePage = computed(() => route.value.name === 'index')
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
 
-    const {
-      background,
-      animationlogo,
-      animateBackground,
-      animateSubtitle,
-      animateNavbar,
-      animationTimeline
-    } = animationGSAP($gsap, Elastic)
-
-    onMounted(() => {
-      nextTick(() => {
-        const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
-        if (isPlayAnimation) {
-          store.commit('content/setAnimate', false)
-        }
-        if (logo.value && isHomePage.value && !isPlayAnimation) {
-          animationTimeline()
-        }
-        animationlogo(logo.value)
-        animateSubtitle()
-        animateBackground()
-        animateNavbar()
-        localStorage.setItem('showAnimateHomePage', 'true')
-      })
-    })
-
-    const color = computed(() => {
-      const paramsColor = BLAND_COLOR[route.value.params?.slug] || BLAND_COLOR[route.value.name]
-      if (paramsColor) {
-        return paramsColor
-      } else {
-        return ''
-      }
-    })
-
     return {
       anchor,
-      // content,
       wrapper,
       scrollingContent,
       main,
       isHomePage,
       logo,
-      background,
       showAnimate,
-      color,
       hideTextLogo
     }
   },

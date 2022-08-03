@@ -1,5 +1,6 @@
 <template>
   <main :class="$style.main">
+    <n-background ref="background" class="background" color="#0000" />
     <n-intro
       :description="introTitle"
       :is-hide-mobile-tabs="true"
@@ -24,9 +25,23 @@
 </template>
 
 <script>
-import { ref, defineComponent, useRoute, useRouter, useAsync, useContext, computed, useMeta } from '@nuxtjs/composition-api'
+import {
+  ref,
+  defineComponent,
+  useRoute,
+  useRouter,
+  useAsync,
+  useContext,
+  computed,
+  useMeta,
+  onMounted, onUnmounted
+} from '@nuxtjs/composition-api'
+import { Elastic } from 'gsap'
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+
 import { pagination } from '~/plugins/pagination'
 import { head } from '@/components/scripts/head.js'
+import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default defineComponent({
   name: 'SlugCard',
@@ -35,14 +50,21 @@ export default defineComponent({
   setup () {
     const route = useRoute()
     const router = useRouter()
-    const { store } = useContext()
+    const { store, $gsap } = useContext()
     const cards = ref([])
+    const background = ref(null)
     const totalPage = ref([])
     const id = computed(() => Number(route.value.query.id))
     const tagId = computed(() => Number(route.value.query.tag))
     const loading = ref(false)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
-
+    const {
+      animateBackground,
+      animationlogo,
+      animateSubtitle,
+      animateNavbar,
+      killTrigger
+    } = animationGSAP($gsap, Elastic)
     const introTitle = computed(() => {
       if (id.value) {
         const findSection = store?.state?.content.sections.find((item) => {
@@ -86,6 +108,19 @@ export default defineComponent({
       return result[0]
     })
 
+    onMounted(() => {
+      setTimeout(() => {
+        animateBackground()
+      }, 500)
+      animationlogo()
+      animateSubtitle()
+      animateNavbar()
+    })
+    onUnmounted(() => {
+      ScrollTrigger.refresh()
+      killTrigger()
+    })
+
     head(useMeta, getPageInfo.value)
 
     const { getData, dataPagination } = pagination(fetchData)
@@ -126,6 +161,7 @@ export default defineComponent({
       loading,
       clickTag,
       lazyPagination,
+      background,
       showAnimate,
       getPageInfo
     }
