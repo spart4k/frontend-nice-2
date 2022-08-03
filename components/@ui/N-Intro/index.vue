@@ -2,7 +2,11 @@
   <div ref="main" :class="$style.main">
     <div v-if="!noPreview" :class="$style.intro">
       <n-tabs
-        :class="[$style.tabs, showAnimate && $style.animateContent]"
+        :class="[
+          $style.tabs,
+          showAnimate && $style.animateContent,
+          isHideMobileTabs && $style.hideMobileTabs,
+        ]"
         class="navbar"
       />
       <n-background ref="background" :color="color" />
@@ -61,6 +65,9 @@ export default {
     },
     isShowAnimation: {
       type: Boolean
+    },
+    isHideMobileTabs: {
+      type: Boolean
     }
   },
   setup (props) {
@@ -95,10 +102,10 @@ export default {
         if (logo.value && isHomePage.value && !isPlayAnimation) {
           animationTimeline()
         }
-        animationlogo(logo.value, props.content.$el)
-        animateSubtitle(props.content.$el)
-        animateBackground(props.content.$el)
-        animateNavbar(props.content.$el)
+        animationlogo(logo.value)
+        animateSubtitle()
+        animateBackground()
+        animateNavbar()
         localStorage.setItem('showAnimateHomePage', 'true')
       })
     })
@@ -173,11 +180,17 @@ export default {
   @media (max-width: $tabletWidth) {
     top: 23.6rem;
   }
+  &.hideMobileTabs {
+    @media (max-width: $mobileWidth) {
+      display: none;
+    }
+  }
   &.animateContent {
     visibility: hidden;
     //transform: translateX(100%);
   }
 }
+
 .logo {
   position: fixed;
   z-index: 11;

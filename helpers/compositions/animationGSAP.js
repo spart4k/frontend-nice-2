@@ -118,11 +118,19 @@ const animation = ($gsap, Elastic) => {
       duration: 0.3
     })
   }
+  const getConntetDomElementBounding = () => {
+    const element = document.querySelector(TRIGGER)
+    if (element) {
+      return element.getBoundingClientRect()
+    }
+    return false
+  }
 
-  const animationlogo = (logo, contentBounding) => {
+  const animationlogo = (logo) => {
     const header = document.querySelector('.header')
     const headerBounding = header.getBoundingClientRect().top
-    const top = contentBounding.getBoundingClientRect().top
+    const top = getConntetDomElementBounding().top
+    if (!top) { return }
     ScrollTrigger.matchMedia({
       '(max-width: 900px)' () {
         const tl = $gsap.timeline({
@@ -144,8 +152,10 @@ const animation = ($gsap, Elastic) => {
       }
     })
   }
-  const animateSubtitle = (contentBounding) => {
-    const top = contentBounding.getBoundingClientRect().top
+  const animateSubtitle = () => {
+    const top = getConntetDomElementBounding().top
+    if (!top) { return }
+
     $gsap.to('.subtitleLogo', {
       scrollTrigger: {
         trigger: TRIGGER,
@@ -158,8 +168,10 @@ const animation = ($gsap, Elastic) => {
     })
   }
 
-  const animateNavbar = (contentBounding) => {
-    const top = contentBounding.getBoundingClientRect().top
+  const animateNavbar = () => {
+    const top = getConntetDomElementBounding().top
+    if (!top) { return }
+
     $gsap.to('.navbar', {
       scrollTrigger: {
         trigger: TRIGGER,

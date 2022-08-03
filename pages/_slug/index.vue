@@ -1,6 +1,9 @@
 <template>
   <main :class="$style.main">
-    <n-intro :description="introTitle" />
+    <n-intro
+      :description="introTitle"
+      :is-hide-mobile-tabs="true"
+    />
     <n-preloader v-if="loading" />
     <template v-else>
       <NGridCard
@@ -38,6 +41,7 @@ export default defineComponent({
     const id = computed(() => Number(route.value.query.id))
     const tagId = computed(() => Number(route.value.query.tag))
     const loading = ref(false)
+    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
 
     const introTitle = computed(() => {
       if (id.value) {
@@ -122,6 +126,7 @@ export default defineComponent({
       loading,
       clickTag,
       lazyPagination,
+      showAnimate,
       getPageInfo
     }
   },
