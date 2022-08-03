@@ -1,10 +1,11 @@
 <template>
-  <div :class="[$style.wrapper, $style.bg]">
+  <div :style="{backgroundImage: !isHomePage ? `url(${backgroundImage})` : `url(${backgroundImage})`}" :class="[$style.wrapper, $style.bg]">
     <div :class="$style.overlay" :style="{backgroundColor: color}" />
   </div>
 </template>
 
 <script>
+import { computed } from 'vue-demi'
 
 export default {
   name: 'NBackground',
@@ -21,7 +22,15 @@ export default {
     isHomePage: Boolean,
     color: String
   },
-  setup (props) {}
+  setup (props) {
+  const backgroundImage = computed(() => {
+    if (props.isHomePage) {
+      return require('~/assets/img/background/index-background.jpg')
+    }
+      return require('~/assets/img/background/coin-background.png')
+  })
+  return { backgroundImage }
+  }
 }
 </script>
 
@@ -34,7 +43,7 @@ export default {
   width: 100%;
   height: 100%;
   min-height: 100vh;
-  background-image: url('@/assets/img/background/index-background.jpg');
+  // background-image: url('@/assets/img/background/coin-background.png');
   background-size: cover;
 }
 .overlay {

@@ -1,6 +1,6 @@
 <template>
-  <div :class="$style.card">
-    <div :class="$style.gallery">
+  <div :class="[$style.card, detailPage && $style.detailPage]">
+    <div ref="gallery" :class="[$style.gallery, detailPage && $style.detailPage]">
       <template v-if="data.images.length && !$props.withVideo">
         <template v-if="$props.detailPage && data.images.length > 1">
           <N-Slider :slider-item="data.images" />
@@ -36,8 +36,10 @@
     <div
       :class="[
         $style.body,
-        $props.withAuthor && $style.author
+        $props.withAuthor && $style.author,
+        detailPage && $style.detailPage
       ]"
+      :style="{ height: cardHeight }"
     >
       <template>
         <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`/cards/${data.id}`">
@@ -196,6 +198,8 @@ export default {
     const commentBox = ref()
     const commentEnding = ref('ев')
     const commentCounter = ref(1)
+    const gallery = ref()
+    const cardHeight = ref()
     const { $axios } = useContext()
     const { store } = useContext()
     const videoPlay = ref(false)
@@ -264,6 +268,9 @@ export default {
       }
     }
     onMounted(() => {
+      if (props.detailPage === true && (window.innerWidth > 900)) {
+        cardHeight.value = gallery.value.clientHeight + 'px'
+      }
       extraTagHide()
       commentHeightSet()
       wordEnding()
@@ -301,7 +308,9 @@ export default {
       wordEnding,
       extraTagHide,
       extraTagShow,
+      cardHeight,
       addLike,
+      gallery,
       videoUrl,
       videoPlay,
       videoPlayingChange
@@ -316,9 +325,20 @@ export default {
     width: 100%;
     border-radius: 2rem;
     -webkit-mask-image: -webkit-radial-gradient(white, black);
-    @media (min-width: $tabletWidth) {
-      width: 80%;
-      margin: 0 auto;
+    &.detailPage {
+      @media (min-width: $tabletWidth) {
+        width: 85%;
+        margin: 0 auto;
+        display: flex;
+      }
+    }
+    .gallery {
+      &.detailPage {
+        @media (min-width: $tabletWidth) {
+          min-width: 50%;
+          max-width: 50%;
+        }
+      }
     }
     .wrapperVideo {
       position: relative;
@@ -390,6 +410,12 @@ export default {
     padding: 1.4rem 1.5rem 2.094rem;
     color: $fontColorDefault;
     @include regular-text;
+    &.detailPage {
+      @media (min-width: $tabletWidth) {
+        padding: 3rem;
+        overflow: scroll;
+      }
+    }
     &.author {
       padding: .8rem 1rem 1.3rem;
       p {

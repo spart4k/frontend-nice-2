@@ -2,10 +2,14 @@
   <div ref="main" :class="$style.main" :style="{ paddingTop: !isHomePage ? '15.5rem' : '31.6rem' }">
     <div v-if="!noPreview" :class="$style.intro">
       <n-tabs
-        :class="[$style.tabs, showAnimate && $style.animateContent]"
+        :class="[
+          $style.tabs,
+          showAnimate && $style.animateContent,
+          isHideMobileTabs && $style.hideMobileTabs,
+        ]"
         class="navbar"
       />
-      <n-background ref="background" :color="color" />
+      <n-background ref="background" :color="color" :is-home-page="isHomePage" />
       <div
         v-if="isHomePage"
         ref="logo"
@@ -70,6 +74,9 @@ export default {
     },
     isShowAnimation: {
       type: Boolean
+    },
+    isHideMobileTabs: {
+      type: Boolean
     }
   },
   setup (props) {
@@ -106,10 +113,10 @@ export default {
         if (logo.value && isHomePage.value && !isPlayAnimation) {
           animationTimeline()
         }
-        animationlogo(logo.value, props.content.$el)
-        animateSubtitle(props.content.$el)
-        animateBackground(props.content.$el)
-        animateNavbar(props.content.$el)
+        animationlogo(logo.value)
+        animateSubtitle()
+        animateBackground()
+        animateNavbar()
         localStorage.setItem('showAnimateHomePage', 'true')
       })
     })
@@ -183,14 +190,27 @@ export default {
     transform: translateY(-50%);
   }
 }
-
-.main {
-  padding-top: 30.5rem;
-  @media (max-width: $mobileWidth){
-    //padding-top: calc(31.6rem - var(--padding-top-logo));
-    // padding-top: 31.6rem;
+.tabs {
+  margin: 0;
+  position: fixed;
+  top: 17.5rem;
+  z-index: 3;
+  width: 100%;
+  will-change: transform;
+  @media (max-width: $tabletWidth) {
+    top: 23.6rem;
+  }
+  &.hideMobileTabs {
+    @media (max-width: $mobileWidth) {
+      display: none;
+    }
+  }
+  &.animateContent {
+    visibility: hidden;
+    //transform: translateX(100%);
   }
 }
+
 .logo {
   position: fixed;
   z-index: 999;

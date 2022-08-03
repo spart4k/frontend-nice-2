@@ -10,49 +10,49 @@
       >
         <div :class="$style.sliderContainer">
           <div :class="$style.emojiContainer">
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😄')">
-              😄
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😡')">
-              😡
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😊')">
+              😊
             </div>
             <div :class="$style.emoji" @click="$emit('emojiWrite', '😂')">
               😂
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😢')">
-              😢
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😇')">
+              😇
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😎')">
-              😎
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😎️')">
+              😎️
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '👿')">
-              👿
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '🤝')">
+              🤝
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '👽')">
-              👽
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😉')">
+              😉
+            </div>
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😛')">
+              😛
             </div>
           </div>
           <div :class="$style.emojiContainer">
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😄')">
-              😄
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '🥳')">
+              🥳
+            </div>
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😍')">
+              😍
             </div>
             <div :class="$style.emoji" @click="$emit('emojiWrite', '😡')">
               😡
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😂')">
-              😂
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😌')">
+              😌
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😢')">
-              😢
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😱')">
+              😱
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😎')">
-              😎
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😴')">
+              😴
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '👿')">
-              👿
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '👽')">
-              👽
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '🤯')">
+              🤯
             </div>
           </div>
         </div>
@@ -83,6 +83,11 @@
             alt=""
           >
         </div>
+        <template #customPaging="">
+          <div class="custom-dot">
+            <N-Icon name="back" />
+          </div>
+        </template>
       </VueSlickCarousel>
     </div>
   </div>
@@ -114,6 +119,7 @@ export default {
     border-radius: 20px;
     padding: 1.8rem 0;
     margin: 2.5rem 0 0 0;
+    width: 33rem;
     .sliderContainer{
         display: flex !important;
         padding: 0 1.7rem;
@@ -148,6 +154,11 @@ export default {
     }
     :global(.slick-dots) {
         bottom: -45px;
+    }
+    :global(.slick-active) {
+      :global(.custom-dot) {
+        fill: aqua;
+      }
     }
 }
 </style>

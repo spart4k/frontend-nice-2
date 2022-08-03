@@ -42,8 +42,7 @@ export default {
 <style scoped lang="scss" module>
 .container {
   position: relative;
-  margin-bottom: 9rem;
-  height: calc(100vh - 25.5rem);
+  height: calc(100vh - 15.5rem);
   .wrapper {
     display: flex;
     flex-direction: column;

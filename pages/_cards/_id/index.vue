@@ -1,7 +1,7 @@
 <template>
-  <N-Intro no-preview>
+  <main :class="$style.main">
     <div :class="$style.wrapper">
-      <N-Background :description="description" hide-image />
+      <n-background ref="background" :description="description" color="#0000" />
       <template v-if="card">
         <SectionCards
           :id="card.section_id"
@@ -18,11 +18,11 @@
           <template v-else>
             Перейти в корзину
           </template>
-        <!--        {{ !isAddedBasket ? 'Добавить в корзину' : 'Добавлено' }}-->
+          <!--        {{ !isAddedBasket ? 'Добавить в корзину' : 'Добавлено' }}-->
         </N-Fixed-Button>
       </template>
     </div>
-  </N-Intro>
+  </main>
 </template>
 
 <script>
@@ -99,9 +99,12 @@ export default defineComponent({
 </script>
 
 <style scoped module lang="scss">
+.main {
+  @include container;
+}
 .wrapper {
   width: 100%;
-  padding-top: 5rem;
+  padding-top: 10rem;
 }
 .button__add_basket {
   background-color: rgba($black, 0.8);
