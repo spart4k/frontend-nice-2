@@ -17,7 +17,13 @@
   &.animateContent {
     opacity: 0;
   }
+  :global(.bottom-sheet__bar) {
+    height: 4px;
+    background: #222222;
+    opacity: 0.2;
+  }
 }
+
 .linkHome {
   position: absolute;
   top: 3.8rem;
@@ -67,7 +73,7 @@
 
 .headerNav {
   display: block;
-  padding-top: 2.8rem;
+  padding-top: 4.9rem;
   background-color: rgba(255,255,255, 0);
   backdrop-filter: blur(30px);
   transform: translate3d(0,0,0);
@@ -104,6 +110,11 @@
   .icon {
     margin-bottom: .5rem;
   }
+}
+.close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
 }
 .basket {
   width: 100%;

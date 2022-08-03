@@ -1,15 +1,23 @@
 <template>
-  <n-intro :description="introTitle" :set-height="cards.value && cards.value.length === 1">
+  <main :class="$style.main">
+    <n-intro :description="introTitle" />
     <n-preloader v-if="loading" />
-    <template v-for="card in cards.value">
-      <SectionCards :id="id || card.section_id" :key="card.id" :card="card" @clickTag="clickTag" />
-    </template>
-    <client-only>
-      <n-lazy-pagination
-        @lazyPagination="lazyPagination"
+    <template v-else>
+      <NGridCard
+        v-if="cards.value"
+        ref="content"
+        class="content"
+        :class="[$style.content, showAnimate && $style.animateContent]"
+        :items="cards.value"
+        @clickTag="clickTag"
       />
-    </client-only>
-  </n-intro>
+      <!--      <client-only>-->
+      <!--        <n-lazy-pagination-->
+      <!--          @lazyPagination="lazyPagination"-->
+      <!--        />-->
+      <!--      </client-only>-->
+    </template>
+  </main>
 </template>
 
 <script>
@@ -121,4 +129,9 @@ export default defineComponent({
 })
 </script>
 
-<style scoped lang="scss" module></style>
+<style scoped lang="scss" module>
+.main {
+  @include container;
+}
+.content {}
+</style>

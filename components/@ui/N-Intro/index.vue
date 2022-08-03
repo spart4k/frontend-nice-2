@@ -1,17 +1,11 @@
 <template>
-  <main ref="main" :class="$style.main" :style="{ paddingTop: !isHomePage ? '15.5rem' : '31.6rem' }">
+  <div ref="main" :class="$style.main" :style="{ paddingTop: !isHomePage ? '15.5rem' : '31.6rem' }">
     <div v-if="!noPreview" :class="$style.intro">
-      <!-- <N-Background-->
-      <!--        :hide-image="scrollingContent"-->
-      <!--        :is-home-page="isHomePage"-->
-      <!--        :description="description"-->
-      <!--        :color="color"-->
-      <!-- /> -->
-      <div :class="$style.wrapperBg">
-        <!-- <img v-if="!isHomePage && setImage && !hideImage" :class="$style.heroImage" :src="setImage"> -->
-        <div :class="$style.overlay" :style="{backgroundColor: color}" />
-        <div ref="background" :class="$style.bg" :style="{ backgroundImage: `url(${backgroundImage})` }" />
-      </div>
+      <n-tabs
+        :class="[$style.tabs, showAnimate && $style.animateContent]"
+        class="navbar"
+      />
+      <n-background ref="background" :color="color" />
       <div
         v-if="isHomePage"
         ref="logo"
@@ -20,7 +14,6 @@
       >
         <NLogoTitle
           :is-home-page="isHomePage"
-          :description="description"
           :hide-text-logo="hideTextLogo"
         />
       </div>
@@ -35,21 +28,23 @@
         v-if="!isHomePage"
         ref="anchor"
         :class="[$style.linkAnchor, scrollingContent && $style.scrolling]"
-        @click="scrollTo"
       >
         <n-icon name="arrow-bottom" />
       </div>
     </div>
-    <div ref="content" :class="$style.content" class="content">
-      <slot />
-    </div>
-  </main>
+    <!--    <div-->
+    <!--      ref="content"-->
+    <!--      :class="[$style.content, (!noPreview && showAnimate) && $style.animateContent]"-->
+    <!--      class="content"-->
+    <!--    >-->
+    <!--      <slot />-->
+    <!--    </div>-->
+  </div>
 </template>
 
 <script>
 import { Elastic } from 'gsap'
 import { computed, nextTick, onMounted, ref, useContext, useRoute } from '@nuxtjs/composition-api'
-import { scrollBy } from 'seamless-scroll-polyfill'
 import NLogoTitle from './components/NLogoTitle'
 import { BLAND_COLOR } from '~/const/blandColor'
 import { BLAND_IMAGE } from '~/const/blandImage'
@@ -69,14 +64,19 @@ export default {
     },
     noPreview: {
       type: Boolean
+    },
+    content: {
+      type: Object
+    },
+    isShowAnimation: {
+      type: Boolean
     }
   },
-  setup (_, ctx) {
-    const { $gsap } = useContext()
+  setup (props) {
+    const { $gsap, store } = useContext()
     const anchor = ref(null)
     const logo = ref(null)
-    // const background = ref(null)
-    const content = ref(null)
+    // const content = ref(null)
     const main = ref(null)
     const wrapper = ref(null)
     const scrollingContent = ref(null)
@@ -99,19 +99,21 @@ export default {
     } = animationGSAP($gsap, Elastic)
     onMounted(() => {
       nextTick(() => {
-        if (logo.value) {
-          animationlogo(logo.value, content.value)
-          animateBackground(content.value)
-          animateSubtitle(content.value)
-          animateNavbar(content.value)
+        const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+        if (isPlayAnimation) {
+          store.commit('content/setAnimate', false)
+        }
+        if (logo.value && isHomePage.value && !isPlayAnimation) {
           animationTimeline()
         }
+        animationlogo(logo.value, props.content.$el)
+        animateSubtitle(props.content.$el)
+        animateBackground(props.content.$el)
+        animateNavbar(props.content.$el)
+        localStorage.setItem('showAnimateHomePage', 'true')
       })
     })
-    const scrollTo = () => {
-      const contentBounding = content.value.getBoundingClientRect()
-      scrollBy(main.value, { behavior: 'smooth', top: contentBounding.top - 90 })
-    }
+
     const color = computed(() => {
       const paramsColor = BLAND_COLOR[route.value.params?.slug] || BLAND_COLOR[route.value.name]
       if (paramsColor) {
@@ -130,14 +132,13 @@ export default {
     })
     return {
       anchor,
-      content,
+      // content,
       wrapper,
       scrollingContent,
       main,
       isHomePage,
       logo,
       background,
-      scrollTo,
       color,
       image,
       hideTextLogo,
@@ -157,6 +158,12 @@ export default {
   width: 100%;
   //min-height: 100vh;
   height: 100vh;
+  background-image: url('@/assets/img/background/index-background.jpg');
+  background-size: cover;
+  background-repeat: repeat;
+  z-index: 1;
+  background-position: 0 0;
+  // transform: scale(1.2);
   .overlay {
     position: fixed;
     width: 100%;
@@ -174,16 +181,6 @@ export default {
     top: 50%;
     right: 0;
     transform: translateY(-50%);
-  }
-  .bg {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-repeat: repeat;
-    z-index: 1;
-    background-position: 0 0;
-    // transform: scale(1.2);
   }
 }
 
@@ -291,7 +288,7 @@ export default {
 }
 .linkAnchor {
   position: fixed;
-  z-index: 10;
+  z-index: 0;
   bottom: 6.8rem;
   left: 50%;
   transform: translateX(-50%);

@@ -5,24 +5,20 @@
     </h1>
     <div v-if="!isHomePage">
       <N-Icon :class="$style.quote" name="quote" />
-      <h2 :class="$style.subtitle">Читая, вы проживаете несколько жизней.</h2>
-      <h3 :class="$style.author">– Уильям Стайрон</h3>
+      <h2 :class="$style.subtitle">
+        Читая, вы проживаете несколько жизней.
+      </h2>
+      <h3 :class="$style.author">
+        – Уильям Стайрон
+      </h3>
       <div :class="$style.image">
         <img :src="require(`~/assets/img/background/${image}`)" alt="">
       </div>
     </div>
-    <div :class="[isHomePage && $style.wrapper]">
-      <n-logo v-if="isHomePage" :class="$style.logo" size="md" />
-      <!-- <h1
-        v-if="description.subtitle"
-        :class="[
-          isHomePage && $style.intro__subtitle_homePage,
-          $style.subtitle,
-          hideTextLogo && $style.hideTextLogo
-        ]"
-      >
-        {{ description.subtitle }}
-      </h1> -->
+    <div>
+      <div :class="[isHomePage && $style.wrapper]">
+        <n-logo v-if="isHomePage" :class="$style.logo" size="md" />
+      </div>
     </div>
   </div>
 </template>
@@ -47,7 +43,7 @@ export default {
 .container {
   position: relative;
   margin-bottom: 9rem;
-  height: calc(100vh - 15.5rem);
+  height: calc(100vh - 25.5rem);
   .wrapper {
     display: flex;
     flex-direction: column;
@@ -79,6 +75,8 @@ export default {
     img {
       height: 100%;
       width: 100%;
+      pointer-events: none;
+      user-select: none;
     }
   }
   // .subtitle {
