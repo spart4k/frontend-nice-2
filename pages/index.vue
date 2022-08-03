@@ -49,11 +49,11 @@ export default defineComponent({
     const pageInfo = ref({})
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
 
-    const fetchData = (currentPage) => {
+    const fetchData = async (currentPage) => {
       const params = {
         page: currentPage
       }
-      const response = store.dispatch('main/getData', params)
+      const response = await store.dispatch('main/getData', params)
       return response
     }
     store.commit('content/clearBgIntro')

@@ -1,6 +1,6 @@
 <template>
-  <div :class="$style.card">
-    <div :class="$style.gallery">
+  <div :class="[$style.card, detailPage && $style.detailPage]">
+    <div ref="gallery" :class="[$style.gallery, detailPage && $style.detailPage]">
       <template v-if="data.images.length && !$props.withVideo">
         <template v-if="$props.detailPage && data.images.length > 1">
           <N-Slider :slider-item="data.images" />
@@ -36,12 +36,38 @@
     <div
       :class="[
         $style.body,
-        $props.withAuthor && $style.author
+        $props.withAuthor && $style.author,
+        detailPage && $style.detailPage
       ]"
+      :style="{ height: cardHeight }"
     >
       <template>
-        <!-- NuxtLink -->
-        <div :class="$style.body__top" tag="div" :to="`/cards/${data.id}`">
+        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`/cards/${data.id}`">
+          <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
+            {{ data.title }}
+          </h2>
+          <template v-if="$props.detailPage && data.author.length>0">
+            <p :class="$style.authorName">
+              автор {{ data.author }}
+            </p>
+          </template>
+          <div v-if="data.date_event" :class="$style.time">
+            {{ dateFormat }}
+          </div>
+          <template v-if="data.price && $props.detailPage">
+            <div :class="$style.price">
+              {{ data.price }}р.
+            </div>
+            <N-Wire v-if="false" />
+            <div :class="$style.buyButton">
+              Купить
+            </div>
+          </template>
+          <div v-if="isJsonString" :class="$style.cardText">
+            <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
+          </div>
+        </NuxtLink>
+        <div v-if="$props.detailPage" :class="$style.body__top" tag="div">
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
             {{ data.title }}
           </h2>
@@ -94,10 +120,11 @@
           </N-Chip>
         </div>
         <div :class="$style.socials" :style="{ marginTop: $props.detailPage ? '3rem' : '2rem' }">
-          <div>
+          <div @click="addLike">
             <N-Like v-model="like" />
             <div :class="$style.parser">
-              {{ !$props.detailPage ? '0' : 'Нравиться' }}
+              <!-- likeCounter -->
+              {{ !$props.detailPage ? '0' : 'Нравится' }}
             </div>
           </div>
           <div @click="showComments = !showComments">
@@ -107,7 +134,7 @@
             </div>
           </div>
         </div>
-        <div v-if="!$props.detailPage" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '3rem' : '' }">
+        <div v-if="!$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '3rem' : '' }">
           <N-Chip
             v-for="item in data.tags"
             :key="item.id"
@@ -134,12 +161,14 @@
         <p :class="$style.comments__title">
           {{ commentCounter }} комментари{{ commentEnding }}
         </p>
-        <N-Input />
+        <N-Input @smilies="commentHeightSet" />
         <N-Plug v-if="false" />
-        <N-Comment />
-        <N-Comment />
-        <N-Comment />
-        <N-Comment />
+        <div v-if="true">
+          <N-Comment />
+          <N-Comment />
+          <N-Comment />
+          <N-Comment />
+        </div>
       </div>
       <div v-if="$slots.footer" :class="$style.body__footer">
         <slot name="footer" />
@@ -158,8 +187,9 @@ export default {
   props: { ...dataProps.props },
   setup (props) {
     const videoRef = ref(null)
-    const showComments = ref(true)
-    const like = ref(false)
+    const showComments = ref(false)
+    const like = ref(props.data.liked)
+    const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
     const chipsCounter = ref(0)
     const chipsWidth = ref(-10)
@@ -168,8 +198,20 @@ export default {
     const commentBox = ref()
     const commentEnding = ref('ев')
     const commentCounter = ref(1)
+    const gallery = ref()
+    const cardHeight = ref()
     const { $axios } = useContext()
+    const { store } = useContext()
     const videoPlay = ref(false)
+    const addLike = async () => {
+      if (like.value === true) {
+        likeCounter.value++
+        await store.dispatch('like/addLike', props.data.id)
+      } else {
+        likeCounter.value--
+        await store.dispatch('like/removeLike', props.data.id)
+      }
+    }
     const videoPlayingChange = () => {
       videoPlay.value = !videoPlay.value
       if (videoRef.value.paused === true) {
@@ -187,50 +229,34 @@ export default {
       return true
     })
     const videoUrl = ref()
-    const screenChange = () => {
-      showComments.value = true
-      commentHeight.value = '9999999px'
-      setTimeout(() => {
-        commentHeight.value = commentBox.value.getBoundingClientRect().height + 'px'
-      }, 50)
-      if (showComments.value === false) {
-        showComments.value = true
-        commentHeight.value = '9999999px'
-        setTimeout(() => {
-          commentHeight.value = commentBox.value.getBoundingClientRect().height + 'px'
-        }, 50)
-        showComments.value = false
-      }
-    }
     const commentHeightSet = () => {
-      commentHeight.value = '9999999px'
-      setTimeout(() => {
-        commentHeight.value = commentBox.value.getBoundingClientRect().height + 'px'
-        showComments.value = false
-      }, 150)
+      if (props.detailPage === true) {
+        setTimeout(() => {
+          commentHeight.value = commentBox.value.scrollHeight + 'px'
+        }, 0)
+      }
     }
     const extraTagHide = () => {
+      if (chipsArray.value?.length) {
         for (let i = 0; i < chipsArray.value.length; i++) {
-          chipsWidth.value += chipsArray.value[i].$el.offsetWidth + 10
-        }
-        if (chipsWidth.value > 315) {
-          for (let i = chipsArray.value.length - 1; chipsWidth.value > 251; i--) {
-              chipsWidth.value = chipsWidth.value - (chipsArray.value[i].$el.offsetWidth + 10)
-              chipsArray.value[i].$el.style.display = 'none'
-              chipsCounter.value++
+            chipsWidth.value += chipsArray.value[i].$el.offsetWidth + 10
           }
-        }
+          if (chipsWidth.value > 315) {
+            for (let i = chipsArray.value.length - 1; chipsWidth.value > 251; i--) {
+                chipsWidth.value = chipsWidth.value - (chipsArray.value[i].$el.offsetWidth + 10)
+                chipsArray.value[i].$el.style.display = 'none'
+                chipsCounter.value++
+            }
+          }
       }
+    }
     const extraTagShow = () => {
         chipsArray.value.forEach(function (item) {
           item.$el.style.display = 'flex'
         })
         chipExtra.value.$el.style.display = 'none'
       }
-    onMounted(() => {
-      extraTagHide()
-      commentHeightSet()
-      window.addEventListener('resize', screenChange)
+    const wordEnding = () => {
       const string = commentCounter.value.toString()
       const lastElem = string[string.length - 1]
       if (!(string[string.length - 2] === '1')) {
@@ -240,6 +266,15 @@ export default {
           commentEnding.value = 'й'
         }
       }
+    }
+    onMounted(() => {
+      if (props.detailPage === true && (window.innerWidth > 900)) {
+        cardHeight.value = gallery.value.clientHeight + 'px'
+      }
+      extraTagHide()
+      commentHeightSet()
+      wordEnding()
+      window.addEventListener('resize', commentHeightSet)
       nextTick(() => {
         if (props.withVideo) {
           videoUrl.value = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`
@@ -249,13 +284,14 @@ export default {
       })
     })
     onUnmounted(() => {
-      window.addEventListener('resize', screenChange)
+      window.addEventListener('resize', commentHeightSet)
     })
     const dateFormat = computed(() => {
       return props.data.date_event?.replace(/:(\w+)/, '')?.replace(/\s/, ' / ') ?? ''
     })
     return {
       like,
+      likeCounter,
       chipsCounter,
       showComments,
       chipsArray,
@@ -269,12 +305,15 @@ export default {
       commentBox,
       videoRef,
       commentHeightSet,
+      wordEnding,
       extraTagHide,
       extraTagShow,
+      cardHeight,
+      addLike,
+      gallery,
       videoUrl,
       videoPlay,
-      videoPlayingChange,
-      screenChange
+      videoPlayingChange
     }
   }
 }
@@ -286,9 +325,20 @@ export default {
     width: 100%;
     border-radius: 2rem;
     -webkit-mask-image: -webkit-radial-gradient(white, black);
-    @media (min-width: $tabletWidth) {
-      width: 80%;
-      margin: 0 auto;
+    &.detailPage {
+      @media (min-width: $tabletWidth) {
+        width: 85%;
+        margin: 0 auto;
+        display: flex;
+      }
+    }
+    .gallery {
+      &.detailPage {
+        @media (min-width: $tabletWidth) {
+          min-width: 50%;
+          max-width: 50%;
+        }
+      }
     }
     .wrapperVideo {
       position: relative;
@@ -360,6 +410,12 @@ export default {
     padding: 1.4rem 1.5rem 2.094rem;
     color: $fontColorDefault;
     @include regular-text;
+    &.detailPage {
+      @media (min-width: $tabletWidth) {
+        padding: 3rem;
+        overflow: scroll;
+      }
+    }
     &.author {
       padding: .8rem 1rem 1.3rem;
       p {
@@ -420,13 +476,16 @@ export default {
       margin-left: auto;
     }
     .comments {
-      transition: all .8s;
-      overflow: hidden;
+      transition: all .6s;
+      // overflow: hidden;
       opacity: 0;
       &__title {
         color: $fontColorDefault;
         @include regular-text-bold;
         }
+      .commentsBox {
+        // overflow: hidden;
+      }
     }
     .show {
       opacity: 1;

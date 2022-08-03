@@ -1,27 +1,19 @@
 <template>
-  <main :class="$style.main">
+  <N-Intro no-preview>
     <div :class="$style.wrapper">
-      <n-background ref="background" :description="description" color="#0000" />
+      <N-Background :description="description" hide-image />
       <template v-if="card">
         <SectionCards
-          :id="card.section_id"
+          :id="10"
           :key="card.id"
           detail-page
           :card="card"
           @clickTag="clickTag"
         />
-        <N-Back-Button />
-        <N-Fixed-Button v-if="card.is_product" :is-auth="isAuth" :check-auth="true" @clickButton="addBasket">
-          <template v-if="!isAddedBasket">
-            Добавить в корзину
-          </template>
-          <template v-else>
-            Перейти в корзину
-          </template>
-        </N-Fixed-Button>
+        <!-- <N-Back-Button /> -->
       </template>
     </div>
-  </main>
+  </N-Intro>
 </template>
 
 <script>
@@ -29,9 +21,8 @@ import { ref, useAsync, useContext, defineComponent, useRouter, computed, useMet
 import { head } from '@/components/scripts/head.js'
 
 export default defineComponent({
-  name: 'DetailCards',
+  name: 'NCoin',
   layout: 'default',
-  // middleware: 'background',
   transition: 'home',
   setup () {
     const isAddedBasket = ref(false)
@@ -44,6 +35,7 @@ export default defineComponent({
       return {
         background: bgName?.value?.slug
       }
+      // title: bgName.value
     })
 
     const clickTag = (value) => {
@@ -57,25 +49,12 @@ export default defineComponent({
       } catch (e) {
         console.log(e)
       }
-    }, route.value.params.id)
+    })
     head(useMeta, card.value)
     const bgName = computed(() => {
       const find = sections.value?.find(item => Number(item.id) === +card.value?.section_id)
       return find
     })
-
-    const addBasket = () => {
-      if (!isAddedBasket.value) {
-        isAddedBasket.value = true
-        const params = {
-          card_id: route.value.params.id,
-          quantity: 1
-        }
-        store.dispatch('basket/addBasket', params)
-      } else {
-        router.push('/basket')
-      }
-    }
 
     const isAuth = computed(() => {
       return store.state.authentication.authorizated
@@ -83,7 +62,6 @@ export default defineComponent({
 
     return {
       card,
-      addBasket,
       clickTag,
       description,
       isAddedBasket,
@@ -97,12 +75,9 @@ export default defineComponent({
 </script>
 
 <style scoped module lang="scss">
-.main {
-  @include container;
-}
 .wrapper {
   width: 100%;
-  padding-top: 10rem;
+  padding-top: 5rem;
 }
 .button__add_basket {
   background-color: rgba($black, 0.8);

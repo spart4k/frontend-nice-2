@@ -1,5 +1,5 @@
 <template>
-  <div ref="main" :class="$style.main">
+  <div ref="main" :class="$style.main" :style="{ paddingTop: !isHomePage ? '15.5rem' : '31.6rem' }">
     <div v-if="!noPreview" :class="$style.intro">
       <n-tabs
         :class="[
@@ -9,7 +9,9 @@
         ]"
         class="navbar"
       />
+      <n-background ref="background" :color="color" :is-home-page="isHomePage" />
       <div
+        v-if="isHomePage"
         ref="logo"
         class="logo"
         :class="[$style.logo]"
@@ -20,12 +22,19 @@
           :hide-text-logo="hideTextLogo"
         />
       </div>
+      <div v-else>
+        <NLogoTitle
+          :is-home-page="isHomePage"
+          :description="description"
+          :image="image"
+        />
+      </div>
       <div
         v-if="!isHomePage"
         ref="anchor"
         :class="[$style.linkAnchor, scrollingContent && $style.scrolling]"
       >
-        <n-icon name="arrow-top" />
+        <n-icon name="arrow-bottom" />
       </div>
     </div>
   </div>
@@ -34,6 +43,9 @@
 <script>
 import { computed, ref, useContext, useRoute } from '@nuxtjs/composition-api'
 import NLogoTitle from './components/NLogoTitle'
+import { BLAND_COLOR } from '~/const/blandColor'
+import { BLAND_IMAGE } from '~/const/blandImage'
+import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default {
   name: 'NIntro',
@@ -69,10 +81,56 @@ export default {
     const scrollingContent = ref(null)
     const hideTextLogo = ref(false)
     const route = useRoute()
-
     const isHomePage = computed(() => route.value.name === 'index')
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
 
+    const backgroundImage = computed(() => {
+      if (!isHomePage.value) {
+        return require('@/assets/img/background/coin-background.png')
+      }
+        return require('@/assets/img/background/index-background.jpg')
+    })
+    const {
+      background,
+      animationlogo,
+      animateBackground,
+      animateSubtitle,
+      animateNavbar,
+      animationTimeline
+    } = animationGSAP($gsap, Elastic)
+    onMounted(() => {
+      nextTick(() => {
+        const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+        if (isPlayAnimation) {
+          store.commit('content/setAnimate', false)
+        }
+        if (logo.value && isHomePage.value && !isPlayAnimation) {
+          animationTimeline()
+        }
+        animationlogo(logo.value)
+        animateSubtitle()
+        animateBackground()
+        animateNavbar()
+        localStorage.setItem('showAnimateHomePage', 'true')
+      })
+    })
+
+    const color = computed(() => {
+      const paramsColor = BLAND_COLOR[route.value.params?.slug] || BLAND_COLOR[route.value.name]
+      if (paramsColor) {
+        return paramsColor
+      } else {
+        return ''
+      }
+    })
+    const image = computed(() => {
+      const paramsImage = BLAND_IMAGE[route.value.params?.slug] || BLAND_IMAGE[route.value.name]
+      if (paramsImage) {
+        return paramsImage
+      } else {
+        return ''
+      }
+    })
     return {
       anchor,
       wrapper,
@@ -81,7 +139,11 @@ export default {
       isHomePage,
       logo,
       showAnimate,
-      hideTextLogo
+      background,
+      color,
+      image,
+      hideTextLogo,
+      backgroundImage
     }
   },
   watchQuery: true
@@ -95,22 +157,23 @@ export default {
   left: 0;
   bottom: 0;
   width: 100%;
+  //min-height: 100vh;
   height: 100vh;
   background-image: url('@/assets/img/background/index-background.jpg');
-  background-size: contain;
+  background-size: cover;
   background-repeat: repeat;
   z-index: 1;
   background-position: 0 0;
-  transform: scale(1.2);
+  // transform: scale(1.2);
   .overlay {
     position: fixed;
     width: 100%;
     left: 0;
     top: 0;
     height: 100%;
-    opacity: 0.35;
+    opacity: 0.6;
     z-index: 2;
-    mix-blend-mode: hard-light;
+    mix-blend-mode: overlay;
   }
   .heroImage {
     position: absolute;
@@ -144,28 +207,21 @@ export default {
 
 .logo {
   position: fixed;
-  z-index: 11;
+  z-index: 999;
+  //top: 0;
   left: 50%;
   transform-origin: top center;
   padding-top: var(--padding-top-logo);
-  top: 1rem;
-  transform: translateX(-50%);
-  @media (max-width:$mobileWidth) {
-    top: 7rem;
-  }
-  &.animateContent {
-    transform: translate(-50%, -50%);
-    top: 50%;
-  }
+  transform: translate(-50%, -50%);
+  top: 50%;
+  //@media (max-width: $tabletWidth){
+  //  top: 7rem;
+  //}
 }
 .intro {
   width: 100%;
   color: $white;
   overflow: auto;
-  padding-top: 30.5rem;
-  @media (max-width: $mobileWidth){
-    padding-top: 31.6rem;
-  }
   .visually-hidden {
     position: fixed;
     transform: scale(0);
@@ -235,10 +291,8 @@ export default {
   z-index: 10;
   padding-bottom: 5rem;
   width: 100%;
+  // opacity: 0;
   transition: opacity 300ms;
-  &.animateContent {
-    opacity: 0;
-  }
   & > * + * {
     margin-top: 2rem;
   }
@@ -248,7 +302,7 @@ export default {
 }
 .linkAnchor {
   position: fixed;
-  z-index: 10;
+  z-index: 0;
   bottom: 6.8rem;
   left: 50%;
   transform: translateX(-50%);

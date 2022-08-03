@@ -1,15 +1,25 @@
 <template>
-  <div :style="{ marginBottom: showContainer ? '5rem' : '3.5rem' }" :class="$style.container">
-    <textarea
+  <div :style="{ marginBottom: smilies ? '5rem' : '3.5rem' }" :class="$style.container">
+    <!-- <input
       ref="input"
       v-model="letters"
       type="text"
       maxlength="200"
       :class="$style.input"
       placeholder="Написать комментарий ..."
+    > -->
+    <textarea
+      ref="input"
+      v-model="letters"
+      placeholder="Написать комментарий ..."
+      maxlength="200"
+      :class="$style.textarea"
+      rows="1"
+      @input="resize($event)"
     />
+    <!-- <div><span ref="input" tabindex="-1" :class="$style.textarea" role="textbox" contenteditable="true" /></div> -->
     <div :class="$style.emoji">
-      <N-Icon name="smile" :class="$style.icon" :style="{ color: showContainer ? '#F45532' : '#222222' }" @click="showContainer = !showContainer" />
+      <N-Icon name="smile" :class="$style.icon" :style="{ color: smilies ? '#F45532' : '#222222' }" @click="showSmilies(); $emit('smilies')" />
       <div :class="$style.send">
         <div :class="$style.letterCounter">
           {{ letters.length }}/200
@@ -17,8 +27,7 @@
         <N-Icon name="send" @click="sendComment" />
       </div>
     </div>
-    <N-Emoji v-if="showContainer" @emojiWrite="emojiWrite" @click="emojiWrite" />
-    <p><span class="textarea" role="textbox" contenteditable></span></p>
+    <N-Emoji v-if="smilies" @emojiWrite="emojiWrite" @click="emojiWrite" />
   </div>
 </template>
 
@@ -32,19 +41,30 @@ export default {
   setup () {
   const letters = ref('')
   const input = ref()
-  const showContainer = ref()
+  const smilies = ref()
+  const showSmilies = () => {
+    smilies.value = !smilies.value
+  }
+  const resize = (e) => {
+    e.target.style.height = 'auto'
+    e.target.style.height = `${e.target.scrollHeight}px`
+  }
   const sendComment = () => {
-    console.log(letters.value)
+    console.log(letters.value.length)
   }
   const emojiWrite = (emoji) => {
-    letters.value += emoji
-    input.value.focus()
+    if (letters.value.length < 199) {
+      letters.value += emoji
+      input.value.focus()
+    }
   }
   return {
     emojiWrite,
     letters,
-    showContainer,
+    smilies,
+    showSmilies,
     sendComment,
+    resize,
     input
   }
   }
@@ -54,15 +74,28 @@ export default {
 <style scoped lang="scss" module>
 .container{
     margin-top: 2rem;
-    .input {
-        width: 100%;
-        @include regular-text;
-        color: $fontColorDefault;
-        padding: 1rem 0;
-        border: none;
-        border-bottom: 2px solid #D46D33;
-        outline: none;
-        resize: none;
+    // .input {
+    //     width: 100%;
+    //     @include regular-text;
+    //     color: $fontColorDefault;
+    //     padding: 1rem 0;
+    //     border: none;
+    //     border-bottom: 2px solid #D46D33;
+    //     outline: none;
+    //     resize: none;
+    // }
+    .textarea {
+      display: block;
+      width: 100%;
+      height: 38px;
+      @include regular-text;
+      color: $fontColorDefault;
+      overflow: hidden;
+      padding: 1rem 0;
+      border: none;
+      border-bottom: 2px solid #D46D33;
+      outline: none;
+      resize: none;
     }
     .emoji {
     margin-top: 1.5rem;
@@ -83,13 +116,5 @@ export default {
             }
         }
     }
-}
-.textarea {
-  display: block;
-  width: 100%;
-  overflow: hidden;
-  resize: both;
-  min-height: 40px;
-  line-height: 20px;
 }
 </style>

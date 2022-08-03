@@ -36,6 +36,7 @@ export default {
     onMounted(() => {
       store.commit('authentication/setUserData')
       store.commit('authentication/setToken')
+      store.commit('authentication/setToken', '2|TeUVUgPl8axidfScynskYjPgeJRzCdxXcyIqDINY')
       store.dispatch('basket/getBasket')
     })
 
