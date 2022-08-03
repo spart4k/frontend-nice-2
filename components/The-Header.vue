@@ -15,10 +15,7 @@
       </div>
     </n-button>
 
-    <vue-bottom-sheet ref="menu">
-      <div>
-        <n-icon name="close" />
-      </div>
+    <vue-bottom-sheet ref="menu" :overlay="true">
       <nav :class="[$style.headerNav, active && $style.active]">
         <ul :class="$style.user_list">
           <li :class="$style.user_item">
@@ -51,6 +48,7 @@
           @hideNavMenu=" active = false"
         />
       </nav>
+      <n-icon name="close" :class="$style.close" @click="closeMenu" />
     </vue-bottom-sheet>
 
     <transition name="fade-fast">
@@ -123,7 +121,13 @@ export default {
     }
 
     const openMenu = () => {
+      // document.body.style.overflow = 'hidden'
       menu.value.open()
+      // active.value = !active.value
+    }
+    const closeMenu = () => {
+      // document.body.style.overflow = 'auto'
+      menu.value.close()
       // active.value = !active.value
     }
 
@@ -152,6 +156,7 @@ export default {
 
     return {
       openMenu,
+      closeMenu,
       toggleMenu,
       openTestPage,
       openProfile,

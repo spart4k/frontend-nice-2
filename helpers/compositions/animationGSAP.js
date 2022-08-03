@@ -3,6 +3,7 @@ import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 
 const animation = ($gsap, Elastic) => {
   const TRIGGER = '.content'
+  $gsap.registerPlugin(ScrollTrigger)
 
   const background = ref(null)
   const animationTimeline = () => {
@@ -121,14 +122,13 @@ const animation = ($gsap, Elastic) => {
   const animationlogo = (logo, contentBounding) => {
     const header = document.querySelector('.header')
     const headerBounding = header.getBoundingClientRect().top
-    $gsap.registerPlugin(ScrollTrigger)
-
+    const top = contentBounding.getBoundingClientRect().top
     ScrollTrigger.matchMedia({
       '(max-width: 900px)' () {
         const tl = $gsap.timeline({
           scrollTrigger: {
             trigger: TRIGGER,
-            start: () => `top ${contentBounding.getBoundingClientRect().top}px`,
+            start: () => `top ${top}px`,
             end: () => `top ${headerBounding}`,
             scrub: true
             // markers: true,
@@ -145,10 +145,11 @@ const animation = ($gsap, Elastic) => {
     })
   }
   const animateSubtitle = (contentBounding) => {
+    const top = contentBounding.getBoundingClientRect().top
     $gsap.to('.subtitleLogo', {
       scrollTrigger: {
         trigger: TRIGGER,
-        start: () => `top ${contentBounding.getBoundingClientRect().top}px`,
+        start: () => `top ${top}px`,
         end: () => 100,
         scrub: true,
         markers: true
@@ -172,7 +173,7 @@ const animation = ($gsap, Elastic) => {
   }
 
   const animateBackground = () => {
-    $gsap.to(background.value,
+    $gsap.to(background.value?.$el,
       {
         backgroundPosition: '0 -200%',
         // scale: 1.2,

@@ -1,14 +1,11 @@
 <template>
-  <main ref="main" :class="$style.main">
+  <div ref="main" :class="$style.main">
     <div v-if="!noPreview" :class="$style.intro">
       <n-tabs
         :class="[$style.tabs, showAnimate && $style.animateContent]"
         class="navbar"
       />
-      <div :class="$style.wrapperBg">
-        <div :class="$style.overlay" :style="{backgroundColor: color}" />
-        <div ref="background" :class="$style.bg" />
-      </div>
+      <n-background ref="background" :color="color" />
       <div
         ref="logo"
         class="logo"
@@ -16,7 +13,6 @@
       >
         <NLogoTitle
           :is-home-page="isHomePage"
-          :description="description"
           :hide-text-logo="hideTextLogo"
         />
       </div>
@@ -28,14 +24,14 @@
         <n-icon name="arrow-top" />
       </div>
     </div>
-    <div
-      ref="content"
-      :class="[$style.content, (!noPreview && showAnimate) && $style.animateContent]"
-      class="content"
-    >
-      <slot />
-    </div>
-  </main>
+    <!--    <div-->
+    <!--      ref="content"-->
+    <!--      :class="[$style.content, (!noPreview && showAnimate) && $style.animateContent]"-->
+    <!--      class="content"-->
+    <!--    >-->
+    <!--      <slot />-->
+    <!--    </div>-->
+  </div>
 </template>
 
 <script>
@@ -59,13 +55,19 @@ export default {
     },
     noPreview: {
       type: Boolean
+    },
+    content: {
+      type: Object
+    },
+    isShowAnimation: {
+      type: Boolean
     }
   },
-  setup () {
+  setup (props) {
     const { $gsap, store } = useContext()
     const anchor = ref(null)
     const logo = ref(null)
-    const content = ref(null)
+    // const content = ref(null)
     const main = ref(null)
     const wrapper = ref(null)
     const scrollingContent = ref(null)
@@ -89,15 +91,14 @@ export default {
         const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
         if (isPlayAnimation) {
           store.commit('content/setAnimate', false)
-          console.log('test')
         }
         if (logo.value && isHomePage.value && !isPlayAnimation) {
           animationTimeline()
         }
-        animationlogo(logo.value, content.value)
-        animateSubtitle(content.value)
-        animateBackground(content.value)
-        animateNavbar(content.value)
+        animationlogo(logo.value, props.content.$el)
+        animateSubtitle(props.content.$el)
+        animateBackground(props.content.$el)
+        animateNavbar(props.content.$el)
         localStorage.setItem('showAnimateHomePage', 'true')
       })
     })
@@ -113,7 +114,7 @@ export default {
 
     return {
       anchor,
-      content,
+      // content,
       wrapper,
       scrollingContent,
       main,
@@ -137,6 +138,12 @@ export default {
   bottom: 0;
   width: 100%;
   height: 100vh;
+  background-image: url('@/assets/img/background/index-background.jpg');
+  background-size: contain;
+  background-repeat: repeat;
+  z-index: 1;
+  background-position: 0 0;
+  transform: scale(1.2);
   .overlay {
     position: fixed;
     width: 100%;
@@ -154,17 +161,6 @@ export default {
     top: 50%;
     right: 0;
     transform: translateY(-50%);
-  }
-  .bg {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-image: url('@/assets/img/background/index-background.jpg');
-    background-size: contain;
-    background-repeat: repeat;
-    z-index: 1;
-    background-position: 0 0;
-    transform: scale(1.2);
   }
 }
 .tabs {

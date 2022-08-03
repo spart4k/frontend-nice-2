@@ -1,8 +1,5 @@
 <template>
   <div>
-    <h1 v-if="!isHomePage" :class="[$style.title]">
-      {{ description.title }}
-    </h1>
     <div :class="[isHomePage && $style.wrapper]">
       <n-logo v-if="isHomePage" :class="$style.logo" size="md" />
       <!--      <h1-->
@@ -40,6 +37,7 @@ export default {
   flex-direction: column;
   align-items: center;
 }
+
 .title {
     @include title;
     @include montserratBlack;

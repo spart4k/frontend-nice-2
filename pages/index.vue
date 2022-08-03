@@ -1,24 +1,27 @@
 <template>
-  <n-intro :description="introTitle">
-    <!--      <TransitionGroup name="home" tag="div">-->
+  <main>
+    <n-intro :description="introTitle" :content="content" :is-show-animation="true" />
     <NGridCard
       v-if="cards.value && cards.value.data"
+      ref="content"
+      class="content"
+      :class="[$style.content, showAnimate && $style.animateContent]"
       :items="cards.value.data"
       @clickTag="clickTag"
     />
-    <!--    <div v-if="cards.value && cards.value.data">-->
-    <!--      {{ cards.value && cards.value.data }}-->
-    <!--    </div>-->
-    <!--      </transitiongroup>-->
-    <!--      <client-only>-->
-    <!--        <n-lazy-pagination-->
-    <!--          @lazyPagination="lazyPagination"-->
-    <!--        />-->
-    <!--      </client-only>-->
-  </n-intro>
+  </main>
 </template>
 <script>
-import { ref, defineComponent, useContext, useRoute, useRouter, useAsync, useMeta } from '@nuxtjs/composition-api'
+import {
+  ref,
+  defineComponent,
+  useContext,
+  useRoute,
+  useRouter,
+  useAsync,
+  useMeta,
+  computed
+} from '@nuxtjs/composition-api'
 import { pagination } from '~/plugins/pagination'
 import { head } from '@/components/scripts/head.js'
 export default defineComponent({
@@ -29,6 +32,7 @@ export default defineComponent({
     const route = useRoute()
     const cards = ref([])
     const totalPage = ref(0)
+    const content = ref(null)
 
     const introTitle = ref({
       title: 'Главная',
@@ -37,7 +41,8 @@ export default defineComponent({
     })
 
     const pageInfo = ref({})
-    // store.commit('content/changeState', { key: 'logoBg', value: 'main' })
+    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
+
     const fetchData = (currentPage) => {
       const params = {
         page: currentPage
@@ -71,12 +76,15 @@ export default defineComponent({
     }
 
     return {
+      lazyPagination,
+      clickTag,
+
       introTitle,
       cards,
       page,
-      lazyPagination,
       pageInfo,
-      clickTag
+      content,
+      showAnimate
     }
   },
   head: {},
@@ -96,8 +104,25 @@ export default defineComponent({
     width: 100%;
     max-width: 53.2rem;
   }
-  &__item {
-    margin-bottom: 2rem;
+}
+.content {
+  @include container;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+  padding-bottom: 5rem;
+  width: 100%;
+  transition: opacity 300ms;
+  &.animateContent {
+    opacity: 0;
+  }
+  & > * + * {
+    margin-top: 2rem;
+  }
+  &.setHeight {
+    min-height: 100%;
   }
 }
 </style>
