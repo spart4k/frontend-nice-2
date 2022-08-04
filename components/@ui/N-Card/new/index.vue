@@ -19,10 +19,11 @@
         </template>
       </template>
       <template v-else-if="$props.withVideo">
-        <div :class="$style.wrapperVideo" @click="videoPlayingChange">
+        <div :class="[$style.wrapperVideo, detailPage && $style.detailPage]" @click="videoPlayingChange">
           <N-Button-Play v-if="!videoPlay" />
           <video
             ref="videoRef"
+            :class="detailPage && $style.detailPage"
             playsinline
             :controls="videoPlay"
             muted
@@ -120,14 +121,14 @@
           </N-Chip>
         </div>
         <div :class="$style.socials" :style="{ marginTop: $props.detailPage ? '3rem' : '2rem' }">
-          <div @click="addLike">
-            <N-Like v-model="like" />
+          <div>
+            <N-Like v-model="like" :class="$style.likeContainer" @click="addLike" />
             <div :class="$style.parser">
               <!-- likeCounter -->
               {{ !$props.detailPage ? '0' : 'Нравится' }}
             </div>
           </div>
-          <div @click="showComments = !showComments">
+          <div :class="$style.commentsContainer" @click="showComments = !showComments">
             <N-Icon name="comments" />
             <div :class="$style.parser">
               {{ !$props.detailPage ? '0' : 'Комментировать' }}
@@ -163,7 +164,7 @@
         </p>
         <N-Input @smilies="commentHeightSet" />
         <N-Plug v-if="false" />
-        <div v-if="true">
+        <div v-if="showComments">
           <N-Comment />
           <N-Comment />
           <N-Comment />
@@ -188,6 +189,7 @@ export default {
   setup (props) {
     const videoRef = ref(null)
     const showComments = ref(false)
+    // const comments = ref(false)
     const like = ref(props.data.liked)
     const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
@@ -267,13 +269,18 @@ export default {
         }
       }
     }
-    onMounted(() => {
+    const blockHeight = () => {
       if (props.detailPage === true && (window.innerWidth > 900)) {
         cardHeight.value = gallery.value.clientHeight + 'px'
+        console.log(cardHeight.value)
       }
+    }
+    onMounted(() => {
+      blockHeight()
       extraTagHide()
       commentHeightSet()
       wordEnding()
+      window.addEventListener('resize', blockHeight)
       window.addEventListener('resize', commentHeightSet)
       nextTick(() => {
         if (props.withVideo) {
@@ -284,6 +291,7 @@ export default {
       })
     })
     onUnmounted(() => {
+      window.addEventListener('resize', blockHeight)
       window.addEventListener('resize', commentHeightSet)
     })
     const dateFormat = computed(() => {
@@ -303,6 +311,7 @@ export default {
       commentEnding,
       commentHeight,
       commentBox,
+      blockHeight,
       videoRef,
       commentHeightSet,
       wordEnding,
@@ -327,7 +336,8 @@ export default {
     -webkit-mask-image: -webkit-radial-gradient(white, black);
     &.detailPage {
       @media (min-width: $tabletWidth) {
-        width: 85%;
+        width: 114rem;
+        height: 67.4rem;
         margin: 0 auto;
         display: flex;
       }
@@ -335,13 +345,26 @@ export default {
     .gallery {
       &.detailPage {
         @media (min-width: $tabletWidth) {
+        background: black;
           min-width: 50%;
           max-width: 50%;
+          min-height: 70vh;
+          // max-height: 30vh;
+          // margin: auto 0;
+          display: flex;
+          align-items: center;
+          // justify-content: center;
         }
       }
     }
     .wrapperVideo {
       position: relative;
+      width: 100%;
+      &.detailPage {
+        @media (min-width: $tabletWidth) {
+          height: 100%;
+        }
+      }
       &:after {
         display: block;
         content: '';
@@ -352,9 +375,14 @@ export default {
         position: absolute;
         left: 0;
         top: 0;
-        width: 100.5%;
+        width: 100%;
         object-fit: cover;
         height: 100%;
+        &.detailPage {
+          @media (min-width: $tabletWidth) {
+            object-fit: contain;
+          }
+        }
       }
     }
     //video {
@@ -400,10 +428,16 @@ export default {
     display: flex;
     width: auto;
     gap: 3rem;
-  div {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
+    div {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      }
+    .likeContainer {
+      cursor: pointer;
+    }
+    .commentsContainer {
+      cursor: pointer;
     }
   }
   .body {
@@ -413,7 +447,7 @@ export default {
     &.detailPage {
       @media (min-width: $tabletWidth) {
         padding: 3rem;
-        overflow: scroll;
+        overflow-y: overlay;
       }
     }
     &.author {
@@ -468,6 +502,9 @@ export default {
       display: flex;
       flex-wrap: wrap;
       gap: 1.039rem;
+      .chip {
+        cursor: pointer;
+      }
     }
     &__footer {
       margin-top: 3rem;
