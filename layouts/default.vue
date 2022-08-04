@@ -3,10 +3,19 @@
     <the-header :header-items="headerItems" class="header" />
 
     <n-intro-wrapper>
-      <n-intro v-if="isHomePage" :description="introTitle" :is-show-animation="true">
+      <n-intro
+        v-if="isHomePage"
+        :description="introTitle"
+        :is-show-animation="true"
+      >
         <Nuxt />
       </n-intro>
-      <n-intro-slug v-else :description="introTitle" :is-show-animation="true">
+
+      <n-intro-slug
+        v-else
+        :description="introTitle"
+        :is-show-animation="true"
+      >
         <Nuxt />
       </n-intro-slug>
     </n-intro-wrapper>

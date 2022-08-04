@@ -3,22 +3,21 @@
     <div :class="$style.intro">
       <!--      v-if="!noPreview"-->
       <n-tabs
+        class="navbar"
         :class="[
           $style.tabs,
           showAnimate && $style.animateContent,
-          isHideMobileTabs && $style.hideMobileTabs,
         ]"
-        class="navbar"
       />
       <div
-        v-if="isHomePage"
         ref="logo"
         class="logo"
         :class="[$style.logo, showAnimate && $style.animateContent]"
       >
-        <NLogoTitle
+        <N-Logo
           :is-home-page="isHomePage"
           :hide-text-logo="hideTextLogo"
+          size="md"
         />
       </div>
       <div
@@ -38,7 +37,6 @@
 <script>
 import { computed, nextTick, onMounted, ref, useContext, useRoute } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
-import NLogoTitle from './components/NLogoTitle'
 import { BLAND_COLOR } from '~/const/blandColor'
 import { BLAND_IMAGE } from '~/const/blandImage'
 import animationGSAP from '~/helpers/compositions/animationGSAP'
@@ -47,9 +45,6 @@ import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default {
   name: 'NIntro',
-  components: {
-    NLogoTitle
-  },
   props: {
     description: {
       type: Object
@@ -138,7 +133,6 @@ export default {
       isHomePage,
       logo,
       showAnimate,
-      // background,
       color,
       image,
       hideTextLogo,
@@ -191,14 +185,8 @@ export default {
   @media (max-width: $tabletWidth) {
     top: 23.6rem;
   }
-  &.hideMobileTabs {
-    @media (max-width: $mobileWidth) {
-      display: none;
-    }
-  }
   &.animateContent {
     visibility: hidden;
-    //transform: translateX(100%);
   }
 }
 
@@ -206,20 +194,18 @@ export default {
   position: fixed;
   z-index: 999;
   top: 0;
+  @media (max-width: $mobileWidth) {
+    top: 7rem;
+  }
   left: 50%;
   transform-origin: top center;
   padding-top: var(--padding-top-logo);
-  //top: 9rem;
   transform: translate(-50%, 0);
-  @media (max-width: $tabletWidth){
-    top: 7rem;
-  }
   &.animateContent {
     top: 50%;
+    visibility: hidden;
+    transform: translate(-50%, -50%);
   }
-  //@media (max-width: $tabletWidth){
-  //  top: 7rem;
-  //}
 }
 .intro {
   width: 100%;
@@ -298,9 +284,6 @@ export default {
   transition: opacity 300ms;
   & > * + * {
     margin-top: 2rem;
-  }
-  &.setHeight {
-    min-height: 100%;
   }
 }
 .linkAnchor {

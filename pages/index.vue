@@ -18,7 +18,7 @@ import {
   useRoute,
   useRouter,
   useAsync,
-  useMeta, onMounted, nextTick
+  useMeta
 } from '@nuxtjs/composition-api'
 
 import { pagination } from '~/plugins/pagination'
@@ -74,19 +74,6 @@ export default defineComponent({
     const clickTag = (tag) => {
       router.push({ path: 'tags', query: { tag } })
     }
-
-    onMounted(() => {
-      nextTick(() => {
-        const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
-        if (isPlayAnimation) {
-          store.commit('content/setAnimate', false)
-        }
-        if (!isPlayAnimation) {
-          // animationTimeline()
-        }
-        localStorage.setItem('showAnimateHomePage', 'true')
-      })
-    })
 
     return {
       lazyPagination,

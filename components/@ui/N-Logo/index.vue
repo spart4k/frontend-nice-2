@@ -61,14 +61,6 @@ export default {
   align-items: center;
   width: 100%;
   will-change: transform;
-  .wrapperImage {
-    overflow: hidden;
-    &.animateContent {
-      & > img {
-        transform: translateY(-100%);
-      }
-    }
-  }
   img {
     width: 100%;
   }
@@ -90,8 +82,5 @@ export default {
 .md {
   width: 16.3rem;
 }
-//.big {
-//    width: 35.5rem;
-//}
 
 </style>

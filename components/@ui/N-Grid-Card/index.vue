@@ -2,7 +2,6 @@
   <div :class="$style.cards">
     <template v-if="spliceArray.colLeft && spliceArray.colRight">
       <div :class="$style.col">
-        <!--        :key="card.id" :class="$style.cards__item"-->
         <template v-for="(card) in spliceArray.colLeft">
           <div v-if="card.hasOwnProperty('image')" :key="card.id" :class="$style.image">
             <img :src="require(`~/assets/img/${card.image}.png`)" alt="DOG ">
@@ -10,12 +9,12 @@
           <section-cards v-else :id="card.section.id" :key="card.id" :class="$style.cards__item" :card="card" />
         </template>
       </div>
-      <!--      :key="card.id" :class="$style.cards__item"-->
       <div :class="$style.col">
         <template v-for="(card) in spliceArray.colRight">
           <section-cards
             :id="card.section.id"
             :key="card.id"
+            ref="colRightElements"
             :card="card"
             :class="$style.cards__item"
             @clickTag="($event) => $emit('clickTag', card.section.id)"
@@ -40,6 +39,7 @@ export default {
   setup (props) {
     const { items } = unref(props)
     const proxyArray = ref(items)
+    const colRightElements = ref(null)
 
     watch(() => props.items, () => {
       proxyArray.value = props.items
@@ -47,12 +47,11 @@ export default {
 
     const spliceArray = computed(() => {
       const middleIndex = Math.ceil(proxyArray.value?.length / 2)
-
-      const firstHalf = proxyArray.value?.splice(0, middleIndex)
       const obj = {
         image: 'dogs',
         id: Math.random()
       }
+      const firstHalf = proxyArray.value?.splice(0, middleIndex)
       firstHalf.unshift(obj)
       const secondHalf = proxyArray.value?.splice(-middleIndex)
 
@@ -61,26 +60,30 @@ export default {
         colRight: secondHalf
       }
     })
+    const heightDogs = computed(() => {
+      if (colRightElements.value && colRightElements.value.length) {
+        return `${colRightElements.value[0]?.$el?.clientHeight / 10}rem`
+      }
+      return 'auto'
+    })
 
     return {
       spliceArray,
-      proxyArray
+      proxyArray,
+      colRightElements,
+      heightDogs
     }
   }
 }
-
 </script>
 
 <style scoped lang="scss" module>
 .cards {
   display: flex;
-  justify-content: center;
-  width: 100%;
-  @media (min-width: 1440px) {
+  justify-content: space-between;
+  margin: 0 auto;
+  @media (max-width: $desktopWidth) {
     width: calc(100% - 17.3rem - 17.3rem);
-  }
-  @media (max-width: $tabletWidth) {
-    justify-content: space-between;
   }
   @media (max-width: $mobileWidth) {
     flex-direction: column;
@@ -95,8 +98,14 @@ export default {
   }
 
   .image {
-    max-width: 39.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60rem;
     img {
+      line-height: 0;
+      width: 39.7rem;
+      //height: 46.8rem;
       max-width: 100%;
     }
     @media(max-width: $mobileWidth) {
@@ -105,16 +114,13 @@ export default {
   }
 }
 .col + .col {
-  margin-left: 2rem;
+  //margin-left: 3rem;
   @media (max-width: $tabletWidth) {
     margin-left: 0;
   }
 }
 .col {
-  width: calc(50% - 1rem);
-  @media (min-width: 1440px) {
-    max-width: 53rem;
-  }
+  width: calc(50% - 1.5rem);
   @media (max-width: $mobileWidth) {
     width: auto;
     max-width: none;

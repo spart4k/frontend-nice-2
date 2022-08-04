@@ -5,13 +5,14 @@
   padding: 0 1.5rem;
   margin-top: 0;
   margin-bottom: 0;
+  justify-content: center;
   &::-webkit-scrollbar {
     display: none;
   }
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
-  @media(min-width: $desktopWidth) {
-    justify-content: center;
+  @media(max-width: $mobileWidth) {
+    justify-content: flex-start;
   }
   li + li {
     margin-left: .5rem;
