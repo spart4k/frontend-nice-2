@@ -6,8 +6,8 @@
           <N-Slider :slider-item="data.images" />
         </template>
         <template v-else>
-          <div v-if="$props.detailPage">
-            <div :class="[$style.hat]">
+          <div v-if="$props.detailPage" :class="[$style.hatContainer, detailPage && $style.detailPage]">
+            <div :class="[$style.hat, detailPage && $style.detailPage]">
               <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
             </div>
           </div>
@@ -345,15 +345,35 @@ export default {
     .gallery {
       &.detailPage {
         @media (min-width: $tabletWidth) {
-        background: black;
+          background: #222222;
           min-width: 50%;
           max-width: 50%;
-          min-height: 70vh;
-          // max-height: 30vh;
-          // margin: auto 0;
-          display: flex;
-          align-items: center;
-          // justify-content: center;
+          :global(.slick-slider) {
+            height: 100% !important;
+            display: flex;
+            :global(.slick-dots) {
+              bottom: 0;
+            }
+            :global(.slick-list) {
+              height: 100% !important;
+              margin: auto 0;
+              :global(.slick-track) {
+                height: 100%;
+                :global(.slick-slide) {
+                  height: 100%;
+                  :global(div) {
+                    height: 100%;
+                    img {
+                      display: inline-block;
+                      object-fit: contain;
+                      height: 100%;
+                      width: 100%;
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -404,11 +424,21 @@ export default {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
   }
-  .hat {
-    // min-height: 23.6rem;
-    width: 100%;
-    //background-color: #e7dddd;
-    border: none;
+  .hatContainer {
+    &.detailPage {
+      @media (min-width: $tabletWidth) {
+        height: 100%;
+      }
+    }
+    .hat {
+      width: 100%;
+      border: none;
+      &.detailPage {
+        @media (min-width: $tabletWidth) {
+          height: 100%;
+        }
+      }
+    }
   }
   .price {
     color: $fontColorDefault;

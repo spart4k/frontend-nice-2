@@ -1,5 +1,8 @@
 <template>
   <div :class="$style.wrapper">
+    <div :class="$style.fullscreen">
+      <N-Icon name="fullscreen" @click="popupChange" />
+    </div>
     <div :class="$style.slider_top">
       <VueSlickCarousel
         ref="c1"
@@ -10,7 +13,7 @@
         @beforeChange="syncSliders"
       >
         <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
-          <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="" @click="popupChange">
+          <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="">
         </div>
       </VueSlickCarousel>
       <portal v-if="popup" to="sliderPopup">
@@ -92,6 +95,27 @@ export default {
 .wrapper {
   width: 100%;
   margin-bottom: 3rem;
+  position: relative;
+  @media (min-width: $tabletWidth) {
+    height: 100%;
+    margin-bottom: 0rem;
+  }
+  .fullscreen {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    height: auto;
+    padding: 1rem;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    z-index: 10;
+  }
+  div {
+    @media (min-width: $tabletWidth) {
+      height: 100%;
+    }
+  }
 
   .item{
     z-index: 5;
