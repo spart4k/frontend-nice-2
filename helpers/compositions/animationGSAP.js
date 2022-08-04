@@ -181,8 +181,8 @@ const animation = ($gsap, Elastic) => {
 
     $gsap.to('.navbar', {
       scrollTrigger: {
-        trigger: TRIGGER,
-        start: `top ${top}`,
+        // trigger: TRIGGER,
+        // start: `top ${top}`,
         end: 100,
         scrub: true
       },
@@ -193,11 +193,6 @@ const animation = ($gsap, Elastic) => {
 
   const animateBackground = () => {
     const height = ref(window.innerHeight / 10)
-    ScrollTrigger.addEventListener('refreshInit', () => {
-      console.log(height.value)
-      height.value = window.innerHeight / 10
-    })
-
     $gsap.to('.background',
       {
         scrollTrigger: {

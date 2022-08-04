@@ -22,16 +22,12 @@ import {
   useRouter,
   useAsync,
   useContext,
-  computed,
+  computed
   // useMeta,
-  onMounted
 } from '@nuxtjs/composition-api'
-
-import { Elastic } from 'gsap'
 
 import { pagination } from '~/plugins/pagination'
 // import { head } from '@/components/scripts/head.js'
-import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default defineComponent({
   name: 'SlugCard',
@@ -40,7 +36,7 @@ export default defineComponent({
   setup () {
     const route = useRoute()
     const router = useRouter()
-    const { store, $gsap } = useContext()
+    const { store } = useContext()
     const cards = ref([])
     const background = ref(null)
     const totalPage = ref([])
@@ -48,12 +44,6 @@ export default defineComponent({
     const tagId = computed(() => Number(route.value.query.tag))
     const loading = ref(false)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
-
-    const {
-      animationlogo,
-      animateSubtitle,
-      animateNavbar
-    } = animationGSAP($gsap, Elastic)
 
     const introTitle = computed(() => {
       if (id.value) {
@@ -98,12 +88,6 @@ export default defineComponent({
     //   const result = sections?.filter(section => section.slug === route.value.params.slug)
     //   return result[0]
     // })
-
-    onMounted(() => {
-      animationlogo()
-      animateSubtitle()
-      animateNavbar()
-    })
 
     // head(useMeta, getPageInfo.value)
 

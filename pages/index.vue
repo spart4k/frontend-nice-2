@@ -20,17 +20,15 @@ import {
   useAsync,
   useMeta, onMounted, nextTick
 } from '@nuxtjs/composition-api'
-import { Elastic } from 'gsap'
 
 import { pagination } from '~/plugins/pagination'
 import { head } from '@/components/scripts/head.js'
-import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default defineComponent({
   name: 'IndexPage',
   middleware: 'background',
   setup () {
-    const { store, $gsap } = useContext()
+    const { store } = useContext()
     const router = useRouter()
     const route = useRoute()
     const cards = ref([])
@@ -52,13 +50,6 @@ export default defineComponent({
       return response
     }
     store.commit('content/clearBgIntro')
-
-    const {
-      animationlogo,
-      animateSubtitle,
-      animateNavbar,
-      animationTimeline
-    } = animationGSAP($gsap, Elastic)
 
     cards.value = useAsync(async () => {
       try {
@@ -91,11 +82,8 @@ export default defineComponent({
           store.commit('content/setAnimate', false)
         }
         if (!isPlayAnimation) {
-          animationTimeline()
+          // animationTimeline()
         }
-        animationlogo()
-        animateSubtitle()
-        animateNavbar()
         localStorage.setItem('showAnimateHomePage', 'true')
       })
     })

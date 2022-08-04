@@ -16,8 +16,8 @@
 
 <script>
 import { ref, useContext, useFetch, onMounted, computed } from '@nuxtjs/composition-api'
-// import { Elastic } from 'gsap'
-// import animationGSAP from '~/helpers/compositions/animationGSAP'
+import { Elastic } from 'gsap'
+import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default {
   name: 'DefaultLayout',
@@ -48,23 +48,15 @@ export default {
       subtitle: 'творческое объединение',
       background: ''
     })
-    // const {
-    //   animateBackground
-    // } = animationGSAP($gsap, Elastic)
+    const {
+      animateBackground
+    } = animationGSAP($gsap, Elastic)
+
     onMounted(() => {
       store.commit('authentication/setUserData')
       store.commit('authentication/setToken')
       store.dispatch('basket/getBasket')
-      $gsap.to('.background',
-        {
-          scrollTrigger: {
-            scrub: true
-          },
-          backgroundPosition: `0 ${window.innerHeight}px`,
-          ease: 'none',
-          force3D: true
-        })
-      // animateBackground()
+      animateBackground()
     })
 
     return {

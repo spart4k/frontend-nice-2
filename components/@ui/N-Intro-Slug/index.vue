@@ -20,12 +20,14 @@
 </template>
 
 <script>
-import { computed, onMounted, ref, useContext, useRoute } from '@nuxtjs/composition-api'
+import { computed, onMounted, ref, useRoute, useContext } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import NLogoTitle from './components/NLogoTitle'
+
+import animationGSAP from '~/helpers/compositions/animationGSAP'
+
 import { BLAND_COLOR } from '~/const/blandColor'
 import { BLAND_IMAGE } from '~/const/blandImage'
-import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default {
   name: 'NIntro',
@@ -53,14 +55,20 @@ export default {
     }
   },
   setup () {
-    const { $gsap } = useContext()
     const logo = ref(null)
     const main = ref(null)
     const wrapper = ref(null)
     const scrollingContent = ref(null)
     const hideTextLogo = ref(false)
     const route = useRoute()
+    const { $gsap } = useContext()
     const isHomePage = computed(() => route.value.name === 'index')
+
+    const {
+      animationlogo,
+      animateSubtitle,
+      animateNavbar
+    } = animationGSAP($gsap, Elastic)
 
     const backgroundImage = computed(() => {
       if (!isHomePage.value) {
@@ -77,6 +85,7 @@ export default {
         return ''
       }
     })
+
     const image = computed(() => {
       const paramsImage = BLAND_IMAGE[route.value.params?.slug] || BLAND_IMAGE[route.value.name]
       if (paramsImage) {
@@ -86,12 +95,10 @@ export default {
       }
     })
 
-    const {
-      animateBackground
-    } = animationGSAP($gsap, Elastic)
-
     onMounted(() => {
-      animateBackground(document.body.scrollHeight / 100)
+      animationlogo()
+      animateSubtitle()
+      animateNavbar()
     })
 
     return {

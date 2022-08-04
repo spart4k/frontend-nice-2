@@ -21,12 +21,6 @@
           :hide-text-logo="hideTextLogo"
         />
       </div>
-      <div v-else>
-        <NLogoTitle
-          :description="description"
-          :image="image"
-        />
-      </div>
       <div
         v-if="!isHomePage"
         ref="anchor"
@@ -42,10 +36,13 @@
 </template>
 
 <script>
-import { computed, ref, useContext, useRoute } from '@nuxtjs/composition-api'
+import { computed, nextTick, onMounted, ref, useContext, useRoute } from '@nuxtjs/composition-api'
+import { Elastic } from 'gsap'
 import NLogoTitle from './components/NLogoTitle'
 import { BLAND_COLOR } from '~/const/blandColor'
 import { BLAND_IMAGE } from '~/const/blandImage'
+import animationGSAP from '~/helpers/compositions/animationGSAP'
+
 // import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default {
@@ -74,7 +71,7 @@ export default {
     }
   },
   setup () {
-    const { store } = useContext()
+    const { store, $gsap } = useContext()
     const anchor = ref(null)
     const logo = ref(null)
     const main = ref(null)
@@ -107,6 +104,30 @@ export default {
       } else {
         return ''
       }
+    })
+
+    const {
+      animationlogo,
+      animateSubtitle,
+      animateNavbar,
+      animationTimeline
+    } = animationGSAP($gsap, Elastic)
+
+    onMounted(() => {
+      nextTick(() => {
+        const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+        if (isPlayAnimation) {
+          store.commit('content/setAnimate', false)
+        }
+        if (!isPlayAnimation) {
+          animationTimeline()
+        }
+
+        animationlogo()
+        animateSubtitle()
+        animateNavbar()
+        localStorage.setItem('showAnimateHomePage', 'true')
+      })
     })
 
     return {
@@ -184,18 +205,17 @@ export default {
 .logo {
   position: fixed;
   z-index: 999;
-  //top: 0;
+  top: 0;
   left: 50%;
   transform-origin: top center;
   padding-top: var(--padding-top-logo);
-  top: 9rem;
+  //top: 9rem;
   transform: translate(-50%, 0);
   @media (max-width: $tabletWidth){
     top: 7rem;
   }
   &.animateContent {
     top: 50%;
-    border: 2px solid red;
   }
   //@media (max-width: $tabletWidth){
   //  top: 7rem;
