@@ -22,7 +22,7 @@ export default {
     position: absolute;
     width: 3.2rem;
     height: 3.2rem;
-    background: rgba(34, 34, 34, 0.1);
+    background: rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,6 +30,7 @@ export default {
     right: 1rem;
     top: 1rem;
     z-index: 106;
+    cursor: pointer;
     .icon {
         color: white;
     }
