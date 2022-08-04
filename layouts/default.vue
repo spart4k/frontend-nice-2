@@ -1,48 +1,77 @@
 <template>
   <div ref="body" class="body">
     <the-header :header-items="headerItems" class="header" />
-    <Nuxt />
+
+    <n-intro-wrapper>
+      <n-intro v-if="isHomePage" :description="introTitle" :is-show-animation="true">
+        <Nuxt />
+      </n-intro>
+      <n-intro-slug v-else :description="introTitle" :is-show-animation="true">
+        <Nuxt />
+      </n-intro-slug>
+    </n-intro-wrapper>
     <portal-target name="sliderPopup" />
   </div>
 </template>
 
 <script>
-import { ref, useContext, useFetch, onMounted } from '@nuxtjs/composition-api'
+import { ref, useContext, useFetch, onMounted, computed } from '@nuxtjs/composition-api'
+// import { Elastic } from 'gsap'
+// import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default {
   name: 'DefaultLayout',
   setup () {
     const headerItems = ref([])
     const body = ref(null)
-    const { $axios, store } = useContext()
+    const { store, route, $gsap } = useContext()
+    const isHomePage = computed(() => route.value.name === 'index')
 
     const fetchData = async () => {
-      const response = await $axios('api/v1/sections')
+      const response = await store.dispatch('content/getHeader')
       return response
     }
 
     useFetch(async () => {
       headerItems.value = []
       const response = await fetchData()
-      if (response.data.length) {
-        headerItems.value = response.data.filter((item) => {
+      if (response.length) {
+        headerItems.value = response.filter((item) => {
           return item.slug !== 'efir'
         })
       }
-      // headerItems.value = response.data
-      store.commit('content/changeSections', response.data)
+      store.commit('content/changeSections', response)
     })
 
+    const introTitle = ref({
+      title: 'Главная',
+      subtitle: 'творческое объединение',
+      background: ''
+    })
+    // const {
+    //   animateBackground
+    // } = animationGSAP($gsap, Elastic)
     onMounted(() => {
       store.commit('authentication/setUserData')
       store.commit('authentication/setToken')
-      store.commit('authentication/setToken', '2|TeUVUgPl8axidfScynskYjPgeJRzCdxXcyIqDINY')
       store.dispatch('basket/getBasket')
+      $gsap.to('.background',
+        {
+          scrollTrigger: {
+            scrub: true
+          },
+          backgroundPosition: `0 ${window.innerHeight}px`,
+          ease: 'none',
+          force3D: true
+        })
+      // animateBackground()
     })
 
     return {
       headerItems,
-      body
+      body,
+      introTitle,
+      isHomePage
     }
   }
 }

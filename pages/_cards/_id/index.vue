@@ -1,7 +1,6 @@
 <template>
   <main :class="$style.main">
     <div :class="$style.wrapper">
-      <n-background ref="background" :description="description" color="#0000" />
       <template v-if="card">
         <SectionCards
           :id="card.section_id"

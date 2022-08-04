@@ -39,11 +39,14 @@ export default {
     showLogo: {
       type: Boolean,
       default: true
+    },
+    isHomePage: {
+      type: Boolean
     }
   },
-  setup () {
+  setup (props) {
     const { store } = useContext()
-    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
+    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage && props.isHomePage)
     return {
       showAnimate
     }

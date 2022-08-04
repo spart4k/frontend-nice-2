@@ -1,16 +1,12 @@
 <template>
-  <main>
-    <n-background ref="background" class="background" color="#0000" />
-    <n-intro :description="introTitle" :content="content" :is-show-animation="true" />
-    <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
-      <NGridCard
-        v-if="cards.value && cards.value.data"
-        ref="content"
-        :items="cards.value.data"
-        @clickTag="clickTag"
-      />
-    </div>
-  </main>
+  <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
+    <NGridCard
+      v-if="cards.value && cards.value.data"
+      ref="content"
+      :items="cards.value.data"
+      @clickTag="clickTag"
+    />
+  </div>
 </template>
 <script>
 
@@ -22,10 +18,9 @@ import {
   useRoute,
   useRouter,
   useAsync,
-  useMeta, onMounted, onUnmounted, nextTick
+  useMeta, onMounted, nextTick
 } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 
 import { pagination } from '~/plugins/pagination'
 import { head } from '@/components/scripts/head.js'
@@ -33,6 +28,7 @@ import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default defineComponent({
   name: 'IndexPage',
+  middleware: 'background',
   setup () {
     const { store, $gsap } = useContext()
     const router = useRouter()
@@ -48,7 +44,6 @@ export default defineComponent({
     })
     const pageInfo = ref({})
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
-
     const fetchData = async (currentPage) => {
       const params = {
         page: currentPage
@@ -59,11 +54,9 @@ export default defineComponent({
     store.commit('content/clearBgIntro')
 
     const {
-      animateBackground,
       animationlogo,
       animateSubtitle,
       animateNavbar,
-      killTrigger,
       animationTimeline
     } = animationGSAP($gsap, Elastic)
 
@@ -100,19 +93,11 @@ export default defineComponent({
         if (!isPlayAnimation) {
           animationTimeline()
         }
-        setTimeout(() => {
-          animateBackground(background.value.$el)
-        }, 500)
         animationlogo()
         animateSubtitle()
         animateNavbar()
         localStorage.setItem('showAnimateHomePage', 'true')
       })
-    })
-
-    onUnmounted(() => {
-      ScrollTrigger.refresh()
-      killTrigger()
     })
 
     return {

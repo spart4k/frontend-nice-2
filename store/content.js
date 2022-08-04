@@ -5,6 +5,7 @@ export const state = () => ({
   imgIntro: '',
   bgDetails: '',
   sections: [],
+  headerItems: [],
   isShowAnimationHomePage: true
 })
 
@@ -24,6 +25,9 @@ export const mutations = {
   changeSections (state, value) {
     state.sections = value
   },
+  changeHeaderItems (state, value) {
+    state.headerItems = value
+  },
   setAnimate (state, value) {
     state.isShowAnimationHomePage = value
   }
@@ -39,5 +43,12 @@ export const getters = {
       }
     }
     return state.sections
+  }
+}
+
+export const actions = {
+  async getHeader ({ commit }) {
+   const response = await this.$axios('api/v1/sections')
+    return response.data
   }
 }

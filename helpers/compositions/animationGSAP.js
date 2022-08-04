@@ -7,8 +7,7 @@ const animation = ($gsap, Elastic) => {
   $gsap.registerPlugin(ScrollTrigger)
 
   const killTrigger = () => {
-    console.log('tes')
-    // scrollBackground.value.scrollTrigger.refresh()
+    console.log(1212, scrollBackground)
   }
 
   const background = ref(null)
@@ -105,11 +104,13 @@ const animation = ($gsap, Elastic) => {
     )
 
     $gsap.set(body, { overflow: 'hidden' }, 'start')
-
+    tl.set(LOGO, {
+      y: -100
+    })
     tl.to(LOGO, {
       y: 0,
       duration: 0.3,
-      delay: 0.3
+      delay: 1
     })
     tl.to(SUBTITLE, {
       y: 0,
@@ -191,12 +192,18 @@ const animation = ($gsap, Elastic) => {
   }
 
   const animateBackground = () => {
-    scrollBackground.value = $gsap.to('.background',
+    const height = ref(window.innerHeight / 10)
+    ScrollTrigger.addEventListener('refreshInit', () => {
+      console.log(height.value)
+      height.value = window.innerHeight / 10
+    })
+
+    $gsap.to('.background',
       {
         scrollTrigger: {
           scrub: true
         },
-        backgroundPosition: '0 -=10%',
+        backgroundPosition: `0 ${height.value}px`,
         ease: 'none',
         force3D: true
       })

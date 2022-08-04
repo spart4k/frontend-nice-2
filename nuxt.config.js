@@ -16,12 +16,7 @@ export default {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
-
   },
-  // transition: {
-  //   mode: 'in-out'
-  // },
-  // cache: false,
   server: {
     port: 8000 // default: 3000
   },
