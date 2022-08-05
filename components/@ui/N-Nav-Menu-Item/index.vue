@@ -36,7 +36,6 @@ export default {
 
 <style scoped lang="scss" module>
 .item {
-  padding: 1.5rem 1.5rem;
   width: 100%;
   height: 10.5rem;
   color: rgb(255, 255, 255);
@@ -52,6 +51,7 @@ export default {
   a {
     width: 100%;
     height: 100%;
+    padding: 1.5rem 1.5rem;
     position: relative;
     display: flex;
     align-items: flex-end;

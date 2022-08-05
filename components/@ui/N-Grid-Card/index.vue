@@ -79,7 +79,9 @@ export default {
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
-  width: calc(100% - 17.3rem - 17.3rem);
+  @media (min-width: $desktopWidth) {
+    width: calc(100% - 17.3rem - 17.3rem);
+  }
   @media (max-width: $mobileWidth) {
     flex-direction: column;
     justify-content: center;

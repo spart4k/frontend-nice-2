@@ -200,15 +200,16 @@ const animation = ($gsap, Elastic) => {
 
   const animateBackground = () => {
     const height = ref(window.innerHeight / 10)
-    $gsap.to('.background',
-      {
-        scrollTrigger: {
-          scrub: true
-        },
-        backgroundPosition: `0 ${height.value}px`,
-        ease: 'none',
-        force3D: true
-      })
+    console.log(height)
+    // $gsap.to('.background',
+    //   {
+    //     scrollTrigger: {
+    //       scrub: true
+    //     },
+    //     backgroundPosition: `0 ${height.value}px`,
+    //     ease: 'none',
+    //     force3D: true
+    //   })
   }
 
   return {

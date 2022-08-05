@@ -16,7 +16,13 @@
       </div>
     </n-button>
 
-    <vue-bottom-sheet ref="menu" :overlay="true">
+    <N-BootomSheet
+      ref="menu"
+      effect="fx-slide-from-left"
+      max-width="39rem"
+      :max-height="$mq === 'md' ? '100%' : ''"
+      @closeMenu="closeMenu"
+    >
       <client-only>
         <nav :class="$style.headerNav">
           <ul :class="$style.user_list">
@@ -51,8 +57,7 @@
           />
         </nav>
       </client-only>
-      <n-icon name="close" :class="$style.close" @click="closeMenu" />
-    </vue-bottom-sheet>
+    </N-BootomSheet>
 
     <div :class="[$style.logo]" @click="$router.push('/')">
       <n-logo v-if="!isHomePage" size="md" />
@@ -116,10 +121,10 @@ export default {
     }
 
     const openMenu = () => {
-      menu.value.open()
+     menu.value.$children[0].open()
     }
     const closeMenu = () => {
-      menu.value.close()
+      menu.value.$children[0].close()
     }
 
     const openTestPage = (num) => {

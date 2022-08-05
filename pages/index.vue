@@ -21,7 +21,6 @@ import {
   computed,
   defineComponent,
   useContext,
-  useRoute,
   useRouter,
   useAsync,
   useMeta
@@ -32,11 +31,9 @@ import { head } from '@/components/scripts/head.js'
 
 export default defineComponent({
   name: 'IndexPage',
-  middleware: 'background',
   setup () {
     const { store } = useContext()
     const router = useRouter()
-    const route = useRoute()
     const cards = ref([])
     const totalPage = ref(0)
     const content = ref(null)
@@ -65,7 +62,7 @@ export default defineComponent({
       } catch (e) {
         console.log(e)
       }
-    }, route.value.fullPath)
+    }, Math.random() * 1000)
 
     store.commit('content/clearBgIntro')
     const metaInfo = cards.value
@@ -94,8 +91,7 @@ export default defineComponent({
       showAnimate
     }
   },
-  head: {},
-  watchQuery: ['page']
+  head: {}
 })
 </script>
 <style lang="scss" module>
