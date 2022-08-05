@@ -1,55 +1,63 @@
 <template>
-  <n-intro :description="introTitle">
-    <!--      <TransitionGroup name="home" tag="div">-->
-    <NGridCard
-      v-if="cards.value && cards.value.data"
-      :items="cards.value.data"
-      @clickTag="clickTag"
-    />
-    <!--    <div v-if="cards.value && cards.value.data">-->
-    <!--      {{ cards.value && cards.value.data }}-->
-    <!--    </div>-->
-    <!--      </transitiongroup>-->
-    <!--      <client-only>-->
-    <!--        <n-lazy-pagination-->
-    <!--          @lazyPagination="lazyPagination"-->
-    <!--        />-->
-    <!--      </client-only>-->
+  <n-intro
+    :description="introTitle"
+    :is-show-animation="true"
+  >
+    <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
+      <NGridCard
+        v-if="cards.value && cards.value.data"
+        ref="content"
+        :items="cards.value.data"
+        home-page
+        @clickTag="clickTag"
+      />
+    </div>
   </n-intro>
 </template>
 <script>
-import { ref, defineComponent, useContext, useRoute, useRouter, useAsync, useMeta } from '@nuxtjs/composition-api'
+
+import {
+  ref,
+  computed,
+  defineComponent,
+  useContext,
+  useRoute,
+  useRouter,
+  useAsync,
+  useMeta
+} from '@nuxtjs/composition-api'
+
 import { pagination } from '~/plugins/pagination'
 import { head } from '@/components/scripts/head.js'
+
 export default defineComponent({
   name: 'IndexPage',
+  middleware: 'background',
   setup () {
     const { store } = useContext()
     const router = useRouter()
     const route = useRoute()
     const cards = ref([])
     const totalPage = ref(0)
-
+    const content = ref(null)
+    const background = ref(null)
     const introTitle = ref({
       title: 'Главная',
       subtitle: 'творческое объединение',
       background: ''
     })
-
     const pageInfo = ref({})
-    // store.commit('content/changeState', { key: 'logoBg', value: 'main' })
-    const fetchData = (currentPage) => {
-      console.log(2131312321)
+    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
+    const fetchData = async (currentPage) => {
       const params = {
         page: currentPage
       }
-      const response = store.dispatch('main/getData', params)
+      const response = await store.dispatch('main/getData', params)
       return response
     }
     store.commit('content/clearBgIntro')
 
     cards.value = useAsync(async () => {
-      console.log(2131312321)
       try {
         const response = await fetchData()
         totalPage.value = response?.data.last_page
@@ -58,6 +66,7 @@ export default defineComponent({
         console.log(e)
       }
     }, route.value.fullPath)
+
     store.commit('content/clearBgIntro')
     const metaInfo = cards.value
     head(useMeta, metaInfo.value)
@@ -73,12 +82,16 @@ export default defineComponent({
     }
 
     return {
+      lazyPagination,
+      clickTag,
+
       introTitle,
+      background,
       cards,
       page,
-      lazyPagination,
       pageInfo,
-      clickTag
+      content,
+      showAnimate
     }
   },
   head: {},
@@ -98,8 +111,25 @@ export default defineComponent({
     width: 100%;
     max-width: 53.2rem;
   }
-  &__item {
-    margin-bottom: 2rem;
+}
+.content {
+  @include container;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+  padding-bottom: 5rem;
+  width: 100%;
+  transition: opacity 300ms;
+  &.animateContent {
+    opacity: 0;
+  }
+  & > * + * {
+    margin-top: 2rem;
+  }
+  &.setHeight {
+    min-height: 100%;
   }
 }
 </style>

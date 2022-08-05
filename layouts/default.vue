@@ -1,74 +1,77 @@
 <template>
-  <div ref="body" :class="$style.wrapper" class="body">
-    <the-header :header-items="headerItems" class="header" :class="$style.header" />
-    <n-tabs :class="$style.tabs" />
-    <Nuxt :class="$style.content" />
+  <div ref="body" class="body">
+    <the-header :header-items="headerItems" class="header" />
+
+    <n-intro-wrapper is-home-page :color="color">
+      <Nuxt />
+    </n-intro-wrapper>
     <portal-target name="sliderPopup" />
   </div>
 </template>
 
 <script>
-import { ref, useContext, useFetch, onMounted } from '@nuxtjs/composition-api'
+import { ref, useContext, useFetch, onMounted, computed } from '@nuxtjs/composition-api'
+import { Elastic } from 'gsap'
+import animationGSAP from '~/helpers/compositions/animationGSAP'
+import { BLAND_COLOR } from '~/const/blandColor'
 
 export default {
   name: 'DefaultLayout',
   setup () {
     const headerItems = ref([])
     const body = ref(null)
-    const { $axios, store } = useContext()
+    const { store, route, $gsap } = useContext()
+    const isHomePage = computed(() => route.value.name === 'index')
 
     const fetchData = async () => {
-      const response = await $axios('api/v1/sections')
+      const response = await store.dispatch('content/getHeader')
       return response
     }
 
-    // store.dispatch('basket/getBasket')
     useFetch(async () => {
       headerItems.value = []
       const response = await fetchData()
-      if (response.data.length) {
-        headerItems.value = response.data.filter((item) => {
+      if (response.length) {
+        headerItems.value = response.filter((item) => {
           return item.slug !== 'efir'
         })
       }
-      // headerItems.value = response.data
-      store.commit('content/changeSections', response.data)
+      store.commit('content/changeSections', response)
+    })
+
+    const introTitle = ref({
+      title: 'Главная',
+      subtitle: 'творческое объединение',
+      background: ''
+    })
+    const {
+      animateBackground
+    } = animationGSAP($gsap, Elastic)
+
+    const color = computed(() => {
+      const paramsColor = BLAND_COLOR[route.value.params?.slug] || BLAND_COLOR[route.value.name]
+      if (paramsColor) {
+        return paramsColor
+      } else {
+        return ''
+      }
     })
 
     onMounted(() => {
-      const vh = window.innerHeight * 0.01
-      // Then we set the value in the --vh custom property to the root of the document
-      document.documentElement.style.setProperty('--vh', `${vh}px`)
-      window.addEventListener('resize', () => {
-        // We execute the same script as before
-        const vh = window.innerHeight * 0.01
-        document.documentElement.style.setProperty('--vh', `${vh}px`)
-      })
+    console.log(isHomePage.value)
       store.commit('authentication/setUserData')
       store.commit('authentication/setToken')
       store.dispatch('basket/getBasket')
+      animateBackground()
     })
 
     return {
       headerItems,
-      body
+      body,
+      color,
+      introTitle,
+      isHomePage
     }
   }
 }
 </script>
-
-<style scoped module lang="scss">
-.tabs {
-  margin: 0;
-  position: fixed;
-  top: 17.5rem;
-  z-index: 3;
-  width: 100%;
-  @media (max-width: $tabletWidth) {
-    top: 23.6rem;
-  }
-  //@media (min-width: $tabletWidth) {
-  //  top: 15.6rem;
-  //}
-}
-</style>

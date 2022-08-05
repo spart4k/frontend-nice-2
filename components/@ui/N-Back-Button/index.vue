@@ -32,6 +32,7 @@ export default {
     justify-content: center;
     align-items: center;
     gap: 15px;
+    cursor: pointer;
     @media (min-width: $tabletWidth) {
       margin: 2rem auto 0;
       width: 36.2rem;

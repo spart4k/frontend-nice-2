@@ -1,7 +1,6 @@
 <template>
-  <N-Intro no-preview>
+  <main :class="$style.main">
     <div :class="$style.wrapper">
-      <N-Background :description="description" hide-image />
       <template v-if="card">
         <SectionCards
           :id="card.section_id"
@@ -11,18 +10,17 @@
           @clickTag="clickTag"
         />
         <N-Back-Button />
-        <N-Fixed-Button v-if="card.is_product" :is-auth="isAuth" :check-auth="true" @clickButton="addBasket">
+        <!-- <N-Fixed-Button v-if="card.is_product" :is-auth="isAuth" :check-auth="true" @clickButton="addBasket">
           <template v-if="!isAddedBasket">
             Добавить в корзину
           </template>
           <template v-else>
             Перейти в корзину
           </template>
-        <!--        {{ !isAddedBasket ? 'Добавить в корзину' : 'Добавлено' }}-->
-        </N-Fixed-Button>
+        </N-Fixed-Button> -->
       </template>
     </div>
-  </N-Intro>
+  </main>
 </template>
 
 <script>
@@ -45,7 +43,6 @@ export default defineComponent({
       return {
         background: bgName?.value?.slug
       }
-      // title: bgName.value
     })
 
     const clickTag = (value) => {
@@ -99,9 +96,15 @@ export default defineComponent({
 </script>
 
 <style scoped module lang="scss">
+.main {
+  @include container;
+}
 .wrapper {
   width: 100%;
-  padding-top: 5rem;
+  padding-top: 10.3rem;
+  @media (min-width: $tabletWidth) {
+    padding-top: 15rem;
+  }
 }
 .button__add_basket {
   background-color: rgba($black, 0.8);

@@ -1,13 +1,11 @@
 <template>
-  <div :class="$style.wrapper">
-    <img v-if="!isHomePage && setImage && !hideImage" :class="$style.heroImage" :src="setImage">
-    <div :class="$style.overlay" :style="{backgroundColor: color}" />
-    <div :class="$style.bg" />
+  <div :style="{backgroundImage: `url(${backgroundImage})`}" :class="[$style.wrapper, $style.bg]">
+    <div :class="$style.overlay" :style="{backgroundColor: isHomePage ? color : '#292BC2'}" />
   </div>
 </template>
 
 <script>
-import { computed } from '@nuxtjs/composition-api'
+import { computed } from 'vue-demi'
 
 export default {
   name: 'NBackground',
@@ -25,16 +23,14 @@ export default {
     color: String
   },
   setup (props) {
-    const setImage = computed(() => {
-      if (props.description.background) {
-        return `${require('@/assets/img/background/' + `${props.description.background}.png`)}`
-      } else {
-        return null
-      }
-    })
-    return {
-      setImage
-    }
+  console.log(props.isHomePage)
+  const backgroundImage = computed(() => {
+    // if (props.isHomePage) {
+    //   return require('~/assets/img/background/index-background.jpg')
+    // }
+      return require('~/assets/img/background/coin-background.png')
+  })
+  return { backgroundImage }
   }
 }
 </script>
@@ -46,7 +42,10 @@ export default {
   left: 0;
   bottom: 0;
   width: 100%;
+  height: 100%;
   min-height: 100vh;
+  // background-image: url('@/assets/img/background/coin-background.png');
+  background-size: cover;
 }
 .overlay {
   position: fixed;
@@ -57,21 +56,5 @@ export default {
   opacity: 0.35;
   z-index: 2;
   mix-blend-mode: hard-light;
-}
-.heroImage {
-  position: absolute;
-  max-height: 35rem;
-  z-index: 3;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-}
-.bg {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-image: url('@/assets/img/background/index-background.jpg');
-  background-size: cover;
-  z-index: 1;
 }
 </style>

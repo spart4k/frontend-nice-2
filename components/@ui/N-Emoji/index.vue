@@ -10,55 +10,85 @@
       >
         <div :class="$style.sliderContainer">
           <div :class="$style.emojiContainer">
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😄')">
-              😄
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😡')">
-              😡
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😊')">
+              😊
             </div>
             <div :class="$style.emoji" @click="$emit('emojiWrite', '😂')">
               😂
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😢')">
-              😢
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😇')">
+              😇
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😎')">
-              😎
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😎️')">
+              😎️
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '👿')">
-              👿
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '🤝')">
+              🤝
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '👽')">
-              👽
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😉')">
+              😉
             </div>
-          </div>
-          <div :class="$style.emojiContainer">
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😄')">
-              😄
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😛')">
+              😛
+            </div>
+          <!-- </div>
+          <div :class="$style.emojiContainer"> -->
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '🥳')">
+              🥳
+            </div>
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😍')">
+              😍
             </div>
             <div :class="$style.emoji" @click="$emit('emojiWrite', '😡')">
               😡
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😂')">
-              😂
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😌')">
+              😌
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😢')">
-              😢
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😱')">
+              😱
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😎')">
-              😎
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '😴')">
+              😴
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '👿')">
-              👿
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '👽')">
-              👽
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '🤯')">
+              🤯
             </div>
           </div>
         </div>
-        <div>
-          asafasf
+        <div :class="$style.stikerContainer">
+          <img
+            :class="$style.sticker"
+            src="~/assets/img/sticker.png"
+            alt=""
+          >
+          <img
+            :class="$style.sticker"
+            src="~/assets/img/sticker2.png"
+            alt=""
+          >
+          <img
+            :class="$style.sticker"
+            src="~/assets/img/sticker3.png"
+            alt=""
+          >
+          <img
+            :class="$style.sticker"
+            src="~/assets/img/sticker4.png"
+            alt=""
+          >
+          <img
+            :class="$style.sticker"
+            src="~/assets/img/sticker5.png"
+            alt=""
+          >
         </div>
+        <template #customPaging="">
+          <div class="custom-dot">
+            <N-Icon :class="$style.smile" name="smile" />
+            <N-Icon name="sticker" />
+          </div>
+        </template>
       </VueSlickCarousel>
     </div>
   </div>
@@ -88,28 +118,92 @@ export default {
 .container {
     background: #F5F5F5;
     border-radius: 20px;
-    padding: 1.8rem 1.7rem;
+    padding: 1.8rem 0;
     margin: 2.5rem 0 0 0;
+    // width: 33rem;
     .sliderContainer{
         display: flex !important;
+        padding: 0 1.7rem;
         gap: 20px;
         flex-direction: column;
         .emojiContainer{
             display: flex !important;
             justify-content: space-between;
+            flex-wrap: wrap;
+            row-gap: 2rem;
+            gap: 0.8rem;
+              @media (min-width: $tabletWidth) {
+                gap: 1.4rem;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+              }
             .emoji {
                 display: inline-block;
-                font-size: 32px;
+                font-size: 3.2rem;
                 line-height: 1;
                 user-select: none;
+                cursor: pointer;
+                  @media (min-width: $tabletWidth) {
+                    font-size: 4rem;
+                }
             }
         }
     }
+    .stikerContainer {
+      padding: 0.8rem .2rem;
+      display: flex !important;
+      justify-content: space-around;
+      .sticker {
+        display: inline-block;
+        width: 6.2rem;
+        height: 6.2rem;
+        user-select: none;
+        cursor: pointer;
+        @media (min-width: $tabletWidth) {
+          width: 8rem;
+          height: 8rem;
+        }
+      }
+    }
+    :global(.slick-dots li){
+      opacity: 0.1;
+      margin: 0 .75rem;
+    }
+    :global(.slick-dots li):first-child {
+      :global(.custom-dot){
+        :global(div):last-child {
+          display: none;
+        }
+        :global(div):first-child {
+          :global(svg) {
+            width: 2rem;
+            height: 2rem;
+          }
+        }
+      }
+    }
+    :global(.slick-dots li):last-child {
+      :global(.custom-dot){
+        :global(div):first-child {
+          display: none;
+        }
+        :global(div):last-child {
+          :global(svg) {
+            width: 2rem;
+            height: 2rem;
+          }
+        }
+      }
+    }
+
     :global(.slick-dots li button:before) {
-        font-size: 10px;
+        font-size: 1rem;
     }
     :global(.slick-dots) {
-        bottom: -45px;
+        bottom: -5.5rem;
+    }
+    :global(.slick-active) {
+      opacity: 1 !important;
     }
 }
 </style>

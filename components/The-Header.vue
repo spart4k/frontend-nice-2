@@ -1,5 +1,6 @@
 <template>
-  <header :class="$style.header">
+  <!--  , showAnimate && $style.animateContent-->
+  <header :class="[$style.header]">
     <n-button
       type-button="transparent"
       :class="[active && $style.open, $style.deviceMenu]"
@@ -14,60 +15,50 @@
         {{ basketCount.calcBasketCard }}
       </div>
     </n-button>
-    <transition name="fade-fast">
-      <nav v-if="active" :class="[$style.headerNav, active && $style.active]">
-        <div :class="[$style.linkHome]" @click="active = false">
-          <transition name="fade-fast">
-            <nuxt-link v-if="!isHomePage" :to="{ path: '/' }">
-              <n-icon name="arrow" :class="$style.icon" />
-              <span>На главную</span>
-            </nuxt-link>
-          </transition>
-        </div>
 
-        <transition
-          appear
-          v-bind="$attrs"
-          @before-enter="beforeEnter"
-          @enter="enter"
-          @leave="leave"
-        >
-          <div
-            v-if="isAuth && basketCount.calcBasketCard > 0 && active"
-            :class="[$style.basket, $style.headerMenu__item]"
-            @click="active = false"
-          >
-            <nuxt-link to="/basket">
-              <div :class="$style.basket__title">
-                <n-icon name="basket" :class="$style.icon" />
-                <span>Корзина</span>
+    <vue-bottom-sheet ref="menu" :overlay="true">
+      <client-only>
+        <nav :class="$style.headerNav">
+          <ul :class="$style.user_list">
+            <li :class="$style.user_item">
+              <n-icon name="user" :class="$style.icon" />
+              <div :class="$style.user_item_text">
+                <nuxt-link to="#">
+                  Профиль
+                </nuxt-link>
               </div>
-              <div :class="$style.basket__price">
-                {{ basketCount.calcBasketCard }} {{ basketCount.text }} на {{ basketCount.cardSum }}р
+            </li>
+            <li :class="$style.user_item">
+              <n-icon name="basket" :class="$style.icon" />
+              <div :class="$style.user_item_text">
+                <nuxt-link to="#">
+                  Корзина
+                </nuxt-link>
               </div>
-            </nuxt-link>
-          </div>
-        </transition>
+            </li>
+            <li :class="$style.user_item">
+              <n-icon name="search" :class="$style.icon" />
+              <div :class="$style.user_item_text">
+                <nuxt-link to="#">
+                  Поиск
+                </nuxt-link>
+              </div>
+            </li>
+          </ul>
+          <n-nav-menu
+            :header-items="headerItems"
+            @hideNavMenu=" active = false"
+          />
+        </nav>
+      </client-only>
+      <n-icon name="close" :class="$style.close" @click="closeMenu" />
+    </vue-bottom-sheet>
 
-        <div :class="$style.headerNav__inner">
-          <n-nav-menu :show-nav-menu="active" :header-items="headerItems" :class="$style.headerMenu__list" @hideNavMenu=" active = false" />
-        </div>
-      </nav>
-    </transition>
-
-    <transition name="fade-fast">
-      <nuxt-link
-        v-if="isHomePage ? showLogo : true"
-        to="/"
-        :class="[$style.logo, active && $style.hideElement]"
-      >
-        <div>творческое объединение</div>
-        <n-logo size="lg" />
-      </nuxt-link>
-    </transition>
+    <div :class="[$style.logo]" @click="$router.push('/')">
+      <n-logo v-if="!isHomePage" size="md" />
+    </div>
 
     <ul :class="[$style.headerUser__list, active && $style.hideElement]">
-      <!--      :class="$style.headerUser__item"-->
       <li>
         <a href="mailto:tisthenice@gmail.com" :class="$style.link">
           <span :class="$style.link__text">эфир</span>
@@ -76,9 +67,7 @@
       </li>
     </ul>
     <FormAuthSteps v-model="activeAuthSteps" />
-    <!--    <n-tabs :class="$style.tabs" />-->
   </header>
-  <!--  </div>-->
 </template>
 
 <script lang="js">
@@ -95,18 +84,19 @@ export default {
     }
   },
   setup (_, ctx) {
-    const { $gsap } = useContext()
-    const { $store } = ctx.root
-    const hasOpenMenu = ref(false)
+    const { store } = useContext()
+    const menu = ref(null)
     const active = ref(false)
     const activeAuthSteps = ref(false)
     const route = useRoute()
     const router = useRouter()
     const header = ref(null)
     const isHomePage = computed(() => route.value.name === 'index')
-    const bgName = computed(() => $store.state.content.bgIntro)
-    const basketData = computed(() => $store.state.basket.basket?.data)
-    const isAuth = computed(() => $store.state.authentication.authorizated)
+    const bgName = computed(() => store.state.content.bgIntro)
+    const basketData = computed(() => store.state.basket.basket?.data)
+    const isAuth = computed(() => store.state.authentication.authorizated)
+    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
+
     const basketCount = computed(() => {
       const calcBasketCard = basketData.value?.cards?.reduce((acc, value) => {
          acc += value.pivot.quantity
@@ -126,39 +116,28 @@ export default {
     }
 
     const openMenu = () => {
-      active.value = !active.value
-      hasOpenMenu.value = !hasOpenMenu.value
+      menu.value.open()
     }
+    const closeMenu = () => {
+      menu.value.close()
+    }
+
     const openTestPage = (num) => {
       router.push({ path: `${num}` })
     }
+
     const openProfile = () => {
-      if ($store.state.authentication.authorizated) {
+      if (store.state.authentication.authorizated) {
         router.push({ path: '/profile' })
       } else {
         activeAuthSteps.value = true
       }
     }
-    const showLogo = computed(() => $store.state.content.showLogo)
-    const stateShowLogin = computed(() => {
-      return $store.state.authentication.showLogin
-    })
-    const beforeEnter = (el) => {
-      el.style.opacity = 0
-      el.style.transform = 'translateY(30px)'
-    }
-    const enter = (el, done) => {
-      // Each element requires a data-index attribute in order for the transition to work properly
-       $gsap.to(el, {
-        opacity: 1,
-        transform: 'translateY(0)',
-        delay: el.dataset.index * 0.03,
-        onComplete: done
-       })
-    }
-    const leave = (el, done) => {
 
-    }
+    const showLogo = computed(() => store.state.content.showLogo)
+    const stateShowLogin = computed(() => {
+      return store.state.authentication.showLogin
+    })
 
     watch(() => stateShowLogin.value, (newValue) => {
       if (newValue === true) {
@@ -168,27 +147,24 @@ export default {
 
     return {
       openMenu,
+      closeMenu,
       toggleMenu,
       openTestPage,
       openProfile,
       randomColor,
       BLAND_COLOR,
-
+      showAnimate,
       basketData,
       showLogo,
       isHomePage,
       active,
-      hasOpenMenu,
       header,
       bgName,
       basketCount,
       activeAuthSteps,
       isAuth,
       stateShowLogin,
-      beforeEnter,
-      enter,
-      leave
-
+      menu
     }
   }
 }

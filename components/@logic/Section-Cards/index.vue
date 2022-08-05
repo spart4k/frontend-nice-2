@@ -15,6 +15,9 @@
     <template v-else-if="id === 7">
       <N-Card-Default :detail-page="detailPage" :with-author="!detailPage" :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
     </template> -->
+    <template v-else-if="id === 10">
+      <N-Card-Coin :detail-page="detailPage" :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
+    </template>
     <!-- <template v-else>
       <N-Card-Default
         :detail-page="detailPage"
@@ -29,6 +32,8 @@
         @clickTag="($event) => $emit('clickTag', $event)"
       />
     </template>
+    <!-- <N-Card-Author /> -->
+    <!-- <N-Card-Coin /> -->
   </div>
 </template>
 

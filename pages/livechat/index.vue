@@ -1,12 +1,12 @@
 <template>
   <n-intro no-preview>
     <N-Background :description="description" />
-    <div @click="open" :class="$style.open">
+    <div :class="$style.open" @click="open">
       open
     </div>
     <portal to="sliderPopup">
-      <vue-bottom-sheet max-height="100%" is-full-screen ref="liveChat">
-        <live-default ></live-default>
+      <vue-bottom-sheet ref="liveChat" max-height="100%" is-full-screen>
+        <live-default />
       </vue-bottom-sheet>
     </portal>
   </n-intro>
@@ -18,12 +18,10 @@ export default {
   name: 'ProfilePage',
   setup () {
     const { store } = useContext()
-    console.log(useContext())
     const qtyBasket = computed(() => {
       return store.state.basket.basketLength
     })
     const liveChat = ref(null)
-    console.log(liveChat)
     const open = () => {
       liveChat.value.open()
     }

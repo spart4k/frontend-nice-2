@@ -1,20 +1,10 @@
 <template>
-  <div>
-    <h1 v-if="!isHomePage" :class="[$style.title]">
-      {{ description.title }}
-    </h1>
-    <div :class="[isHomePage && $style.wrapper]">
-      <n-logo v-if="isHomePage" :class="$style.logo" size="md" />
-      <h1
-        v-if="description.subtitle"
-        :class="[
-          isHomePage && $style.intro__subtitle_homePage,
-          $style.subtitle,
-          hideTextLogo && $style.hideTextLogo
-        ]"
-      >
-        {{ description.subtitle }}
-      </h1>
+  <div :class="$style.container">
+    <N-Section-Intro v-if="!isHomePage" :description="description" :image="image" />
+    <div>
+      <div :class="[isHomePage && $style.wrapper]">
+        <n-logo v-if="isHomePage" :is-home-page="isHomePage" :class="$style.logo" size="md" />
+      </div>
     </div>
   </div>
 </template>
@@ -29,33 +19,33 @@ export default {
     description: {
       type: Object
     },
-    hideTextLogo: Boolean
+    hideTextLogo: Boolean,
+    image: String
   }
 }
 </script>
 
 <style scoped lang="scss" module>
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.title {
-    @include title;
-    @include montserratBlack;
-    margin-bottom: 2rem;
-}
-.subtitle {
-  @include Bankir-Retro;
-  @include text;
-  color: rgba($white, .85);
-  width: 20.5rem;
-  line-height: 2.9rem;
-  transition: opacity 0.6s ease;
-  text-align: center;
-  &.hideTextLogo {
-    opacity: 0;
+.container {
+  //position: fixed;
+  //height: calc(100vh - 15.5rem);
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
+  // .subtitle {
+  //   @include Bankir-Retro;
+  //   @include text;
+  //   color: rgba($white, .85);
+  //   width: 20.5rem;
+  //   line-height: 2.9rem;
+  //   transition: opacity 0.6s ease;
+  //   text-align: center;
+  //   &.hideTextLogo {
+  //     opacity: 0;
+  //   }
+  // }
 }
 
 </style>
