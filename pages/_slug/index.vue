@@ -1,9 +1,5 @@
 <template>
-  <main :class="$style.main">
-    <n-intro
-      :description="introTitle"
-      :is-hide-mobile-tabs="true"
-    />
+  <div>
     <n-preloader v-if="loading" />
     <template v-else>
       <NGridCard
@@ -14,34 +10,50 @@
         :items="cards.value"
         @clickTag="clickTag"
       />
-      <!--      <client-only>-->
-      <!--        <n-lazy-pagination-->
-      <!--          @lazyPagination="lazyPagination"-->
-      <!--        />-->
-      <!--      </client-only>-->
     </template>
-  </main>
+  </div>
 </template>
 
 <script>
-import { ref, defineComponent, useRoute, useRouter, useAsync, useContext, computed, useMeta } from '@nuxtjs/composition-api'
+import {
+  ref,
+  defineComponent,
+  useRoute,
+  useRouter,
+  useAsync,
+  useContext,
+  computed,
+  // useMeta,
+  onMounted
+} from '@nuxtjs/composition-api'
+
+import { Elastic } from 'gsap'
+
 import { pagination } from '~/plugins/pagination'
-import { head } from '@/components/scripts/head.js'
+// import { head } from '@/components/scripts/head.js'
+import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default defineComponent({
   name: 'SlugCard',
-  layout: 'default',
+  middleware: 'background',
   // transition: 'home',
   setup () {
     const route = useRoute()
     const router = useRouter()
-    const { store } = useContext()
+    const { store, $gsap } = useContext()
     const cards = ref([])
+    const background = ref(null)
     const totalPage = ref([])
     const id = computed(() => Number(route.value.query.id))
     const tagId = computed(() => Number(route.value.query.tag))
     const loading = ref(false)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
+
+    const {
+      animationlogo,
+      animateSubtitle,
+      animateNavbar
+    } = animationGSAP($gsap, Elastic)
 
     const introTitle = computed(() => {
       if (id.value) {
@@ -80,13 +92,20 @@ export default defineComponent({
       const response = store.dispatch('pages/getData', params)
       return response
     }
-    const getPageInfo = computed(() => {
-      const sections = store.state.content.sections
-      const result = sections.filter(section => section.slug === route.value.params.slug)
-      return result[0]
+
+    // const getPageInfo = computed(() => {
+    //   const sections = store.state.content.sections
+    //   const result = sections?.filter(section => section.slug === route.value.params.slug)
+    //   return result[0]
+    // })
+
+    onMounted(() => {
+      animationlogo()
+      animateSubtitle()
+      animateNavbar()
     })
 
-    head(useMeta, getPageInfo.value)
+    // head(useMeta, getPageInfo.value)
 
     const { getData, dataPagination } = pagination(fetchData)
 
@@ -119,15 +138,16 @@ export default defineComponent({
     }, route.value.path)
 
     return {
+      clickTag,
+      lazyPagination,
       introTitle,
       cards,
       totalPage,
       id,
       loading,
-      clickTag,
-      lazyPagination,
-      showAnimate,
-      getPageInfo
+      background,
+      showAnimate
+      // getPageInfo
     }
   },
   head: {}

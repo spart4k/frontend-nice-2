@@ -3,7 +3,12 @@ import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 
 const animation = ($gsap, Elastic) => {
   const TRIGGER = '.content'
+  const scrollBackground = ref('')
   $gsap.registerPlugin(ScrollTrigger)
+
+  const killTrigger = () => {
+    console.log(1212, scrollBackground)
+  }
 
   const background = ref(null)
   const animationTimeline = () => {
@@ -99,11 +104,13 @@ const animation = ($gsap, Elastic) => {
     )
 
     $gsap.set(body, { overflow: 'hidden' }, 'start')
-
+    tl.set(LOGO, {
+      y: -100
+    })
     tl.to(LOGO, {
       y: 0,
       duration: 0.3,
-      delay: 0.3
+      delay: 1
     })
     tl.to(SUBTITLE, {
       y: 0,
@@ -126,7 +133,8 @@ const animation = ($gsap, Elastic) => {
     return false
   }
 
-  const animationlogo = (logo) => {
+  const animationlogo = () => {
+    const logo = document.querySelector('.logo')
     const header = document.querySelector('.header')
     const headerBounding = header.getBoundingClientRect().top
     const top = getConntetDomElementBounding().top
@@ -161,8 +169,7 @@ const animation = ($gsap, Elastic) => {
         trigger: TRIGGER,
         start: () => `top ${top}px`,
         end: () => 100,
-        scrub: true,
-        markers: true
+        scrub: true
       },
       opacity: 0
     })
@@ -185,15 +192,20 @@ const animation = ($gsap, Elastic) => {
   }
 
   const animateBackground = () => {
-    $gsap.to(background.value?.$el,
+    const height = ref(window.innerHeight / 10)
+    ScrollTrigger.addEventListener('refreshInit', () => {
+      console.log(height.value)
+      height.value = window.innerHeight / 10
+    })
+
+    $gsap.to('.background',
       {
-        backgroundPosition: '0 -200%',
-        // scale: 1.2,
-        ease: 'none',
-        force3D: true,
         scrollTrigger: {
           scrub: true
-        }
+        },
+        backgroundPosition: `0 ${height.value}px`,
+        ease: 'none',
+        force3D: true
       })
   }
 
@@ -203,7 +215,8 @@ const animation = ($gsap, Elastic) => {
     animateSubtitle,
     animateBackground,
     animateNavbar,
-    animationTimeline
+    animationTimeline,
+    killTrigger
   }
 }
 export default animation

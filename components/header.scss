@@ -18,7 +18,7 @@
     opacity: 0;
   }
   :global(.bottom-sheet__bar) {
-    height: 4px;
+    height: 6px;
     background: #222222;
     opacity: 0.2;
   }
@@ -55,9 +55,9 @@
   position: absolute;
   font-family: Bankir-Retro, sans-serif;
   color: $white;
-  top: 2.8rem;
   left: 50%;
   transform: translateX(-50%);
+  //top: 2.8rem;
   width: 7.5rem;
   display: flex;
   flex-direction: column;
@@ -74,9 +74,6 @@
 .headerNav {
   display: block;
   padding-top: 4.9rem;
-  background-color: rgba(255,255,255, 0);
-  backdrop-filter: blur(30px);
-  transform: translate3d(0,0,0);
   backface-visibility: hidden;
   z-index: 10;
   overflow-y: auto;

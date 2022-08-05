@@ -1,5 +1,6 @@
 <template>
-  <header :class="[$style.header, showAnimate && $style.animateContent]">
+  <!--  , showAnimate && $style.animateContent-->
+  <header :class="[$style.header]">
     <n-button
       type-button="transparent"
       :class="[active && $style.open, $style.deviceMenu]"
@@ -16,54 +17,48 @@
     </n-button>
 
     <vue-bottom-sheet ref="menu" :overlay="true">
-      <nav :class="[$style.headerNav, active && $style.active]">
-        <ul :class="$style.user_list">
-          <li :class="$style.user_item">
-            <n-icon name="user" :class="$style.icon" />
-            <div :class="$style.user_item_text">
-              <nuxt-link to="#">
-                Профиль
-              </nuxt-link>
-            </div>
-          </li>
-          <li :class="$style.user_item">
-            <n-icon name="basket" :class="$style.icon" />
-            <div :class="$style.user_item_text">
-              <nuxt-link to="#">
-                Корзина
-              </nuxt-link>
-            </div>
-          </li>
-          <li :class="$style.user_item">
-            <n-icon name="search" :class="$style.icon" />
-            <div :class="$style.user_item_text">
-              <nuxt-link to="#">
-                Поиск
-              </nuxt-link>
-            </div>
-          </li>
-        </ul>
-        <n-nav-menu
-          :header-items="headerItems"
-          @hideNavMenu=" active = false"
-        />
-      </nav>
+      <client-only>
+        <nav :class="$style.headerNav">
+          <ul :class="$style.user_list">
+            <li :class="$style.user_item">
+              <n-icon name="user" :class="$style.icon" />
+              <div :class="$style.user_item_text">
+                <nuxt-link to="#">
+                  Профиль
+                </nuxt-link>
+              </div>
+            </li>
+            <li :class="$style.user_item">
+              <n-icon name="basket" :class="$style.icon" />
+              <div :class="$style.user_item_text">
+                <nuxt-link to="#">
+                  Корзина
+                </nuxt-link>
+              </div>
+            </li>
+            <li :class="$style.user_item">
+              <n-icon name="search" :class="$style.icon" />
+              <div :class="$style.user_item_text">
+                <nuxt-link to="#">
+                  Поиск
+                </nuxt-link>
+              </div>
+            </li>
+          </ul>
+          <n-nav-menu
+            :header-items="headerItems"
+            @hideNavMenu=" active = false"
+          />
+        </nav>
+      </client-only>
       <n-icon name="close" :class="$style.close" @click="closeMenu" />
     </vue-bottom-sheet>
 
-    <transition name="fade-fast">
-      <nuxt-link
-        v-if="isHomePage ? showLogo : true"
-        to="/"
-        :class="[$style.logo, active && $style.hideElement]"
-      >
-        <div>творческое объединение</div>
-        <n-logo size="lg" />
-      </nuxt-link>
-    </transition>
+    <div :class="[$style.logo]" @click="$router.push('/')">
+      <n-logo v-if="!isHomePage" size="lg" />
+    </div>
 
     <ul :class="[$style.headerUser__list, active && $style.hideElement]">
-      <!--      :class="$style.headerUser__item"-->
       <li>
         <a href="mailto:tisthenice@gmail.com" :class="$style.link">
           <span :class="$style.link__text">эфир</span>

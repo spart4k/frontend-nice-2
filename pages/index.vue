@@ -1,48 +1,49 @@
 <template>
-  <main>
-    <n-intro :description="introTitle" :content="content" :is-show-animation="true" />
+  <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
     <NGridCard
       v-if="cards.value && cards.value.data"
       ref="content"
-      class="content"
-      :class="[$style.content, showAnimate && $style.animateContent]"
       :items="cards.value.data"
       @clickTag="clickTag"
     />
-  </main>
+  </div>
 </template>
 <script>
+
 import {
   ref,
+  computed,
   defineComponent,
   useContext,
   useRoute,
   useRouter,
   useAsync,
-  useMeta,
-  computed
+  useMeta, onMounted, nextTick
 } from '@nuxtjs/composition-api'
+import { Elastic } from 'gsap'
+
 import { pagination } from '~/plugins/pagination'
 import { head } from '@/components/scripts/head.js'
+import animationGSAP from '~/helpers/compositions/animationGSAP'
+
 export default defineComponent({
   name: 'IndexPage',
+  middleware: 'background',
   setup () {
-    const { store } = useContext()
+    const { store, $gsap } = useContext()
     const router = useRouter()
     const route = useRoute()
     const cards = ref([])
     const totalPage = ref(0)
     const content = ref(null)
-
+    const background = ref(null)
     const introTitle = ref({
       title: 'Главная',
       subtitle: 'творческое объединение',
       background: ''
     })
-
     const pageInfo = ref({})
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
-
     const fetchData = async (currentPage) => {
       const params = {
         page: currentPage
@@ -51,6 +52,13 @@ export default defineComponent({
       return response
     }
     store.commit('content/clearBgIntro')
+
+    const {
+      animationlogo,
+      animateSubtitle,
+      animateNavbar,
+      animationTimeline
+    } = animationGSAP($gsap, Elastic)
 
     cards.value = useAsync(async () => {
       try {
@@ -61,6 +69,7 @@ export default defineComponent({
         console.log(e)
       }
     }, route.value.fullPath)
+
     store.commit('content/clearBgIntro')
     const metaInfo = cards.value
     head(useMeta, metaInfo.value)
@@ -75,11 +84,28 @@ export default defineComponent({
       router.push({ path: 'tags', query: { tag } })
     }
 
+    onMounted(() => {
+      nextTick(() => {
+        const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+        if (isPlayAnimation) {
+          store.commit('content/setAnimate', false)
+        }
+        if (!isPlayAnimation) {
+          animationTimeline()
+        }
+        animationlogo()
+        animateSubtitle()
+        animateNavbar()
+        localStorage.setItem('showAnimateHomePage', 'true')
+      })
+    })
+
     return {
       lazyPagination,
       clickTag,
 
       introTitle,
+      background,
       cards,
       page,
       pageInfo,

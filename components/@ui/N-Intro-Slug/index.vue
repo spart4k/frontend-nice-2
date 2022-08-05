@@ -1,52 +1,31 @@
 <template>
   <div ref="main" :class="$style.main" :style="{ paddingTop: !isHomePage ? '15.5rem' : '31.6rem' }">
-    <div :class="$style.intro">
-      <!--      v-if="!noPreview"-->
+    <div v-if="!noPreview" :class="$style.intro">
       <n-tabs
         :class="[
           $style.tabs,
-          showAnimate && $style.animateContent,
           isHideMobileTabs && $style.hideMobileTabs,
         ]"
         class="navbar"
       />
-      <div
-        v-if="isHomePage"
-        ref="logo"
-        class="logo"
-        :class="[$style.logo, showAnimate && $style.animateContent]"
-      >
-        <NLogoTitle
-          :is-home-page="isHomePage"
-          :hide-text-logo="hideTextLogo"
-        />
-      </div>
-      <div v-else>
-        <NLogoTitle
-          :description="description"
-          :image="image"
-        />
-      </div>
-      <div
-        v-if="!isHomePage"
-        ref="anchor"
-        :class="[$style.linkAnchor, scrollingContent && $style.scrolling]"
-      >
-        <n-icon name="arrow-bottom" />
-      </div>
+      <NLogoTitle
+        :description="description"
+        :image="image"
+      />
     </div>
-    <section>
+    <section :class="$style.container">
       <slot />
     </section>
   </div>
 </template>
 
 <script>
-import { computed, ref, useContext, useRoute } from '@nuxtjs/composition-api'
+import { computed, onMounted, ref, useContext, useRoute } from '@nuxtjs/composition-api'
+import { Elastic } from 'gsap'
 import NLogoTitle from './components/NLogoTitle'
 import { BLAND_COLOR } from '~/const/blandColor'
 import { BLAND_IMAGE } from '~/const/blandImage'
-// import animationGSAP from '~/helpers/compositions/animationGSAP'
+import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default {
   name: 'NIntro',
@@ -74,8 +53,7 @@ export default {
     }
   },
   setup () {
-    const { store } = useContext()
-    const anchor = ref(null)
+    const { $gsap } = useContext()
     const logo = ref(null)
     const main = ref(null)
     const wrapper = ref(null)
@@ -83,7 +61,6 @@ export default {
     const hideTextLogo = ref(false)
     const route = useRoute()
     const isHomePage = computed(() => route.value.name === 'index')
-    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
 
     const backgroundImage = computed(() => {
       if (!isHomePage.value) {
@@ -109,15 +86,20 @@ export default {
       }
     })
 
+    const {
+      animateBackground
+    } = animationGSAP($gsap, Elastic)
+
+    onMounted(() => {
+      animateBackground(document.body.scrollHeight / 100)
+    })
+
     return {
-      anchor,
       wrapper,
       scrollingContent,
       main,
       isHomePage,
       logo,
-      showAnimate,
-      // background,
       color,
       image,
       hideTextLogo,
@@ -129,6 +111,9 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
+.container {
+  @include container;
+}
 .wrapperBg{
   position: fixed;
   top: 0;

@@ -273,19 +273,19 @@ export default {
         }
       }
     }
-    const blockHeight = () => {
-      if (props.detailPage === true && (window.innerWidth > 900)) {
-        cardHeight.value = gallery.value.clientHeight + 'px'
-      }
-    }
+    // const blockHeight = () => {
+    //   if (props.detailPage === true && (window.innerWidth > 900)) {
+    //     cardHeight.value = gallery.value.clientHeight + 'px'
+    //   }
+    // }
     onMounted(() => {
-      emptyBlockHeight.value = 502 - body.value.clientHeight
+      // emptyBlockHeight.value = 502 - body.value.clientHeight
       windowWidth.value = window.innerWidth
-      blockHeight()
+      // blockHeight()
       extraTagHide()
       commentHeightSet()
       wordEnding()
-      window.addEventListener('resize', blockHeight)
+      // window.addEventListener('resize', blockHeight)
       window.addEventListener('resize', commentHeightSet)
       nextTick(() => {
         if (props.withVideo) {
@@ -296,7 +296,7 @@ export default {
       })
     })
     onUnmounted(() => {
-      window.addEventListener('resize', blockHeight)
+      // window.addEventListener('resize', blockHeight)
       window.addEventListener('resize', commentHeightSet)
     })
     const dateFormat = computed(() => {
@@ -316,7 +316,7 @@ export default {
       commentEnding,
       commentHeight,
       commentBox,
-      blockHeight,
+      // blockHeight,
       body,
       videoRef,
       commentHeightSet,
@@ -425,8 +425,8 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    line-height: 16px;
-    max-height: 34px;
+    // line-height: 17px;
+    max-height: 3.4rem;
     opacity: 0.8;
     @include regular-text;
     -webkit-line-clamp: 3;

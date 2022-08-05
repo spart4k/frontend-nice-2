@@ -8,7 +8,7 @@
         src="@/assets/img/logo.png"
         alt="Логотип Nice"
         class="logo_image"
-        :class="[$style.logoImage, showAnimate && $style.animateContent]"
+        :class="$style.logoImage"
       >
     </div>
     <div :class="[$style.wrapperImage, showAnimate && $style.animateContent]">
@@ -16,7 +16,7 @@
         src="@/assets/img/subtitle.png"
         alt="subtitle"
         class="subtitleLogo"
-        :class="[$style.imageSubtitle]"
+        :class="$style.imageSubtitle"
       >
     </div>
   </div>
@@ -33,14 +33,20 @@ export default {
       type: String,
       default: ''
     },
+    defaultLogo: {
+      type: Boolean
+    },
     showLogo: {
       type: Boolean,
       default: true
+    },
+    isHomePage: {
+      type: Boolean
     }
   },
-  setup () {
+  setup (props) {
     const { store } = useContext()
-    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
+    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage && props.isHomePage)
     return {
       showAnimate
     }
@@ -68,14 +74,14 @@ export default {
   }
   .logoImage {
     display: block;
-    padding-bottom: 1.7rem;
+    padding-bottom: 0.9rem;
     line-height: 0;
   }
   .imageSubtitle {
     display: block;
     line-height: 0;
-    width: 18rem;
     will-change: transform;
+    width: 100%;
   }
 }
 .sm {

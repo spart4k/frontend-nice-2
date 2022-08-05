@@ -3,7 +3,7 @@
     <N-Section-Intro v-if="!isHomePage" :description="description" :image="image" />
     <div>
       <div :class="[isHomePage && $style.wrapper]">
-        <n-logo v-if="isHomePage" :class="$style.logo" size="md" />
+        <n-logo v-if="isHomePage" :is-home-page="isHomePage" :class="$style.logo" size="md" />
       </div>
     </div>
   </div>
@@ -27,8 +27,8 @@ export default {
 
 <style scoped lang="scss" module>
 .container {
-  position: relative;
-  height: calc(100vh - 15.5rem);
+  //position: fixed;
+  //height: calc(100vh - 15.5rem);
   .wrapper {
     display: flex;
     flex-direction: column;
