@@ -4,9 +4,8 @@
       :overlay="true"
       :effect="$mq === 'sm' ? 'fx-default' : effect"
       :max-width="maxWidth"
-      :max-height="$mq === 'sm' ? '90%' : '100%'"
       :swipe-able="$mq === 'sm'"
-      :is-full-screen="$mq !== 'sm'"
+      :scrollable="true"
       :rounded="$mq === 'sm'"
       v-on="$attrs"
     >
@@ -48,6 +47,9 @@ export default {
     @media (min-width: $mobileWidth) {
       left: 0!important;
     }
+  }
+  :global(.bottom-sheet__content) {
+    overflow: auto !important;
   }
   :global(.bottom-sheet__bar) {
     height: 6px;

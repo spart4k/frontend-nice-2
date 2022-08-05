@@ -23,40 +23,38 @@
       :max-height="$mq === 'md' ? '100%' : ''"
       @closeMenu="closeMenu"
     >
-      <client-only>
-        <nav :class="$style.headerNav">
-          <ul :class="$style.user_list">
-            <li :class="$style.user_item">
-              <n-icon name="user" :class="$style.icon" />
-              <div :class="$style.user_item_text">
-                <nuxt-link to="#">
-                  Профиль
-                </nuxt-link>
-              </div>
-            </li>
-            <li :class="$style.user_item">
-              <n-icon name="basket" :class="$style.icon" />
-              <div :class="$style.user_item_text">
-                <nuxt-link to="#">
-                  Корзина
-                </nuxt-link>
-              </div>
-            </li>
-            <li :class="$style.user_item">
-              <n-icon name="search" :class="$style.icon" />
-              <div :class="$style.user_item_text">
-                <nuxt-link to="#">
-                  Поиск
-                </nuxt-link>
-              </div>
-            </li>
-          </ul>
-          <n-nav-menu
-            :header-items="headerItems"
-            @hideNavMenu=" active = false"
-          />
-        </nav>
-      </client-only>
+      <nav :class="$style.headerNav">
+        <ul :class="$style.user_list">
+          <li :class="$style.user_item">
+            <n-icon name="user" :class="$style.icon" />
+            <div :class="$style.user_item_text">
+              <nuxt-link to="#">
+                Профиль
+              </nuxt-link>
+            </div>
+          </li>
+          <li :class="$style.user_item">
+            <n-icon name="basket" :class="$style.icon" />
+            <div :class="$style.user_item_text">
+              <nuxt-link to="#">
+                Корзина
+              </nuxt-link>
+            </div>
+          </li>
+          <li :class="$style.user_item">
+            <n-icon name="search" :class="$style.icon" />
+            <div :class="$style.user_item_text">
+              <nuxt-link to="#">
+                Поиск
+              </nuxt-link>
+            </div>
+          </li>
+        </ul>
+        <n-nav-menu
+          :header-items="headerItems"
+          @hideNavMenu=" active = false"
+        />
+      </nav>
     </N-BootomSheet>
 
     <div :class="[$style.logo]" @click="$router.push('/')">
