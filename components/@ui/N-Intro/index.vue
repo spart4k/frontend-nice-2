@@ -160,7 +160,7 @@ export default {
 
 .logo {
   position: fixed;
-  z-index: 999;
+  z-index: 99;
   top: 0;
   left: 50%;
   transform-origin: top center;

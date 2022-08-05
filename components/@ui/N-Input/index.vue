@@ -38,7 +38,8 @@ export default {
   name: 'NInput',
   props: {
   },
-  setup () {
+  setup (props, ctx) {
+  const { emit } = ctx
   const letters = ref('')
   const input = ref()
   const smilies = ref()
@@ -46,11 +47,13 @@ export default {
     smilies.value = !smilies.value
   }
   const resize = (e) => {
+    emit('input', letters.value)
     e.target.style.height = 'auto'
     e.target.style.height = `${e.target.scrollHeight}px`
   }
   const sendComment = () => {
-    console.log(letters.value.length)
+    emit('sendMessage', letters.value)
+    console.log(letters.value)
   }
   const emojiWrite = (emoji) => {
     if (letters.value.length < 199) {
@@ -96,6 +99,7 @@ export default {
       border-bottom: .2rem solid #D46D33;
       outline: none;
       resize: none;
+      background-color: transparent;
     }
     .emoji {
       margin-top: 1.5rem;
