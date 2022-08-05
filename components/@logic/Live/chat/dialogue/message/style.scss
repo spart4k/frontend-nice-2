@@ -1,11 +1,14 @@
 .message {
   display: flex;
   margin-top: 2rem;
+  max-width: 100%;
   .author {
     @include montserratBold;
     margin-right: 1rem;
+    color: $fontColorDefault;
   }
   .body {
     @include montserratMedium;
+    color: $fontColorDefault;
   }
 }

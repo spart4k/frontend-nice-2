@@ -1,6 +1,6 @@
 <template>
-  <div :style="{backgroundImage: !isHomePage ? `url(${backgroundImage})` : `url(${backgroundImage})`}" :class="[$style.wrapper, $style.bg]">
-    <div :class="$style.overlay" :style="{backgroundColor: color}" />
+  <div :style="{backgroundImage: `url(${backgroundImage})`}" :class="[$style.wrapper, $style.bg]">
+    <div :class="$style.overlay" :style="{backgroundColor: isHomePage ? color : '#292BC2'}" />
   </div>
 </template>
 
@@ -23,10 +23,11 @@ export default {
     color: String
   },
   setup (props) {
+  console.log(props.isHomePage)
   const backgroundImage = computed(() => {
-    if (props.isHomePage) {
-      return require('~/assets/img/background/index-background.jpg')
-    }
+    // if (props.isHomePage) {
+    //   return require('~/assets/img/background/index-background.jpg')
+    // }
       return require('~/assets/img/background/coin-background.png')
   })
   return { backgroundImage }

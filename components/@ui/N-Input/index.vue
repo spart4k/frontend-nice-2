@@ -24,7 +24,7 @@
         <div :class="$style.letterCounter">
           {{ letters.length }}/200
         </div>
-        <N-Icon name="send" @click="sendComment" />
+        <N-Icon :class="$style.sendButton" name="send" @click="sendComment" />
       </div>
     </div>
     <N-Emoji v-if="smilies" @emojiWrite="emojiWrite" @click="emojiWrite" />
@@ -38,7 +38,8 @@ export default {
   name: 'NInput',
   props: {
   },
-  setup () {
+  setup (props, ctx) {
+  const { emit } = ctx
   const letters = ref('')
   const input = ref()
   const smilies = ref()
@@ -46,11 +47,13 @@ export default {
     smilies.value = !smilies.value
   }
   const resize = (e) => {
+    emit('input', letters.value)
     e.target.style.height = 'auto'
     e.target.style.height = `${e.target.scrollHeight}px`
   }
   const sendComment = () => {
-    console.log(letters.value.length)
+    emit('sendMessage', letters.value)
+    console.log(letters.value)
   }
   const emojiWrite = (emoji) => {
     if (letters.value.length < 199) {
@@ -93,16 +96,21 @@ export default {
       overflow: hidden;
       padding: 1rem 0;
       border: none;
-      border-bottom: 2px solid #D46D33;
+      border-bottom: .2rem solid #D46D33;
       outline: none;
       resize: none;
+      background-color: transparent;
     }
     .emoji {
-    margin-top: 1.5rem;
-    display: flex;
-    justify-content: space-between;
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      .sendButton {
+        cursor: pointer;
+      }
     .icon {
       transition: all .2s;
+      cursor: pointer;
     }
     .send {
         display: flex;

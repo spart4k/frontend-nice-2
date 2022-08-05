@@ -40,7 +40,6 @@
         $props.withAuthor && $style.author,
         detailPage && $style.detailPage
       ]"
-      :style="{ height: cardHeight }"
     >
       <template>
         <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`/cards/${data.id}`">
@@ -68,7 +67,7 @@
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div>
         </NuxtLink>
-        <div v-if="$props.detailPage" :class="$style.body__top" tag="div">
+        <div ref="body" v-if="$props.detailPage" :class="[$style.body__top, detailPage && $style.detailPage]" tag="div">
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
             {{ data.title }}
           </h2>
@@ -92,15 +91,16 @@
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div>
+          <template v-if="data.files && $props.detailPage && !$props.withVideo">
+            <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
+              <p :class="$style.audioName">
+                {{ item.title }}
+              </p>
+              <N-Audio v-if="item.src" :src="`https://nice.c.roky.rocks/${item.src}`" />
+            </div>
+          </template>
         </div>
-        <template v-if="data.files && $props.detailPage && !$props.withVideo">
-          <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
-            <p :class="$style.audioName">
-              {{ item.title }}
-            </p>
-            <N-Audio v-if="item.src" :src="`https://nice.c.roky.rocks/${item.src}`" />
-          </div>
-        </template>
+        <!-- <div v-if="$props.detailPage && (windowWidth > 900) && !showComments" :class="[$style.empty, detailPage && $style.detailPage]" :style="{ height: emptyBlockHeight + 'px' }" /> -->
         <div v-if="$props.detailPage" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '1.5rem' : '' }">
           <N-Chip
             v-for="item in data.tags"
@@ -120,7 +120,7 @@
             +{{ chipsCounter }}
           </N-Chip>
         </div>
-        <div :class="$style.socials" :style="{ marginTop: $props.detailPage ? '3rem' : '2rem' }">
+        <div :class="[$style.socials, detailPage && $style.detailPage]" :style="{ marginTop: $props.detailPage ? '3rem' : '2rem' }">
           <div>
             <N-Like v-model="like" :class="$style.likeContainer" @click="addLike" />
             <div :class="$style.parser">
@@ -128,7 +128,7 @@
               {{ !$props.detailPage ? '0' : 'Нравится' }}
             </div>
           </div>
-          <div :class="$style.commentsContainer" @click="showComments = !showComments">
+          <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.commentsContainer" @click="showComments = !showComments">
             <N-Icon name="comments" />
             <div :class="$style.parser">
               {{ !$props.detailPage ? '0' : 'Комментировать' }}
@@ -159,12 +159,12 @@
         :class="[$style.comments,showComments ? $style.show : '']"
         :style="{maxHeight: showComments ? commentHeight : '0'}"
       >
-        <p :class="$style.comments__title">
+        <!-- <p :class="$style.comments__title">
           {{ commentCounter }} комментари{{ commentEnding }}
-        </p>
+        </p> -->
         <N-Input @smilies="commentHeightSet" />
         <N-Plug v-if="false" />
-        <div v-if="showComments">
+        <div v-if="true">
           <N-Comment />
           <N-Comment />
           <N-Comment />
@@ -188,7 +188,7 @@ export default {
   props: { ...dataProps.props },
   setup (props) {
     const videoRef = ref(null)
-    const showComments = ref(false)
+    const showComments = ref(true)
     // const comments = ref(false)
     const like = ref(props.data.liked)
     const likeCounter = ref(props.data.like_count)
@@ -198,10 +198,13 @@ export default {
     const chipsArray = ref()
     const commentHeight = ref()
     const commentBox = ref()
-    const commentEnding = ref('ев')
-    const commentCounter = ref(1)
-    const gallery = ref()
-    const cardHeight = ref()
+    // const commentEnding = ref('ев')
+    // const commentCounter = ref(1)
+    // const gallery = ref()
+    const windowWidth = ref()
+    // const body = ref()
+    // const emptyBlockHeight = ref()
+    // const cardHeight = ref()
     const { $axios } = useContext()
     const { store } = useContext()
     const videoPlay = ref(false)
@@ -258,29 +261,37 @@ export default {
         })
         chipExtra.value.$el.style.display = 'none'
       }
-    const wordEnding = () => {
-      const string = commentCounter.value.toString()
-      const lastElem = string[string.length - 1]
-      if (!(string[string.length - 2] === '1')) {
-        if (lastElem === '2' || lastElem === '3' || lastElem === '4') {
-          commentEnding.value = 'я'
-        } else if (lastElem === '1') {
-          commentEnding.value = 'й'
-        }
-      }
-    }
-    const blockHeight = () => {
-      if (props.detailPage === true && (window.innerWidth > 900)) {
-        cardHeight.value = gallery.value.clientHeight + 'px'
-        console.log(cardHeight.value)
-      }
+    // const wordEnding = () => {
+    //   const string = commentCounter.value.toString()
+    //   const lastElem = string[string.length - 1]
+    //   if (!(string[string.length - 2] === '1')) {
+    //     if (lastElem === '2' || lastElem === '3' || lastElem === '4') {
+    //       commentEnding.value = 'я'
+    //     } else if (lastElem === '1') {
+    //       commentEnding.value = 'й'
+    //     }
+    //   }
+    // }
+    // const blockHeight = () => {
+    //   if (props.detailPage === true && (window.innerWidth > 900)) {
+    //     cardHeight.value = gallery.value.clientHeight + 'px'
+    //   }
+    // }
+    const windowWidthCount = () => {
+      windowWidth.value = window.innerWidth
     }
     onMounted(() => {
-      blockHeight()
+      // emptyBlockHeight.value = 502 - body.value.clientHeight
+      windowWidthCount()
+      if (windowWidth.value < 900) {
+        showComments.value = false
+      }
+      // blockHeight()
       extraTagHide()
       commentHeightSet()
-      wordEnding()
-      window.addEventListener('resize', blockHeight)
+      // wordEnding()
+      // window.addEventListener('resize', blockHeight)
+      window.addEventListener('resize', windowWidthCount)
       window.addEventListener('resize', commentHeightSet)
       nextTick(() => {
         if (props.withVideo) {
@@ -291,7 +302,8 @@ export default {
       })
     })
     onUnmounted(() => {
-      window.addEventListener('resize', blockHeight)
+      // window.addEventListener('resize', blockHeight)
+      window.addEventListener('resize', windowWidthCount)
       window.addEventListener('resize', commentHeightSet)
     })
     const dateFormat = computed(() => {
@@ -307,19 +319,23 @@ export default {
       chipsWidth,
       chipExtra,
       dateFormat,
-      commentCounter,
-      commentEnding,
+      // commentCounter,
+      // commentEnding,
       commentHeight,
       commentBox,
-      blockHeight,
+      // blockHeight,
+      // body,
       videoRef,
       commentHeightSet,
-      wordEnding,
+      // wordEnding,
       extraTagHide,
       extraTagShow,
-      cardHeight,
+      // cardHeight,
+      // emptyBlockHeight,
       addLike,
-      gallery,
+      // gallery,
+      windowWidth,
+      windowWidthCount,
       videoUrl,
       videoPlay,
       videoPlayingChange
@@ -331,21 +347,24 @@ export default {
   .card {
     background-color: $white;
     //width: 36rem;
+    height: fit-content;
     width: 100%;
     border-radius: 2rem;
     -webkit-mask-image: -webkit-radial-gradient(white, black);
     &.detailPage {
       @media (min-width: $tabletWidth) {
         width: 114rem;
-        height: 67.4rem;
+        height: calc(76vh - 7rem);
         margin: 0 auto;
         display: flex;
       }
     }
     .gallery {
+        cursor: pointer;
       &.detailPage {
         @media (min-width: $tabletWidth) {
           background: #222222;
+          cursor: unset;
           min-width: 50%;
           max-width: 50%;
           :global(.slick-slider) {
@@ -417,7 +436,7 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    line-height: 16px;
+    // line-height: 17px;
     max-height: 34px;
     opacity: 0.8;
     @include regular-text;
@@ -454,10 +473,20 @@ export default {
     background: #C83F8E;
     border-radius: 2.5rem;
   }
+  .empty {
+    width: 100%;
+  }
   .socials {
     display: flex;
     width: auto;
     gap: 3rem;
+    &.detailPage {
+      @media (min-width: $tabletWidth) {
+        padding-top: 3.094rem;
+        border-top: .1rem solid rgba(34, 34, 34, 0.1);
+        margin-top: 3rem;
+      }
+    }
     div {
       display: flex;
       gap: 1rem;
@@ -474,6 +503,7 @@ export default {
     padding: 1.4rem 1.5rem 2.094rem;
     color: $fontColorDefault;
     @include regular-text;
+    width: 100%;
     &.detailPage {
       @media (min-width: $tabletWidth) {
         padding: 3rem;
@@ -499,6 +529,10 @@ export default {
       margin-bottom: .8rem;
     }
     &__top {
+      &.detailPage {
+        @media (min-width: $tabletWidth) {
+        }
+      }
       cursor: pointer;
       .cardText {
         p {

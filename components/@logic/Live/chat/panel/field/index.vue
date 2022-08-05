@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.field">
-    <input type="text" placeholder="Скажите что-то ...">
+    <input v-model="value" @input="inputValue" placeholder="Скажите что-то ...">
   </div>
 </template>
 

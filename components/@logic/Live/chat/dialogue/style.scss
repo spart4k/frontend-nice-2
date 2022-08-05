@@ -5,5 +5,9 @@
   overflow: auto;
   .wrap {
     overflow: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-x: hidden;
+    position: relative;
   }
 }

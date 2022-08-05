@@ -16,7 +16,7 @@ export default {
   width: max-content;
   padding: .8rem 1.2rem;
   max-height: 3.1rem;
-  border: solid 2px $blueBlack2;
+  border: solid .2rem $blueBlack2;
   border-radius: $border-radius-2;
   color: $blueBlack2;
   @include text-md;

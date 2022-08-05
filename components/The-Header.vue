@@ -56,6 +56,12 @@
         />
       </nav>
     </N-BootomSheet>
+    <vue-bottom-sheet ref="liveChat" max-height="100%" is-full-screen>
+      <client-only>
+        <live-default />
+      </client-only>
+      <n-icon name="close" :class="$style.close" @click="closeLive" />
+    </vue-bottom-sheet>
 
     <div :class="[$style.logo]" @click="$router.push('/')">
       <n-logo v-if="!isHomePage" size="md" />
@@ -63,10 +69,10 @@
 
     <ul :class="[$style.headerUser__list, active && $style.hideElement]">
       <li>
-        <a href="mailto:tisthenice@gmail.com" :class="$style.link">
+        <div @click="openLive" :class="$style.link">
           <span :class="$style.link__text">эфир</span>
           <n-icon name="domofon" :class="$style.link__icon" />
-        </a>
+        </div>
       </li>
     </ul>
     <FormAuthSteps v-model="activeAuthSteps" />
@@ -94,6 +100,7 @@ export default {
     const route = useRoute()
     const router = useRouter()
     const header = ref(null)
+    const liveChat = ref(null)
     const isHomePage = computed(() => route.value.name === 'index')
     const bgName = computed(() => store.state.content.bgIntro)
     const basketData = computed(() => store.state.basket.basket?.data)
@@ -123,6 +130,14 @@ export default {
     }
     const closeMenu = () => {
       menu.value.$children[0].close()
+    }
+
+    const openLive = () => {
+      liveChat.value.open()
+    }
+
+    const closeLive = () => {
+      liveChat.value.close()
     }
 
     const openTestPage = (num) => {
@@ -167,7 +182,10 @@ export default {
       activeAuthSteps,
       isAuth,
       stateShowLogin,
-      menu
+      menu,
+      liveChat,
+      closeLive,
+      openLive
     }
   }
 }
