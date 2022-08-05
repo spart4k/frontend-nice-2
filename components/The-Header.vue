@@ -55,7 +55,7 @@
     </vue-bottom-sheet>
 
     <div :class="[$style.logo]" @click="$router.push('/')">
-      <n-logo v-if="!isHomePage" size="lg" />
+      <n-logo v-if="!isHomePage" size="md" />
     </div>
 
     <ul :class="[$style.headerUser__list, active && $style.hideElement]">
@@ -116,14 +116,10 @@ export default {
     }
 
     const openMenu = () => {
-      // document.body.style.overflow = 'hidden'
       menu.value.open()
-      // active.value = !active.value
     }
     const closeMenu = () => {
-      // document.body.style.overflow = 'auto'
       menu.value.close()
-      // active.value = !active.value
     }
 
     const openTestPage = (num) => {

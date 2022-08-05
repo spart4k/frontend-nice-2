@@ -1,13 +1,9 @@
 <template>
   <div ref="main" :class="$style.main">
-    <div v-if="!noPreview" :class="$style.intro">
+    <div :class="$style.intro">
       <n-tabs
-        :class="[$style.tabs]"
+        :class="$style.tabs"
         class="navbar"
-      />
-      <NLogoTitle
-        :description="description"
-        :image="image"
       />
     </div>
     <section :class="$style.container">
@@ -19,7 +15,6 @@
 <script>
 import { computed, onMounted, ref, useRoute, useContext } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
-import NLogoTitle from './components/NLogoTitle'
 
 import animationGSAP from '~/helpers/compositions/animationGSAP'
 
@@ -28,9 +23,6 @@ import { BLAND_IMAGE } from '~/const/blandImage'
 
 export default {
   name: 'NIntro',
-  components: {
-    NLogoTitle
-  },
   props: {
     description: {
       type: Object
@@ -50,20 +42,12 @@ export default {
     const hideTextLogo = ref(false)
     const route = useRoute()
     const { $gsap } = useContext()
-    const isHomePage = computed(() => route.value.name === 'index')
 
     const {
       animationlogo,
-      animateSubtitle,
-      animateNavbar
+      animateSubtitle
+      // animateNavbar
     } = animationGSAP($gsap, Elastic)
-
-    const backgroundImage = computed(() => {
-      if (!isHomePage.value) {
-        return require('@/assets/img/background/coin-background.png')
-      }
-        return require('@/assets/img/background/index-background.jpg')
-    })
 
     const color = computed(() => {
       const paramsColor = BLAND_COLOR[route.value.params?.slug] || BLAND_COLOR[route.value.name]
@@ -82,23 +66,38 @@ export default {
         return ''
       }
     })
+    const introTitle = ref({
+      title: 'Главная'
+    })
+    const imagePreview = ref('ctivo')
 
     onMounted(() => {
       animationlogo()
       animateSubtitle()
-      animateNavbar()
+      // animateNavbar()
+      $gsap.to('.navbar', {
+        scrollTrigger: {
+          trigger: '.content',
+          // start: `top ${top}`,
+          start: 10,
+          end: 100,
+          scrub: true
+        },
+        y: -60,
+        opacity: 0
+      })
     })
 
     return {
       wrapper,
       scrollingContent,
       main,
-      isHomePage,
       logo,
       color,
       image,
       hideTextLogo,
-      backgroundImage
+      introTitle,
+      imagePreview
     }
   },
   watchQuery: true
@@ -106,6 +105,12 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
+.main {
+  padding-top: 30.5rem;
+  @media (max-width: $mobileWidth) {
+    padding-top: 10.3rem;
+  }
+}
 .container {
   @include container;
 }

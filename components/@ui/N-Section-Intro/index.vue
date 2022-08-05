@@ -32,11 +32,17 @@ export default {
 
 <style scoped lang="scss" module>
 .container {
+  position: relative;
+  color: $white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
   .title {
-      @include title;
-      @include montserratBlack;
-      margin-bottom: 4rem;
-      text-align: center
+    @include title;
+    @include montserratBlack;
+    margin-bottom: 4rem;
+    text-align: center
   }
   .quote {
     text-align: center

@@ -11,12 +11,11 @@ const animation = ($gsap, Elastic) => {
   }
 
   const background = ref(null)
-  const animationTimeline = () => {
+  const animationTimeline = (NAVBAR = '.navbar') => {
     const LOGO = '.logo_image'
     const LOGO_WRAPPER = '.logo'
     const HEADER = '.header'
     const SUBTITLE = '.subtitleLogo'
-    const NAVBAR = '.navbar'
     const CONTENT = '.content'
     const body = document.body
     const onComplete = () => {
@@ -182,11 +181,11 @@ const animation = ($gsap, Elastic) => {
     })
   }
 
-  const animateNavbar = () => {
+  const animateNavbar = (selector = '.navbar') => {
     const top = getConntetDomElementBounding().top
     if (!top) { return }
 
-    $gsap.to('.navbar', {
+    $gsap.to(selector, {
       scrollTrigger: {
         trigger: TRIGGER,
         // start: `top ${top}`,

@@ -1,12 +1,18 @@
 <template>
-  <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
-    <NGridCard
-      v-if="cards.value && cards.value.data"
-      ref="content"
-      :items="cards.value.data"
-      @clickTag="clickTag"
-    />
-  </div>
+  <n-intro
+    :description="introTitle"
+    :is-show-animation="true"
+  >
+    <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
+      <NGridCard
+        v-if="cards.value && cards.value.data"
+        ref="content"
+        :items="cards.value.data"
+        home-page
+        @clickTag="clickTag"
+      />
+    </div>
+  </n-intro>
 </template>
 <script>
 

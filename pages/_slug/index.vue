@@ -1,7 +1,6 @@
 <template>
-  <div>
-    <n-preloader v-if="loading" />
-    <template v-else>
+  <n-intro-slug>
+    <template v-if="cards.value">
       <NGridCard
         v-if="cards.value"
         ref="content"
@@ -9,9 +8,11 @@
         :class="[$style.content, showAnimate && $style.animateContent]"
         :items="cards.value"
         @clickTag="clickTag"
-      />
+      >
+        <n-section-intro :description="introTitle" :image="`ctivo.png`" />
+      </NGridCard>
     </template>
-  </div>
+  </n-intro-slug>
 </template>
 
 <script>

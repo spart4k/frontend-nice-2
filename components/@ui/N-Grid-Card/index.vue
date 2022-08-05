@@ -1,20 +1,22 @@
 <template>
   <div :class="$style.cards">
     <template v-if="spliceArray.colLeft && spliceArray.colRight">
-      <div :class="$style.col">
+      <div :class="[$style.col, !spliceArray.colRight.length && $style.oneElement]">
+        <div v-if="homePage" :class="$style.image">
+          <img :src="require(`~/assets/img/dogs.png`)" alt="DOG ">
+        </div>
+        <div v-else :class="$style.preview">
+          <slot />
+        </div>
         <template v-for="(card) in spliceArray.colLeft">
-          <div v-if="card.hasOwnProperty('image')" :key="card.id" :class="$style.image">
-            <img :src="require(`~/assets/img/${card.image}.png`)" alt="DOG ">
-          </div>
-          <section-cards v-else :id="card.section.id" :key="card.id" :class="$style.cards__item" :card="card" />
+          <section-cards :id="card.section.id" :key="card.id" :class="$style.cards__item" :card="card" />
         </template>
       </div>
-      <div :class="$style.col">
+      <div v-if="spliceArray.colRight.length" :class="$style.col">
         <template v-for="(card) in spliceArray.colRight">
           <section-cards
             :id="card.section.id"
             :key="card.id"
-            ref="colRightElements"
             :card="card"
             :class="$style.cards__item"
             @clickTag="($event) => $emit('clickTag', card.section.id)"
@@ -33,13 +35,15 @@ export default {
   props: {
     items: {
       type: Array
+    },
+    homePage: {
+      type: Boolean
     }
   },
 
   setup (props) {
     const { items } = unref(props)
     const proxyArray = ref(items)
-    const colRightElements = ref(null)
 
     watch(() => props.items, () => {
       proxyArray.value = props.items
@@ -47,12 +51,7 @@ export default {
 
     const spliceArray = computed(() => {
       const middleIndex = Math.ceil(proxyArray.value?.length / 2)
-      const obj = {
-        image: 'dogs',
-        id: Math.random()
-      }
       const firstHalf = proxyArray.value?.splice(0, middleIndex)
-      firstHalf.unshift(obj)
       const secondHalf = proxyArray.value?.splice(-middleIndex)
 
       return {
@@ -60,31 +59,27 @@ export default {
         colRight: secondHalf
       }
     })
-    const heightDogs = computed(() => {
-      if (colRightElements.value && colRightElements.value.length) {
-        return `${colRightElements.value[0]?.$el?.clientHeight / 10}rem`
-      }
-      return 'auto'
-    })
 
     return {
       spliceArray,
-      proxyArray,
-      colRightElements,
-      heightDogs
+      proxyArray
     }
   }
 }
 </script>
 
 <style scoped lang="scss" module>
+.preview {
+  height: 60rem;
+  @media (max-width: $mobileWidth) {
+    height: calc(100vh - 10.3rem);
+  }
+}
 .cards {
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
-  @media (max-width: $desktopWidth) {
-    width: calc(100% - 17.3rem - 17.3rem);
-  }
+  width: calc(100% - 17.3rem - 17.3rem);
   @media (max-width: $mobileWidth) {
     flex-direction: column;
     justify-content: center;
@@ -105,7 +100,6 @@ export default {
     img {
       line-height: 0;
       width: 39.7rem;
-      //height: 46.8rem;
       max-width: 100%;
     }
     @media(max-width: $mobileWidth) {
@@ -114,13 +108,27 @@ export default {
   }
 }
 .col + .col {
-  //margin-left: 3rem;
   @media (max-width: $tabletWidth) {
     margin-left: 0;
   }
 }
 .col {
   width: calc(50% - 1.5rem);
+  &.oneElement {
+    display: flex;
+    width: auto;
+    .cards__item, .preview {
+      width: calc(50% - 1.5rem);
+    }
+    @media(max-width: $mobileWidth) {
+      flex-direction: column;
+      align-items: center;
+      width: auto;
+      .cards__item, .preview {
+        width: auto;
+      }
+    }
+  }
   @media (max-width: $mobileWidth) {
     width: auto;
     max-width: none;
