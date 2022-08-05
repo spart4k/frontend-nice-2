@@ -40,7 +40,6 @@
         $props.withAuthor && $style.author,
         detailPage && $style.detailPage
       ]"
-      :style="{ height: cardHeight }"
     >
       <template>
         <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`/cards/${data.id}`">
@@ -101,7 +100,7 @@
             </div>
           </template>
         </div>
-        <div v-if="$props.detailPage && (windowWidth > 900) && !showComments" :class="[$style.empty, detailPage && $style.detailPage]" :style="{ height: emptyBlockHeight + 'px' }" />
+        <!-- <div v-if="$props.detailPage && (windowWidth > 900) && !showComments" :class="[$style.empty, detailPage && $style.detailPage]" :style="{ height: emptyBlockHeight + 'px' }" /> -->
         <div v-if="$props.detailPage" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '1.5rem' : '' }">
           <N-Chip
             v-for="item in data.tags"
@@ -129,7 +128,7 @@
               {{ !$props.detailPage ? '0' : 'Нравится' }}
             </div>
           </div>
-          <div :class="$style.commentsContainer" @click="showComments = !showComments">
+          <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.commentsContainer" @click="showComments = !showComments">
             <N-Icon name="comments" />
             <div :class="$style.parser">
               {{ !$props.detailPage ? '0' : 'Комментировать' }}
@@ -160,12 +159,12 @@
         :class="[$style.comments,showComments ? $style.show : '']"
         :style="{maxHeight: showComments ? commentHeight : '0'}"
       >
-        <p :class="$style.comments__title">
+        <!-- <p :class="$style.comments__title">
           {{ commentCounter }} комментари{{ commentEnding }}
-        </p>
+        </p> -->
         <N-Input @smilies="commentHeightSet" />
         <N-Plug v-if="false" />
-        <div v-if="showComments">
+        <div v-if="true">
           <N-Comment />
           <N-Comment />
           <N-Comment />
@@ -189,7 +188,7 @@ export default {
   props: { ...dataProps.props },
   setup (props) {
     const videoRef = ref(null)
-    const showComments = ref(false)
+    const showComments = ref(true)
     // const comments = ref(false)
     const like = ref(props.data.liked)
     const likeCounter = ref(props.data.like_count)
@@ -199,13 +198,13 @@ export default {
     const chipsArray = ref()
     const commentHeight = ref()
     const commentBox = ref()
-    const commentEnding = ref('ев')
-    const commentCounter = ref(1)
-    const gallery = ref()
+    // const commentEnding = ref('ев')
+    // const commentCounter = ref(1)
+    // const gallery = ref()
     const windowWidth = ref()
-    const body = ref()
-    const emptyBlockHeight = ref()
-    const cardHeight = ref()
+    // const body = ref()
+    // const emptyBlockHeight = ref()
+    // const cardHeight = ref()
     const { $axios } = useContext()
     const { store } = useContext()
     const videoPlay = ref(false)
@@ -262,30 +261,37 @@ export default {
         })
         chipExtra.value.$el.style.display = 'none'
       }
-    const wordEnding = () => {
-      const string = commentCounter.value.toString()
-      const lastElem = string[string.length - 1]
-      if (!(string[string.length - 2] === '1')) {
-        if (lastElem === '2' || lastElem === '3' || lastElem === '4') {
-          commentEnding.value = 'я'
-        } else if (lastElem === '1') {
-          commentEnding.value = 'й'
-        }
-      }
-    }
+    // const wordEnding = () => {
+    //   const string = commentCounter.value.toString()
+    //   const lastElem = string[string.length - 1]
+    //   if (!(string[string.length - 2] === '1')) {
+    //     if (lastElem === '2' || lastElem === '3' || lastElem === '4') {
+    //       commentEnding.value = 'я'
+    //     } else if (lastElem === '1') {
+    //       commentEnding.value = 'й'
+    //     }
+    //   }
+    // }
     // const blockHeight = () => {
     //   if (props.detailPage === true && (window.innerWidth > 900)) {
     //     cardHeight.value = gallery.value.clientHeight + 'px'
     //   }
     // }
+    const windowWidthCount = () => {
+      windowWidth.value = window.innerWidth
+    }
     onMounted(() => {
       // emptyBlockHeight.value = 502 - body.value.clientHeight
-      windowWidth.value = window.innerWidth
+      windowWidthCount()
+      if (windowWidth.value < 900) {
+        showComments.value = false
+      }
       // blockHeight()
       extraTagHide()
       commentHeightSet()
-      wordEnding()
+      // wordEnding()
       // window.addEventListener('resize', blockHeight)
+      window.addEventListener('resize', windowWidthCount)
       window.addEventListener('resize', commentHeightSet)
       nextTick(() => {
         if (props.withVideo) {
@@ -297,6 +303,7 @@ export default {
     })
     onUnmounted(() => {
       // window.addEventListener('resize', blockHeight)
+      window.addEventListener('resize', windowWidthCount)
       window.addEventListener('resize', commentHeightSet)
     })
     const dateFormat = computed(() => {
@@ -312,22 +319,23 @@ export default {
       chipsWidth,
       chipExtra,
       dateFormat,
-      commentCounter,
-      commentEnding,
+      // commentCounter,
+      // commentEnding,
       commentHeight,
       commentBox,
       // blockHeight,
-      body,
+      // body,
       videoRef,
       commentHeightSet,
-      wordEnding,
+      // wordEnding,
       extraTagHide,
       extraTagShow,
-      cardHeight,
-      emptyBlockHeight,
+      // cardHeight,
+      // emptyBlockHeight,
       addLike,
-      gallery,
+      // gallery,
       windowWidth,
+      windowWidthCount,
       videoUrl,
       videoPlay,
       videoPlayingChange
@@ -339,21 +347,24 @@ export default {
   .card {
     background-color: $white;
     //width: 36rem;
+    height: fit-content;
     width: 100%;
     border-radius: 2rem;
     -webkit-mask-image: -webkit-radial-gradient(white, black);
     &.detailPage {
       @media (min-width: $tabletWidth) {
         width: 114rem;
-        height: 67.4rem;
+        height: calc(76vh - 7rem);
         margin: 0 auto;
         display: flex;
       }
     }
     .gallery {
+        cursor: pointer;
       &.detailPage {
         @media (min-width: $tabletWidth) {
           background: #222222;
+          cursor: unset;
           min-width: 50%;
           max-width: 50%;
           :global(.slick-slider) {
@@ -426,7 +437,7 @@ export default {
     text-overflow: ellipsis;
     display: -webkit-box;
     // line-height: 17px;
-    max-height: 3.4rem;
+    max-height: 34px;
     opacity: 0.8;
     @include regular-text;
     -webkit-line-clamp: 3;
@@ -471,9 +482,9 @@ export default {
     gap: 3rem;
     &.detailPage {
       @media (min-width: $tabletWidth) {
-        margin-top: 2.8rem;
-        padding-top: 3rem;
-        border-top: 1px solid rgba(34, 34, 34, 0.1);
+        padding-top: 3.094rem;
+        border-top: .1rem solid rgba(34, 34, 34, 0.1);
+        margin-top: 3rem;
       }
     }
     div {

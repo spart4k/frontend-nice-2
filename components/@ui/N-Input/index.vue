@@ -24,7 +24,7 @@
         <div :class="$style.letterCounter">
           {{ letters.length }}/200
         </div>
-        <N-Icon name="send" @click="sendComment" />
+        <N-Icon :class="$style.sendButton" name="send" @click="sendComment" />
       </div>
     </div>
     <N-Emoji v-if="smilies" @emojiWrite="emojiWrite" @click="emojiWrite" />
@@ -93,16 +93,20 @@ export default {
       overflow: hidden;
       padding: 1rem 0;
       border: none;
-      border-bottom: 2px solid #D46D33;
+      border-bottom: .2rem solid #D46D33;
       outline: none;
       resize: none;
     }
     .emoji {
-    margin-top: 1.5rem;
-    display: flex;
-    justify-content: space-between;
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      .sendButton {
+        cursor: pointer;
+      }
     .icon {
       transition: all .2s;
+      cursor: pointer;
     }
     .send {
         display: flex;

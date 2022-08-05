@@ -11,12 +11,11 @@ const animation = ($gsap, Elastic) => {
   }
 
   const background = ref(null)
-  const animationTimeline = () => {
+  const animationTimeline = (NAVBAR = '.navbar') => {
     const LOGO = '.logo_image'
     const LOGO_WRAPPER = '.logo'
     const HEADER = '.header'
     const SUBTITLE = '.subtitleLogo'
-    const NAVBAR = '.navbar'
     const CONTENT = '.content'
     const body = document.body
     const onComplete = () => {
@@ -102,27 +101,32 @@ const animation = ($gsap, Elastic) => {
         duration: 3.5
       }
     )
-
     $gsap.set(body, { overflow: 'hidden' }, 'start')
+    tl.set(LOGO_WRAPPER, {
+      visibility: 'visible'
+    })
     tl.set(LOGO, {
+      y: -100
+    })
+    tl.set(SUBTITLE, {
       y: -100
     })
     tl.to(LOGO, {
       y: 0,
-      duration: 0.3,
+      duration: 0.6,
       delay: 1
     })
     tl.to(SUBTITLE, {
       y: 0,
-      duration: 0.3
+      duration: 0.6
     })
     tl.to(LOGO, {
       y: () => '100%',
-      duration: 0.3
+      duration: 0.6
     })
     tl.to(SUBTITLE, {
       y: '100%',
-      duration: 0.3
+      duration: 0.6
     })
   }
   const getConntetDomElementBounding = () => {
@@ -140,11 +144,12 @@ const animation = ($gsap, Elastic) => {
     const top = getConntetDomElementBounding().top
     if (!top) { return }
     ScrollTrigger.matchMedia({
-      '(max-width: 900px)' () {
+      '(max-width: 450px)' () {
         const tl = $gsap.timeline({
           scrollTrigger: {
             trigger: TRIGGER,
-            start: () => `top ${top}px`,
+            // start: () => `top ${top}px`,
+            start: 10,
             end: () => `top ${headerBounding}`,
             scrub: true
             // markers: true,
@@ -167,7 +172,8 @@ const animation = ($gsap, Elastic) => {
     $gsap.to('.subtitleLogo', {
       scrollTrigger: {
         trigger: TRIGGER,
-        start: () => `top ${top}px`,
+        // start: () => `top ${top}px`,
+        start: 10,
         end: () => 100,
         scrub: true
       },
@@ -175,14 +181,15 @@ const animation = ($gsap, Elastic) => {
     })
   }
 
-  const animateNavbar = () => {
+  const animateNavbar = (selector = '.navbar') => {
     const top = getConntetDomElementBounding().top
     if (!top) { return }
 
-    $gsap.to('.navbar', {
+    $gsap.to(selector, {
       scrollTrigger: {
         trigger: TRIGGER,
-        start: `top ${top}`,
+        // start: `top ${top}`,
+        start: 10,
         end: 100,
         scrub: true
       },
@@ -193,11 +200,6 @@ const animation = ($gsap, Elastic) => {
 
   const animateBackground = () => {
     const height = ref(window.innerHeight / 10)
-    ScrollTrigger.addEventListener('refreshInit', () => {
-      console.log(height.value)
-      height.value = window.innerHeight / 10
-    })
-
     $gsap.to('.background',
       {
         scrollTrigger: {

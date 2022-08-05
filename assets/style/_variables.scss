@@ -4,7 +4,7 @@ $mobileWidth: 450px;
 
 $border-radius-1: 1.5rem;
 $border-radius-2: .6rem;
-$border-radius-3: 25px;
+$border-radius-3: 2.5rem;
 
 $fontColorDefault: #222222;
 $black: #000;
@@ -66,6 +66,8 @@ $paddingTopLog: 2rem;
 @mixin container {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+  max-width: $desktopWidth;
+  margin: 0 auto;
 }
 
 @mixin title {

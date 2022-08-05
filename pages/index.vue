@@ -1,12 +1,18 @@
 <template>
-  <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
-    <NGridCard
-      v-if="cards.value && cards.value.data"
-      ref="content"
-      :items="cards.value.data"
-      @clickTag="clickTag"
-    />
-  </div>
+  <n-intro
+    :description="introTitle"
+    :is-show-animation="true"
+  >
+    <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
+      <NGridCard
+        v-if="cards.value && cards.value.data"
+        ref="content"
+        :items="cards.value.data"
+        home-page
+        @clickTag="clickTag"
+      />
+    </div>
+  </n-intro>
 </template>
 <script>
 
@@ -18,19 +24,17 @@ import {
   useRoute,
   useRouter,
   useAsync,
-  useMeta, onMounted, nextTick
+  useMeta
 } from '@nuxtjs/composition-api'
-import { Elastic } from 'gsap'
 
 import { pagination } from '~/plugins/pagination'
 import { head } from '@/components/scripts/head.js'
-import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default defineComponent({
   name: 'IndexPage',
   middleware: 'background',
   setup () {
-    const { store, $gsap } = useContext()
+    const { store } = useContext()
     const router = useRouter()
     const route = useRoute()
     const cards = ref([])
@@ -52,13 +56,6 @@ export default defineComponent({
       return response
     }
     store.commit('content/clearBgIntro')
-
-    const {
-      animationlogo,
-      animateSubtitle,
-      animateNavbar,
-      animationTimeline
-    } = animationGSAP($gsap, Elastic)
 
     cards.value = useAsync(async () => {
       try {
@@ -83,22 +80,6 @@ export default defineComponent({
     const clickTag = (tag) => {
       router.push({ path: 'tags', query: { tag } })
     }
-
-    onMounted(() => {
-      nextTick(() => {
-        const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
-        if (isPlayAnimation) {
-          store.commit('content/setAnimate', false)
-        }
-        if (!isPlayAnimation) {
-          animationTimeline()
-        }
-        animationlogo()
-        animateSubtitle()
-        animateNavbar()
-        localStorage.setItem('showAnimateHomePage', 'true')
-      })
-    })
 
     return {
       lazyPagination,

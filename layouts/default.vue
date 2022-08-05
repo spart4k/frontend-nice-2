@@ -2,13 +2,8 @@
   <div ref="body" class="body">
     <the-header :header-items="headerItems" class="header" />
 
-    <n-intro-wrapper>
-      <n-intro v-if="isHomePage" :description="introTitle" :is-show-animation="true">
-        <Nuxt />
-      </n-intro>
-      <n-intro-slug v-else :description="introTitle" :is-show-animation="true">
-        <Nuxt />
-      </n-intro-slug>
+    <n-intro-wrapper is-home-page :color="color">
+      <Nuxt />
     </n-intro-wrapper>
     <portal-target name="sliderPopup" />
   </div>
@@ -16,8 +11,9 @@
 
 <script>
 import { ref, useContext, useFetch, onMounted, computed } from '@nuxtjs/composition-api'
-// import { Elastic } from 'gsap'
-// import animationGSAP from '~/helpers/compositions/animationGSAP'
+import { Elastic } from 'gsap'
+import animationGSAP from '~/helpers/compositions/animationGSAP'
+import { BLAND_COLOR } from '~/const/blandColor'
 
 export default {
   name: 'DefaultLayout',
@@ -48,28 +44,31 @@ export default {
       subtitle: 'творческое объединение',
       background: ''
     })
-    // const {
-    //   animateBackground
-    // } = animationGSAP($gsap, Elastic)
+    const {
+      animateBackground
+    } = animationGSAP($gsap, Elastic)
+
+    const color = computed(() => {
+      const paramsColor = BLAND_COLOR[route.value.params?.slug] || BLAND_COLOR[route.value.name]
+      if (paramsColor) {
+        return paramsColor
+      } else {
+        return ''
+      }
+    })
+
     onMounted(() => {
+    console.log(isHomePage.value)
       store.commit('authentication/setUserData')
       store.commit('authentication/setToken')
       store.dispatch('basket/getBasket')
-      $gsap.to('.background',
-        {
-          scrollTrigger: {
-            scrub: true
-          },
-          backgroundPosition: `0 ${window.innerHeight}px`,
-          ease: 'none',
-          force3D: true
-        })
-      // animateBackground()
+      animateBackground()
     })
 
     return {
       headerItems,
       body,
+      color,
       introTitle,
       isHomePage
     }

@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$style.logo, $style[size]]">
+  <div :class="[$style.logo, $style[size], defaultLogo && $style.defaultLogo]">
     <div
       :class="[$style.wrapperImage, showAnimate && $style.animateContent]"
     >
@@ -43,6 +43,7 @@ export default {
     isHomePage: {
       type: Boolean
     }
+
   },
   setup (props) {
     const { store } = useContext()
@@ -63,11 +64,6 @@ export default {
   will-change: transform;
   .wrapperImage {
     overflow: hidden;
-    &.animateContent {
-      & > img {
-        transform: translateY(-100%);
-      }
-    }
   }
   img {
     width: 100%;
@@ -89,9 +85,12 @@ export default {
 }
 .md {
   width: 16.3rem;
+  @media (max-width: $mobileWidth) {
+    width: 8.8rem;
+  }
 }
-//.big {
-//    width: 35.5rem;
-//}
+.defaultLogo {
+  width: 16.3rem;
+}
 
 </style>
