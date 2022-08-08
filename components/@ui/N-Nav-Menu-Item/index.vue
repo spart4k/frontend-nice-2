@@ -20,7 +20,8 @@ export default {
   name: 'NavMenu',
   props: {
    item: {
-     type: Object
+     type: Object,
+     required: true
    }
   },
   setup (props) {

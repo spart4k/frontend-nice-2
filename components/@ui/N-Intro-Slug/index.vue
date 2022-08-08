@@ -22,7 +22,7 @@ import { BLAND_COLOR } from '~/const/blandColor'
 import { BLAND_IMAGE } from '~/const/blandImage'
 
 export default {
-  name: 'NIntro',
+  name: 'NIntroSlug',
   props: {
     description: {
       type: Object
@@ -75,17 +75,17 @@ export default {
       animationlogo()
       animateSubtitle()
       // animateNavbar()
-      $gsap.to('.navbar', {
-        scrollTrigger: {
-          trigger: '.content',
-          // start: `top ${top}`,
-          start: 10,
-          end: 100,
-          scrub: true
-        },
-        y: -60,
-        opacity: 0
-      })
+      // $gsap.to('.navbar', {
+      //   scrollTrigger: {
+      //     trigger: '.content',
+      //     // start: `top ${top}`,
+      //     start: 10,
+      //     end: 100,
+      //     scrub: true
+      //   },
+      //   y: -60,
+      //   opacity: 0
+      // })
     })
 
     return {

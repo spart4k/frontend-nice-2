@@ -31,6 +31,7 @@ import { head } from '@/components/scripts/head.js'
 
 export default defineComponent({
   name: 'IndexPage',
+  transition: 'home',
   setup () {
     const { store } = useContext()
     const router = useRouter()
@@ -107,6 +108,7 @@ export default defineComponent({
     width: 100%;
     max-width: 53.2rem;
   }
+
 }
 .content {
   @include container;

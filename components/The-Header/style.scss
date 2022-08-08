@@ -2,12 +2,12 @@
   position: fixed;
   top: 2rem;
   left: 0;
+  right: 0;
   color: $white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 100;
-  right: 0;
+  z-index: var(--header-z-index);
   @include container;
   @media (min-width: $tabletWidth) {
     top: 4rem;
@@ -65,37 +65,13 @@
   display: block;
   padding-top: 4.9rem;
   backface-visibility: hidden;
-  z-index: 10;
+  max-height: 100%;
+  overflow: auto;
   @include container;
 }
 
 .headerNav.active .headerNav__inner {
   display: flex;
-}
-.user_list {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 0;
-  margin-bottom: 3rem;
-  padding: 0;
-  color: $black;
-  .user_item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .user_text {
-    align-self: flex-end;
-  }
-  a {
-    @include text-sm;
-    font-weight: 500;
-    color: inherit;
-  }
-  .icon {
-    margin-bottom: .5rem;
-  }
 }
 .basket {
   width: 100%;

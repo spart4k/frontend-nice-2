@@ -12,13 +12,15 @@
         – Уильям Стайрон
       </h3>
       <div :class="$style.image">
-        <img :src="require(`~/assets/img/background/${image}`)" alt="">
+        <img :src="require(`~/assets/img/preview/${BLAND_IMAGE[image]}`)" alt="">
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { BLAND_IMAGE } from '~/const/blandImage'
+
 export default {
   name: 'NSectionIntro',
   props: {
@@ -26,6 +28,11 @@ export default {
       type: Object
     },
     image: String
+  },
+  setup () {
+    return {
+      BLAND_IMAGE
+    }
   }
 }
 </script>

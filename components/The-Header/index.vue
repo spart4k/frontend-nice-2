@@ -1,6 +1,9 @@
 <template>
   <!--  , showAnimate && $style.animateContent-->
   <header :class="[$style.header]">
+    <div v-if="$route.name !== 'index'" :class="$style.logo" @click="$router.push('/')">
+      <n-logo size="md" />
+    </div>
     <n-button
       type-button="transparent"
       :class="[active && $style.open, $style.deviceMenu]"
@@ -24,32 +27,7 @@
       @closeMenu="closeMenu"
     >
       <nav :class="$style.headerNav">
-        <ul :class="$style.user_list">
-          <li :class="$style.user_item">
-            <n-icon name="user" :class="$style.icon" />
-            <div :class="$style.user_item_text">
-              <nuxt-link to="#">
-                Профиль
-              </nuxt-link>
-            </div>
-          </li>
-          <li :class="$style.user_item">
-            <n-icon name="basket" :class="$style.icon" />
-            <div :class="$style.user_item_text">
-              <nuxt-link to="#">
-                Корзина
-              </nuxt-link>
-            </div>
-          </li>
-          <li :class="$style.user_item">
-            <n-icon name="search" :class="$style.icon" />
-            <div :class="$style.user_item_text">
-              <nuxt-link to="#">
-                Поиск
-              </nuxt-link>
-            </div>
-          </li>
-        </ul>
+        <menuUserTop />
         <n-nav-menu
           :header-items="headerItems"
           @hideNavMenu=" active = false"
@@ -63,13 +41,9 @@
       <n-icon name="close" :class="$style.close" @click="closeLive" />
     </vue-bottom-sheet>
 
-    <div :class="[$style.logo]" @click="$router.push('/')">
-      <n-logo v-if="!isHomePage" size="md" />
-    </div>
-
     <ul :class="[$style.headerUser__list, active && $style.hideElement]">
       <li>
-        <div @click="openLive" :class="$style.link">
+        <div :class="$style.link" @click="openLive">
           <span :class="$style.link__text">эфир</span>
           <n-icon name="domofon" :class="$style.link__icon" />
         </div>
@@ -81,11 +55,15 @@
 
 <script lang="js">
 import { computed, ref, useRouter, useRoute, watch, useContext } from '@nuxtjs/composition-api'
+import menuUserTop from './components/MenuUserTop'
 import { numWord } from '~/helpers/compositions/declination'
 import { BLAND_COLOR } from '~/const/blandColor'
 const COLORS = ['#489430', '#00B4B5', '#FF4F00', '#ded037']
 export default {
   name: 'TheHeader',
+  components: {
+    menuUserTop
+  },
   props: {
     headerItems: {
       type: Array,
@@ -170,6 +148,8 @@ export default {
       openTestPage,
       openProfile,
       randomColor,
+      closeLive,
+      openLive,
       BLAND_COLOR,
       showAnimate,
       basketData,
@@ -183,23 +163,11 @@ export default {
       isAuth,
       stateShowLogin,
       menu,
-      liveChat,
-      closeLive,
-      openLive
+      liveChat
+
     }
   }
 }
 </script>
 
-<style scoped lang="scss" module src="./header.scss">
-  .list-enter-active,
-  .list-leave-active {
-    transition: all 0.5s ease;
-  }
-  .list-enter-from,
-  .list-leave-to {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-
-</style>
+<style scoped lang="scss" module src="./style.scss"></style>

@@ -7,9 +7,10 @@
         class="content"
         :class="[$style.content, showAnimate && $style.animateContent]"
         :items="cards.value"
+        :description="introTitle"
         @clickTag="clickTag"
       >
-        <n-section-intro :description="introTitle" :image="`ctivo.png`" />
+        <!--        <n-section-intro :description="introTitle" :image="`ctivo.png`" />-->
       </NGridCard>
     </template>
   </n-intro-slug>
@@ -27,13 +28,11 @@ import {
   // useMeta,
 } from '@nuxtjs/composition-api'
 
-import { pagination } from '~/plugins/pagination'
+// import { pagination } from '~/plugins/pagination'
 // import { head } from '@/components/scripts/head.js'
 
 export default defineComponent({
   name: 'SlugCard',
-  middleware: 'background',
-  // transition: 'home',
   setup () {
     const route = useRoute()
     const router = useRouter()
@@ -74,13 +73,16 @@ export default defineComponent({
       }
     })
 
+    const isPageMagazin = computed(() => route.value.path.indexOf('magazin'))
+
     const fetchData = (currentPage) => {
       const params = {
         page: currentPage,
         section_id: id.value ? id.value : '',
         tag_id: tagId.value ? tagId.value : ''
       }
-      const response = store.dispatch('pages/getData', params)
+      const path = isPageMagazin > 0 ? 'shop/getData' : 'pages/getData'
+      const response = store.dispatch(path, params)
       return response
     }
 
@@ -92,11 +94,12 @@ export default defineComponent({
 
     // head(useMeta, getPageInfo.value)
 
-    const { getData, dataPagination } = pagination(fetchData)
+    // const { getData, dataPagination } = pagination(fetchData)
 
     const lazyPagination = ($state) => {
-      getData($state, cards.value.value.last_page)
-      cards.value.value.data = [...cards.value.value.data, ...dataPagination.value]
+      // getData($state, cards.value.value.last_page)
+      // cards.value.value.data = [...cards.value.value.data, ...dataPagination.value]
+      console.log('test')
     }
 
     const clickTag = async (value) => {
@@ -112,7 +115,7 @@ export default defineComponent({
     }
 
     store.commit('content/changeBgIntro', route.value.params.slug)
-
+    console.log(route.value.path.indexOf('iskusstvo'))
     cards.value = useAsync(async () => {
       try {
         const response = await fetchData()

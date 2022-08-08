@@ -31,7 +31,7 @@ export default defineComponent({
   name: 'DetailCards',
   layout: 'default',
   // middleware: 'background',
-  transition: 'home',
+  // transition: 'home',
   setup () {
     const isAddedBasket = ref(false)
     const { route, store } = useContext()

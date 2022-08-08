@@ -4,13 +4,17 @@
       :overlay="true"
       :effect="$mq === 'sm' ? 'fx-default' : effect"
       :max-width="maxWidth"
+      :max-height="$mq === 'sm' ? '90%' : '100%'"
       :swipe-able="$mq === 'sm'"
-      :scrollable="true"
+      :is-full-screen="true"
       :rounded="$mq === 'sm'"
       v-on="$attrs"
+      @closed="$emit('test')"
     >
-      <n-icon name="close" :class="$style.close" @click="$emit('closeMenu')" />
-      <slot />
+      <client-only>
+        <n-icon name="close" :class="$style.close" @click="$emit('closeMenu')" />
+        <slot />
+      </client-only>
     </vue-bottom-sheet>
   </div>
 </template>
@@ -33,6 +37,7 @@ export default {
 .wrapper {
   .close {
     position: absolute;
+    z-index: 20;
     top: 1.5rem;
     right: 1.5rem;
     width: 3.2rem;
