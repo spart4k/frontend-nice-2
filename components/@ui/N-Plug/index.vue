@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.plug">
-    <span>Войдите</span> или <span>зарегистрируйтесь</span> чтобы написать комментарий и оценить пост
+    <a @click="$emit('login')">Войдите</a> или <a @click="$emit('registration')">зарегистрируйтесь</a> чтобы написать комментарий и оценить пост
   </div>
 </template>
 
@@ -26,9 +26,10 @@ export default {
         text-align: center;
         margin-top: 2rem;
         margin-bottom: 3.5rem;
-        span {
+        a {
           @include regular-text-bold;
-          color: #F23D15
+          color: #F23D15;
+          cursor: pointer;
         }
       }
 </style>

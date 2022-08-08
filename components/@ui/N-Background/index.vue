@@ -1,6 +1,6 @@
 <template>
   <div :style="{backgroundImage: `url(${backgroundImage})`}" :class="[$style.wrapper, $style.bg]">
-    <div :class="$style.overlay" :style="{backgroundColor: isHomePage ? color : '#292BC2'}" />
+    <div :class="$style.overlay" :style="{backgroundColor: isHomePage ? '#292BC2' : color }" />
   </div>
 </template>
 
@@ -23,7 +23,6 @@ export default {
     color: String
   },
   setup (props) {
-  console.log(props.isHomePage)
   const backgroundImage = computed(() => {
     // if (props.isHomePage) {
     //   return require('~/assets/img/background/index-background.jpg')

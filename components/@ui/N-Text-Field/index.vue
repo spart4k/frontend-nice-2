@@ -4,21 +4,22 @@
       {{ $props.title }}
     </h3>
     <div :class="[$style.wrapperInput]">
-      <span class="input-error" v-if="error">
+      <span v-if="error" class="input-error">
         {{ errMessage }}
       </span>
-      <span class="input-error" v-if="errCustom">
+      <span v-if="errCustom" class="input-error">
         {{ errCustom }}
       </span>
       <input
         v-model="proxyVal"
         v-mask="$props.mask"
+        :style="{ borderColor: color }"
         :type="$props.type"
         :max="$props.max"
         :readOnly="readOnly"
         :placeholder="$props.placeholder"
         @keydown.enter="$emit('keydown', $event)"
-      />
+      >
     </div>
   </label>
 </template>
@@ -63,6 +64,10 @@ export default {
     readOnly: {
       type: Boolean,
       default: false
+    },
+    color: {
+      type: String,
+      default: ''
     }
   },
   setup (props, ctx) {
@@ -127,20 +132,17 @@ export default {
   }
   &.mdFz {
     input {
-      @include text;
+      @include regular-text;
     }
   }
   h3 {
+    @include regular-text;
     color: $fontColorDefault;
-    @include text-md;
-    margin-bottom: 0.75rem;
+    opacity: 0.5;
   }
   .wrapperInput {
+  box-sizing: border-box;
     position: relative;
-    height: 5.1rem;
-    background-color: $gray2;
-    border-radius: 0.4rem;
-    transition: .2s;
     span {
       position: absolute;
       bottom: -1.8rem;
@@ -149,25 +151,23 @@ export default {
     }
   }
   input {
-    padding-left: 1.478rem;
-    padding-right: 1.478rem;
     width: 100%;
-    height: 100%;
     background-color: transparent;
     outline: none;
     border: none;
-    font-weight: 600;
     border-radius: inherit;
-    transition: .4s;
-    border: 1px solid transparent;
-    &:focus {
-      border: 1px solid $fontColorDefault;
-    }
-    &:not(:placeholder-shown) {
-      border: 1px solid $fontColorDefault;
-    }
-    @include montserratSemiBold;
-    @include text-md;
+    border-bottom: .2rem solid #5289C5;
+    @include regular-text;
+    color: $fontColorDefault;
+    padding: 1rem 0;
+  }
+  input[type=password] {
+    padding-top: 0;
+    font-size: 24px;
+  }
+  input::placeholder {
+    color: $fontColorDefault;
+    opacity: 0.5;
   }
 
 }

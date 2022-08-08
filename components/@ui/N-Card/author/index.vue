@@ -98,9 +98,12 @@ export default {
     border-radius: 2rem;
     -webkit-mask-image: -webkit-radial-gradient(white, black);
     .body {
-        padding: 1.4rem 1.5rem 2.094rem;
+        padding: 1.4rem 1.5rem 2rem;
         color: $fontColorDefault;
         @include regular-text;
+        @media (min-width: $tabletWidth) {
+          padding: 1.5rem 1.5rem 3rem;
+        }
         .stats {
             margin-bottom: .5rem;
             display: flex;
@@ -111,14 +114,29 @@ export default {
                 border-radius: 50%;
                 background-color: rgb(195, 195, 195);
                 margin-right: 2rem;
+                @media (min-width: $tabletWidth) {
+                  width: 14rem;
+                  height: 14rem;
+                  margin-right: 3.4rem;
+                }
             }
             .amount {
                 text-align: center;
+                margin-right: .6rem;
+                @media (min-width: $tabletWidth) {
+                  margin-right: 3.1rem;
+                }
                 .amountNumber {
-                    @include regular-text-bold;
+                  @include regular-text-bold;
+                  @media (min-width: $tabletWidth) {
+                    @include text-style-h2;
+                  }
                 }
                 .amountText {
-                    @include regular-text-small;
+                  @include regular-text-small;
+                  @media (min-width: $tabletWidth) {
+                    @include regular-text;
+                  }
                 }
             }
             .amount+.amount {
