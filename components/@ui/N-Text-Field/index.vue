@@ -4,10 +4,10 @@
       {{ $props.title }}
     </h3>
     <div :class="[$style.wrapperInput]">
-      <span v-if="error" class="input-error">
+      <span v-if="error" :class="$style.inputError">
         {{ errMessage }}
       </span>
-      <span v-if="errCustom" class="input-error">
+      <span v-if="errCustom" :class="$style.inputError">
         {{ errCustom }}
       </span>
       <input

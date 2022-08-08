@@ -182,7 +182,7 @@
     <portal to="sliderPopup">
       <vue-bottom-sheet ref="loginMenu" :overlay="true" max-height="90%">
         <template>
-          <N-Registration @closeSheet="closeSheet" />
+          <N-Sheet @closeSheet="closeSheet" />
         </template>
       </vue-bottom-sheet>
     </portal>

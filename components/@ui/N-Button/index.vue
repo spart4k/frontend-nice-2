@@ -58,4 +58,7 @@ export default {
   .wide {
     width: 100%;
   }
+  .left {
+    padding: 0;
+  }
 </style>
