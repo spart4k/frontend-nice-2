@@ -1,6 +1,9 @@
 <template>
   <!--  , showAnimate && $style.animateContent-->
   <header :class="[$style.header]">
+    <div v-if="$route.name !== 'index'" :class="$style.logo" @click="$router.push('/')">
+      <n-logo size="md" />
+    </div>
     <n-button
       type-button="transparent"
       :class="[active && $style.open, $style.deviceMenu]"
@@ -16,54 +19,34 @@
       </div>
     </n-button>
 
-    <vue-bottom-sheet ref="menu" :overlay="true">
+    <N-BootomSheet
+      ref="menu"
+      effect="fx-slide-from-left"
+      max-width="39rem"
+      :max-height="$mq === 'md' ? '100%' : ''"
+      @closeMenu="closeMenu"
+    >
+      <nav :class="$style.headerNav">
+        <menuUserTop />
+        <n-nav-menu
+          :header-items="headerItems"
+          @hideNavMenu=" active = false"
+        />
+      </nav>
+    </N-BootomSheet>
+    <vue-bottom-sheet ref="liveChat" max-height="100%" is-full-screen>
       <client-only>
-        <nav :class="$style.headerNav">
-          <ul :class="$style.user_list">
-            <li :class="$style.user_item">
-              <n-icon name="user" :class="$style.icon" />
-              <div :class="$style.user_item_text">
-                <nuxt-link to="#">
-                  Профиль
-                </nuxt-link>
-              </div>
-            </li>
-            <li :class="$style.user_item">
-              <n-icon name="basket" :class="$style.icon" />
-              <div :class="$style.user_item_text">
-                <nuxt-link to="#">
-                  Корзина
-                </nuxt-link>
-              </div>
-            </li>
-            <li :class="$style.user_item">
-              <n-icon name="search" :class="$style.icon" />
-              <div :class="$style.user_item_text">
-                <nuxt-link to="#">
-                  Поиск
-                </nuxt-link>
-              </div>
-            </li>
-          </ul>
-          <n-nav-menu
-            :header-items="headerItems"
-            @hideNavMenu=" active = false"
-          />
-        </nav>
+        <live-default />
       </client-only>
-      <n-icon name="close" :class="$style.close" @click="closeMenu" />
+      <n-icon name="close" :class="$style.close" @click="closeLive" />
     </vue-bottom-sheet>
-
-    <div :class="[$style.logo]" @click="$router.push('/')">
-      <n-logo v-if="!isHomePage" size="md" />
-    </div>
 
     <ul :class="[$style.headerUser__list, active && $style.hideElement]">
       <li>
-        <a href="mailto:tisthenice@gmail.com" :class="$style.link">
+        <div :class="$style.link" @click="openLive">
           <span :class="$style.link__text">эфир</span>
           <n-icon name="domofon" :class="$style.link__icon" />
-        </a>
+        </div>
       </li>
     </ul>
     <FormAuthSteps v-model="activeAuthSteps" />
@@ -72,11 +55,15 @@
 
 <script lang="js">
 import { computed, ref, useRouter, useRoute, watch, useContext } from '@nuxtjs/composition-api'
+import menuUserTop from './components/MenuUserTop'
 import { numWord } from '~/helpers/compositions/declination'
 import { BLAND_COLOR } from '~/const/blandColor'
 const COLORS = ['#489430', '#00B4B5', '#FF4F00', '#ded037']
 export default {
   name: 'TheHeader',
+  components: {
+    menuUserTop
+  },
   props: {
     headerItems: {
       type: Array,
@@ -91,6 +78,7 @@ export default {
     const route = useRoute()
     const router = useRouter()
     const header = ref(null)
+    const liveChat = ref(null)
     const isHomePage = computed(() => route.value.name === 'index')
     const bgName = computed(() => store.state.content.bgIntro)
     const basketData = computed(() => store.state.basket.basket?.data)
@@ -116,10 +104,18 @@ export default {
     }
 
     const openMenu = () => {
-      menu.value.open()
+     menu.value.$children[0].open()
     }
     const closeMenu = () => {
-      menu.value.close()
+      menu.value.$children[0].close()
+    }
+
+    const openLive = () => {
+      liveChat.value.open()
+    }
+
+    const closeLive = () => {
+      liveChat.value.close()
     }
 
     const openTestPage = (num) => {
@@ -152,6 +148,8 @@ export default {
       openTestPage,
       openProfile,
       randomColor,
+      closeLive,
+      openLive,
       BLAND_COLOR,
       showAnimate,
       basketData,
@@ -164,21 +162,12 @@ export default {
       activeAuthSteps,
       isAuth,
       stateShowLogin,
-      menu
+      menu,
+      liveChat
+
     }
   }
 }
 </script>
 
-<style scoped lang="scss" module src="./header.scss">
-  .list-enter-active,
-  .list-leave-active {
-    transition: all 0.5s ease;
-  }
-  .list-enter-from,
-  .list-leave-to {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-
-</style>
+<style scoped lang="scss" module src="./style.scss"></style>

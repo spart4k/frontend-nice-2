@@ -1,15 +1,19 @@
 <template>
   <div :class="$style.cards">
     <template v-if="spliceArray.colLeft && spliceArray.colRight">
-      <div :class="[$style.col, !spliceArray.colRight.length && $style.oneElement]">
-        <div v-if="homePage" :class="$style.image">
-          <img :src="require(`~/assets/img/dogs.png`)" alt="DOG ">
-        </div>
-        <div v-else :class="$style.preview">
-          <slot />
-        </div>
+      <div :class="$style.col">
         <template v-for="(card) in spliceArray.colLeft">
-          <section-cards :id="card.section.id" :key="card.id" :class="$style.cards__item" :card="card" />
+          <n-section-intro
+            v-if="card.hasOwnProperty('preview')"
+            :key="card.id"
+            :description="card"
+            :image="card.image"
+            :class="$style.preview"
+          />
+          <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
+            <img :src="card.image" alt="DOG ">
+          </div>
+          <section-cards v-else :id="card.section.id" :key="card.id" :class="$style.cards__item" :card="card" />
         </template>
       </div>
       <div v-if="spliceArray.colRight.length" :class="$style.col">
@@ -28,7 +32,7 @@
 </template>
 
 <script>
-import { computed, unref, ref, watch } from '@nuxtjs/composition-api'
+import { computed, unref, ref, useContext } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NGridCard',
@@ -38,20 +42,36 @@ export default {
     },
     homePage: {
       type: Boolean
+    },
+    description: {
+      type: Object
     }
   },
 
   setup (props) {
+    const { route } = useContext()
     const { items } = unref(props)
     const proxyArray = ref(items)
 
-    watch(() => props.items, () => {
-      proxyArray.value = props.items
-    })
-
     const spliceArray = computed(() => {
+      if (!props.homePage) {
+        proxyArray.value.unshift({
+          image: route.value.params.slug,
+          title: props.description.title,
+          preview: true,
+          id: Math.random()
+        })
+      } else {
+        proxyArray.value.unshift({
+          home: true,
+          image: require('~/assets/img/preview/dogs.png'),
+          id: Math.random()
+
+        })
+      }
       const middleIndex = Math.ceil(proxyArray.value?.length / 2)
       const firstHalf = proxyArray.value?.splice(0, middleIndex)
+
       const secondHalf = proxyArray.value?.splice(-middleIndex)
 
       return {
@@ -70,16 +90,18 @@ export default {
 
 <style scoped lang="scss" module>
 .preview {
-  height: 60rem;
+  height: 60rem !important;
   @media (max-width: $mobileWidth) {
     height: calc(100vh - 10.3rem);
   }
 }
 .cards {
   display: flex;
-  justify-content: space-between;
   margin: 0 auto;
-  width: calc(100% - 17.3rem - 17.3rem);
+  justify-content: center;
+  @media (min-width: $desktopWidth) {
+    width: calc(100% - 17.3rem - 17.3rem);
+  }
   @media (max-width: $mobileWidth) {
     flex-direction: column;
     justify-content: center;
@@ -107,31 +129,19 @@ export default {
     }
   }
 }
-.col + .col {
-  @media (max-width: $tabletWidth) {
-    margin-left: 0;
-  }
-}
 .col {
+  max-width: 53.2rem;
   width: calc(50% - 1.5rem);
-  &.oneElement {
-    display: flex;
-    width: auto;
-    .cards__item, .preview {
-      width: calc(50% - 1.5rem);
-    }
-    @media(max-width: $mobileWidth) {
-      flex-direction: column;
-      align-items: center;
-      width: auto;
-      .cards__item, .preview {
-        width: auto;
-      }
-    }
-  }
   @media (max-width: $mobileWidth) {
     width: auto;
     max-width: none;
   }
 }
+.col + .col {
+  margin-left: 3rem;
+  @media (max-width: $mobileWidth) {
+    margin-left: 0;
+  }
+}
+
 </style>

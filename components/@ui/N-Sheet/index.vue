@@ -1,10 +1,18 @@
 <template>
   <div :class="$style.container">
-    <N-Button-Close :class="$style.closeButton" color="#222222" background-color="rgba(34, 34, 34, 0.2)" @click="$emit('closeSheet')" />
-    <!-- <N-Sheet-Register /> -->
+    <!-- <template v-if="true">
+      <N-Sheet-Register @toLogin="toLogin" />
+    </template>
+    <template v-else-if="false">
+      <N-Sheet-Login />
+    </template>
+    <template v-else>
+      <N-Sheet-Password-Recovery />
+    </template> -->
     <!-- <N-Sheet-Login /> -->
-    <N-Sheet-Password-Recovery />
+    <!-- <N-Sheet-Password-Recovery /> -->
     <!-- <N-Sheet-Profile /> -->
+    <N-Sheet-Search />
   </div>
 </template>
 
@@ -16,7 +24,11 @@ export default {
   props: {
   },
   setup () {
+    const toLogin = () => {
+      console.log('sadas')
+    }
   return {
+    toLogin
   }
   }
 }

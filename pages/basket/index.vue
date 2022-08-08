@@ -1,53 +1,53 @@
 <template>
-<n-intro no-preview>
-  <div :class="$style.wrapper">
-    <N-Background :description="description" />
-    <div v-if="cards && cards.length" :class="$style.rows">
-      <ul :class="$style.list">
-        <li v-for="card in cards" :key="card.id" :class="$style.item">
-          <N-Basket-Row
-            :item="card"
-            @decrement="decrementBasket"
-            @increment="incrementBasket"
-          />
-        </li>
-      </ul>
-      <div :class="$style.total__sum">
-        <div :class="$style.total__sum_text">
-          ИТОГО
+  <n-intro no-preview>
+    <div :class="$style.wrapper">
+      <N-Background :description="description" />
+      <div v-if="cards && cards.length" :class="$style.rows">
+        <ul :class="$style.list">
+          <li v-for="card in cards" :key="card.id" :class="$style.item">
+            <N-Basket-Row
+              :item="card"
+              @decrement="decrementBasket"
+              @increment="incrementBasket"
+            />
+          </li>
+        </ul>
+        <div :class="$style.total__sum">
+          <div :class="$style.total__sum_text">
+            ИТОГО
+          </div>
+          <div :class="$style.total__sum_price">
+            {{ row.cards_sum }}р.
+          </div>
         </div>
-        <div :class="$style.total__sum_price">
-          {{ row.cards_sum }}р.
+        <div :class="$style.last_view">
+          <div :class="$style.last_view_title">
+            Последние просмотренные
+          </div>
+          <div :class="$style.last_view_items">
+            <ul v-if="userInfo && userInfo.length" :class="$style.last_view_list">
+              <li v-for="views in userInfo" :key="views.id" :class="$style.last_view_item">
+                <nuxt-link :to="`/card/${views.card_id}`">
+                  <template v-if="views.card && views.card.images.length">
+                    <n-lazy-img :src="`${$axios.defaults.baseURL}${views.card.images[0].src}`" :alt="views.card.title" />
+                  </template>
+                </nuxt-link>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div :class="$style.last_view">
-        <div :class="$style.last_view_title">
-          Последние просмотренные
-        </div>
-        <div :class="$style.last_view_items">
-          <ul v-if="userInfo && userInfo.length" :class="$style.last_view_list">
-            <li v-for="views in userInfo" :key="views.id" :class="$style.last_view_item">
-              <nuxt-link :to="`/card/${views.card_id}`">
-                <template v-if="views.card && views.card.images.length">
-                  <n-lazy-img :src="`${$axios.defaults.baseURL}${views.card.images[0].src}`" :alt="views.card.title" />
-                </template>
-              </nuxt-link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
 
-    <div v-else :class="$style.empty_basket">
-      <h1>
-        Корзина пуста
-      </h1>
+      <div v-else :class="$style.empty_basket">
+        <h1>
+          Корзина пуста
+        </h1>
+      </div>
+      <N-Fixed-Button v-if="cards && cards.length" fz="md" @clickButton="sendBasket">
+        Заказать за {{ row.cards_sum }}
+      </N-Fixed-Button>
     </div>
-    <N-Fixed-Button v-if="cards && cards.length" fz="md" @clickButton="sendBasket">
-      Заказать за {{ row.cards_sum }}
-    </N-Fixed-Button>
-  </div>
-</n-intro>
+  </n-intro>
 </template>
 
 <script>

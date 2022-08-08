@@ -12,8 +12,8 @@
     <N-Button type-button="wide" background-color="#5289C5">
       Войти
     </N-Button>
-    <N-Button :class="$style.noRegistered" type-button="wide" color="#5289C5">
-      Еще не зарегистрированы?
+    <N-Button :class="$style.noRegistered" type-button="wide" color="#5289C5" @click="$emit('toLogin')">
+      Уже зарегистрированы?
     </N-Button>
   </div>
 </template>

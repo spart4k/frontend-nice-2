@@ -31,6 +31,8 @@ $paddingTopLog: 2rem;
   --footer-height: 13.3rem;
   --header-height: #{$headerHeight};
   --padding-top-logo: #{$paddingTopLog};
+  --header-z-index: 100;
+  --logo-z-index: 50;
   --vh: 10rem;
 }
 

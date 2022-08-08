@@ -2,12 +2,12 @@
   position: fixed;
   top: 2rem;
   left: 0;
+  right: 0;
   color: $white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 100;
-  right: 0;
+  z-index: var(--header-z-index);
   @include container;
   @media (min-width: $tabletWidth) {
     top: 4rem;
@@ -17,17 +17,11 @@
   &.animateContent {
     opacity: 0;
   }
-  :global(.bottom-sheet__bar) {
-    height: 6px;
-    background: #222222;
-    opacity: 0.2;
-  }
 }
 
 .linkHome {
   position: absolute;
   top: 3.8rem;
-
   a {
     color: inherit;
     display: flex;
@@ -71,43 +65,13 @@
   display: block;
   padding-top: 4.9rem;
   backface-visibility: hidden;
-  z-index: 10;
-  overflow-y: auto;
+  max-height: 100%;
+  overflow: auto;
   @include container;
 }
 
 .headerNav.active .headerNav__inner {
   display: flex;
-}
-.user_list {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 0;
-  margin-bottom: 3rem;
-  padding: 0;
-  color: $black;
-  .user_item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .user_text {
-    align-self: flex-end;
-  }
-  a {
-    @include text-sm;
-    font-weight: 500;
-    color: inherit;
-  }
-  .icon {
-    margin-bottom: .5rem;
-  }
-}
-.close {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
 }
 .basket {
   width: 100%;
@@ -205,3 +169,33 @@
   @include  text-sm;
 }
 
+.close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 3.2rem;
+  height: 3.2rem;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+  cursor: pointer;
+}
+:global(.bottom-sheet__card) {
+  @media (min-width: $mobileWidth) {
+    left: 0!important;
+  }
+}
+:global(.bottom-sheet__bar) {
+  height: 6px;
+  background: #222222;
+  opacity: 0.2;
+  @media (min-width: $mobileWidth) {
+    display: none;
+  }
+}
+:global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-left) {
+  @media (min-width: $mobileWidth) {
+    transform: translate(0, 0) !important;
+  }
+}

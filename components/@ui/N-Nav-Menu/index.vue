@@ -82,11 +82,10 @@ export default {
 .list {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  grid-template-columns: 1fr 1fr;
   justify-content: space-between;
   width: 100%;
   padding: 0;
-  overflow: hidden;
   gap: .85rem;
   @media (min-width: $tabletWidth) {
     justify-content: center;

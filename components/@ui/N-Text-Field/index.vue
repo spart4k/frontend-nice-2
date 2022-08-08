@@ -4,12 +4,12 @@
       {{ $props.title }}
     </h3>
     <div :class="[$style.wrapperInput]">
-      <span v-if="error" :class="$style.inputError">
+      <!-- <span v-if="error" :class="$style.inputError">
         {{ errMessage }}
       </span>
       <span v-if="errCustom" :class="$style.inputError">
         {{ errCustom }}
-      </span>
+      </span> -->
       <input
         v-model="proxyVal"
         v-mask="$props.mask"
@@ -21,6 +21,9 @@
         @keydown.enter="$emit('keydown', $event)"
       >
     </div>
+    <p v-if="error" :class="$style.inputError">
+      {{ errMessage }}
+    </p>
   </label>
 </template>
 <script lang="js">
@@ -143,12 +146,12 @@ export default {
   .wrapperInput {
   box-sizing: border-box;
     position: relative;
-    span {
-      position: absolute;
-      bottom: -1.8rem;
-      left: 0;
-      color: red;
-    }
+    // span {
+    //   position: absolute;
+    //   bottom: -1.8rem;
+    //   left: 0;
+    //   color: red;
+    // }
   }
   input {
     width: 100%;
@@ -156,7 +159,7 @@ export default {
     outline: none;
     border: none;
     border-radius: inherit;
-    border-bottom: .2rem solid #5289C5;
+    border-bottom: .2rem solid;
     @include regular-text;
     color: $fontColorDefault;
     padding: 1rem 0;
@@ -169,6 +172,10 @@ export default {
     color: $fontColorDefault;
     opacity: 0.5;
   }
-
+  .inputError {
+    margin-top: 1rem;
+    color: #D13C33;
+    @include regular-text;
+  }
 }
 </style>

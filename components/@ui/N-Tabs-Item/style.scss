@@ -4,7 +4,6 @@
   box-sizing: border-box;
   width: 12rem;
   line-height: 4rem;
-  padding: 0 2rem;
   color: $white;
   background: #D46D33;
   flex-shrink: 0;
@@ -15,5 +14,7 @@
   }
   a {
     color: inherit;
+    display: block;
+    padding: 0 2rem;
   }
 }

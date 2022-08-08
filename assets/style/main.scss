@@ -29,12 +29,14 @@
 
 html {
   font-size: 10px;
-  @media (max-width: 1440px) {
-    font-size: calc((10 / 1440) * 100vw);
-  }
-
   background-color: $blueBlack3;
   height: -webkit-fill-available;
+  @media (max-width: $desktopWidth) {
+    font-size: calc((10 / 1440) * 100vw);
+  }
+  @media (max-width: $tabletWidth) {
+    font-size: calc((10 / 900) * 100vw);
+  }
   @media (max-width: $mobileWidth) {
     font-size: calc((10 / 390) * 100vw);
   }

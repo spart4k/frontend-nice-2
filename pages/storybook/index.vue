@@ -183,9 +183,9 @@ export default {
     })
 
     const sliderItem = ref([
-      { src: require('~/assets/img/img_slider.jpeg') },
       { src: require('~/assets/img/img_slider-2.jpeg') },
-      { src: require('~/assets/img/img_slider.jpeg') },
+      { src: require('~/assets/img/img_slider-2.jpeg') },
+      { src: require('~/assets/img/img_slider-2.jpeg') },
       { src: require('~/assets/img/img_slider-2.jpeg') }
     ])
     const author = {

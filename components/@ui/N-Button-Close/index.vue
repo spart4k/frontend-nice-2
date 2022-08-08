@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.box" :style="{ backgroundColor: backgroundColor }">
+  <div :class="$style.box" :style="{ backgroundColor: backgroundColor }" v-on="$listeners">
     <N-Icon :class="$style.icon" name="button-close" :style="{ color: color }" />
   </div>
 </template>

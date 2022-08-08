@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.dialogue">
       <div :class="$style.wrap">
-        <live-chat-dialogue-message v-for="(message, index) in messages" :key="index" :message="message"/>
+        <live-chat-dialogue-message v-for="(message, index) in messageToView" :key="index" :message="message"/>
       </div>
   </div>
 </template>

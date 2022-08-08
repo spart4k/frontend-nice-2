@@ -180,11 +180,17 @@
       </div>
     </div>
     <portal to="sliderPopup">
-      <vue-bottom-sheet ref="loginMenu" :overlay="true" max-height="90%">
-        <template>
-          <N-Sheet @closeSheet="closeSheet" />
-        </template>
-      </vue-bottom-sheet>
+      <!-- <vue-bottom-sheet ref="loginMenu" :overlay="true" max-height="90%">
+        <N-Sheet @closeSheet="closeSheet" />
+      </vue-bottom-sheet> -->
+      <N-BootomSheet
+        ref="loginMenu"
+        :max-width="'450px'"
+        effect="fx-slide-from-left"
+        @closeMenu="closeMenu"
+      >
+        <N-Sheet />
+      </N-BootomSheet>
     </portal>
   </div>
 </template>
@@ -222,14 +228,12 @@ export default {
     const { store } = useContext()
     const videoPlay = ref(false)
     const login = () => {
-      console.log('login')
-      loginMenu.value.open()
+      loginMenu.value.$children[0].open()
     }
     const registration = () => {
-      console.log('registration')
     }
-    const closeSheet = () => {
-      console.log('asd')
+    const closeMenu = () => {
+      loginMenu.value.$children[0].close()
     }
     const addLike = async () => {
       if (like.value === true) {
@@ -365,7 +369,7 @@ export default {
       login,
       registration,
       loginMenu,
-      closeSheet
+      closeMenu
     }
   }
 }
