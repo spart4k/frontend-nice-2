@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ marginBottom: smilies ? '5rem' : '3.5rem' }" :class="$style.container">
+  <div :style="{ marginBottom: smilies ? '5rem' : '0' }" :class="$style.container">
     <!-- <input
       ref="input"
       v-model="letters"

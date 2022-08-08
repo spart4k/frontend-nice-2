@@ -11,7 +11,7 @@
               <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
             </div>
           </div>
-          <nuxt-link v-else :to="`cards/${data.id}`" tag="div">
+          <nuxt-link v-else :to="`cards/${data.id}?section=${data.section.slug}`" tag="div">
             <div :class="[$style.hat]">
               <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
             </div>
@@ -42,7 +42,7 @@
       ]"
     >
       <template>
-        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`/cards/${data.id}`">
+        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`cards/${data.id}?section=${data.section.slug}`">
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
             {{ data.title }}
           </h2>
@@ -67,7 +67,7 @@
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div>
         </NuxtLink>
-        <div ref="body" v-if="$props.detailPage" :class="[$style.body__top, detailPage && $style.detailPage]" tag="div">
+        <div v-if="$props.detailPage" ref="body" :class="[$style.body__top, detailPage && $style.detailPage]" tag="div">
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
             {{ data.title }}
           </h2>
@@ -101,6 +101,8 @@
           </template>
         </div>
         <!-- <div v-if="$props.detailPage && (windowWidth > 900) && !showComments" :class="[$style.empty, detailPage && $style.detailPage]" :style="{ height: emptyBlockHeight + 'px' }" /> -->
+      </template>
+      <div :class="[$style.body__bottom, detailPage && $style.detailPage]">
         <div v-if="$props.detailPage" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '1.5rem' : '' }">
           <N-Chip
             v-for="item in data.tags"
@@ -152,31 +154,41 @@
             +{{ chipsCounter }}
           </N-Chip>
         </div>
-      </template>
-      <div
-        v-if="$props.detailPage"
-        ref="commentBox"
-        :class="[$style.comments,showComments ? $style.show : '']"
-        :style="{maxHeight: showComments ? commentHeight : '0'}"
-      >
-        <!-- <p :class="$style.comments__title">
+        <div
+          v-if="$props.detailPage"
+          ref="commentBox"
+          :class="[$style.comments,showComments ? $style.show : '']"
+          :style="{maxHeight: showComments ? commentHeight : '0'}"
+        >
+          <!-- <p :class="$style.comments__title">
           {{ commentCounter }} комментари{{ commentEnding }}
         </p> -->
-        <N-Input @smilies="commentHeightSet" />
-        <N-Plug v-if="false" />
-        <div v-if="true">
-          <N-Comment />
-          <N-Comment />
-          <N-Comment />
-          <N-Comment />
+          <!-- <N-Input @smilies="commentHeightSet" /> -->
+          <N-Plug v-if="true" @login="login" @registration="registration" />
+          <div :class="$style.commentsContainer">
+            <div>
+              <N-Comment />
+              <N-Comment />
+              <N-Comment />
+              <N-Comment />
+            </div>
+          </div>
         </div>
       </div>
       <div v-if="$slots.footer" :class="$style.body__footer">
         <slot name="footer" />
       </div>
     </div>
+    <portal to="sliderPopup">
+      <vue-bottom-sheet ref="loginMenu" :overlay="true" max-height="90%">
+        <template>
+          <N-Registration @closeSheet="closeSheet" />
+        </template>
+      </vue-bottom-sheet>
+    </portal>
   </div>
 </template>
+
 <script lang="js">
 import { computed, nextTick, onMounted, onUnmounted, ref, useContext } from '@nuxtjs/composition-api'
 import dataProps from '../props'
@@ -188,7 +200,7 @@ export default {
   props: { ...dataProps.props },
   setup (props) {
     const videoRef = ref(null)
-    const showComments = ref(true)
+    const showComments = ref(false)
     // const comments = ref(false)
     const like = ref(props.data.liked)
     const likeCounter = ref(props.data.like_count)
@@ -198,6 +210,7 @@ export default {
     const chipsArray = ref()
     const commentHeight = ref()
     const commentBox = ref()
+    const loginMenu = ref()
     // const commentEnding = ref('ев')
     // const commentCounter = ref(1)
     // const gallery = ref()
@@ -208,6 +221,16 @@ export default {
     const { $axios } = useContext()
     const { store } = useContext()
     const videoPlay = ref(false)
+    const login = () => {
+      console.log('login')
+      loginMenu.value.open()
+    }
+    const registration = () => {
+      console.log('registration')
+    }
+    const closeSheet = () => {
+      console.log('asd')
+    }
     const addLike = async () => {
       if (like.value === true) {
         likeCounter.value++
@@ -283,8 +306,8 @@ export default {
     onMounted(() => {
       // emptyBlockHeight.value = 502 - body.value.clientHeight
       windowWidthCount()
-      if (windowWidth.value < 900) {
-        showComments.value = false
+      if (windowWidth.value > 900) {
+        showComments.value = true
       }
       // blockHeight()
       extraTagHide()
@@ -338,7 +361,11 @@ export default {
       windowWidthCount,
       videoUrl,
       videoPlay,
-      videoPlayingChange
+      videoPlayingChange,
+      login,
+      registration,
+      loginMenu,
+      closeSheet
     }
   }
 }
@@ -437,7 +464,7 @@ export default {
     text-overflow: ellipsis;
     display: -webkit-box;
     // line-height: 17px;
-    max-height: 34px;
+    max-height: 3.4rem;
     opacity: 0.8;
     @include regular-text;
     -webkit-line-clamp: 3;
@@ -508,6 +535,9 @@ export default {
       @media (min-width: $tabletWidth) {
         padding: 3rem;
         overflow-y: overlay;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
       }
     }
     &.author {
@@ -536,7 +566,7 @@ export default {
       cursor: pointer;
       .cardText {
         p {
-          line-height: 17px;
+          line-height: 1.7rem;
         }
         *+* {
           margin-top: 15px;
@@ -586,6 +616,9 @@ export default {
         }
       .commentsBox {
         // overflow: hidden;
+      }
+      .commentsContainer {
+        margin-top: 3.5rem;
       }
     }
     .show {

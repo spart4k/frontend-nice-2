@@ -166,6 +166,7 @@ export default {
   transform-origin: top center;
   padding-top: var(--padding-top-logo);
   transform: translate(-50%, 0);
+  cursor: pointer;
   &.animateContent {
     top: 50%;
     border: 2px solid red;

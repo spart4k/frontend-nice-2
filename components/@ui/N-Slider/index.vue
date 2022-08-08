@@ -18,7 +18,7 @@
       </VueSlickCarousel>
       <portal v-if="popup" to="sliderPopup">
         <div :class="$style.overlay" @click="popupChange">
-          <N-Button-Close />
+          <N-Button-Close :class="$style.closeButton" />
           <div :class="$style.popupSlider" @click.stop>
             <VueSlickCarousel
               ref="c2"
@@ -184,6 +184,10 @@ export default {
     height: 100%;
     z-index: 100;
     background-color: rgba(51, 51, 51, 0.9);
+    .closeButton {
+      top: 1rem;
+      right: 1rem;
+    }
     .popupSlider {
       z-index: 102;
       width: 100%;

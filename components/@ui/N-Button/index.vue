@@ -1,5 +1,5 @@
 <template>
-  <button :class="[$style[typeButton], $style.btn]" v-on="$listeners">
+  <button :class="[$style[typeButton], $style.btn]" :style="{ color: color, backgroundColor: backgroundColor }" v-on="$listeners">
     <slot />
   </button>
 </template>
@@ -12,6 +12,14 @@ export default {
       type: String,
       default: '',
       required: false
+    },
+    color: {
+      type: String,
+      default: 'white'
+    },
+    backgroundColor: {
+      type: String,
+      default: 'transparent'
     }
   }
 }
@@ -19,22 +27,16 @@ export default {
 
 <style scoped lang="scss" module>
   .btn{
+    box-sizing: border-box;
     cursor: pointer;
-    border: 1px solid $blueBlack;
-    border-radius: .4rem;
-    background-color: $blueBlack;
+    border: none;
+    border-radius: 2.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    //height: 5.1rem;
-    color: $white;
-    font-weight: 600;
-    @include text;
+    @include button;
     transition: background-color .2s;
-    max-width: 100%;
-    //&:hover {
-    //  background-color: rgba($blueBlack, .9);
-    //}
+    padding: 1.4rem 3.7rem;
   }
   .sub {
     background: transparent;
@@ -52,5 +54,8 @@ export default {
     &:hover {
       background-color: transparent;
     }
+  }
+  .wide {
+    width: 100%;
   }
 </style>

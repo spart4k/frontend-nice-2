@@ -1,6 +1,6 @@
 <template>
-  <div :class="$style.box">
-    <N-Icon :class="$style.icon" name="button-close" />
+  <div :class="$style.box" :style="{ backgroundColor: backgroundColor }">
+    <N-Icon :class="$style.icon" name="button-close" :style="{ color: color }" />
   </div>
 </template>
 
@@ -11,6 +11,8 @@ export default {
   components: {
   },
   props: {
+    color: { type: String, default: 'white' },
+    backgroundColor: { type: String, default: 'rgba(255, 255, 255, 0.2)' }
   },
   setup (props) {
   }
@@ -22,17 +24,15 @@ export default {
     position: absolute;
     width: 3.2rem;
     height: 3.2rem;
-    background: rgba(255, 255, 255, 0.2);
+    // background: rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    right: 1rem;
-    top: 1rem;
     z-index: 106;
     cursor: pointer;
     .icon {
-        color: white;
+        // color: white;
     }
 }
 </style>

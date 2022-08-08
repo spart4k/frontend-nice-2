@@ -2,7 +2,7 @@
   <div ref="body" class="body">
     <the-header :header-items="headerItems" class="header" />
 
-    <n-intro-wrapper is-home-page :color="color">
+    <n-intro-wrapper :is-home-page="isHomePage" :color="color">
       <Nuxt />
     </n-intro-wrapper>
     <N-BootomSheet
@@ -60,7 +60,7 @@ export default {
     } = animationGSAP($gsap, Elastic)
 
     const color = computed(() => {
-      const paramsColor = BLAND_COLOR[route.value.params?.slug] || BLAND_COLOR[route.value.name]
+      const paramsColor = BLAND_COLOR[route.value.params?.slug] || BLAND_COLOR[route.value.name] || BLAND_COLOR[route.value.query.section]
       if (paramsColor) {
         return paramsColor
       } else {
