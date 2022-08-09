@@ -18,6 +18,12 @@
       </p>
       <input :class="$style.wireInput" type="number">
     </div>
+    <div :class="$style.wireNumber">
+      <p :class="$style.wireText">
+        Кол-во:
+      </p>
+      <v-select id="" :options="['1 шт.', '2 шт.', '3 шт.']" :class="$style.wireSelect" name="" />
+    </div>
     <div :class="$style.wireColorSection">
       <p :class="$style.wireText">
         Цвет

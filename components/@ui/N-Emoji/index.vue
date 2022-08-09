@@ -59,27 +59,27 @@
         <div :class="$style.stikerContainer">
           <img
             :class="$style.sticker"
-            src="~/assets/img/sticker.png"
+            src="~/assets/img/sticker/sticker.png"
             alt=""
           >
           <img
             :class="$style.sticker"
-            src="~/assets/img/sticker2.png"
+            src="~/assets/img/sticker/sticker2.png"
             alt=""
           >
           <img
             :class="$style.sticker"
-            src="~/assets/img/sticker3.png"
+            src="~/assets/img/sticker/sticker3.png"
             alt=""
           >
           <img
             :class="$style.sticker"
-            src="~/assets/img/sticker4.png"
+            src="~/assets/img/sticker/sticker4.png"
             alt=""
           >
           <img
             :class="$style.sticker"
-            src="~/assets/img/sticker5.png"
+            src="~/assets/img/sticker/sticker5.png"
             alt=""
           >
         </div>

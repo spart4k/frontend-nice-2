@@ -84,9 +84,9 @@
               {{ data.price }}р.
             </div>
             <N-Wire v-if="false" />
-            <div :class="$style.buyButton">
+            <N-Button :class="$style.buyButton" background-color="#C83F8E">
               Купить
-            </div>
+            </N-Button>
           </template>
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
@@ -163,8 +163,8 @@
           <!-- <p :class="$style.comments__title">
           {{ commentCounter }} комментари{{ commentEnding }}
         </p> -->
-          <!-- <N-Input @smilies="commentHeightSet" /> -->
-          <N-Plug v-if="true" @login="login" @registration="registration" />
+          <N-Input v-if="false" @smilies="commentHeightSet" />
+          <N-Plug v-else @login="login" @registration="registration" />
           <div :class="$style.commentsContainer">
             <div>
               <N-Comment />
@@ -496,13 +496,7 @@ export default {
     margin-bottom:2rem;
   }
   .buyButton {
-    display: inline-block;
-    @include button;
-    color: $white;
-    padding: 1.4rem 3.6rem;
     margin-bottom: 2rem;
-    background: #C83F8E;
-    border-radius: 2.5rem;
   }
   .empty {
     width: 100%;

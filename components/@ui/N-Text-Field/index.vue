@@ -166,7 +166,7 @@ export default {
   }
   input[type=password] {
     padding-top: 0;
-    font-size: 24px;
+    font-size: 2.4rem;
   }
   input::placeholder {
     color: $fontColorDefault;
