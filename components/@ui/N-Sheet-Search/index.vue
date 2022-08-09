@@ -5,7 +5,7 @@
     </h2>
     <div :class="$style.inputContainer">
       <N-Text-Field placeholder="Начните искать ..." type="text" color="#6448B5" />
-      <N-Icon :class="$style.searchIcon" name="search" />
+      <N-Icon :class="$style.searchIcon" name="loupe" />
     </div>
     <div :class="$style.searchResults">
       <div v-if="false">

@@ -94,7 +94,7 @@ export default {
 <style lang="scss" module>
 .wrapper{
   position: relative;
-  perspective: 1200px;
+  perspective: 1400px;
   width: 100%;
   .card {
     position: absolute;
