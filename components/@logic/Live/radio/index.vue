@@ -2,8 +2,10 @@
   <div :class="$style.radio">
     <div :class="$style.wrap">
       <img :class="$style.wrapper" :src="require(`~/assets/img/live/def-radio-wrap.jpg`)" alt="">
-      <marquee scrollamount="7" direction="right" :class="$style.name">
-        Eli & Fur live from Courmayeur, Skyway Monte Bianco, in Italy for Cercle
+      <marquee class="marquee" scrollamount="7" direction="right" :class="$style.name">
+        <div class="inner">
+          Eli & Fur live from Courmayeur, Skyway Monte Bianco, in Italy for Cercle
+        </div>
       </marquee>
       <div :class="$style.control">
         <div v-if="!audioPlaying" @click="playAudio" class="">

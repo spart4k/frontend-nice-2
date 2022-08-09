@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ marginBottom: smilies ? '5rem' : '3.5rem' }" :class="$style.container">
+  <div  :style="{ marginBottom: smilies ? '5rem' : '' }" :class="$style.container">
     <!-- <input
       ref="input"
       v-model="letters"
@@ -11,7 +11,7 @@
     <textarea
       ref="input"
       v-model="letters"
-      placeholder="Написать комментарий ..."
+      :placeholder="placeholder"
       maxlength="200"
       :class="$style.textarea"
       rows="1"
@@ -32,11 +32,15 @@
 </template>
 
 <script>
-import { ref } from '@nuxtjs/composition-api'
+import { ref, watch } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NInput',
   props: {
+    placeholder: {
+      type: String,
+      default: 'Написать комментарий....'
+    }
   },
   setup (props, ctx) {
   const { emit } = ctx
@@ -47,12 +51,13 @@ export default {
     smilies.value = !smilies.value
   }
   const resize = (e) => {
-    emit('input', letters.value)
     e.target.style.height = 'auto'
     e.target.style.height = `${e.target.scrollHeight}px`
   }
+  watch(() => {})
   const sendComment = () => {
     emit('sendMessage', letters.value)
+    letters.value = ''
     console.log(letters.value)
   }
   const emojiWrite = (emoji) => {
@@ -61,6 +66,9 @@ export default {
       input.value.focus()
     }
   }
+  watch(() => letters.value, (newValue) => {
+    emit('input', newValue)
+  })
   return {
     emojiWrite,
     letters,
