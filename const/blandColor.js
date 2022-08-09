@@ -9,8 +9,8 @@ export const BLAND_COLOR = {
   // odezda: '#497C94',
   // meropriiatiia: '#58A1F5',
   // efir: '#006350'
-  muzyka: '#5289C5',
-  video: '#1C2B67',
+  muzyka: '#1C2B67',
+  video: '#5289C5',
   ctivo: '#D46D33',
   iskusstvo: '#6448B5',
   kuxnia: '#DCB247',
@@ -19,5 +19,5 @@ export const BLAND_COLOR = {
   odezda: '#6CCAC8',
   meropriiatiia: '#D13C33',
   efir: '#006350',
-  coin: '#73CA55'
+  moneta: '#73CA55'
 }

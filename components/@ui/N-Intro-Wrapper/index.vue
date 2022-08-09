@@ -1,6 +1,6 @@
 <template>
   <main>
-    <n-background ref="background" is-home-page :color="color" class="background" />
+    <n-background ref="background" :is-home-page="isHomePage" :color="color" class="background" />
     <slot />
   </main>
 </template>

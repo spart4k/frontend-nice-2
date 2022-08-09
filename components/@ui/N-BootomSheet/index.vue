@@ -6,13 +6,16 @@
       :max-width="maxWidth"
       :max-height="$mq === 'sm' ? '90%' : '100%'"
       :swipe-able="$mq === 'sm'"
-      :is-full-screen="true"
+      :is-full-screen="windowWidth>450 ? true : false"
       :rounded="$mq === 'sm'"
       v-on="$attrs"
       @closed="$emit('test')"
     >
       <client-only>
-        <n-icon name="close" :class="$style.close" @click="$emit('closeMenu')" />
+        <!-- <n-icon name="close" :class="$style.close" @click="$emit('closeMenu')" /> -->
+        <div>
+          <N-Button-Close :class="$style.close" color="#222222" background-color="rgba(34, 34, 34, 0.1)" @click="$emit('closeMenu')" />
+        </div>
         <slot />
       </client-only>
     </vue-bottom-sheet>
@@ -20,6 +23,8 @@
 </template>
 
 <script>
+import { onMounted, onUnmounted, ref } from '@nuxtjs/composition-api'
+
 export default {
   name: 'NBottomSheet',
   props: {
@@ -29,6 +34,23 @@ export default {
       default: ''
     },
     effect: String
+  },
+  setup () {
+    const windowWidth = ref()
+    const windowWidthCount = () => {
+      windowWidth.value = window.innerWidth
+    }
+    onMounted(() => {
+      windowWidthCount()
+      window.addEventListener('resize', windowWidthCount)
+    })
+    onUnmounted(() => {
+      window.addEventListener('resize', windowWidthCount)
+    })
+    return {
+      windowWidth,
+      windowWidthCount
+    }
   }
 }
 </script>
@@ -57,7 +79,7 @@ export default {
     overflow: auto !important;
   }
   :global(.bottom-sheet__bar) {
-    height: 6px;
+    height: 6px !important;
     background: #222222;
     opacity: 0.2;
     @media (min-width: $mobileWidth) {
