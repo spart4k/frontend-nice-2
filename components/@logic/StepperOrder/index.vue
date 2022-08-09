@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { computed, ref } from '@nuxtjs/composition-api'
+import { computed, ref, useContext, watch } from '@nuxtjs/composition-api'
 import StepOne from './components/StepOne'
 import StepTwo from './components/StepTwo'
 import StepThree from './components/StepThree'
@@ -22,6 +22,7 @@ export default {
   },
   setup () {
     const page = ref(0)
+    const { store } = useContext()
     const changeStep = (key) => {
       if (key === 'increment') {
         page.value += 1
@@ -29,6 +30,9 @@ export default {
         page.value -= 1
       }
     }
+    watch(() => store.state.stepperOrder.isShowBottomSheet, () => {
+      page.value = 0
+    })
     const isCurrentPage = computed(() => {
       switch (page.value) {
         case 0 :
@@ -52,6 +56,9 @@ export default {
 <style lang="scss" module>
 .container {
   padding-top: 3rem;
+  padding-bottom: 1rem;
+  height: 100%;
+  overflow-y: scroll;
   @include paddings;
   color: $fontColorDefault;
 }

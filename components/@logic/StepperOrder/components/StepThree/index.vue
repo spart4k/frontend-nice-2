@@ -1,9 +1,27 @@
 <template>
-  <div>
-    <h3>Ваша корзина</h3>
-    <ul>
-      <n-basket-row :item="basketItem" />
-    </ul>
+  <div :class="$style.wrapper">
+    <h3 :class="$style.title">
+      Спасибо за заказ!
+    </h3>
+    <div :class="$style.subtitle">
+      Номер вашего заказа №122
+    </div>
+    <div :class="$style.text">
+      Менеджер свяжется с вами
+      в рабочий день с 8:00 до 19:00.
+    </div>
+    <div :class="$style.image">
+      <img src="~/assets/img/plug.png" alt="plug">
+    </div>
+    <n-button
+      :class="$style.btn"
+      :type-button="'pink'"
+    >
+      Продолжить
+    </n-button>
+    <n-button type-button="transparent" color="#C83F8E" :class="[$style.btn, $style.btnHistory]">
+      История заказов
+    </n-button>
   </div>
 </template>
 
@@ -11,23 +29,39 @@
 export default {
   name: 'StepOne',
   setup () {
-    const basketItem = {
-      title: 'Sprite',
-      price: 3200,
-      pivot: {
-        quantity: 2
-      },
-      images: [
-        { src: 'https://media-exp1.licdn.com/dms/image/C560BAQHMnA03XDdf3w/company-logo_200_200/0/1519855918965?e=2147483647&v=beta&t=J3kUMZwIphc90TFKH5oOO9Sa9K59fimgJf-s_okU3zs' }
-      ]
-    }
-    return {
-      basketItem
-    }
+    return {}
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss" module>
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .image {
+    margin-bottom: 6.6rem;
+  }
+  .title {
+    @include text-style-h2;
+  }
+  .subtitle {
+    color: $pink2;
+    margin-bottom: 3rem;
+    @include button;
+  }
+  .text {
+    width: 24.5rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    @include regular-text;
+  }
+  .btn {
+    width: 100%;
+  }
+  .btnHistory {
+    margin-top: 4.1rem;
+  }
+}
 
 </style>

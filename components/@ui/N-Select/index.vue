@@ -13,7 +13,7 @@
       <select
         :class="[$style.select]"
       >
-        <option v-for="item in selectItems" :key="item.value" :value="item.value">
+        <option v-for="item in selectItems" :key="item.value" :class="$style.optionItem" :value="item.value">
           {{ item.text }}
         </option>
       </select>
@@ -50,8 +50,7 @@ export default {
   width: 100%;
   height: 100%;
   span {
-    color: $fontColorDefault;
-    opacity: 0.5;
+    color:rgba($fontColorDefault, 0.5);
     display: block;
   }
 }
@@ -89,9 +88,12 @@ export default {
 .select {
   -webkit-appearance: none;
   -moz-appearance: none;
-  border-width: 2px;
+  background-color: transparent;
+  border-width: .2rem;
   border-radius: .6rem;
   width: 100%;
   height: 100%;
+  color: $fontColorDefault;
+  @include regular-text;
 }
 </style>

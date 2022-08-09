@@ -1,18 +1,24 @@
 <template>
   <div :class="$style.wrapper">
     <vue-bottom-sheet
-      :overlay="true"
+      :overlay="false"
       :effect="$mq === 'sm' ? 'fx-default' : effect"
       :max-width="maxWidth"
-      :max-height="$mq === 'sm' ? '90%' : '100%'"
+      :max-height="maxHeight"
       :swipe-able="$mq === 'sm'"
-      :is-full-screen="true"
+      :is-full-screen="fullscreen"
       :rounded="$mq === 'sm'"
       v-on="$attrs"
-      @closed="$emit('test')"
+      @closed="$emit('closed')"
     >
       <client-only>
-        <n-icon name="close" :class="$style.close" @click="$emit('closeMenu')" />
+        <n-button-close
+          color="#222222"
+          background-color="rgba(34, 34, 34, 0.1)"
+          name="close"
+          :class="$style.close"
+          @click="$emit('closeMenu')"
+        />
         <slot />
       </client-only>
     </vue-bottom-sheet>
@@ -28,7 +34,23 @@ export default {
       type: String,
       default: ''
     },
-    effect: String
+    effect: String,
+    fullscreen: {
+      type: Boolean
+    }
+  },
+  setup () {
+    // const opened = () => {
+    //   // document.body.style.position = 'fixed'
+    //   // document.body.style.left = 0
+    //   // document.body.style.top = 0
+    //   // document.body.style.right = 0
+    //   // document.body.style.bottom = 0
+    //   document.body.cssText = 'position: fixed; left: 0; right: 0; top: 0; bottom: 0;'
+    // }
+    return {
+      // opened
+    }
   }
 }
 </script>
@@ -48,21 +70,19 @@ export default {
     }
     cursor: pointer;
   }
+  :global(.bottom-sheet__pan[data-v-61ac11a0]) {
+      padding-bottom: 20px;
+      padding-top: 15px;
+      height: 5rem;
+  }
   :global(.bottom-sheet__card) {
     @media (min-width: $mobileWidth) {
       left: 0!important;
     }
   }
   :global(.bottom-sheet__content) {
-    overflow: auto !important;
-  }
-  :global(.bottom-sheet__bar) {
-    height: 6px;
-    background: #222222;
-    opacity: 0.2;
-    @media (min-width: $mobileWidth) {
-      display: none;
-    }
+    //overflow-y: auto !important;
+    flex: 1;
   }
   :global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-left) {
     @media (min-width: $mobileWidth) {
@@ -70,5 +90,11 @@ export default {
     }
   }
 }
-
+:global(.bottom-sheet__bar) {
+  height: 6px !important;
+  background: rgba(#222222, 0.2);
+  @media (min-width: $mobileWidth) {
+    display: none !important;
+  }
+}
 </style>
