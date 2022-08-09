@@ -12,7 +12,7 @@
     <N-Button type-button="wide" background-color="#5289C5">
       Войти
     </N-Button>
-    <N-Button :class="$style.noRegistered" type-button="wide" color="#5289C5" @click="$emit('toLogin')">
+    <N-Button :class="$style.noRegistered" type-button="wide" color="#5289C5" background-color="transparent" @click="$emit('changeComponent', 'N-Sheet-Login')">
       Уже зарегистрированы?
     </N-Button>
   </div>

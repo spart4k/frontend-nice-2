@@ -58,7 +58,6 @@
             <div :class="$style.price">
               {{ data.price }}р.
             </div>
-            <N-Wire v-if="false" />
             <div :class="$style.buyButton">
               Купить
             </div>
@@ -83,7 +82,7 @@
             <div :class="$style.price">
               {{ data.price }}р.
             </div>
-            <N-Wire v-if="false" />
+            <N-Wire v-if="true" />
             <N-Button :class="$style.buyButton" background-color="#C83F8E">
               Купить
             </N-Button>
@@ -180,16 +179,13 @@
       </div>
     </div>
     <portal to="sliderPopup">
-      <!-- <vue-bottom-sheet ref="loginMenu" :overlay="true" max-height="90%">
-        <N-Sheet @closeSheet="closeSheet" />
-      </vue-bottom-sheet> -->
       <N-BootomSheet
         ref="loginMenu"
         :max-width="'450px'"
         effect="fx-slide-from-left"
         @closeMenu="closeMenu"
       >
-        <N-Sheet />
+        <N-Sheet :page="page" />
       </N-BootomSheet>
     </portal>
   </div>
@@ -207,7 +203,6 @@ export default {
   setup (props) {
     const videoRef = ref(null)
     const showComments = ref(false)
-    // const comments = ref(false)
     const like = ref(props.data.liked)
     const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
@@ -217,20 +212,18 @@ export default {
     const commentHeight = ref()
     const commentBox = ref()
     const loginMenu = ref()
-    // const commentEnding = ref('ев')
-    // const commentCounter = ref(1)
-    // const gallery = ref()
     const windowWidth = ref()
-    // const body = ref()
-    // const emptyBlockHeight = ref()
-    // const cardHeight = ref()
+    const page = ref()
     const { $axios } = useContext()
     const { store } = useContext()
     const videoPlay = ref(false)
     const login = () => {
+      page.value = 'N-Sheet-Login'
       loginMenu.value.$children[0].open()
     }
     const registration = () => {
+      page.value = 'N-Sheet-Register'
+      loginMenu.value.$children[0].open()
     }
     const closeMenu = () => {
       loginMenu.value.$children[0].close()
@@ -288,36 +281,16 @@ export default {
         })
         chipExtra.value.$el.style.display = 'none'
       }
-    // const wordEnding = () => {
-    //   const string = commentCounter.value.toString()
-    //   const lastElem = string[string.length - 1]
-    //   if (!(string[string.length - 2] === '1')) {
-    //     if (lastElem === '2' || lastElem === '3' || lastElem === '4') {
-    //       commentEnding.value = 'я'
-    //     } else if (lastElem === '1') {
-    //       commentEnding.value = 'й'
-    //     }
-    //   }
-    // }
-    // const blockHeight = () => {
-    //   if (props.detailPage === true && (window.innerWidth > 900)) {
-    //     cardHeight.value = gallery.value.clientHeight + 'px'
-    //   }
-    // }
     const windowWidthCount = () => {
       windowWidth.value = window.innerWidth
     }
     onMounted(() => {
-      // emptyBlockHeight.value = 502 - body.value.clientHeight
       windowWidthCount()
       if (windowWidth.value > 900) {
         showComments.value = true
       }
-      // blockHeight()
       extraTagHide()
       commentHeightSet()
-      // wordEnding()
-      // window.addEventListener('resize', blockHeight)
       window.addEventListener('resize', windowWidthCount)
       window.addEventListener('resize', commentHeightSet)
       nextTick(() => {
@@ -329,7 +302,6 @@ export default {
       })
     })
     onUnmounted(() => {
-      // window.addEventListener('resize', blockHeight)
       window.addEventListener('resize', windowWidthCount)
       window.addEventListener('resize', commentHeightSet)
     })
@@ -346,21 +318,13 @@ export default {
       chipsWidth,
       chipExtra,
       dateFormat,
-      // commentCounter,
-      // commentEnding,
       commentHeight,
       commentBox,
-      // blockHeight,
-      // body,
       videoRef,
       commentHeightSet,
-      // wordEnding,
       extraTagHide,
       extraTagShow,
-      // cardHeight,
-      // emptyBlockHeight,
       addLike,
-      // gallery,
       windowWidth,
       windowWidthCount,
       videoUrl,
@@ -369,7 +333,8 @@ export default {
       login,
       registration,
       loginMenu,
-      closeMenu
+      closeMenu,
+      page
     }
   }
 }

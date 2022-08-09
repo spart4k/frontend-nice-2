@@ -22,7 +22,7 @@
       <p :class="$style.wireText">
         Кол-во:
       </p>
-      <v-select id="" :options="['1 шт.', '2 шт.', '3 шт.']" :class="$style.wireSelect" name="" />
+      <v-select id="" :options="options" :class="$style.wireSelect" name="" />
     </div>
     <div :class="$style.wireColorSection">
       <p :class="$style.wireText">
@@ -30,23 +30,23 @@
       </p>
       <div ref="color" :class="$style.wireColorBox">
         <label :class="[$style.wireColor,$style.borderRed]" for="">
-          <input name="color" type="radio">
+          <input :class="$style.inputColorRed" name="color" type="radio">
           <span :class="[$style.checkmark,$style.backgroundRed]" />
         </label>
         <label :class="[$style.wireColor,$style.borderBlue]" for="">
-          <input name="color" type="radio">
+          <input :class="$style.inputColorBlue" name="color" type="radio">
           <span :class="[$style.checkmark,$style.backgroundBlue]" />
         </label>
         <label :class="[$style.wireColor,$style.borderBlack]" for="">
-          <input name="color" type="radio">
+          <input :class="$style.inputColorBlack" name="color" type="radio">
           <span :class="[$style.checkmark,$style.backgroundBlack]" />
         </label>
         <label :class="[$style.wireColor,$style.borderPurple]" for="">
-          <input name="color" type="radio">
+          <input :class="$style.inputColorPurple" name="color" type="radio">
           <span :class="[$style.checkmark,$style.backgroundPurple]" />
         </label>
         <label :class="[$style.wireColor,$style.borderYellow]" for="">
-          <input name="color" type="radio">
+          <input :class="$style.inputColorYellow" name="color" type="radio">
           <span :class="[$style.checkmark,$style.backgroundYellow]" />
         </label>
       </div>
@@ -65,6 +65,12 @@ export default {
     vSelect
   },
   props: {
+    options: {
+      type: Array,
+      default () {
+        return ['1 шт.', '2 шт.', '3 шт.', '4 шт.', '5 шт.', '6 шт.', '7 шт.', '8 шт.', '9 шт.', '10 шт.', '11 шт.', '12 шт.', '13 шт.', '14 шт.', '15 шт.', '16 шт.', '17 шт.', '18 шт.', '19 шт.', '20 шт.']
+      }
+    }
   },
   setup (props) {
   return {
@@ -166,7 +172,6 @@ export default {
             background-color: #DCB247;
           }
           input:checked ~ .checkmark {
-            background-color: #F8F8F8;
             width: 2rem;
             height: 2rem;
             top: calc(50% - 1rem);
@@ -189,6 +194,15 @@ export default {
           border-color: #DCB247;
         }
       }
+    }
+    :global(.vs__dropdown-option) {
+      height: 4.5rem;
+      display: flex;
+      font-size: 1.6rem;
+      align-items: center;
+    }
+    :global(.vs__dropdown-option--highlight) {
+      background: #C83F8E;
     }
   }
 </style>

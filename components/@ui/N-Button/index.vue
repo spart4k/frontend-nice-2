@@ -19,7 +19,7 @@ export default {
     },
     backgroundColor: {
       type: String,
-      default: 'transparent'
+      default: ''
     }
   }
 }
@@ -47,6 +47,9 @@ export default {
     opacity: 0.5;
     pointer-events: none;
   }
+  .pink {
+    background-color: $pink2;
+  }
   .transparent {
     background-color: transparent;
     border: none;
@@ -60,5 +63,6 @@ export default {
   }
   .left {
     padding: 0;
+    background-color: transparent;
   }
 </style>

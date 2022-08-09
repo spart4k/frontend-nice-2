@@ -5,22 +5,12 @@
     <n-intro-wrapper :is-home-page="isHomePage" :color="color">
       <Nuxt />
     </n-intro-wrapper>
-    <N-BootomSheet
-      ref="menu1"
-      effect="fx-slide-from-left"
-      max-width="39rem"
-      :max-height="$mq === 'md' ? '100%' : ''"
-      @test="test"
-      @closeMenu="closed"
-    >
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam aperiam at beatae ea eaque eius illum ipsa nihil praesentium saepe? Dignissimos laboriosam nam neque quod quos reprehenderit sit, suscipit? Porro!
-    </N-BootomSheet>
     <portal-target name="sliderPopup" />
   </div>
 </template>
 
 <script>
-import { ref, useContext, useFetch, onMounted, computed, watch } from '@nuxtjs/composition-api'
+import { ref, useContext, useFetch, onMounted, computed } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import animationGSAP from '~/helpers/compositions/animationGSAP'
 import { BLAND_COLOR } from '~/const/blandColor'
@@ -68,19 +58,6 @@ export default {
       }
     })
 
-    const closed = () => {
-      menu1.value.$children[0].close()
-    }
-    const test = () => {
-      store.commit('stepperOrder/changeShowStateBottomSheet', false)
-    }
-
-    watch(() => store.state.stepperOrder.isShowBottomSheet, () => {
-      if (store.state.stepperOrder.isShowBottomSheet) {
-        menu1.value.$children[0].open()
-      }
-    })
-
     onMounted(() => {
       store.commit('authentication/setUserData')
       store.commit('authentication/setToken')
@@ -94,10 +71,7 @@ export default {
       color,
       introTitle,
       isHomePage,
-      menu1,
-
-      closed,
-      test
+      menu1
     }
   }
 }

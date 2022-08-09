@@ -1,5 +1,13 @@
 <template>
-  <label :class="[$style.textField, $props.mdFz && $style.mdFz, $props.error.length || $props.errCustom ? $style.error : '', $props.readOnly ? $style.readonly : '']">
+  <label
+    :class="[
+      $style.textField,
+      $props.mdFz && $style.mdFz,
+      $props.error.length || $props.errCustom ? $style.error : '',
+      $props.readOnly ? $style.readonly : '',
+      $style[$props.colorBorder]
+    ]"
+  >
     <h3 v-if="$props.title" :class="$style.title">
       {{ $props.title }}
     </h3>
@@ -71,6 +79,10 @@ export default {
     color: {
       type: String,
       default: ''
+    },
+    colorBorder: {
+      type: String,
+      default: ''
     }
   },
   setup (props, ctx) {
@@ -99,15 +111,6 @@ export default {
         return newText
       }
     })
-
-    // const getValue = computed({
-    //   get () {
-    //     return props.value
-    //   },
-    //   set (val) {
-    //     emit('input', val)
-    //   }
-    // })
 
     return {
       proxyVal,
@@ -176,6 +179,11 @@ export default {
     margin-top: 1rem;
     color: #D13C33;
     @include regular-text;
+    &.pinkBorder {
+      input {
+        border-color:$pink2 ;
+      }
+    }
   }
 }
 </style>

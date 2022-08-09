@@ -27,12 +27,23 @@
       @closeMenu="closeMenu"
     >
       <nav :class="$style.headerNav">
-        <menuUserTop />
+        <menuUserTop
+          @openMenuBasket="openMenuBasket"
+        />
         <n-nav-menu
           :header-items="headerItems"
           @hideNavMenu=" active = false"
         />
       </nav>
+    </N-BootomSheet>
+    <N-BootomSheet
+      ref="menuBasket"
+      effect="fx-slide-from-left"
+      max-width="39rem"
+      :max-height="$mq === 'md' ? '100%' : ''"
+      @closeMenu="closedMenuBasket"
+    >
+      <StepperOrder />
     </N-BootomSheet>
     <vue-bottom-sheet ref="liveChat" max-height="100%" is-full-screen>
       <client-only>
@@ -40,7 +51,6 @@
       </client-only>
       <n-icon name="close" :class="$style.close" @click="closeLive" />
     </vue-bottom-sheet>
-
     <ul :class="[$style.headerUser__list, active && $style.hideElement]">
       <li>
         <div :class="$style.link" @click="openLive">
@@ -57,8 +67,6 @@
 import { computed, ref, useRouter, useRoute, watch, useContext } from '@nuxtjs/composition-api'
 import menuUserTop from './components/MenuUserTop'
 import { numWord } from '~/helpers/compositions/declination'
-import { BLAND_COLOR } from '~/const/blandColor'
-const COLORS = ['#489430', '#00B4B5', '#FF4F00', '#ded037']
 export default {
   name: 'TheHeader',
   components: {
@@ -73,6 +81,7 @@ export default {
   setup (_, ctx) {
     const { store } = useContext()
     const menu = ref(null)
+    const menuBasket = ref(null)
     const active = ref(false)
     const activeAuthSteps = ref(false)
     const route = useRoute()
@@ -97,8 +106,6 @@ export default {
       }
     })
 
-    const randomColor = () => COLORS[Math.floor(Math.random() * COLORS.length)]
-
     const toggleMenu = () => {
       active.value = false
     }
@@ -110,16 +117,19 @@ export default {
       menu.value.$children[0].close()
     }
 
+    const closedMenuBasket = () => {
+      menuBasket.value.$children[0].close()
+    }
+    const openMenuBasket = () => {
+      menuBasket.value.$children[0].open()
+    }
+
     const openLive = () => {
       liveChat.value.open()
     }
 
     const closeLive = () => {
       liveChat.value.close()
-    }
-
-    const openTestPage = (num) => {
-      router.push({ path: `${num}` })
     }
 
     const openProfile = () => {
@@ -144,13 +154,14 @@ export default {
     return {
       openMenu,
       closeMenu,
+      openMenuBasket,
+      closedMenuBasket,
       toggleMenu,
-      openTestPage,
       openProfile,
-      randomColor,
       closeLive,
       openLive,
-      BLAND_COLOR,
+
+      menuBasket,
       showAnimate,
       basketData,
       showLogo,

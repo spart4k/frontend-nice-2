@@ -32,6 +32,8 @@ export default {
     z-index: 106;
     cursor: pointer;
     .icon {
+        width: 1.4rem;
+        height: 1.4rem;
         // color: white;
     }
 }

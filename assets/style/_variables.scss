@@ -11,11 +11,13 @@ $black: #000;
 $white: #ffffff;
 $gray: #EBEBEB;
 $gray2: #E6E6E6;
+$gray3: #F5F5F5;
 $orange: #FF4F02;
 $orange2: #FF5000;
 $yellow: #F6DA65;
 $yellow2: #FADD66;
 $pink: #FFC8C8;
+$pink2: #C83F8E;
 $blue: #BBD6FF;
 $activeLink: #699b69;
 $blueBlack: #3E5366;
@@ -64,7 +66,10 @@ $paddingTopLog: 2rem;
   font-family: 'Bankir-Retro', sans-serif;
   font-weight: normal;
 }
-
+@mixin paddings {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
 @mixin container {
   padding-left: 1.5rem;
   padding-right: 1.5rem;

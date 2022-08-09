@@ -6,7 +6,7 @@
       :max-width="maxWidth"
       :max-height="$mq === 'sm' ? '90%' : '100%'"
       :swipe-able="$mq === 'sm'"
-      :is-full-screen="windowWidth>450 ? true : false"
+      :is-full-screen="windowWidth>450"
       :rounded="$mq === 'sm'"
       v-on="$attrs"
       @closed="$emit('test')"

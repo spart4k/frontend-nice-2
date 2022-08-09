@@ -8,7 +8,7 @@
         </nuxt-link>
       </div>
     </li>
-    <li :class="$style.item" @click="showModalStepper">
+    <li :class="$style.item" @click="$emit('openMenuBasket')">
       <n-icon name="basket" :class="$style.icon" />
       <div :class="$style.item__text">
         Корзина
@@ -26,18 +26,11 @@
 </template>
 
 <script>
-import { useContext } from '@nuxtjs/composition-api'
 
 export default {
   name: 'MenuUserTop',
   setup () {
-    const { store } = useContext()
-    const showModalStepper = () => {
-      store.commit('stepperOrder/changeShowStateBottomSheet', true)
-    }
-    return {
-      showModalStepper
-    }
+    return {}
   }
 }
 </script>
