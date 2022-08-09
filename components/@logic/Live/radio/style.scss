@@ -1,16 +1,23 @@
 .radio {
+  position: relative;
   width: 100%;
-  max-width: 100%s;
+  max-width: 100%;
   border-radius: 20px;
-  padding: 2rem 1rem 2rem 1rem;
+  padding: 5rem 1rem 2rem 1rem;
   background-color: #F5F5F5;
+  margin-top: 8rem;
   .wrap {
     display: flex;
     align-items: center;
+    flex-direction: column;
     justify-content: space-between;
     .wrapper {
-      width: 4.2rem;
-      height: 4.2rem;
+      width: 11.5rem;
+      height: 11.5rem;
+      position: absolute;
+      left: 50%;
+      top: -50%;
+      transform: translateX(-50%) translateY(-10%);
     }
     .name {
       overflow: hidden;
@@ -33,7 +40,7 @@
       //box-shadow: -25px -1px 8px -8px rgba(28, 29, 30, 0.2) inset;
     }
     .control {
-      margin: 0rem 1rem;
+      margin: 1.6rem 1rem 0rem 1rem;
     }
   }
 

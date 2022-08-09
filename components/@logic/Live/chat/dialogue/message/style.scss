@@ -1,5 +1,6 @@
 .message {
   display: flex;
+  align-items: baseline;
   margin-top: 2rem;
   max-width: 100%;
   .author {
@@ -10,5 +11,8 @@
   .body {
     @include montserratMedium;
     color: $fontColorDefault;
+    .emoji {
+      font-size: 1.8rem;
+    }
   }
 }

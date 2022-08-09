@@ -62,6 +62,8 @@ export default {
   }
   const emojiWrite = (emoji) => {
     if (letters.value.length < 199) {
+      // const template =
+      // `<span class="emoji">${emoji}</span>`
       letters.value += emoji
       input.value.focus()
     }

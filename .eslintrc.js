@@ -18,5 +18,6 @@ module.exports = {
   rules: {
     'indent': 'off',
     'vue/multi-word-component-names': 0,
+    'unicorn/escape-case': 'off'
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.radio">
     <div :class="$style.wrap">
-      <img :class="$style.wrapper" :src="require(`~/assets/img/live/def-radio-wrap.jpg`)" alt="">
+      <img :class="$style.wrapper" :src="require(`~/assets/img/live/def-radio-wrap.png`)" alt="">
       <marquee class="marquee" scrollamount="7" direction="right" :class="$style.name">
         <div class="inner">
           Eli & Fur live from Courmayeur, Skyway Monte Bianco, in Italy for Cercle
@@ -20,8 +20,8 @@
         </div>
         <div v-else-if="audioPlaying" @click="pauseAudio" class="">
           <svg
-          width="16"
-          height="22"
+          width="18"
+          height="20"
           viewBox="0 0 16 22"
           fill="none"
           xmlns="http://www.w3.org/2000/svg">

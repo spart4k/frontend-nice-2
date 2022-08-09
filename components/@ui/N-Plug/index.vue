@@ -26,6 +26,7 @@ export default {
         text-align: center;
         margin-top: 2rem;
         margin-bottom: 3.5rem;
+        color: $fontColorDefault;
         a {
           @include regular-text-bold;
           color: #F23D15;
