@@ -134,7 +134,7 @@
               {{ !$props.detailPage ? '0' : 'Нравится' }}
             </div>
           </div>
-          <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.commentsContainer" @click="showComments = !showComments">
+          <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.commentsContainer" @click="showComments = !showComments; comments = !comments">
             <N-Icon name="comments" />
             <div :class="$style.parser">
               {{ !$props.detailPage ? '0' : 'Комментировать' }}
@@ -170,7 +170,7 @@
           <N-Input v-if="true" type="textarea" @smilies="commentHeightSet" />
           <N-Plug v-else @login="login" @registration="registration" />
           <transition name="comments">
-            <div v-if="showComments" :class="$style.commentsContainer">
+            <div v-if="comments" :class="$style.commentsContainer">
               <div>
                 <N-Comment />
                 <N-Comment />
@@ -224,6 +224,7 @@ export default {
     const { $axios } = useContext()
     const { store } = useContext()
     const videoPlay = ref(false)
+    const comments = ref(true)
     const login = () => {
       page.value = 'FormAuthLogin'
       loginMenu.value.$children[0].open()
@@ -298,6 +299,7 @@ export default {
       }
       extraTagHide()
       commentHeightSet()
+      comments.value = false
       window.addEventListener('resize', windowWidthCount)
       window.addEventListener('resize', commentHeightSet)
       nextTick(() => {
@@ -327,6 +329,7 @@ export default {
       dateFormat,
       commentHeight,
       commentBox,
+      comments,
       videoRef,
       commentHeightSet,
       extraTagHide,

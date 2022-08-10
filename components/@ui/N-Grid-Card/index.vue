@@ -27,9 +27,9 @@
           />
         </template>
       </div>
-      <div :class="$style.col">
+      <!-- <div :class="$style.col">
         <N-Card-Coin />
-      </div>
+      </div> -->
     </template>
   </div>
 </template>
