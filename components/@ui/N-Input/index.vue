@@ -1,7 +1,15 @@
 <template>
   <div :class="$style.container">
+    <div
+    :class="$style.input"
+    ref="input"
+    v-if="$props.type === 'contenteditable'"
+    contenteditable="true"
+    placeholder="Div placeholder...">
+
+    </div>
     <input
-      v-if="$props.type === 'input'"
+      v-else-if="$props.type === 'input'"
       ref="input"
       v-model="letters"
       type="text"
@@ -25,7 +33,7 @@
       <N-Icon name="smile" :class="$style.icon" :style="{ color: smilies ? '#F45532' : '#222222' }" @click="showSmilies(); $emit('smilies')" />
       <div :class="$style.send">
         <div :class="$style.letterCounter">
-          {{ letters.length }}/200
+          1/200
         </div>
         <N-Icon :class="$style.sendButton" name="send" @click="sendComment" />
       </div>
@@ -92,16 +100,20 @@ export default {
     return window.innerWidth
   })
   const emojiWrite = (emoji) => {
-    if (letters.value.length < 199) {
-      // const template =
-      // `<span class="emoji">${emoji}</span>`
-      letters.value += emoji
-      if (widthFrame.value > 768) {
-        input.value.focus()
-      }
-    }
+    // if (letters.value.length < 199) {
+    //  // const template =
+    //  // `<span class="emoji">${emoji}</span>`
+    //  letters.value += `<span>${emoji}</span>`
+
+    //  if (widthFrame.value > 768) {
+    //    input.value.focus()
+    //  }
+    // }
   }
-  watch(() => letters.value, (newValue) => {
+
+  watch(() => input.value, (newValue) => {
+    console.log(input.value.innerHTML)
+    console.log(newValue)
     emit('input', newValue)
   })
   return {
@@ -173,6 +185,11 @@ export default {
             opacity: 0.5;
             }
         }
+    }
+    [contenteditable=true]:empty:before{
+      content: attr(placeholder);
+      pointer-events: none;
+      display: block; /* For Firefox */
     }
 }
 </style>
