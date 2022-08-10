@@ -31,7 +31,7 @@
             <div :class="$style.emoji" @click="$emit('emojiWrite', '😛')">
               😛
             </div>
-          <!-- </div>
+            <!-- </div>
           <div :class="$style.emojiContainer"> -->
             <div :class="$style.emoji" @click="$emit('emojiWrite', '🥳')">
               🥳
@@ -126,14 +126,15 @@ export default {
     .sliderContainer{
         display: flex !important;
         padding: 0 1.7rem;
-        gap: 20px;
+        gap: 2rem;
         flex-direction: column;
         .emojiContainer{
             display: flex !important;
             justify-content: space-between;
             flex-wrap: wrap;
             row-gap: 2rem;
-            gap: 0.8rem;
+            gap: .6rem;
+            padding: 0.6rem 0;
               @media (min-width: $tabletWidth) {
                 gap: 1.4rem;
                 flex-wrap: wrap;
@@ -141,7 +142,7 @@ export default {
               }
             .emoji {
                 display: inline-block;
-                font-size: 3.2rem;
+                font-size: 2.9rem;
                 line-height: 1;
                 user-select: none;
                 cursor: pointer;

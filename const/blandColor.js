@@ -1,5 +1,4 @@
 export const BLAND_COLOR = {
-
   muzyka: '#1C2B67',
   video: '#5289C5',
   ctivo: '#D46D33',

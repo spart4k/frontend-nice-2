@@ -82,7 +82,7 @@
             <div :class="$style.price">
               {{ data.price }}р.
             </div>
-            <template v-if="false">
+            <template v-if="true">
               <N-Wire />
             </template>
             <template v-else>
@@ -167,16 +167,18 @@
           <!-- <p :class="$style.comments__title">
           {{ commentCounter }} комментари{{ commentEnding }}
         </p> -->
-          <N-Input v-if="false" @smilies="commentHeightSet" />
+          <N-Input v-if="true" type="textarea" @smilies="commentHeightSet" />
           <N-Plug v-else @login="login" @registration="registration" />
-          <div :class="$style.commentsContainer">
-            <div>
-              <N-Comment />
-              <N-Comment />
-              <N-Comment />
-              <N-Comment />
+          <transition name="comments">
+            <div v-if="showComments" :class="$style.commentsContainer">
+              <div>
+                <N-Comment />
+                <N-Comment />
+                <N-Comment />
+                <N-Comment />
+              </div>
             </div>
-          </div>
+          </transition>
         </div>
       </div>
       <div v-if="$slots.footer" :class="$style.body__footer">

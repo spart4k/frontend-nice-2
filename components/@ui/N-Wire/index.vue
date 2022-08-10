@@ -18,37 +18,35 @@
       </p>
       <input :class="$style.wireInput" type="number">
     </div>
-    <!-- <div :class="$style.wireNumber">
-      <p :class="$style.wireText">
-        Кол-во:
-      </p>
-      <v-select id="" :options="options" :class="$style.wireSelect" name="" />
-    </div> -->
     <N-Goods-Counter />
     <div :class="$style.wireColorSection">
       <p :class="$style.wireText">
         Цвет
       </p>
       <div ref="color" :class="$style.wireColorBox">
-        <label :class="[$style.wireColor,$style.borderRed]" for="">
-          <input :class="$style.inputColorRed" name="color" type="radio">
-          <span :class="[$style.checkmark,$style.backgroundRed]" />
+        <label :class="$style.wireColor" :style="{ borderColor: 'rgb(126 100 181)' }">
+          <input name="color" type="radio">
+          <span :class="$style.checkmark" :style="{ backgroundColor: 'rgb(126 100 181)' }" />
         </label>
-        <label :class="[$style.wireColor,$style.borderBlue]" for="">
-          <input :class="$style.inputColorBlue" name="color" type="radio">
-          <span :class="[$style.checkmark,$style.backgroundBlue]" />
+        <label :class="$style.wireColor" :style="{ borderColor: '#5c9bd5' }">
+          <input name="color" type="radio">
+          <span :class="$style.checkmark" :style="{ backgroundColor: '#5c9bd5' }" />
         </label>
-        <label :class="[$style.wireColor,$style.borderBlack]" for="">
-          <input :class="$style.inputColorBlack" name="color" type="radio">
-          <span :class="[$style.checkmark,$style.backgroundBlack]" />
+        <label :class="$style.wireColor" :style="{ borderColor: '#d53e4d' }">
+          <input name="color" type="radio">
+          <span :class="$style.checkmark" :style="{ backgroundColor: '#d53e4d' }" />
         </label>
-        <label :class="[$style.wireColor,$style.borderPurple]" for="">
-          <input :class="$style.inputColorPurple" name="color" type="radio">
-          <span :class="[$style.checkmark,$style.backgroundPurple]" />
+        <label :class="$style.wireColor" :style="{ borderColor: '#DCC444' }">
+          <input name="color" type="radio">
+          <span :class="$style.checkmark" :style="{ backgroundColor: '#DCC444' }" />
         </label>
-        <label :class="[$style.wireColor,$style.borderYellow]" for="">
-          <input :class="$style.inputColorYellow" name="color" type="radio">
-          <span :class="[$style.checkmark,$style.backgroundYellow]" />
+        <label :class="$style.wireColor" :style="{ borderColor: '#388262' }">
+          <input name="color" type="radio">
+          <span :class="$style.checkmark" :style="{ backgroundColor: '#388262' }" />
+        </label>
+        <label :class="$style.wireColor" :style="{ borderColor: 'rgb(78 186 206)' }">
+          <input name="color" type="radio">
+          <span :class="$style.checkmark" :style="{ backgroundColor: 'rgb(78 186 206)' }" />
         </label>
       </div>
     </div>
@@ -143,7 +141,7 @@ export default {
           width: 3.2rem;
           height: 3.2rem;
           position: relative;
-          border: red solid .2rem;
+          border: solid .2rem;
           border-radius: 50%;
           input {
             position: absolute;
@@ -161,42 +159,12 @@ export default {
             left: -2px;
             border-radius: 50%;
           }
-          .backgroundRed {
-          background-color: #F23D15;
-          }
-          .backgroundBlue {
-            background-color: #5289C5;
-          }
-          .backgroundBlack {
-            background-color: #222222;
-          }
-          .backgroundPurple {
-            background-color: #C83F8E;
-          }
-          .backgroundYellow {
-            background-color: #DCB247;
-          }
           input:checked ~ .checkmark {
             width: 2rem;
             height: 2rem;
             top: calc(50% - 1rem);
             left: calc(50% - 1rem);
           }
-        }
-        .borderRed {
-          border-color: #F23D15;
-        }
-        .borderBlue {
-          border-color: #5289C5;
-        }
-        .borderBlack {
-          border-color: #222222;
-        }
-        .borderPurple {
-          border-color: #C83F8E;
-        }
-        .borderYellow {
-          border-color: #DCB247;
         }
       }
     }
