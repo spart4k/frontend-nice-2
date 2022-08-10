@@ -21,18 +21,6 @@
       <n-row>
         <n-text-field placeholder="Введите ваш еmail" title="Email" :color-border="'pinkBorder'" />
       </n-row>
-      <n-row>
-        <n-select
-          title="Адрес"
-          :color-border="'pinkBorder'"
-          :select-items="selectItems"
-          :position-arrow="{
-            right: 0,
-          }"
-          has-border-bottom
-          :class="$style.form__select"
-        />
-      </n-row>
       <div>
         <n-text-field :color-border="'pinkBorder'" placeholder="Улица, дом, квартира" />
       </div>

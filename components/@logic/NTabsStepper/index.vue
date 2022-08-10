@@ -1,15 +1,18 @@
 <template>
   <div :class="$style.tabs__item">
-    <ul :class="$style.list">
-      <li
-        v-for="item in tabsItem"
-        :key="item.value"
-        :class="[$style.item, item.value === currentTab && $style.active]"
-        @click="currentTab = item.value"
-      >
-        {{ item.title }}
-      </li>
-    </ul>
+    <div :class="$style.wrapper">
+      <div :class="$style.list">
+        <div
+          v-for="(item, index) in tabsItem"
+          :key="item.value"
+          :class="[$style.item, item.value === currentTab && $style.active]"
+          @click="transformActive(index, item.value)"
+        >
+          {{ item.title }}
+        </div>
+        <span ref="glider" :class="$style.glider" />
+      </div>
+    </div>
     <slot name="body" :current-tab="currentTab" />
   </div>
 </template>
@@ -21,13 +24,20 @@ export default {
   name: 'NTabs',
   setup () {
     const currentTab = ref('TabDelivery')
+    const glider = ref(null)
     const tabsItem = [
       { title: 'Доставка', value: 'TabDelivery' },
       { title: 'Самовывоз', value: 'TabPickup' }
     ]
+    const transformActive = (index, value) => {
+      currentTab.value = value
+      glider.value.style.transform = `translateX(${100 * index}%)`
+    }
     return {
       tabsItem,
-      currentTab
+      currentTab,
+      glider,
+      transformActive
     }
   }
 }
@@ -38,13 +48,30 @@ export default {
     padding-left: 0;
     margin: 0;
   }
-  .list {
+  .wrapper {
     width: 100%;
-    display: flex;
-    background-color: $gray3;
     border-radius: 2.5rem;
-    padding: .5rem;
     margin-bottom: 2.5rem;
+    padding: .5rem;
+    background-color: $gray3;
+  }
+  .list {
+    display: flex;
+
+    position: relative;
+
+  }
+  .glider {
+    content: '';
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    z-index: 3;
+    width: 50%;
+    height: 100%;
+    background-color: $pink2;
+    border-radius: 2.5rem;
+    transition: transform 0.5s $animationTiming1;
   }
   .item {
     width: 50%;
@@ -53,9 +80,11 @@ export default {
     list-style: none;
     line-height: 4rem;
     text-align: center;
+    position: relative;
+    z-index: 4;
     @include regular-text;
+    transition: color 0.5s $animationTiming1;
     &.active {
-      background-color: $pink2;
       color: $white;
     }
   }

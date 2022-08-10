@@ -5,7 +5,6 @@
     <n-intro-wrapper :is-home-page="isHomePage" :color="color">
       <Nuxt />
     </n-intro-wrapper>
-    <portal-target name="sliderPopup" />
     <N-BootomSheet
       ref="menuBasket"
       effect="fx-slide-from-left"
@@ -17,6 +16,7 @@
     >
       <StepperOrder />
     </N-BootomSheet>
+    <portal-target name="sliderPopup" />
   </div>
 </template>
 

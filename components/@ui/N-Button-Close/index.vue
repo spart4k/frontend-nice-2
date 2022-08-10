@@ -1,6 +1,6 @@
 <template>
-  <div :class="$style.box" :style="{ backgroundColor: backgroundColor }" v-on="$listeners">
-    <N-Icon :class="$style.icon" name="button-close" :style="{ color: color }" />
+  <div :class="$style.box" v-on="$listeners">
+    <N-Icon :class="$style.icon" name="close" :style="{ color: color }" />
   </div>
 </template>
 
@@ -11,8 +11,7 @@ export default {
   components: {
   },
   props: {
-    color: { type: String, default: 'white' },
-    backgroundColor: { type: String, default: 'rgba(255, 255, 255, 0.2)' }
+    color: { type: String, default: 'white' }
   },
   setup (props) {
   }
@@ -21,18 +20,17 @@ export default {
 
 <style scoped lang="scss" module>
 .box{
-    position: absolute;
-    width: 3.2rem;
+    width: 3.3rem;
     height: 3.2rem;
-    // background: rgba(255, 255, 255, 0.2);
+    background: rgba(34, 34, 34, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    z-index: 106;
     cursor: pointer;
-    .icon {
-        // color: white;
-    }
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>

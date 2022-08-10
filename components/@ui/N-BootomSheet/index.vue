@@ -1,27 +1,26 @@
 <template>
   <div :class="$style.wrapper">
-    <vue-bottom-sheet
-      :overlay="false"
-      :effect="$mq === 'sm' ? 'fx-default' : effect"
-      :max-width="maxWidth"
-      :max-height="maxHeight"
-      :swipe-able="$mq === 'sm'"
-      :is-full-screen="fullscreen"
-      :rounded="$mq === 'sm'"
-      v-on="$attrs"
-      @closed="$emit('closed')"
-    >
-      <client-only>
+    <client-only>
+      <vue-bottom-sheet
+        :overlay="false"
+        :effect="$mq === 'sm' ? 'fx-default' : effect"
+        :max-width="maxWidth"
+        :max-height="maxHeight"
+        :swipe-able="$mq === 'sm'"
+        :is-full-screen="fullscreen"
+        :rounded="$mq === 'sm'"
+        v-on="$attrs"
+        @closed="$emit('closed')"
+      >
         <n-button-close
-          color="#222222"
           background-color="rgba(34, 34, 34, 0.1)"
           name="close"
           :class="$style.close"
           @click="$emit('closeMenu')"
         />
         <slot />
-      </client-only>
-    </vue-bottom-sheet>
+      </vue-bottom-sheet>
+    </client-only>
   </div>
 </template>
 
@@ -40,17 +39,7 @@ export default {
     }
   },
   setup () {
-    // const opened = () => {
-    //   // document.body.style.position = 'fixed'
-    //   // document.body.style.left = 0
-    //   // document.body.style.top = 0
-    //   // document.body.style.right = 0
-    //   // document.body.style.bottom = 0
-    //   document.body.cssText = 'position: fixed; left: 0; right: 0; top: 0; bottom: 0;'
-    // }
-    return {
-      // opened
-    }
+    return {}
   }
 }
 </script>
@@ -59,16 +48,8 @@ export default {
 .wrapper {
   .close {
     position: absolute;
-    z-index: 20;
     top: 1.5rem;
     right: 1.5rem;
-    width: 3.2rem;
-    height: 3.2rem;
-    svg {
-      width: 100%;
-      height: 100%;
-    }
-    cursor: pointer;
   }
   :global(.bottom-sheet__pan[data-v-61ac11a0]) {
       padding-bottom: 20px;

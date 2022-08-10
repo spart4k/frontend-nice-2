@@ -3,7 +3,7 @@
     <div :class="$style.intro">
       <n-tabs
         :class="$style.tabs"
-        class="navbar"
+        class="navbarq"
       />
     </div>
     <section :class="$style.container">
@@ -74,18 +74,18 @@ export default {
     onMounted(() => {
       animationlogo()
       animateSubtitle()
-      // animateNavbar()
-      // $gsap.to('.navbar', {
-      //   scrollTrigger: {
-      //     trigger: '.content',
-      //     // start: `top ${top}`,
-      //     start: 10,
-      //     end: 100,
-      //     scrub: true
-      //   },
-      //   y: -60,
-      //   opacity: 0
-      // })
+      // animateNavbar('.navbarq')
+      $gsap.to('.navbarq', {
+        scrollTrigger: {
+          trigger: '.content',
+          // start: `top ${top}`,
+          start: 10,
+          end: 100,
+          scrub: true
+        },
+        y: -60,
+        opacity: 0
+      })
     })
 
     return {
@@ -143,7 +143,6 @@ export default {
   }
   &.animateContent {
     top: 50%;
-    border: 2px solid red;
   }
 }
 .wrapper__content {
