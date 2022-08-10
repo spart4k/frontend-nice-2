@@ -82,7 +82,12 @@
             <div :class="$style.price">
               {{ data.price }}р.
             </div>
-            <N-Wire v-if="true" />
+            <template v-if="false">
+              <N-Wire />
+            </template>
+            <template v-else>
+              <N-Goods-Counter :class="$style.goodsCounter" />
+            </template>
             <N-Button :class="$style.buyButton" background-color="#C83F8E">
               Купить
             </N-Button>
@@ -218,11 +223,11 @@ export default {
     const { store } = useContext()
     const videoPlay = ref(false)
     const login = () => {
-      page.value = 'N-Sheet-Login'
+      page.value = 'FormAuthLogin'
       loginMenu.value.$children[0].open()
     }
     const registration = () => {
-      page.value = 'N-Sheet-Register'
+      page.value = 'FormAuthDefault'
       loginMenu.value.$children[0].open()
     }
     const closeMenu = () => {
@@ -356,7 +361,7 @@ export default {
       }
     }
     .gallery {
-        cursor: pointer;
+      cursor: pointer;
       &.detailPage {
         @media (min-width: $tabletWidth) {
           background: #222222;
@@ -547,6 +552,9 @@ export default {
       .authorName{
         margin-bottom: 1.5rem;
         @include regular-text-bold
+      }
+      .goodsCounter {
+        margin-bottom: 3rem;
       }
     }
     .cardAudio {

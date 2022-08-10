@@ -23,7 +23,8 @@
       ref="menu"
       effect="fx-slide-from-left"
       max-width="39rem"
-      :max-height="$mq === 'md' ? '100%' : ''"
+      :max-height="'100%'"
+      :fullscreen="true"
       @closeMenu="closeMenu"
     >
       <nav :class="$style.headerNav">
@@ -36,15 +37,16 @@
         />
       </nav>
     </N-BootomSheet>
-    <N-BootomSheet
-      ref="menuBasket"
-      effect="fx-slide-from-left"
-      max-width="39rem"
-      :max-height="$mq === 'md' ? '100%' : ''"
-      @closeMenu="closedMenuBasket"
-    >
-      <StepperOrder />
-    </N-BootomSheet>
+    <!--    <N-BootomSheet-->
+    <!--      ref="menuBasket"-->
+    <!--      effect="fx-slide-from-left"-->
+    <!--      max-width="39rem"-->
+    <!--      :max-height="'100%'"-->
+    <!--      :fullscreen="true"-->
+    <!--      @closeMenu="closedMenuBasket"-->
+    <!--    >-->
+    <!--      <StepperOrder />-->
+    <!--    </N-BootomSheet>-->
     <vue-bottom-sheet ref="liveChat" max-height="100%" is-full-screen>
       <client-only>
         <live-default />
@@ -121,7 +123,8 @@ export default {
       menuBasket.value.$children[0].close()
     }
     const openMenuBasket = () => {
-      menuBasket.value.$children[0].open()
+      console.log(2)
+      store.commit('stepperOrder/changeShowStateBottomSheet', true)
     }
 
     const openLive = () => {

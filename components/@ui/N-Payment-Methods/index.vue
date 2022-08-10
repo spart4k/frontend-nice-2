@@ -33,7 +33,7 @@ export default {
   flex-shrink: 0;
   background-color: $gray3;
   border-radius: 2rem;
-  width: 13rem;
+  width: calc((100% / 3) - 1rem);
   height: 8rem;
   color: $fontColorDefault;
   padding: 1rem;
@@ -50,6 +50,9 @@ export default {
   &.active {
     background-color: transparent;
     border-color: $pink2;
+    .text {
+      color: $pink2;
+    }
     .icon {
       svg {
         path {

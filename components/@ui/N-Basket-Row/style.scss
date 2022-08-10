@@ -22,6 +22,8 @@
     height: 3.1rem;
     margin-bottom: 1.1rem;
     border-radius: .6rem;
+    color: $fontColorDefault;
+
     select {
       background-position: calc(100% - 1.3rem) center;
       border: 2px solid $fontColorDefault;
@@ -29,10 +31,14 @@
       padding-right: 1.3rem;
     }
   }
+  .count {
+    @include regular-text;
+    margin-bottom: 0.5rem;
+  }
   &__title {
     @include montserratSemiBold;
     @include regular-text;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
   &__price {
     @include montserratSemiBold;

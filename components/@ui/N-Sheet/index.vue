@@ -1,10 +1,10 @@
 <template>
   <div :class="$style.container">
     <component :is="proxyCurrentComp" @changeComponent="changeComponent" />
-    <!-- <N-Sheet-Register /> -->
-    <!-- <N-Sheet-Login /> -->
-    <!-- <N-Sheet-Password-Recovery /> -->
-    <!-- <N-Sheet-Profile /> -->
+    <!-- <FormProfileDefault /> -->
+    <!-- <FormAuthLogin /> -->
+    <!-- <FormAuthDefault /> -->
+    <!-- <FormAuthRecovery /> -->
     <!-- <N-Sheet-Search /> -->
   </div>
 </template>
@@ -18,23 +18,23 @@ export default {
   props: {
     page: {
       type: String,
-      default: 'N-Sheet-Register'
+      default: 'FormProfileDefault'
     }
   },
   setup (props) {
-  const proxyCurrentComp = ref(props.page)
+    const proxyCurrentComp = ref(props.page)
 
-  watch(() => props.page, () => {
-    proxyCurrentComp.value = props.page
-  })
+    watch(() => props.page, () => {
+      proxyCurrentComp.value = props.page
+    })
 
-  const changeComponent = (value) => {
-    proxyCurrentComp.value = value
-  }
-  return {
-    changeComponent,
-    proxyCurrentComp
-  }
+    const changeComponent = (value) => {
+      proxyCurrentComp.value = value
+    }
+    return {
+      changeComponent,
+      proxyCurrentComp
+    }
   }
 }
 </script>

@@ -10,27 +10,12 @@
       <n-row>
         <n-text-field placeholder="Введите ваш еmail" title="Email" :color-border="'pinkBorder'" />
       </n-row>
-      <n-row>
-        <n-select
-          title="Адрес"
-          :color-border="'pinkBorder'"
-          :select-items="selectItems"
-          :position-arrow="{
-            right: 0,
-          }"
-          has-border-bottom
-          :class="$style.form__select"
-        />
-      </n-row>
-      <div>
-        <n-text-field :color-border="'pinkBorder'" placeholder="Улица, дом, квартира" />
-      </div>
     </form>
     <n-row>
       <h4 :class="$style.title">
         Состав заказа
       </h4>
-      <N-Basket-row :item="basketItem" />
+      <N-Basket-row :item="basketItem" readonly />
     </n-row>
     <n-row>
       <h4 :class="$style.title">
@@ -47,7 +32,7 @@
       </ul>
     </n-row>
     <div :class="$style.orders">
-      <h4 :class="$style.orders__title">
+      <h4 :class="[$style.orders__title, $style.titleBig]">
         Ваш заказ
       </h4>
       <div :class="$style.cols">
@@ -61,11 +46,27 @@
         </div>
         <div :class="$style.col">
           <div :class="$style.col__left">
-            Товары
+            Стоимость доставки
           </div>
           <div :class="$style.col__right">
             3 500 р.
           </div>
+        </div>
+        <div :class="$style.col">
+          <div :class="$style.col__left">
+            Скидка
+          </div>
+          <div :class="$style.col__right">
+            3 500 р.
+          </div>
+        </div>
+      </div>
+      <div :class="$style.total">
+        <div :class="[$style.total__text, $style.titleBig]">
+          Итого
+        </div>
+        <div :class="$style.total__sum">
+          4 500 р.
         </div>
       </div>
     </div>
@@ -76,6 +77,7 @@
     >
       Оплатить онлайн
     </n-button>
+    <NPersonalConsent />
   </div>
 </template>
 
@@ -86,10 +88,6 @@ export default {
   name: 'TabDelivery',
   setup () {
     const activePayment = ref('card')
-    const selectItems = [
-      { text: 'Нижний Новгород', value: 1 },
-      { text: 'Samara', value: 2 }
-    ]
     const basketItem = {
       title: 'Провод midi/midi 0.2m синий',
       price: 3200,
@@ -105,7 +103,6 @@ export default {
       { text: 'Картой', icon: 'card-stepper', value: 'card' }
     ]
     return {
-      selectItems,
       basketItem,
       paymentsMethodSelect,
       activePayment
@@ -115,6 +112,10 @@ export default {
 </script>
 
 <style lang="scss" module>
+.titleBig {
+  font-weight: 500;
+  @include button;
+}
 .form {
   margin-bottom: 2.5rem;
   &__select {
@@ -130,17 +131,18 @@ export default {
 
 .btn {
   width: 100%;
+  margin-bottom: 1.5rem;
 }
 
 .paymentList {
   display: flex;
-  overflow-x: auto;
   width: 100%;
   li + li {
     margin-left: 1rem;
   }
 }
 .orders {
+  margin-bottom: 3rem;
   .cols {
     padding-bottom: 3rem;
     margin-bottom: 3rem;
@@ -148,8 +150,6 @@ export default {
   }
   &__title {
     margin-bottom: 1.5rem;
-    font-weight: 500;
-    @include button;
   }
   .col + .col {
     margin-top: 1.5rem;
@@ -159,11 +159,14 @@ export default {
     justify-content: space-between;
     &__left {
       @include regular-text;
-      font-weight: 500;
     }
     &__right {
       @include regular-text-bold;
-      font-weight: 700;
+    }
+  }
+  .total {
+    &__sum {
+      @include text-style-h2;
     }
   }
 }

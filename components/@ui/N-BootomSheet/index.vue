@@ -1,15 +1,15 @@
 <template>
   <div :class="$style.wrapper">
     <vue-bottom-sheet
-      :overlay="true"
+      :overlay="false"
       :effect="$mq === 'sm' ? 'fx-default' : effect"
       :max-width="maxWidth"
-      :max-height="$mq === 'sm' ? '90%' : '100%'"
+      :max-height="maxHeight"
       :swipe-able="$mq === 'sm'"
       :is-full-screen="windowWidth>450"
       :rounded="$mq === 'sm'"
       v-on="$attrs"
-      @closed="$emit('test')"
+      @closed="$emit('closed')"
     >
       <client-only>
         <!-- <n-icon name="close" :class="$style.close" @click="$emit('closeMenu')" /> -->
@@ -70,6 +70,11 @@ export default {
     }
     cursor: pointer;
   }
+  :global(.bottom-sheet__pan[data-v-61ac11a0]) {
+      padding-bottom: 20px;
+      padding-top: 15px;
+      height: 5rem;
+  }
   :global(.bottom-sheet__card) {
     @media (min-width: $mobileWidth) {
       left: 0!important;
@@ -92,5 +97,11 @@ export default {
     }
   }
 }
-
+:global(.bottom-sheet__bar) {
+  height: 6px !important;
+  background: rgba(#222222, 0.2);
+  @media (min-width: $mobileWidth) {
+    display: none !important;
+  }
+}
 </style>

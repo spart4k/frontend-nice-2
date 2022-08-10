@@ -6,11 +6,22 @@
       <Nuxt />
     </n-intro-wrapper>
     <portal-target name="sliderPopup" />
+    <N-BootomSheet
+      ref="menuBasket"
+      effect="fx-slide-from-left"
+      max-width="39rem"
+      :max-height="'100%'"
+      :fullscreen="true"
+      @closeMenu="closedMenuBasket"
+      @closed="closedSwipe"
+    >
+      <StepperOrder />
+    </N-BootomSheet>
   </div>
 </template>
 
 <script>
-import { ref, useContext, useFetch, onMounted, computed } from '@nuxtjs/composition-api'
+import { ref, useContext, useFetch, onMounted, computed, watch } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import animationGSAP from '~/helpers/compositions/animationGSAP'
 import { BLAND_COLOR } from '~/const/blandColor'
@@ -20,13 +31,16 @@ export default {
   setup () {
     const headerItems = ref([])
     const body = ref(null)
-    const menu1 = ref(null)
+    const menuBasket = ref(null)
     const { store, route, $gsap } = useContext()
     const isHomePage = computed(() => route.value.name === 'index')
 
     const fetchData = async () => {
       const response = await store.dispatch('content/getHeader')
       return response
+    }
+    const closedSwipe = () => {
+      store.commit('stepperOrder/changeShowStateBottomSheet', false)
     }
 
     useFetch(async () => {
@@ -57,6 +71,22 @@ export default {
         return ''
       }
     })
+    watch(() => store.state.stepperOrder.isShowBottomSheet, () => {
+      if (store.state.stepperOrder.isShowBottomSheet) {
+        openMenuBasket()
+      } else {
+        closedMenuBasket()
+      }
+    })
+
+    const closedMenuBasket = () => {
+      menuBasket.value.$children[0].close()
+      store.commit('stepperOrder/changeShowStateBottomSheet', false)
+    }
+
+    const openMenuBasket = () => {
+      menuBasket.value.$children[0].open()
+    }
 
     onMounted(() => {
       store.commit('authentication/setUserData')
@@ -71,7 +101,10 @@ export default {
       color,
       introTitle,
       isHomePage,
-      menu1
+      menuBasket,
+      closedMenuBasket,
+      openMenuBasket,
+      closedSwipe
     }
   }
 }

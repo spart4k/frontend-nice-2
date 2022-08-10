@@ -1,29 +1,25 @@
 <template>
   <li :class="$style.product">
     <div :class="$style.product__img">
-      <!--      <N-Lazy-Img :src="`${$axios.defaults.baseURL}${item.images[0].src}`" alt="изоображение товара" />-->
       <N-Lazy-Img :src="require('~/assets/img/cabel.jpeg')" alt="изоображение товара" />
     </div>
     <div :class="$style.product__description">
       <h3 :class="$style.product__title">
         {{ item.title }}
       </h3>
-      <div :class="$style.product__select">
+      <div v-if="!readonly" :class="$style.product__select">
         <n-select
           :select-items="selectItems"
           :position-arrow="{ right: '1.3rem' }"
         />
       </div>
-      <!--      <label>-->
-      <!--        <select :class="$style.product__select">-->
-      <!--          <option value="1">312</option>-->
-      <!--          <option value="13">313112</option>-->
-      <!--        </select>-->
-      <!--      </label>-->
+      <div v-else :class="$style.count">
+        1 шт
+      </div>
       <div :class="$style.product__price">
         {{ item.price }}р.
       </div>
-      <div :class="$style.product__iconDelete">
+      <div v-if="!readonly" :class="$style.product__iconDelete">
         <n-icon name="delete" />
       </div>
     </div>
@@ -38,6 +34,10 @@ export default {
   props: {
     item: {
       type: Object
+    },
+    readonly: {
+      type: Boolean,
+      default: false
     }
   },
   setup (props, { emit }) {

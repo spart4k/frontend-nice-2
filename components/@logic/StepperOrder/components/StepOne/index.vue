@@ -46,6 +46,9 @@ export default {
 </script>
 
 <style  lang="scss" module>
+.title {
+  margin-bottom: 2rem;
+}
 ul {
   padding-left: 0;
 }

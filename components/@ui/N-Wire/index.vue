@@ -18,12 +18,13 @@
       </p>
       <input :class="$style.wireInput" type="number">
     </div>
-    <div :class="$style.wireNumber">
+    <!-- <div :class="$style.wireNumber">
       <p :class="$style.wireText">
         Кол-во:
       </p>
       <v-select id="" :options="options" :class="$style.wireSelect" name="" />
-    </div>
+    </div> -->
+    <N-Goods-Counter />
     <div :class="$style.wireColorSection">
       <p :class="$style.wireText">
         Цвет
@@ -92,7 +93,7 @@ export default {
       color: $fontColorDefault;
       padding: 1rem 0;
       border: none;
-      border-bottom: 2px solid #C83F8E;
+      border-bottom: .2rem solid #C83F8E;
       outline: none;
     }
     .wireSelect {
@@ -100,13 +101,17 @@ export default {
       @include regular-text;
       color: $fontColorDefault;
       border: none;
-      border-bottom: 2px solid #C83F8E;
+      border-bottom: .2rem solid #C83F8E;
       outline: none;
       :global(.vs__dropdown-toggle) {
         border: none;
         padding: 0;
         :global(.vs__selected-options) {
           padding: 0;
+          :global(.vs__search) {
+            padding: 0;
+            font-size: 1.4rem !important;
+          }
           :global(.vs__selected) {
             margin: 0;
             padding: 0;
@@ -138,7 +143,7 @@ export default {
           width: 3.2rem;
           height: 3.2rem;
           position: relative;
-          border: red solid 2px;
+          border: red solid .2rem;
           border-radius: 50%;
           input {
             position: absolute;
