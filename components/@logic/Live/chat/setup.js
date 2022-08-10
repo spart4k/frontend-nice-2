@@ -20,15 +20,30 @@ export default {
         author: 'Aleksey',
         body: message
       }
+      // wsSendEcho(newMessage)
       messages.value.push(newMessage)
+    }
+
+    const myWs = new WebSocket('ws://localhost:9000')
+    myWs.onmessage = function (message) {
+      // messages.value.push(message.data)
+      console.log(message)
+    }
+    const wsSendEcho = (value) => {
+      console.log(value)
+      myWs.send(JSON.stringify({ action: 'ECHO', data: value.toString() }))
     }
     onMounted(() => {
       initMesassage()
+      myWs.onopen = function () {
+        console.log('подключился')
+      }
     })
     return {
       messages,
       initMesassage,
-      sendMessage
+      sendMessage,
+      wsSendEcho
     }
   }
 }

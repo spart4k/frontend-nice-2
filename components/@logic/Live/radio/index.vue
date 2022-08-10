@@ -1,10 +1,13 @@
 <template>
   <div :class="$style.radio">
     <div :class="$style.wrap">
-      <img :class="$style.wrapper" :src="require(`~/assets/img/live/def-radio-wrap.jpg`)" alt="">
-      <marquee scrollamount="7" direction="right" :class="$style.name">
-        Eli & Fur live from Courmayeur, Skyway Monte Bianco, in Italy for Cercle
-      </marquee>
+      <img :class="$style.wrapper" :src="require(`~/assets/img/live/def-radio-wrap.png`)" alt="">
+      <div ref="marquee" class="marquee" :class="[ $style.marquee, $style.name ]">
+        <div class="inner" :class="$style.inner">
+          <p>Eli & Fur live from Courmayeur, Skyway Monte Bianco, in Italy for Cercle</p>
+        </div>
+      </div>
+
       <div :class="$style.control">
         <div v-if="!audioPlaying" @click="playAudio" class="">
           <svg
@@ -18,8 +21,8 @@
         </div>
         <div v-else-if="audioPlaying" @click="pauseAudio" class="">
           <svg
-          width="16"
-          height="22"
+          width="18"
+          height="20"
           viewBox="0 0 16 22"
           fill="none"
           xmlns="http://www.w3.org/2000/svg">

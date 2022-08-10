@@ -9,9 +9,11 @@ export default {
     const { emit } = ctx
     const newMessage = ref('')
     const sendMessage = () => {
-      console.log(newMessage.value)
       if (newMessage.value) {
-        emit('sendText', newMessage.value)
+        const emojiRegex = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g
+        const replaced = newMessage.value.replaceAll(emojiRegex, '<span class="emoji">$1</span>')
+        console.log(replaced)
+        emit('sendText', replaced)
         newMessage.value = ''
       }
     }

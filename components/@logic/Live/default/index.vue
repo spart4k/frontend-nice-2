@@ -1,8 +1,8 @@
 <template>
   <div :class="$style.live">
-    <div :class="$style.title">
-      Эфир
-    </div>
+    <!-- <div :class="$style.title">
+       Эфир
+    </div>-->
     <live-radio/>
     <live-chat/>
   </div>
