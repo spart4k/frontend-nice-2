@@ -1,4 +1,4 @@
-import { ref } from '@vue/composition-api'
+import { ref, onMounted } from '@vue/composition-api'
 
 export default {
   name: 'live-radio',
@@ -13,6 +13,7 @@ export default {
     const audioPause = ref(null)
     const audioPlay = ref(null)
     const audioPlaying = ref(false)
+    const marquee = ref(null)
     const playAudio = () => {
       audioPlaying.value = true
       audioSource.value.play()
@@ -23,41 +24,43 @@ export default {
     }
 
     function handleMarquee () {
-      const marquee = document.querySelectorAll('.marquee')
-      const speed = 4
+      console.log(marquee.value)
+      const speed = 1
       // let lastScrollPos = 0
       // let timer
 
-      marquee.forEach(function (el) {
-        const container = el.querySelector('.inner')
-        const content = el.querySelector('.inner > *')
-        // Get total width
-        const elWidth = content.offsetWidth
+      const container = marquee.value.querySelector('.inner')
+      const content = marquee.value.querySelector('.inner > *')
+      // Get total width
+      const elWidth = content.offsetWidth
+      console.log(elWidth)
+      // Duplicate content
+      const clone = content.cloneNode(true)
+      container.appendChild(clone)
 
-        // Duplicate content
-        const clone = content.cloneNode(true)
-        container.appendChild(clone)
+      let progress = 1
+      function loop () {
+        progress = progress - speed
+        if (progress <= elWidth * -1) { progress = 0 }
+        container.style.transform = 'translateX(' + progress + 'px)'
+        container.style.transform += 'skewX(' + speed * 0.4 + 'deg)'
 
-        let progress = 1
-        function loop () {
-          progress = progress - speed
-          if (progress <= elWidth * -1) { progress = 0 }
-          container.style.transform = 'translateX(' + progress + 'px)'
-          container.style.transform += 'skewX(' + speed * 0.4 + 'deg)'
-
-          window.requestAnimationFrame(loop)
-        }
-        loop()
-      })
+        window.requestAnimationFrame(loop)
+      }
+      loop()
     }
-    handleMarquee()
+    onMounted(() => {
+      handleMarquee()
+    })
+
     return {
       audioSource,
       audioPause,
       audioPlay,
       playAudio,
       pauseAudio,
-      audioPlaying
+      audioPlaying,
+      marquee
     }
   }
 }

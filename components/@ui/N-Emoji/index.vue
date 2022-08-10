@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="accordion" :class="$style.emojiWrap">
     <div :class="$style.container">
       <VueSlickCarousel
         ref="c1"
@@ -115,11 +115,13 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
+.emojiWrap {
+  margin: 2.5rem 0 0 0;
+}
 .container {
     background: #F5F5F5;
     border-radius: 20px;
     padding: 1.8rem 0;
-    margin: 2.5rem 0 0 0;
     // width: 33rem;
     .sliderContainer{
         display: flex !important;
@@ -168,6 +170,8 @@ export default {
     :global(.slick-dots li){
       opacity: 0.1;
       margin: 0 .75rem;
+      color: #222222;
+      transition: .2s;
     }
     :global(.slick-dots li):first-child {
       :global(.custom-dot){

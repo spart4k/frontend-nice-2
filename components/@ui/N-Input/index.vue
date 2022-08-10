@@ -1,16 +1,19 @@
 <template>
-  <div :style="{ marginBottom: smilies ? '5rem' : '0' }" :class="$style.container">
-    <!-- <input
+  <div :class="$style.container">
+    <input
+      v-if="$props.type === 'input'"
       ref="input"
       v-model="letters"
       type="text"
       maxlength="200"
       :class="$style.input"
-      placeholder="Написать комментарий ..."
-    > -->
+      :placeholder="placeholder"
+    >
     <textarea
+      v-else-if="$props.type === 'textarea'"
       ref="input"
       v-model="letters"
+
       :placeholder="placeholder"
       maxlength="200"
       :class="$style.textarea"
@@ -27,12 +30,19 @@
         <N-Icon :class="$style.sendButton" name="send" @click="sendComment" />
       </div>
     </div>
-    <N-Emoji v-if="smilies" @emojiWrite="emojiWrite" @click="emojiWrite" />
+    <transition name="accordion"
+    class="accordion"
+    v-on:before-enter="beforeEnter"
+    v-on:enter="enter"
+    v-on:before-leave="beforeLeave"
+    v-on:leave="leave">
+      <N-Emoji v-if="smilies" @emojiWrite="emojiWrite" @click="emojiWrite" />
+    </transition>
   </div>
 </template>
 
 <script>
-import { ref, watch } from '@nuxtjs/composition-api'
+import { ref, watch, computed } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NInput',
@@ -40,6 +50,10 @@ export default {
     placeholder: {
       type: String,
       default: 'Написать комментарий....'
+    },
+    type: {
+      type: String,
+      default: 'input'
     }
   },
   setup (props, ctx) {
@@ -56,16 +70,35 @@ export default {
   }
   watch(() => {})
   const sendComment = () => {
+    input.value.style.height = ''
     emit('sendMessage', letters.value)
     letters.value = ''
     console.log(letters.value)
   }
+  const beforeEnter = (el) => {
+    el.style.height = '0'
+  }
+  const enter = (el) => {
+    el.style.height = el.scrollHeight + 'px'
+  }
+  const beforeLeave = (el) => {
+    el.style.height = el.scrollHeight + 'px'
+  }
+  const leave = (el) => {
+    el.style.margin = '0'
+    el.style.height = '0'
+  }
+  const widthFrame = computed(() => {
+    return window.innerWidth
+  })
   const emojiWrite = (emoji) => {
     if (letters.value.length < 199) {
       // const template =
       // `<span class="emoji">${emoji}</span>`
       letters.value += emoji
-      input.value.focus()
+      if (widthFrame.value > 768) {
+        input.value.focus()
+      }
     }
   }
   watch(() => letters.value, (newValue) => {
@@ -78,7 +111,12 @@ export default {
     showSmilies,
     sendComment,
     resize,
-    input
+    input,
+    beforeEnter,
+    enter,
+    beforeLeave,
+    leave,
+    widthFrame
   }
   }
 }
@@ -87,6 +125,7 @@ export default {
 <style scoped lang="scss" module>
 .container{
     margin-top: 2rem;
+    overflow: hidden;
     // .input {
     //     width: 100%;
     //     @include regular-text;
@@ -97,10 +136,10 @@ export default {
     //     outline: none;
     //     resize: none;
     // }
-    .textarea {
+    .textarea, .input {
       display: block;
       width: 100%;
-      height: 38px;
+      height: 35px;
       @include regular-text;
       color: $fontColorDefault;
       overflow: hidden;
@@ -110,6 +149,7 @@ export default {
       outline: none;
       resize: none;
       background-color: transparent;
+      transition: .1s;
     }
     .emoji {
       margin-top: 1.5rem;
