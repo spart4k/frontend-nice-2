@@ -58,7 +58,7 @@ export default {
   padding-top: 3rem;
   padding-bottom: 1rem;
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   @include paddings;
   color: $fontColorDefault;
 }

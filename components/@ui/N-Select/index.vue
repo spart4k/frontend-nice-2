@@ -58,6 +58,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
+  cursor: pointer;
   &.borderBottom {
     .select {
       padding: 1rem 0;

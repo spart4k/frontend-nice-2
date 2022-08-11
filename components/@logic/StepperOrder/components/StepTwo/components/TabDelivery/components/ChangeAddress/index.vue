@@ -110,6 +110,7 @@ li {
   border-radius: 2rem;
   margin-bottom: 2rem;
   //height: 4.8rem;
+  cursor: pointer;
   border: .2rem solid transparent;
 
   padding: 1.7rem 1.5rem;

@@ -84,6 +84,7 @@ export default {
     z-index: 4;
     @include regular-text;
     transition: color 0.5s $animationTiming1;
+    cursor: pointer;
     &.active {
       color: $white;
     }

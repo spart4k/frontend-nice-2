@@ -62,7 +62,7 @@ export default {
     }
   }
   :global(.bottom-sheet__content) {
-    //overflow-y: auto !important;
+    overflow-y: auto !important;
     flex: 1;
   }
   :global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-left) {
