@@ -264,8 +264,7 @@ export default {
       if (props.detailPage === true) {
         setTimeout(() => {
           commentHeight.value = commentBox.value.scrollHeight + 'px'
-          console.log(commentHeight.value)
-        }, 0)
+        }, 300)
       }
     }
     const extraTagHide = () => {

@@ -13,7 +13,6 @@
       v-else-if="$props.type === 'textarea'"
       ref="input"
       v-model="letters"
-
       :placeholder="placeholder"
       maxlength="200"
       :class="$style.textarea"
