@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.live">
+  <div class="liveChat" :class="$style.live">
     <!-- <div :class="$style.title">
        Эфир
     </div>-->

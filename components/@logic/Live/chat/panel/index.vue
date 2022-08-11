@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.panel">
     <!--<live-chat-panel-field v-model="newMessage" :valueProxy="newMessage" />-->
-    <N-Input v-model="newMessage" placeholder="Скажите что-то ..." type="contenteditable" @sendMessage="sendMessage" :valueProxy="newMessage" />
+    <N-Input v-model="newMessage" placeholder="Скажите что-то ..." type="textarea" @sendMessage="sendMessage" :valueProxy="newMessage" />
 
     <!--<div :class="$style.control">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

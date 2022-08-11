@@ -22,7 +22,7 @@ export default {
       audioPlaying.value = false
       audioSource.value.pause()
     }
-
+    const innerHeight = ref(null)
     function handleMarquee () {
       console.log(marquee.value)
       const speed = 1
@@ -51,6 +51,9 @@ export default {
     }
     onMounted(() => {
       handleMarquee()
+      window.addEventListener('resize', (e) => {
+        innerHeight.value = window.innerHeight
+      })
     })
 
     return {
@@ -60,7 +63,8 @@ export default {
       playAudio,
       pauseAudio,
       audioPlaying,
-      marquee
+      marquee,
+      innerHeight
     }
   }
 }

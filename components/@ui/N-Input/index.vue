@@ -1,19 +1,13 @@
 <template>
   <div :class="$style.container">
-    <div
-    :class="$style.input"
-    ref="input"
-    v-if="$props.type === 'contenteditable'"
-    contenteditable="true"
-    placeholder="Div placeholder...">
-
-    </div>
     <input
-      v-else-if="$props.type === 'input'"
+      v-if="$props.type === 'input'"
       ref="input"
       v-model="letters"
       type="text"
       maxlength="200"
+      @focus="focusInput"
+      @blur="blurInput"
       :class="$style.input"
       :placeholder="placeholder"
     >
@@ -21,9 +15,10 @@
       v-else-if="$props.type === 'textarea'"
       ref="input"
       v-model="letters"
-
       :placeholder="placeholder"
       maxlength="200"
+      @focus="focusInput"
+      @blur="blurInput"
       :class="$style.textarea"
       rows="1"
       @input="resize($event)"
@@ -50,7 +45,7 @@
 </template>
 
 <script>
-import { ref, watch, computed } from '@nuxtjs/composition-api'
+import { ref, watch, computed, onMounted } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NInput',
@@ -76,16 +71,18 @@ export default {
     e.target.style.height = 'auto'
     e.target.style.height = `${e.target.scrollHeight}px`
   }
-  watch(() => {})
   const sendComment = () => {
     input.value.style.height = ''
+    console.log(letters.value)
     emit('sendMessage', letters.value)
     letters.value = ''
-    console.log(letters.value)
   }
   const beforeEnter = (el) => {
     el.style.height = '0'
   }
+  const divContent = computed(() => {
+    return input.value.innerHTML
+  })
   const enter = (el) => {
     el.style.height = el.scrollHeight + 'px'
   }
@@ -99,21 +96,66 @@ export default {
   const widthFrame = computed(() => {
     return window.innerWidth
   })
-  const emojiWrite = (emoji) => {
-    // if (letters.value.length < 199) {
-    //  // const template =
-    //  // `<span class="emoji">${emoji}</span>`
-    //  letters.value += `<span>${emoji}</span>`
 
-    //  if (widthFrame.value > 768) {
-    //    input.value.focus()
-    //  }
-    // }
+  const onInputContent = (e) => {
+    console.log(e.target.innerHTML)
+    console.log(input.value.innerHTML)
+  }
+  const mobileDevice = computed(() => {
+    if (/Android/i.test(navigator.userAgent)) {
+        return true
+    } else {
+        return false
+    }
+  })
+
+  const innerHeight = ref(null)
+  const mountedHeight = ref(null)
+  const emojiWrite = (emoji) => {
+    if (letters.value.length < 199) {
+      letters.value += emoji
+      // РАСКОМЕНТИТЬ
+      // if (widthFrame.value > 768) {
+      //  input.value.focus()
+      // }
+    }
+  }
+  const focusInput = () => {
+    console.log('input')
+    if (widthFrame.value < 768) {
+      // const keyboardHeight = mountedHeight.value - innerHeight.value
+      console.log(innerHeight.value)
+      console.log(mountedHeight.value)
+      const liveChat = document.querySelector('.liveChat')
+      console.log(liveChat)
+      if (liveChat) {
+        console.log(liveChat)
+        setTimeout(() => {
+          liveChat.style.marginTop = -innerHeight.value + 35 + 'px'
+        }, 300)
+      }
+    }
   }
 
-  watch(() => input.value, (newValue) => {
-    console.log(input.value.innerHTML)
-    console.log(newValue)
+  const blurInput = () => {
+    console.log('blur')
+    const liveChat = document.querySelector('.liveChat')
+    if (liveChat) {
+        console.log(liveChat)
+        setTimeout(() => {
+          liveChat.style.marginTop = 0 + 'px'
+        }, 300)
+      }
+  }
+
+  onMounted(() => {
+    mountedHeight.value = window.innerHeight
+    window.addEventListener('resize', (e) => {
+      innerHeight.value = window.innerHeight
+    })
+  })
+
+  watch(() => letters.value, (newValue) => {
     emit('input', newValue)
   })
   return {
@@ -128,7 +170,14 @@ export default {
     enter,
     beforeLeave,
     leave,
-    widthFrame
+    widthFrame,
+    divContent,
+    onInputContent,
+    mobileDevice,
+    innerHeight,
+    mountedHeight,
+    focusInput,
+    blurInput
   }
   }
 }
@@ -153,6 +202,7 @@ export default {
       width: 100%;
       height: 35px;
       @include regular-text;
+      @include text-md-2;
       color: $fontColorDefault;
       overflow: hidden;
       padding: 1rem 0;
