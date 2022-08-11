@@ -28,6 +28,7 @@ $headerHeight: 8.8rem;
 $footerHeight: 13.3rem;
 $bgWidth: 570px;
 $paddingTopLog: 2rem;
+$animationTiming1: cubic-bezier(.71,.01,.15,1);
 
 :root {
   --mobile-width: #{$mobileWidth};

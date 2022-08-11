@@ -13,29 +13,33 @@
     </n-row>
     <form :class="[$style.form, $style.row]">
       <n-row>
-        <n-text-field placeholder="Введите ФИО" title="ФИО" :color-border="'pinkBorder'" />
-      </n-row>
-      <n-row>
-        <n-text-field placeholder="Введите номер телефона" title="Телефон" :color-border="'pinkBorder'" />
-      </n-row>
-      <n-row>
-        <n-text-field placeholder="Введите ваш еmail" title="Email" :color-border="'pinkBorder'" />
-      </n-row>
-      <n-row>
-        <n-select
-          title="Адрес"
+        <n-text-field
+          v-model="formData.name"
+          :error="$errors.name[0]"
+          placeholder="Введите ФИО"
+          title="ФИО"
           :color-border="'pinkBorder'"
-          :select-items="selectItems"
-          :position-arrow="{
-            right: 0,
-          }"
-          has-border-bottom
-          :class="$style.form__select"
         />
       </n-row>
-      <div>
-        <n-text-field :color-border="'pinkBorder'" placeholder="Улица, дом, квартира" />
-      </div>
+      <n-row>
+        <n-text-field
+          v-model="formData.phone"
+          :error="$errors.phone[0]"
+          mask="+7 (###) ###-##-##"
+          placeholder="Введите номер телефона"
+          title="Телефон"
+          :color-border="'pinkBorder'"
+        />
+      </n-row>
+      <n-row>
+        <n-text-field
+          v-model="formData.email"
+          :error="$errors.email[0]"
+          placeholder="Введите ваш еmail"
+          title="Email"
+          :color-border="'pinkBorder'"
+        />
+      </n-row>
     </form>
     <n-row>
       <h4 :class="$style.title">
@@ -98,8 +102,9 @@
     </div>
     <n-button
       :class="$style.btn"
+      :disabled="$v.$invalid && $touched"
       :type-button="'pink'"
-      @click="$emit('changeStep', 'increment')"
+      @click="() => submit()"
     >
       Оплатить онлайн
     </n-button>
@@ -107,108 +112,5 @@
   </div>
 </template>
 
-<script>
-import { ref } from '@nuxtjs/composition-api'
-
-export default {
-  name: 'TabDelivery',
-  setup () {
-    const activePayment = ref('card')
-    const selectItems = [
-      { text: 'Нижний Новгород', value: 1 },
-      { text: 'Samara', value: 2 }
-    ]
-    const basketItem = {
-      title: 'Провод midi/midi 0.2m синий',
-      price: 3200,
-      pivot: {
-        quantity: 2
-      },
-      images: [
-        { src: 'https://media-exp1.licdn.com/dms/image/C560BAQHMnA03XDdf3w/company-logo_200_200/0/1519855918965?e=2147483647&v=beta&t=J3kUMZwIphc90TFKH5oOO9Sa9K59fimgJf-s_okU3zs' }
-      ]
-    }
-
-    const paymentsMethodSelect = [
-      { text: 'Картой', icon: 'card-stepper', value: 'card' },
-      { text: 'Наличными', icon: 'money-stepper', value: 'money' },
-      { text: 'Оплата менеджеру', icon: 'phone-stepper', value: 'phone' }
-    ]
-    return {
-      selectItems,
-      basketItem,
-      paymentsMethodSelect,
-      activePayment
-    }
-  }
-}
-</script>
-
-<style lang="scss" module>
-.address {
-  @include regular-text;
-  &__link {
-    color:$green;
-  }
-  &__text {
-    margin-bottom: 1rem;
-  }
-}
-.titleBig {
-  font-weight: 500;
-  @include button;
-}
-.form {
-  margin-bottom: 2.5rem;
-  &__select {
-    @include regular-text;
-  }
-}
-.title {
-  color: $fontColorDefault;
-  opacity: 0.5;
-  margin-bottom: 1rem;
-  @include regular-text;
-}
-
-.btn {
-  width: 100%;
-  margin-bottom: 1.5rem;
-}
-.paymentList {
-  display: flex;
-  justify-content: space-between;
-  li + li {
-    margin-left: 1rem;
-  }
-}
-.orders {
-  margin-bottom: 3rem;
-  .cols {
-    padding-bottom: 3rem;
-    margin-bottom: 3rem;
-    border-bottom: 1px solid rgba($fontColorDefault, 0.1);
-  }
-  &__title {
-    margin-bottom: 1.5rem;
-  }
-  .col + .col {
-    margin-top: 1.5rem;
-  }
-  .col {
-    display: flex;
-    justify-content: space-between;
-    &__left {
-      @include regular-text;
-    }
-    &__right {
-      @include regular-text-bold;
-    }
-  }
-  .total {
-    &__sum {
-      @include text-style-h2;
-    }
-  }
-}
-</style>
+<script src="./setup.js"></script>
+<style lang="scss" module src="./style.scss"></style>

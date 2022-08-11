@@ -1,6 +1,6 @@
 <template>
   <!--  , showAnimate && $style.animateContent-->
-  <header :class="[$style.header]">
+  <header :class="[$style.header, (showAnimate && $route.name === 'index') && $style.animateContent]">
     <div v-if="$route.name !== 'index'" :class="$style.logo" @click="$router.push('/')">
       <n-logo size="md" />
     </div>
@@ -37,21 +37,11 @@
         />
       </nav>
     </N-BootomSheet>
-    <!--    <N-BootomSheet-->
-    <!--      ref="menuBasket"-->
-    <!--      effect="fx-slide-from-left"-->
-    <!--      max-width="39rem"-->
-    <!--      :max-height="'100%'"-->
-    <!--      :fullscreen="true"-->
-    <!--      @closeMenu="closedMenuBasket"-->
-    <!--    >-->
-    <!--      <StepperOrder />-->
-    <!--    </N-BootomSheet>-->
     <vue-bottom-sheet ref="liveChat" max-height="100%" is-full-screen>
       <client-only>
         <live-default />
+        <n-icon name="close" :class="$style.close" @click="closeLive" />
       </client-only>
-      <n-icon name="close" :class="$style.close" @click="closeLive" />
     </vue-bottom-sheet>
     <ul :class="[$style.headerUser__list, active && $style.hideElement]">
       <li>
@@ -123,7 +113,6 @@ export default {
       menuBasket.value.$children[0].close()
     }
     const openMenuBasket = () => {
-      console.log(2)
       store.commit('stepperOrder/changeShowStateBottomSheet', true)
     }
 

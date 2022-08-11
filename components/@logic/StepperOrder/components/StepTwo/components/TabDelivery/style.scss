@@ -1,0 +1,67 @@
+.titleBig {
+  font-weight: 500;
+  @include button;
+}
+.form {
+  margin-bottom: 2.5rem;
+  &__select {
+    @include regular-text;
+  }
+}
+.title {
+  color: $fontColorDefault;
+  opacity: 0.5;
+  margin-bottom: 1rem;
+  @include regular-text;
+}
+.addressText {
+  @include regular-text;
+
+}
+.addressWrapper {
+  margin-bottom: 3.9rem;
+}
+.btnChangeAddress {
+  width: 100%;
+}
+.btn {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.paymentList {
+  display: flex;
+  width: 100%;
+  li + li {
+    margin-left: 1rem;
+  }
+}
+.orders {
+  margin-bottom: 3rem;
+  .cols {
+    padding-bottom: 3rem;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid rgba($fontColorDefault, 0.1);
+  }
+  &__title {
+    margin-bottom: 1.5rem;
+  }
+  .col + .col {
+    margin-top: 1.5rem;
+  }
+  .col {
+    display: flex;
+    justify-content: space-between;
+    &__left {
+      @include regular-text;
+    }
+    &__right {
+      @include regular-text-bold;
+    }
+  }
+  .total {
+    &__sum {
+      @include text-style-h2;
+    }
+  }
+}

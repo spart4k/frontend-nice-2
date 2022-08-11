@@ -165,7 +165,7 @@
           :class="[$style.comments,showComments ? $style.show : '']"
           :style="{maxHeight: showComments ? commentHeight : '0'}"
         >
-          <N-Input v-if="false" type="textarea" @smilies="commentHeightSet" />
+          <N-Input v-if="true" type="textarea" @smilies="commentHeightSet" />
           <N-Plug v-else @login="login" @registration="registration" />
           <transition name="comments">
             <div v-if="true" :class="$style.commentsContainer">

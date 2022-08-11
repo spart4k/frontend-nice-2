@@ -58,6 +58,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
+  cursor: pointer;
   &.borderBottom {
     .select {
       padding: 1rem 0;
@@ -86,6 +87,8 @@ export default {
   transform: translateY(-50%);
 }
 .select {
+  position: relative;
+  z-index: 5;
   -webkit-appearance: none;
   -moz-appearance: none;
   background-color: transparent;

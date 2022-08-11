@@ -17,8 +17,8 @@
           <N-Button-Close :class="$style.close" color="#222222" background-color="rgba(34, 34, 34, 0.1)" @click="$emit('closeMenu')" />
         </div>
         <slot />
-      </client-only>
-    </vue-bottom-sheet>
+            </client-only>
+      </vue-bottom-sheet>
   </div>
 </template>
 
@@ -59,16 +59,8 @@ export default {
 .wrapper {
   .close {
     position: absolute;
-    z-index: 20;
     top: 1.5rem;
     right: 1.5rem;
-    width: 3.2rem;
-    height: 3.2rem;
-    svg {
-      width: 100%;
-      height: 100%;
-    }
-    cursor: pointer;
   }
   :global(.bottom-sheet__pan[data-v-61ac11a0]) {
       padding-bottom: 20px;

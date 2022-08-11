@@ -40,7 +40,7 @@ export default {
   width: 100%;
   height: 10.5rem;
   color: rgb(255, 255, 255);
-  border-radius: 10px;
+  border-radius: 20px;
   @include montserratSemiBold;
   @include subtitle-sm;
   background-repeat: no-repeat;

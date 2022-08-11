@@ -9,5 +9,5 @@ export const BLAND_IMAGE = {
     odezda: 'odezda.png',
     meropriiatiia: 'meropriiatiia.png',
     efir: 'efir.png',
-    moneta: 'ctivo.png'
+    moneta: 'moneta.png'
 }
