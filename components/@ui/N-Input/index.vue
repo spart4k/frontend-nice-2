@@ -30,12 +30,14 @@
         <N-Icon :class="$style.sendButton" name="send" @click="sendComment" />
       </div>
     </div>
-    <transition name="accordion"
-    class="accordion"
-    v-on:before-enter="beforeEnter"
-    v-on:enter="enter"
-    v-on:before-leave="beforeLeave"
-    v-on:leave="leave">
+    <transition
+      name="accordion"
+      class="accordion"
+      @before-enter="beforeEnter"
+      @enter="enter"
+      @before-leave="beforeLeave"
+      @leave="leave"
+    >
       <N-Emoji v-if="smilies" @emojiWrite="emojiWrite" @click="emojiWrite" />
     </transition>
   </div>
@@ -164,14 +166,14 @@ export default {
     }
     .send {
         display: flex;
-        gap: 15px;
         .letterCounter {
             @include regular-text-small;
             color: $fontColorDefault;
             display: flex;
             align-items: center;
             opacity: 0.5;
-            }
+            margin-right: 1.5rem;
+          }
         }
     }
 }

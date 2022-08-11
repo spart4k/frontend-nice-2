@@ -97,11 +97,12 @@
           </div>
           <template v-if="data.files && $props.detailPage && !$props.withVideo">
             <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
-              <p :class="$style.audioName">
+              <!-- <p :class="$style.audioName">
                 {{ item.title }}
-              </p>
-              <N-Audio v-if="item.src" :src="`https://nice.c.roky.rocks/${item.src}`" />
+              </p> -->
+              <N-Audio v-if="item.src" :title="item.title" :src="`https://nice.c.roky.rocks/${item.src}`" />
             </div>
+            <!-- <LiveRadio /> -->
           </template>
         </div>
         <!-- <div v-if="$props.detailPage && (windowWidth > 900) && !showComments" :class="[$style.empty, detailPage && $style.detailPage]" :style="{ height: emptyBlockHeight + 'px' }" /> -->
@@ -127,14 +128,14 @@
           </N-Chip>
         </div>
         <div :class="[$style.socials, detailPage && $style.detailPage]" :style="{ marginTop: $props.detailPage ? '3rem' : '2rem' }">
-          <div>
+          <div :class="$style.socialsItem">
             <N-Like v-model="like" :class="$style.likeContainer" @click="addLike" />
             <div :class="$style.parser">
               <!-- likeCounter -->
               {{ !$props.detailPage ? '0' : 'Нравится' }}
             </div>
           </div>
-          <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.commentsContainer" @click="showComments = !showComments; comments = !comments">
+          <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet()">
             <N-Icon name="comments" />
             <div :class="$style.parser">
               {{ !$props.detailPage ? '0' : 'Комментировать' }}
@@ -164,13 +165,10 @@
           :class="[$style.comments,showComments ? $style.show : '']"
           :style="{maxHeight: showComments ? commentHeight : '0'}"
         >
-          <!-- <p :class="$style.comments__title">
-          {{ commentCounter }} комментари{{ commentEnding }}
-        </p> -->
-          <N-Input v-if="true" type="textarea" @smilies="commentHeightSet" />
+          <N-Input v-if="false" type="textarea" @smilies="commentHeightSet" />
           <N-Plug v-else @login="login" @registration="registration" />
           <transition name="comments">
-            <div v-if="comments" :class="$style.commentsContainer">
+            <div v-if="true" :class="$style.commentsContainer">
               <div>
                 <N-Comment />
                 <N-Comment />
@@ -266,6 +264,7 @@ export default {
       if (props.detailPage === true) {
         setTimeout(() => {
           commentHeight.value = commentBox.value.scrollHeight + 'px'
+          console.log(commentHeight.value)
         }, 0)
       }
     }
@@ -275,7 +274,7 @@ export default {
             chipsWidth.value += chipsArray.value[i].$el.offsetWidth + 10
           }
           if (chipsWidth.value > 315) {
-            for (let i = chipsArray.value.length - 1; chipsWidth.value > 251; i--) {
+            for (let i = chipsArray.value.length - 1; chipsWidth.value > 245; i--) {
                 chipsWidth.value = chipsWidth.value - (chipsArray.value[i].$el.offsetWidth + 10)
                 chipsArray.value[i].$el.style.display = 'none'
                 chipsCounter.value++
@@ -479,7 +478,14 @@ export default {
   .socials {
     display: flex;
     width: auto;
-    gap: 3rem;
+    .socialsItem {
+      *+div {
+        margin-left: 1rem;
+      }
+    }
+    .socialsItem+.socialsItem{
+      margin-left: 3rem;
+    }
     &.detailPage {
       @media (min-width: $tabletWidth) {
         padding-top: 3.094rem;
@@ -489,9 +495,8 @@ export default {
     }
     div {
       display: flex;
-      gap: 1rem;
       align-items: center;
-      }
+    }
     .likeContainer {
       cursor: pointer;
     }

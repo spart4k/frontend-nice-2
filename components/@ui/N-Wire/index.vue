@@ -4,13 +4,23 @@
       <p :class="$style.wireText">
         Входящее соединение:
       </p>
-      <v-select id="" :options="['Xir M', 'Jack 6.3 Stereo']" :class="$style.wireSelect" name="" />
+      <v-select
+        v-model="wireInput"
+        :options="optionsInput"
+        :class="$style.wireSelect"
+        @input="setSelectedInput"
+      />
     </div>
     <div :class="$style.wireOutcoming">
       <p :class="$style.wireText">
         Исходящее соединение:
       </p>
-      <v-select id="" :options="['Xir M', 'Jack 6.3 Stereo']" :class="$style.wireSelect" name="" />
+      <v-select
+        v-model="wireOutput"
+        :options="optionsOutput"
+        :class="$style.wireSelect"
+        @input="setSelectedOutput"
+      />
     </div>
     <div :class="$style.wireLength">
       <p :class="$style.wireText">
@@ -54,7 +64,7 @@
 </template>
 
 <script>
-// import { ref } from '@nuxtjs/composition-api'
+import { ref } from '@nuxtjs/composition-api'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
@@ -64,16 +74,62 @@ export default {
     vSelect
   },
   props: {
-    options: {
-      type: Array,
-      default () {
-        return ['1 шт.', '2 шт.', '3 шт.', '4 шт.', '5 шт.', '6 шт.', '7 шт.', '8 шт.', '9 шт.', '10 шт.', '11 шт.', '12 шт.', '13 шт.', '14 шт.', '15 шт.', '16 шт.', '17 шт.', '18 шт.', '19 шт.', '20 шт.']
-      }
-    }
   },
   setup (props) {
-  return {
+  const optionsDefault = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])
+  const optionsInput = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])
+  const optionsOutput = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])
+  const wireOutput = ref()
+  const wireInput = ref()
+  const setSelectedInput = (value) => {
+    optionsOutput.value = optionsDefault.value
+    if (value === 'MIDI') {
+      optionsOutput.value = ['MIDI']
+    } else if (value === 'RCA') {
+      optionsOutput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
+    } else if (value === 'XLR M') {
+      optionsOutput.value = ['RCA', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO']
+    } else if (value === 'XLR F') {
+      optionsOutput.value = ['RCA', 'XLR M', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO']
+    } else if (value === 'JACK 6.3 STEREO') {
+      optionsOutput.value = ['XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 3.5 STEREO']
+    } else if (value === 'JACK 6.3 MONO') {
+      optionsOutput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
+    } else if (value === 'JACK 3.5 STEREO') {
+      optionsOutput.value = ['XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 3.5 STEREO']
+    } else if (value === 'JACK 3.5 MONO') {
+      optionsOutput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
+    }
   }
+  const setSelectedOutput = (value) => {
+    optionsInput.value = optionsDefault.value
+    if (value === 'MIDI') {
+      optionsInput.value = ['MIDI']
+    } else if (value === 'RCA') {
+      optionsInput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
+    } else if (value === 'XLR M') {
+      optionsInput.value = ['RCA', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO']
+    } else if (value === 'XLR F') {
+      optionsInput.value = ['RCA', 'XLR M', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO']
+    } else if (value === 'JACK 6.3 STEREO') {
+      optionsInput.value = ['XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 3.5 STEREO']
+    } else if (value === 'JACK 6.3 MONO') {
+      optionsInput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
+    } else if (value === 'JACK 3.5 STEREO') {
+      optionsInput.value = ['XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 3.5 STEREO']
+    } else if (value === 'JACK 3.5 MONO') {
+      optionsInput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
+    }
+  }
+    return {
+      setSelectedInput,
+      setSelectedOutput,
+      optionsOutput,
+      optionsInput,
+      optionsDefault,
+      wireOutput,
+      wireInput
+    }
   }
 }
 </script>
@@ -135,39 +191,41 @@ export default {
       .wireColorBox {
       margin-top: 1rem;
       display: flex;
-      gap: 1.5rem;
       padding: 0;
-        .wireColor {
+      label+label {
+        margin-left: 1.5rem;
+      }
+      .wireColor {
+        width: 3.2rem;
+        height: 3.2rem;
+        position: relative;
+        border: solid .2rem;
+        border-radius: 50%;
+        input {
+          position: absolute;
+          opacity: 0;
+          cursor: pointer;
+          z-index: 5;
+          width: 100%;
+          height: 100%;
+        }
+        .checkmark {
+          position: absolute;
           width: 3.2rem;
           height: 3.2rem;
-          position: relative;
-          border: solid .2rem;
+          top: -2px;
+          left: -2px;
           border-radius: 50%;
-          input {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 5;
-            width: 100%;
-            height: 100%;
-          }
-          .checkmark {
-            position: absolute;
-            width: 3.2rem;
-            height: 3.2rem;
-            top: -2px;
-            left: -2px;
-            border-radius: 50%;
-          }
-          input:checked ~ .checkmark {
-            width: 2rem;
-            height: 2rem;
-            top: calc(50% - 1rem);
-            left: calc(50% - 1rem);
-          }
+        }
+        input:checked ~ .checkmark {
+          width: 2rem;
+          height: 2rem;
+          top: calc(50% - 1rem);
+          left: calc(50% - 1rem);
         }
       }
     }
+  }
     :global(.vs__dropdown-option) {
       height: 4.5rem;
       display: flex;

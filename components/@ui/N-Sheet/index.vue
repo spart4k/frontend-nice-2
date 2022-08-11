@@ -6,6 +6,7 @@
     <!-- <FormAuthDefault /> -->
     <!-- <FormAuthRecovery /> -->
     <!-- <N-Sheet-Search /> -->
+    <!-- <HistoryOrdersDefault /> -->
   </div>
 </template>
 

@@ -31,8 +31,6 @@
             <div :class="$style.emoji" @click="$emit('emojiWrite', '😛')">
               😛
             </div>
-            <!-- </div>
-          <div :class="$style.emojiContainer"> -->
             <div :class="$style.emoji" @click="$emit('emojiWrite', '🥳')">
               🥳
             </div>
@@ -140,6 +138,9 @@ export default {
                 flex-wrap: wrap;
                 justify-content: flex-start;
               }
+            .emoji+.emoji {
+              // margin-left: .6rem;
+            }
             .emoji {
                 display: inline-block;
                 font-size: 2.9rem;

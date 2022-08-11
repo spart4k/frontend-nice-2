@@ -6,6 +6,10 @@
     <template v-if="id === 2">
       <N-Card-New :detail-page="detailPage" with-video :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
     </template>
+    <template v-else-if="id === 11">
+      <N-Card-Coin />
+    </template>
+
     <!-- <template v-else-if="id === 3">
       <N-Card-Read :detail-page="detailPage" :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
     </template>
@@ -53,6 +57,9 @@ export default {
     detailPage: {
       type: Boolean,
       required: false
+    },
+    setup (props) {
+      console.log(props.id)
     }
   }
 }
