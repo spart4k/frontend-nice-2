@@ -23,11 +23,11 @@ import { ref } from '@nuxtjs/composition-api'
 export default {
   name: 'NTabs',
   setup () {
-    const currentTab = ref('TabDelivery')
+    const currentTab = ref('TabPickup')
     const glider = ref(null)
     const tabsItem = [
-      { title: 'Доставка', value: 'TabDelivery' },
-      { title: 'Самовывоз', value: 'TabPickup' }
+      { title: 'Самовывоз', value: 'TabPickup' },
+      { title: 'Доставка', value: 'TabDelivery' }
     ]
     const transformActive = (index, value) => {
       currentTab.value = value

@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.container">
+  <div ref="container" :class="$style.container">
     <components
       :is="isCurrentPage"
       @changeStep="changeStep"
@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { computed, ref, useContext, watch } from '@nuxtjs/composition-api'
+import { computed, onMounted, ref, useContext, watch } from '@nuxtjs/composition-api'
 import StepOne from './components/StepOne'
 import StepTwo from './components/StepTwo'
 import StepThree from './components/StepThree'
@@ -21,6 +21,7 @@ export default {
     StepThree
   },
   setup () {
+    const container = ref(null)
     const page = ref(0)
     const { store } = useContext()
     const changeStep = (key) => {
@@ -32,6 +33,12 @@ export default {
     }
     watch(() => store.state.stepperOrder.isShowBottomSheet, () => {
       page.value = 0
+    })
+    onMounted(() => {
+      container.value.addEventListener('scroll', (e) => {
+        e.preventDefault()
+        console.log(e)
+      })
     })
     const isCurrentPage = computed(() => {
       switch (page.value) {
@@ -47,7 +54,8 @@ export default {
     })
     return {
       isCurrentPage,
-      changeStep
+      changeStep,
+      container
     }
   }
 }
@@ -60,6 +68,8 @@ export default {
   height: 100%;
   overflow-y: auto;
   @include paddings;
+  overscroll-behavior-y: contain !important;
+  transform: translate3d(0px, 0, 0);
   color: $fontColorDefault;
 }
 </style>

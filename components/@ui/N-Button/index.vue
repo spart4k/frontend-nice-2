@@ -37,6 +37,9 @@ export default {
     @include button;
     transition: background-color .2s;
     padding: 1.4rem 3.7rem;
+    &:disabled {
+      opacity: 0.5;
+    }
   }
   .sub {
     background: transparent;

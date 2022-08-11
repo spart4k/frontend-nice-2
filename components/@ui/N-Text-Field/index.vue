@@ -13,10 +13,7 @@
     </h3>
     <div :class="[$style.wrapperInput]">
       <span v-if="error" class="input-error">
-        {{ errMessage }}
-      </span>
-      <span v-if="errCustom" class="input-error">
-        {{ errCustom }}
+        {{ error }}
       </span>
       <input
         v-model="proxyVal"
@@ -32,7 +29,7 @@
   </label>
 </template>
 <script lang="js">
-import { ref, watch, computed } from '@nuxtjs/composition-api'
+import { ref, watch } from '@nuxtjs/composition-api'
 export default {
   name: 'NTextField',
   props: {
@@ -62,10 +59,6 @@ export default {
       default: null
     },
     error: {
-      type: Array,
-      default: () => []
-    },
-    errCustom: {
       type: String,
       default: ''
     },
@@ -90,28 +83,27 @@ export default {
       emit('input', proxyVal.value)
     })
     watch(() => props.valueInfo, (newValue, oldValue) => { proxyVal.value = newValue })
-    const errMessage = computed(() => {
-      if (props.error[0]) {
-        const text = props.error[0].$message
-        let newText = ''
-        switch (text) {
-          case 'Value is required':
-            newText = 'Обязательное поле'
-            break
-          case 'Value is not a valid email address':
-            newText = 'Email введен не корректно'
-            break
-          case 'This field should be at least 18 characters long':
-            newText = 'Введите номер полностью'
-            break
-        }
-        return newText
-      }
-    })
+    // const errMessage = computed(() => {
+    //   if (props.error[0]) {
+    //     const text = props.error[0].$message
+    //     let newText = ''
+    //     switch (text) {
+    //       case 'Value is required':
+    //         newText = 'Обязательное поле'
+    //         break
+    //       case 'Value is not a valid email address':
+    //         newText = 'Email введен не корректно'
+    //         break
+    //       case 'This field should be at least 18 characters long':
+    //         newText = 'Введите номер полностью'
+    //         break
+    //     }
+    //     return newText
+    //   }
+    // })
 
     return {
-      proxyVal,
-      errMessage
+      proxyVal
     }
   }
 }

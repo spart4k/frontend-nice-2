@@ -87,6 +87,8 @@ export default {
   transform: translateY(-50%);
 }
 .select {
+  position: relative;
+  z-index: 5;
   -webkit-appearance: none;
   -moz-appearance: none;
   background-color: transparent;

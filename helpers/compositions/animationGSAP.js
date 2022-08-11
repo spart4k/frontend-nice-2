@@ -112,7 +112,7 @@ const animation = ($gsap, Elastic) => {
     tl.to(LOGO, {
       'clip-path': 'polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)',
       duration: 0.3,
-      delay: 0.2,
+      delay: 1,
       ease: 'cubic-bezier(.71,.01,.15,1)'
     })
     tl.to(SUBTITLE, {

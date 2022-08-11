@@ -1,6 +1,6 @@
 import {
   ref, computed, watch, unref, reactive
-} from '@nuxtjs/composition-api'
+} from '@vue/composition-api'
 import useVuelidate from '@vuelidate/core'
 
 /**
@@ -96,9 +96,9 @@ export default function ({ fields = {}, watcher }) {
     $v,
     $errors,
     $invalid,
+    $touched,
     validate,
     formData,
-    // reactiveFormData: reactive ? ref({ ...formData }) : null,
     getData,
     reset,
     update

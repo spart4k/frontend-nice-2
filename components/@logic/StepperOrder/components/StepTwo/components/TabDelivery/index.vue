@@ -2,13 +2,32 @@
   <div>
     <form :class="[$style.form, $style.row]">
       <n-row>
-        <n-text-field placeholder="Введите ФИО" title="ФИО" :color-border="'pinkBorder'" />
+        <n-text-field
+          v-model="formData.name"
+          :error="$errors.name[0]"
+          placeholder="Введите ФИО"
+          title="ФИО"
+          :color-border="'pinkBorder'"
+        />
       </n-row>
       <n-row>
-        <n-text-field placeholder="Введите номер телефона" title="Телефон" :color-border="'pinkBorder'" />
+        <n-text-field
+          v-model="formData.phone"
+          mask="+7 (###) ###-##-##"
+          placeholder="+7 (777) 777-77-77 "
+          :error="$errors.phone[0]"
+          title="Телефон"
+          :color-border="'pinkBorder'"
+        />
       </n-row>
       <n-row>
-        <n-text-field placeholder="Введите ваш еmail" title="Email" :color-border="'pinkBorder'" />
+        <n-text-field
+          v-model="formData.email"
+          :error="$errors.email[0]"
+          placeholder="Введите ваш еmail"
+          title="Email"
+          :color-border="'pinkBorder'"
+        />
       </n-row>
     </form>
     <div :class="$style.addressWrapper">
@@ -90,7 +109,8 @@
       <n-button
         :class="$style.btn"
         :type-button="'pink'"
-        @click="$emit('changeStep', 'increment')"
+        :disabled="$v.$invalid && $touched"
+        @click="submit"
       >
         Оплатить онлайн
       </n-button>
@@ -111,116 +131,5 @@
   </div>
 </template>
 
-<script>
-import { ref } from '@nuxtjs/composition-api'
-import ChangeAddress from './components/ChangeAddress'
-
-export default {
-  name: 'TabDelivery',
-  components: {
-    ChangeAddress
-  },
-  setup () {
-    const activePayment = ref('card')
-    const menuAddress = ref(null)
-    const basketItem = {
-      title: 'Провод midi/midi 0.2m синий',
-      price: 3200,
-      pivot: {
-        quantity: 2
-      },
-      images: [
-        { src: 'https://media-exp1.licdn.com/dms/image/C560BAQHMnA03XDdf3w/company-logo_200_200/0/1519855918965?e=2147483647&v=beta&t=J3kUMZwIphc90TFKH5oOO9Sa9K59fimgJf-s_okU3zs' }
-      ]
-    }
-    const closedMenu = () => {
-      menuAddress.value.$children[0].close()
-    }
-    const openMenu = () => {
-      console.log(2123)
-      menuAddress.value.$children[0].open()
-    }
-    const paymentsMethodSelect = [
-      { text: 'Картой', icon: 'card-stepper', value: 'card' }
-    ]
-    return {
-      basketItem,
-      paymentsMethodSelect,
-      activePayment,
-      menuAddress,
-      openMenu,
-      closedMenu
-    }
-  }
-}
-</script>
-
-<style lang="scss" module>
-.titleBig {
-  font-weight: 500;
-  @include button;
-}
-.form {
-  margin-bottom: 2.5rem;
-  &__select {
-    @include regular-text;
-  }
-}
-.title {
-  color: $fontColorDefault;
-  opacity: 0.5;
-  margin-bottom: 1rem;
-  @include regular-text;
-}
-.addressText {
-  @include regular-text;
-
-}
-.addressWrapper {
-  margin-bottom: 3.9rem;
-}
-.btnChangeAddress {
-  width: 100%;
-}
-.btn {
-  width: 100%;
-  margin-bottom: 1.5rem;
-}
-
-.paymentList {
-  display: flex;
-  width: 100%;
-  li + li {
-    margin-left: 1rem;
-  }
-}
-.orders {
-  margin-bottom: 3rem;
-  .cols {
-    padding-bottom: 3rem;
-    margin-bottom: 3rem;
-    border-bottom: 1px solid rgba($fontColorDefault, 0.1);
-  }
-  &__title {
-    margin-bottom: 1.5rem;
-  }
-  .col + .col {
-    margin-top: 1.5rem;
-  }
-  .col {
-    display: flex;
-    justify-content: space-between;
-    &__left {
-      @include regular-text;
-    }
-    &__right {
-      @include regular-text-bold;
-    }
-  }
-  .total {
-    &__sum {
-      @include text-style-h2;
-    }
-  }
-}
-</style>
+<script src="./setup.js"></script>
+<style lang="scss" module src="./style.scss"></style>
