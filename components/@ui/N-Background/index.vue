@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { computed } from 'vue-demi'
+import { computed } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NBackground',
@@ -22,11 +22,8 @@ export default {
     isHomePage: Boolean,
     color: String
   },
-  setup (props) {
+  setup () {
   const backgroundImage = computed(() => {
-    // if (props.isHomePage) {
-    //   return require('~/assets/img/background/index-background.jpg')
-    // }
       return require('~/assets/img/background/coin-background.png')
   })
   return { backgroundImage }

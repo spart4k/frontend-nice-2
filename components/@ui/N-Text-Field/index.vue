@@ -12,9 +12,6 @@
       {{ $props.title }}
     </h3>
     <div :class="[$style.wrapperInput]">
-      <!--      <span v-if="error" :class="$style.inputError">-->
-      <!--        {{ error }}-->
-      <!--      </span>-->
       <input
         v-model="proxyVal"
         v-mask="$props.mask"
@@ -28,7 +25,6 @@
       <p v-if="error" :class="$style.inputError">
         {{ error }}
       </p>
-
     </div>
   </label>
 </template>
