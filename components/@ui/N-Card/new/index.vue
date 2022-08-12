@@ -166,14 +166,10 @@
           :class="[$style.comments,showComments ? $style.show : '']"
           :style="{maxHeight: showComments ? commentHeight : '0'}"
         >
-<<<<<<< HEAD
           <!-- <p :class="$style.comments__title">
           {{ commentCounter }} комментари{{ commentEnding }}
         </p> -->
           <N-Input v-if="true" swipingBlock="card" type="textarea" @smilies="commentHeightSet" />
-=======
-          <N-Input v-if="false" type="textarea" @smilies="commentHeightSet" />
->>>>>>> feb44ce582ad442e3ab5ddb556c867149191a9fa
           <N-Plug v-else @login="login" @registration="registration" />
           <div :class="$style.commentsContainer">
             <div>
