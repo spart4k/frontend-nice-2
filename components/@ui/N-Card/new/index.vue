@@ -58,7 +58,6 @@
             <div :class="$style.price">
               {{ data.price }}р.
             </div>
-            <N-Wire v-if="false" />
             <div :class="$style.buyButton">
               Купить
             </div>
@@ -83,27 +82,33 @@
             <div :class="$style.price">
               {{ data.price }}р.
             </div>
-            <N-Wire v-if="false" />
-            <div :class="$style.buyButton">
+            <template v-if="true">
+              <N-Wire />
+            </template>
+            <template v-else>
+              <N-Goods-Counter :class="$style.goodsCounter" />
+            </template>
+            <N-Button :class="$style.buyButton" background-color="#C83F8E">
               Купить
-            </div>
+            </N-Button>
           </template>
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div>
           <template v-if="data.files && $props.detailPage && !$props.withVideo">
             <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
-              <p :class="$style.audioName">
+              <!-- <p :class="$style.audioName">
                 {{ item.title }}
-              </p>
-              <N-Audio v-if="item.src" :src="`https://nice.c.roky.rocks/${item.src}`" />
+              </p> -->
+              <N-Audio v-if="item.src" :title="item.title" :src="`https://nice.c.roky.rocks/${item.src}`" />
             </div>
+            <!-- <LiveRadio /> -->
           </template>
         </div>
         <!-- <div v-if="$props.detailPage && (windowWidth > 900) && !showComments" :class="[$style.empty, detailPage && $style.detailPage]" :style="{ height: emptyBlockHeight + 'px' }" /> -->
       </template>
       <div :class="[$style.body__bottom, detailPage && $style.detailPage]">
-        <div v-if="$props.detailPage" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '1.5rem' : '' }">
+        <div v-if="$props.detailPage" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '3rem' : '' }">
           <N-Chip
             v-for="item in data.tags"
             :key="item.id"
@@ -117,27 +122,27 @@
             v-if="chipsCounter > 0"
             ref="chipExtra"
             :class="$style.chip"
-            @click="extraTagShow()"
+            @click="extraTagShow"
           >
             +{{ chipsCounter }}
           </N-Chip>
         </div>
-        <div :class="[$style.socials, detailPage && $style.detailPage]" :style="{ marginTop: $props.detailPage ? '3rem' : '2rem' }">
-          <div>
+        <div :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
+          <div :class="$style.socialsItem">
             <N-Like v-model="like" :class="$style.likeContainer" @click="addLike" />
             <div :class="$style.parser">
               <!-- likeCounter -->
               {{ !$props.detailPage ? '0' : 'Нравится' }}
             </div>
           </div>
-          <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.commentsContainer" @click="showComments = !showComments">
+          <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
             <N-Icon name="comments" />
             <div :class="$style.parser">
               {{ !$props.detailPage ? '0' : 'Комментировать' }}
             </div>
           </div>
         </div>
-        <div v-if="!$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '3rem' : '' }">
+        <div v-if="!$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '2rem' : '' }">
           <N-Chip
             v-for="item in data.tags"
             :key="item.id"
@@ -161,10 +166,14 @@
           :class="[$style.comments,showComments ? $style.show : '']"
           :style="{maxHeight: showComments ? commentHeight : '0'}"
         >
+<<<<<<< HEAD
           <!-- <p :class="$style.comments__title">
           {{ commentCounter }} комментари{{ commentEnding }}
         </p> -->
           <N-Input v-if="true" swipingBlock="card" type="textarea" @smilies="commentHeightSet" />
+=======
+          <N-Input v-if="false" type="textarea" @smilies="commentHeightSet" />
+>>>>>>> feb44ce582ad442e3ab5ddb556c867149191a9fa
           <N-Plug v-else @login="login" @registration="registration" />
           <div :class="$style.commentsContainer">
             <div>
@@ -181,16 +190,14 @@
       </div>
     </div>
     <portal to="sliderPopup">
-      <!-- <vue-bottom-sheet ref="loginMenu" :overlay="true" max-height="90%">
-        <N-Sheet @closeSheet="closeSheet" />
-      </vue-bottom-sheet> -->
       <N-BootomSheet
         ref="loginMenu"
         :max-width="'450px'"
         effect="fx-slide-from-left"
         @closeMenu="closeMenu"
+        @closed="closed"
       >
-        <N-Sheet />
+        <N-Sheet :page="page" @changeComponent="changeComponent" />
       </N-BootomSheet>
     </portal>
   </div>
@@ -208,7 +215,6 @@ export default {
   setup (props) {
     const videoRef = ref(null)
     const showComments = ref(false)
-    // const comments = ref(false)
     const like = ref(props.data.liked)
     const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
@@ -218,20 +224,25 @@ export default {
     const commentHeight = ref()
     const commentBox = ref()
     const loginMenu = ref()
-    // const commentEnding = ref('ев')
-    // const commentCounter = ref(1)
-    // const gallery = ref()
     const windowWidth = ref()
-    // const body = ref()
-    // const emptyBlockHeight = ref()
-    // const cardHeight = ref()
+    const page = ref()
     const { $axios } = useContext()
     const { store } = useContext()
     const videoPlay = ref(false)
+    const closed = () => {
+      page.value = 'FormAuthDefault'
+    }
+    const changeComponent = (value) => {
+      page.value = value
+    }
+    const comments = ref(true)
     const login = () => {
+      page.value = 'FormAuthLogin'
       loginMenu.value.$children[0].open()
     }
     const registration = () => {
+      page.value = 'FormAuthDefault'
+      loginMenu.value.$children[0].open()
     }
     const closeMenu = () => {
       loginMenu.value.$children[0].close()
@@ -266,7 +277,7 @@ export default {
       if (props.detailPage === true) {
         setTimeout(() => {
           commentHeight.value = commentBox.value.scrollHeight + 'px'
-        }, 0)
+        }, 300)
       }
     }
     const extraTagHide = () => {
@@ -275,7 +286,7 @@ export default {
             chipsWidth.value += chipsArray.value[i].$el.offsetWidth + 10
           }
           if (chipsWidth.value > 315) {
-            for (let i = chipsArray.value.length - 1; chipsWidth.value > 251; i--) {
+            for (let i = chipsArray.value.length - 1; chipsWidth.value > 245; i--) {
                 chipsWidth.value = chipsWidth.value - (chipsArray.value[i].$el.offsetWidth + 10)
                 chipsArray.value[i].$el.style.display = 'none'
                 chipsCounter.value++
@@ -289,36 +300,17 @@ export default {
         })
         chipExtra.value.$el.style.display = 'none'
       }
-    // const wordEnding = () => {
-    //   const string = commentCounter.value.toString()
-    //   const lastElem = string[string.length - 1]
-    //   if (!(string[string.length - 2] === '1')) {
-    //     if (lastElem === '2' || lastElem === '3' || lastElem === '4') {
-    //       commentEnding.value = 'я'
-    //     } else if (lastElem === '1') {
-    //       commentEnding.value = 'й'
-    //     }
-    //   }
-    // }
-    // const blockHeight = () => {
-    //   if (props.detailPage === true && (window.innerWidth > 900)) {
-    //     cardHeight.value = gallery.value.clientHeight + 'px'
-    //   }
-    // }
     const windowWidthCount = () => {
       windowWidth.value = window.innerWidth
     }
     onMounted(() => {
-      // emptyBlockHeight.value = 502 - body.value.clientHeight
       windowWidthCount()
       if (windowWidth.value > 900) {
         showComments.value = true
       }
-      // blockHeight()
       extraTagHide()
       commentHeightSet()
-      // wordEnding()
-      // window.addEventListener('resize', blockHeight)
+      comments.value = false
       window.addEventListener('resize', windowWidthCount)
       window.addEventListener('resize', commentHeightSet)
       nextTick(() => {
@@ -330,9 +322,8 @@ export default {
       })
     })
     onUnmounted(() => {
-      // window.addEventListener('resize', blockHeight)
-      window.addEventListener('resize', windowWidthCount)
-      window.addEventListener('resize', commentHeightSet)
+      window.removeEventListener('resize', windowWidthCount)
+      window.removeEventListener('resize', commentHeightSet)
     })
     const dateFormat = computed(() => {
       return props.data.date_event?.replace(/:(\w+)/, '')?.replace(/\s/, ' / ') ?? ''
@@ -347,22 +338,17 @@ export default {
       chipsWidth,
       chipExtra,
       dateFormat,
-      // commentCounter,
-      // commentEnding,
       commentHeight,
       commentBox,
-      // blockHeight,
-      // body,
+      comments,
       videoRef,
       commentHeightSet,
-      // wordEnding,
       extraTagHide,
       extraTagShow,
-      // cardHeight,
-      // emptyBlockHeight,
       addLike,
-      // gallery,
       windowWidth,
+      closed,
+      changeComponent,
       windowWidthCount,
       videoUrl,
       videoPlay,
@@ -370,7 +356,8 @@ export default {
       login,
       registration,
       loginMenu,
-      closeMenu
+      closeMenu,
+      page
     }
   }
 }
@@ -392,7 +379,7 @@ export default {
       }
     }
     .gallery {
-        cursor: pointer;
+      cursor: pointer;
       &.detailPage {
         @media (min-width: $tabletWidth) {
           background: #222222;
@@ -497,13 +484,7 @@ export default {
     margin-bottom:2rem;
   }
   .buyButton {
-    display: inline-block;
-    @include button;
-    color: $white;
-    padding: 1.4rem 3.6rem;
     margin-bottom: 2rem;
-    background: #C83F8E;
-    border-radius: 2.5rem;
   }
   .empty {
     width: 100%;
@@ -511,19 +492,21 @@ export default {
   .socials {
     display: flex;
     width: auto;
-    gap: 3rem;
-    &.detailPage {
-      @media (min-width: $tabletWidth) {
-        padding-top: 3.094rem;
-        border-top: .1rem solid rgba(34, 34, 34, 0.1);
-        margin-top: 3rem;
+    padding: 3rem 0 1rem;
+    border-top: .1rem solid rgba(34, 34, 34, 0.1);
+
+    .socialsItem {
+      *+div {
+        margin-left: 1rem;
       }
+    }
+    .socialsItem+.socialsItem{
+      margin-left: 3rem;
     }
     div {
       display: flex;
-      gap: 1rem;
       align-items: center;
-      }
+    }
     .likeContainer {
       cursor: pointer;
     }
@@ -574,7 +557,7 @@ export default {
           line-height: 1.7rem;
         }
         *+* {
-          margin-top: 15px;
+          margin-top: 1.5rem;
         }
       }
       h2 {
@@ -589,6 +572,9 @@ export default {
       .authorName{
         margin-bottom: 1.5rem;
         @include regular-text-bold
+      }
+      .goodsCounter {
+        margin-bottom: 3rem;
       }
     }
     .cardAudio {
@@ -606,14 +592,14 @@ export default {
       }
     }
     &__footer {
-      margin-top: 3rem;
+      margin-top: 2rem;
     }
     .comment {
       margin-left: auto;
     }
     .comments {
-      transition: all .6s;
-      // overflow: hidden;
+      transition: all .5s;
+      overflow: hidden;
       opacity: 0;
       &__title {
         color: $fontColorDefault;
@@ -628,7 +614,7 @@ export default {
     }
     .show {
       opacity: 1;
-      margin-top: 2.094rem;
+      margin-top: 3rem;
     }
   }
 </style>

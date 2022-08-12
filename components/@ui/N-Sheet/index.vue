@@ -1,35 +1,41 @@
 <template>
   <div :class="$style.container">
-    <!-- <template v-if="true">
-      <N-Sheet-Register @toLogin="toLogin" />
-    </template>
-    <template v-else-if="false">
-      <N-Sheet-Login />
-    </template>
-    <template v-else>
-      <N-Sheet-Password-Recovery />
-    </template> -->
-    <!-- <N-Sheet-Login /> -->
-    <!-- <N-Sheet-Password-Recovery /> -->
-    <!-- <N-Sheet-Profile /> -->
-    <N-Sheet-Search />
+    <component :is="proxyCurrentComp" @changeComponent="$emit('changeComponent', $event)" />
+    <!-- <FormProfileDefault /> -->
+    <!-- <FormAuthLogin /> -->
+    <!-- <FormAuthDefault /> -->
+    <!-- <FormAuthRecovery /> -->
+    <!-- <N-Sheet-Search /> -->
+    <!-- <HistoryOrdersDefault /> -->
   </div>
 </template>
 
 <script>
+import { watch, ref } from 'vue-demi'
 // import { ref } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NSheet',
   props: {
-  },
-  setup () {
-    const toLogin = () => {
-      console.log('sadas')
+    page: {
+      type: String,
+      default: 'FormProfileDefault'
     }
-  return {
-    toLogin
-  }
+  },
+  setup (props) {
+    const proxyCurrentComp = ref(props.page)
+
+    watch(() => props.page, () => {
+      proxyCurrentComp.value = props.page
+    })
+
+    const changeComponent = (value) => {
+      proxyCurrentComp.value = value
+    }
+    return {
+      changeComponent,
+      proxyCurrentComp
+    }
   }
 }
 </script>
@@ -58,5 +64,8 @@ export default {
   .noRegistered {
     margin-top: 2.4rem;
   }
+}
+:global(.bottom-sheet__content) {
+  height: auto !important;
 }
 </style>

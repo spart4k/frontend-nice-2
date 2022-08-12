@@ -9,7 +9,7 @@
           :card="card"
           @clickTag="clickTag"
         />
-        <N-Back-Button />
+        <N-Back-Button :class="$style.back" />
         <!-- <N-Fixed-Button v-if="card.is_product" :is-auth="isAuth" :check-auth="true" @clickButton="addBasket">
           <template v-if="!isAddedBasket">
             Добавить в корзину
@@ -102,8 +102,13 @@ export default defineComponent({
 .wrapper {
   width: 100%;
   padding-top: 10.3rem;
+  padding-bottom: 4.5rem;
   @media (min-width: $tabletWidth) {
     padding-top: 15rem;
+  }
+  .back {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 }
 .button__add_basket {

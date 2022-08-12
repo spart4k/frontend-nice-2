@@ -24,7 +24,6 @@ export default {
 .button{
     width: 100%;
     height: 5rem;
-    margin-top: 2rem;
     background-color: $white;
     border-radius: 2.5rem;
     -webkit-mask-image: -webkit-radial-gradient(white, black);

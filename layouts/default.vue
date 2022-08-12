@@ -6,14 +6,15 @@
       <Nuxt />
     </n-intro-wrapper>
     <N-BootomSheet
-      ref="menu1"
+      ref="menuBasket"
       effect="fx-slide-from-left"
       max-width="39rem"
-      :max-height="$mq === 'md' ? '100%' : ''"
-      @test="test"
-      @closeMenu="closed"
+      :max-height="'100%'"
+      :fullscreen="true"
+      @closeMenu="closedMenuBasket"
+      @closed="closedSwipe"
     >
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam aperiam at beatae ea eaque eius illum ipsa nihil praesentium saepe? Dignissimos laboriosam nam neque quod quos reprehenderit sit, suscipit? Porro!
+      <StepperOrder />
     </N-BootomSheet>
     <portal-target name="sliderPopup" />
   </div>
@@ -30,13 +31,16 @@ export default {
   setup () {
     const headerItems = ref([])
     const body = ref(null)
-    const menu1 = ref(null)
+    const menuBasket = ref(null)
     const { store, route, $gsap } = useContext()
     const isHomePage = computed(() => route.value.name === 'index')
 
     const fetchData = async () => {
       const response = await store.dispatch('content/getHeader')
       return response
+    }
+    const closedSwipe = () => {
+      store.commit('stepperOrder/changeShowStateBottomSheet', false)
     }
 
     useFetch(async () => {
@@ -55,6 +59,7 @@ export default {
       subtitle: 'творческое объединение',
       background: ''
     })
+
     const {
       animateBackground
     } = animationGSAP($gsap, Elastic)
@@ -68,18 +73,22 @@ export default {
       }
     })
 
-    const closed = () => {
-      menu1.value.$children[0].close()
-    }
-    const test = () => {
+    watch(() => store.state.stepperOrder.isShowBottomSheet, () => {
+      if (store.state.stepperOrder.isShowBottomSheet) {
+        openMenuBasket()
+      } else {
+        closedMenuBasket()
+      }
+    })
+
+    const closedMenuBasket = () => {
+      menuBasket.value.$children[0].close()
       store.commit('stepperOrder/changeShowStateBottomSheet', false)
     }
 
-    watch(() => store.state.stepperOrder.isShowBottomSheet, () => {
-      if (store.state.stepperOrder.isShowBottomSheet) {
-        menu1.value.$children[0].open()
-      }
-    })
+    const openMenuBasket = () => {
+      menuBasket.value.$children[0].open()
+    }
 
     onMounted(() => {
       store.commit('authentication/setUserData')
@@ -94,10 +103,10 @@ export default {
       color,
       introTitle,
       isHomePage,
-      menu1,
-
-      closed,
-      test
+      menuBasket,
+      closedMenuBasket,
+      openMenuBasket,
+      closedSwipe
     }
   }
 }

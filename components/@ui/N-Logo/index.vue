@@ -63,7 +63,9 @@ export default {
   width: 100%;
   will-change: transform;
   .wrapperImage {
-    overflow: hidden;
+    //overflow: hidden;
+    //clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);end
+  //clip-path: polygon(0 0%, 100% 0%, 100% 100%, 0% 100%)
   }
   img {
     width: 100%;

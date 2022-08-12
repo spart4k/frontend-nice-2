@@ -1,15 +1,17 @@
 <template>
-  <label :class="[$style.textField, $props.mdFz && $style.mdFz, $props.error.length || $props.errCustom ? $style.error : '', $props.readOnly ? $style.readonly : '']">
+  <label
+    :class="[
+      $style.textField,
+      $props.mdFz && $style.mdFz,
+      $props.error.length || $props.errCustom ? $style.error : '',
+      $props.readOnly ? $style.readonly : '',
+      $style[$props.colorBorder]
+    ]"
+  >
     <h3 v-if="$props.title" :class="$style.title">
       {{ $props.title }}
     </h3>
     <div :class="[$style.wrapperInput]">
-      <!-- <span v-if="error" :class="$style.inputError">
-        {{ errMessage }}
-      </span>
-      <span v-if="errCustom" :class="$style.inputError">
-        {{ errCustom }}
-      </span> -->
       <input
         v-model="proxyVal"
         v-mask="$props.mask"
@@ -20,14 +22,14 @@
         :placeholder="$props.placeholder"
         @keydown.enter="$emit('keydown', $event)"
       >
+      <p v-if="error" :class="$style.inputError">
+        {{ error }}
+      </p>
     </div>
-    <p v-if="error" :class="$style.inputError">
-      {{ errMessage }}
-    </p>
   </label>
 </template>
 <script lang="js">
-import { ref, watch, computed } from '@nuxtjs/composition-api'
+import { ref, watch } from '@nuxtjs/composition-api'
 export default {
   name: 'NTextField',
   props: {
@@ -57,10 +59,6 @@ export default {
       default: null
     },
     error: {
-      type: Array,
-      default: () => []
-    },
-    errCustom: {
       type: String,
       default: ''
     },
@@ -69,6 +67,10 @@ export default {
       default: false
     },
     color: {
+      type: String,
+      default: ''
+    },
+    colorBorder: {
       type: String,
       default: ''
     }
@@ -81,37 +83,8 @@ export default {
       emit('input', proxyVal.value)
     })
     watch(() => props.valueInfo, (newValue, oldValue) => { proxyVal.value = newValue })
-    const errMessage = computed(() => {
-      if (props.error[0]) {
-        const text = props.error[0].$message
-        let newText = ''
-        switch (text) {
-          case 'Value is required':
-            newText = 'Обязательное поле'
-            break
-          case 'Value is not a valid email address':
-            newText = 'Email введен не корректно'
-            break
-          case 'This field should be at least 18 characters long':
-            newText = 'Введите номер полностью'
-            break
-        }
-        return newText
-      }
-    })
-
-    // const getValue = computed({
-    //   get () {
-    //     return props.value
-    //   },
-    //   set (val) {
-    //     emit('input', val)
-    //   }
-    // })
-
     return {
-      proxyVal,
-      errMessage
+      proxyVal
     }
   }
 }
@@ -144,14 +117,8 @@ export default {
     opacity: 0.5;
   }
   .wrapperInput {
-  box-sizing: border-box;
+    box-sizing: border-box;
     position: relative;
-    // span {
-    //   position: absolute;
-    //   bottom: -1.8rem;
-    //   left: 0;
-    //   color: red;
-    // }
   }
   input {
     width: 100%;
@@ -166,7 +133,7 @@ export default {
   }
   input[type=password] {
     padding-top: 0;
-    font-size: 24px;
+    font-size: 2.4rem;
   }
   input::placeholder {
     color: $fontColorDefault;
@@ -176,6 +143,11 @@ export default {
     margin-top: 1rem;
     color: #D13C33;
     @include regular-text;
+  }
+  &.pinkBorder {
+    input {
+      border-color:$pink2 ;
+    }
   }
 }
 </style>

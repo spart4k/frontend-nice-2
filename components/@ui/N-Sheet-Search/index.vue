@@ -5,9 +5,17 @@
     </h2>
     <div :class="$style.inputContainer">
       <N-Text-Field placeholder="Начните искать ..." type="text" color="#6448B5" />
-      <N-Icon :class="$style.searchIcon" name="search" />
+      <N-Icon :class="$style.searchIcon" name="loupe" />
     </div>
     <div :class="$style.searchResults">
+      <div v-if="false">
+        <N-Search-Result />
+      </div>
+      <div v-else :class="$style.nothing">
+        <p :class="$style.nothingToShow">
+          Нет информации для отображения
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -46,5 +54,18 @@ export default {
     }
   }
   .searchResults{
+    min-height: 60vh;
+    display: flex;
+    .nothing{
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      margin: auto 0;
+      .nothingToShow {
+        @include regular-text;
+        color: $fontColorDefault;
+        opacity: 0.5;
+      }
+    }
   }
 </style>

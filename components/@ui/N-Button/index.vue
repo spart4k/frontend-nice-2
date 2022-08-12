@@ -19,7 +19,7 @@ export default {
     },
     backgroundColor: {
       type: String,
-      default: 'transparent'
+      default: ''
     }
   }
 }
@@ -37,6 +37,9 @@ export default {
     @include button;
     transition: background-color .2s;
     padding: 1.4rem 3.7rem;
+    &:disabled {
+      opacity: 0.5;
+    }
   }
   .sub {
     background: transparent;
@@ -46,6 +49,9 @@ export default {
   .disable {
     opacity: 0.5;
     pointer-events: none;
+  }
+  .pink {
+    background-color: $pink2;
   }
   .transparent {
     background-color: transparent;
@@ -60,5 +66,6 @@ export default {
   }
   .left {
     padding: 0;
+    background-color: transparent;
   }
 </style>

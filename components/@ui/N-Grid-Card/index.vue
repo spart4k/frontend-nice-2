@@ -27,6 +27,9 @@
           />
         </template>
       </div>
+      <!-- <div :class="$style.col">
+        <N-Card-Coin />
+      </div> -->
     </template>
   </div>
 </template>
@@ -90,7 +93,7 @@ export default {
 
 <style scoped lang="scss" module>
 .preview {
-  height: 60rem !important;
+    height: 60rem !important;
   @media (max-width: $mobileWidth) {
     height: calc(100vh - 10.3rem);
   }

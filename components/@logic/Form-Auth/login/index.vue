@@ -1,50 +1,64 @@
 <template>
   <form @submit.prevent="onSubmit">
+    <h2 :class="$style.title">
+      Вход
+    </h2>
+    <!-- <n-text-field
+      v-model.trim="formData.tel"
+      :error="v$.tel.$errors"
+      mask="+7 (###) ###-##-##"
+      md-fz
+      :class="[ $style.input ]"
+      title="Телефон"
+      placeholder="+7 (777) 777-77-77 "
+    /> -->
     <n-text-field
-    v-model.trim="formData.tel"
-    :error="v$.tel.$errors"
-    mask="+7 (###) ###-##-##"
-    md-fz
-    :class="[ $style.input ]"
-    title="Телефон"
-    placeholder="+7 (777) 777-77-77 "
-     />
-    <n-button :class="$style.button" :typeButton="!filledTel ? 'disable' : '' " type="submit">
-      <n-loading v-if="loading"></n-loading>
-      <template v-else>Войти</template>
+      v-model="formData.email"
+      :class="$style.input"
+      placeholder="mail@example.com"
+      title="Email"
+      color="#5289C5"
+      type="email"
+    />
+    <n-text-field
+      v-model="formData.password"
+      :class="$style.input"
+      placeholder=""
+      title="Пароль"
+      color="#5289C5"
+      type="password"
+    />
+    <n-button :class="$style.recovery" type-button="left" color="#5289C5" @click="$emit('changeComponent', 'FormAuthRecovery')">
+      Восстановить пароль
     </n-button>
-    <n-button :class="$style.button" typeButton="sub" @click="returnRegister">
-      Назад
+    <n-button :class="$style.button" :type-button="v$.$invalid ? 'disable' : '' " background-color="#5289C5" type="submit">
+      <n-loading v-if="loading" />
+      <template v-else>
+        Войти
+      </template>
+    </n-button>
+    <n-button :class="$style.button" color="#5289C5" background-color="transparent" @click="$emit('changeComponent', 'FormAuthDefault')">
+      Еще не зарегистрированы?
     </n-button>
   </form>
 </template>
 <script lang="js">
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength } from '@vuelidate/validators'
-import { reactive, ref, useContext, computed } from '@nuxtjs/composition-api'
+import { email, required } from '@vuelidate/validators'
+import { reactive, ref } from '@nuxtjs/composition-api'
 
 export default {
   name: 'FormAuth',
   setup (props, ctx) {
-    const { store } = useContext()
-    const { emit } = ctx
     const formData = reactive({
-      tel: ''
+      email: '',
+      password: ''
     })
-    const rules = {
-      tel: { required, minLength: minLength(18) }
-    }
-
     const loading = ref(false)
-    const errorTel = ref(false)
-    const filledTel = computed(() => {
-      const number = formData.tel.replace(/\D/g, '')
-      if (number.length === 11) {
-        return true
-      } else {
-        return false
-      }
-    })
+    const rules = {
+      email: { required, email },
+      password: { required }
+    }
     const v$ = useVuelidate(rules, formData)
     const onSubmit = () => {
       v$.value.$touch()
@@ -52,27 +66,12 @@ export default {
         return
       }
       loading.value = true
-      emit('saveTel', formData.tel)
-      const number = '+' + formData.tel.replace(/\D/g, '')
-      store.dispatch('authentication/getSms', number)
-      .then((res) => {
-        const code = res.data['sms code']
-        emit('saveCode', code)
-        loading.value = false
-        emit('input', 2)
-      })
-    }
-    const returnRegister = () => {
-      emit('input', 0)
     }
 
     return {
       formData,
       onSubmit,
-      returnRegister,
       loading,
-      errorTel,
-      filledTel,
       v$
     }
   }
@@ -80,13 +79,22 @@ export default {
 </script>
 <style lang="scss" module>
   form {
+    .title {
+      @include text-style-h2;
+      color: $fontColorDefault;
+      text-align: center;
+      margin: 2.7rem 0 2rem;
+    }
     & > .input + .input {
-      margin-top: 1.6rem;
+      margin-top: 2.5rem;
     }
     .button {
-      margin-top: 2.7rem;
+      margin-top: 1rem;
       width: 100%;
-      height: 5.1rem;
+    }
+      .recovery {
+      margin: 2.5rem 0;
+      font-size: 1.4rem !important;
     }
   }
 </style>

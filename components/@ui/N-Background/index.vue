@@ -45,6 +45,7 @@ export default {
   min-height: 100vh;
   // background-image: url('@/assets/img/background/coin-background.png');
   background-size: cover;
+  transform: scale(1.3);
 }
 .overlay {
   position: fixed;

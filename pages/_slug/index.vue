@@ -99,9 +99,8 @@ export default defineComponent({
     const lazyPagination = ($state) => {
       // getData($state, cards.value.value.last_page)
       // cards.value.value.data = [...cards.value.value.data, ...dataPagination.value]
-      console.log('test')
+      console.log('test', route.value)
     }
-
     const clickTag = async (value) => {
       loading.value = true
       router.push({ path: 'tags', query: { tag: value } })
@@ -115,7 +114,6 @@ export default defineComponent({
     }
 
     store.commit('content/changeBgIntro', route.value.params.slug)
-    console.log(route.value.path.indexOf('iskusstvo'))
     cards.value = useAsync(async () => {
       try {
         const response = await fetchData()
@@ -123,7 +121,7 @@ export default defineComponent({
       } catch (e) {
         console.log(e)
       }
-    }, route.value.path)
+    }, Math.random() * 1000)
 
     return {
       clickTag,
@@ -138,7 +136,8 @@ export default defineComponent({
       // getPageInfo
     }
   },
-  head: {}
+  head: {},
+    watchQuery: ['page']
 })
 </script>
 

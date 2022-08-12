@@ -1,5 +1,6 @@
 <template>
-  <div ref="main" :class="$style.main" :style="{ paddingTop: !isHomePage ? '15.5rem' : '31.6rem' }">
+  <!--  :style="{ paddingTop: !isHomePage ? '15.5rem' : '27.7rem' }-->
+  <div ref="main" :class="[$style.main, !isHomePage && $style.paddingSlug]">
     <div :class="$style.intro">
       <n-tabs
         class="navbarSlug"
@@ -116,11 +117,12 @@ export default {
         if (!isPlayAnimation) {
           animationTimeline('.navbarSlug')
         }
+        //   animationTimeline('.navbarSlug')
 
         animationlogo()
         animateSubtitle()
         animateNavbar('.navbarSlug')
-        localStorage.setItem('showAnimateHomePage', 'true')
+        // localStorage.setItem('showAnimateHomePage', 'true')
       })
     })
 
@@ -143,6 +145,15 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
+.main {
+  padding-top: 27.7rem;
+  @media (max-width: $mobileWidth) {
+    padding-top: 31.6rem;
+  }
+  &.paddingSlug {
+    padding-top: 15.5rem;
+  }
+}
 .tabs {
   margin: 0;
   position: fixed;
@@ -167,9 +178,10 @@ export default {
   padding-top: var(--padding-top-logo);
   transform: translate(-50%, 0);
   cursor: pointer;
+  //width: 35rem;
+  //height: 15.9rem;
   &.animateContent {
     top: 50%;
-    border: 2px solid red;
     visibility: hidden;
     transform: translate(-50%, -50%);
   }

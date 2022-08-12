@@ -24,7 +24,7 @@ export default {
     }
     const innerHeight = ref(null)
     function handleMarquee () {
-      console.log(marquee.value)
+      // console.log(marquee.value)
       const speed = 1
       // let lastScrollPos = 0
       // let timer
@@ -33,7 +33,7 @@ export default {
       const content = marquee.value.querySelector('.inner > *')
       // Get total width
       const elWidth = content.offsetWidth
-      console.log(elWidth)
+      // console.log(elWidth)
       // Duplicate content
       const clone = content.cloneNode(true)
       container.appendChild(clone)
