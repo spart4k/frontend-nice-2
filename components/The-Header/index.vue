@@ -18,25 +18,24 @@
         {{ basketCount.calcBasketCard }}
       </div>
     </n-button>
-
-    <N-BootomSheet
-      ref="menu"
-      effect="fx-slide-from-left"
-      max-width="39rem"
-      :max-height="'100%'"
-      :fullscreen="true"
-      @closeMenu="closeMenu"
-    >
-      <nav :class="$style.headerNav">
-        <menuUserTop
-          @openMenuBasket="openMenuBasket"
-        />
-        <n-nav-menu
-          :header-items="headerItems"
-          @hideNavMenu=" active = false"
-        />
-      </nav>
-    </N-BootomSheet>
+    <!--    <N-BootomSheet-->
+    <!--      ref="menu"-->
+    <!--      effect="fx-slide-from-left"-->
+    <!--      max-width="39rem"-->
+    <!--      :max-height="'100%'"-->
+    <!--      :fullscreen="true"-->
+    <!--      @closeMenu="closeMenu"-->
+    <!--    >-->
+    <!--      <nav :class="$style.headerNav">-->
+    <!--        <menuUserTop-->
+    <!--          @openMenuBasket="openMenuBasket"-->
+    <!--        />-->
+    <!--        <n-nav-menu-->
+    <!--          :header-items="headerItems"-->
+    <!--          @hideNavMenu=" active = false"-->
+    <!--        />-->
+    <!--      </nav>-->
+    <!--    </N-BootomSheet>-->
     <vue-bottom-sheet ref="liveChat" max-height="100%" is-full-screen>
       <client-only>
         <live-default />
@@ -57,20 +56,17 @@
 
 <script lang="js">
 import { computed, ref, useRouter, useRoute, watch, useContext } from '@nuxtjs/composition-api'
-import menuUserTop from './components/MenuUserTop'
 import { numWord } from '~/helpers/compositions/declination'
 export default {
   name: 'TheHeader',
-  components: {
-    menuUserTop
-  },
+
   props: {
     headerItems: {
       type: Array,
       default: () => []
     }
   },
-  setup (_, ctx) {
+  setup () {
     const { store } = useContext()
     const menu = ref(null)
     const menuBasket = ref(null)
@@ -81,7 +77,6 @@ export default {
     const header = ref(null)
     const liveChat = ref(null)
     const isHomePage = computed(() => route.value.name === 'index')
-    const bgName = computed(() => store.state.content.bgIntro)
     const basketData = computed(() => store.state.basket.basket?.data)
     const isAuth = computed(() => store.state.authentication.authorizated)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
@@ -103,17 +98,10 @@ export default {
     }
 
     const openMenu = () => {
-     menu.value.$children[0].open()
-    }
-    const closeMenu = () => {
-      menu.value.$children[0].close()
-    }
-
-    const closedMenuBasket = () => {
-      menuBasket.value.$children[0].close()
+      store.commit('menu/changeShowStateBottomSheetMenu', true)
     }
     const openMenuBasket = () => {
-      store.commit('stepperOrder/changeShowStateBottomSheet', true)
+      store.commit('menu/changeShowStateBottomSheetStepper', true)
     }
 
     const openLive = () => {
@@ -145,9 +133,7 @@ export default {
 
     return {
       openMenu,
-      closeMenu,
       openMenuBasket,
-      closedMenuBasket,
       toggleMenu,
       openProfile,
       closeLive,
@@ -160,7 +146,6 @@ export default {
       isHomePage,
       active,
       header,
-      bgName,
       basketCount,
       activeAuthSteps,
       isAuth,

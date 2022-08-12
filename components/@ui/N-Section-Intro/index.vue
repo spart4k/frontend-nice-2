@@ -12,15 +12,27 @@
         – Уильям Стайрон
       </h3>
       <div :class="$style.image">
-        <img :src="require(`~/assets/img/preview/${BLAND_IMAGE[image]}`)" alt="">
+        <img :src="imageModule" alt="">
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { BLAND_IMAGE } from '~/const/blandImage'
-
+import { computed } from '@nuxtjs/composition-api'
+const BLAND_IMAGE = {
+  muzyka: 'muzyka.png',
+  video: 'video.png',
+  ctivo: 'ctivo.png',
+  iskusstvo: 'iskusstvo.png',
+  kuxnia: 'kuxnia.png',
+  magazin: 'magazin.png',
+  foto: 'foto.png',
+  odezda: 'odezda.png',
+  meropriiatiia: 'meropriiatiia.png',
+  efir: 'efir.png',
+  moneta: 'moneta.png'
+}
 export default {
   name: 'NSectionIntro',
   props: {
@@ -29,8 +41,16 @@ export default {
     },
     image: String
   },
-  setup () {
+  setup (props) {
+    const imageModule = computed(() => {
+      if (BLAND_IMAGE[props.image]) {
+        return require(`~/assets/img/preview/${BLAND_IMAGE[props.image]}`)
+      }
+      return ''
+    })
+
     return {
+      imageModule,
       BLAND_IMAGE
     }
   }
