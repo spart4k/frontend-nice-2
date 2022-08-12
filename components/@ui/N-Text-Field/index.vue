@@ -27,7 +27,7 @@
       >
     </div>
     <p v-if="error" :class="$style.inputError">
-      {{ errMessage }}
+      {{ error }}
     </p>
   </label>
 </template>
@@ -171,10 +171,10 @@ export default {
     margin-top: 1rem;
     color: #D13C33;
     @include regular-text;
-    &.pinkBorder {
-      input {
-        border-color:$pink2 ;
-      }
+  }
+  &.pinkBorder {
+    input {
+      border-color:$pink2 ;
     }
   }
 }

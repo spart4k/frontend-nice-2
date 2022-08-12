@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.container">
-    <component :is="proxyCurrentComp" @changeComponent="changeComponent" />
+    <component :is="proxyCurrentComp" @changeComponent="$emit('changeComponent', $event)" />
     <!-- <FormProfileDefault /> -->
     <!-- <FormAuthLogin /> -->
     <!-- <FormAuthDefault /> -->

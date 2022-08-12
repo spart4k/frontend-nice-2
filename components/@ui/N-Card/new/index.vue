@@ -122,7 +122,7 @@
             v-if="chipsCounter > 0"
             ref="chipExtra"
             :class="$style.chip"
-            @click="extraTagShow()"
+            @click="extraTagShow"
           >
             +{{ chipsCounter }}
           </N-Chip>
@@ -135,7 +135,7 @@
               {{ !$props.detailPage ? '0' : 'Нравится' }}
             </div>
           </div>
-          <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet()">
+          <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
             <N-Icon name="comments" />
             <div :class="$style.parser">
               {{ !$props.detailPage ? '0' : 'Комментировать' }}
@@ -165,9 +165,15 @@
           :class="[$style.comments,showComments ? $style.show : '']"
           :style="{maxHeight: showComments ? commentHeight : '0'}"
         >
-          <N-Input v-if="true" type="textarea" @smilies="commentHeightSet" />
+          <N-Input v-if="false" type="textarea" @smilies="commentHeightSet" />
           <N-Plug v-else @login="login" @registration="registration" />
-          <transition name="comments">
+          <transition
+            name="comments"
+            @before-enter="beforeEnter"
+            @enter="enter"
+            @before-leave="beforeLeave"
+            @leave="leave"
+          >
             <div v-if="true" :class="$style.commentsContainer">
               <div>
                 <N-Comment />
@@ -189,8 +195,9 @@
         :max-width="'450px'"
         effect="fx-slide-from-left"
         @closeMenu="closeMenu"
+        @closed="closed"
       >
-        <N-Sheet :page="page" />
+        <N-Sheet :page="page" @changeComponent="changeComponent" />
       </N-BootomSheet>
     </portal>
   </div>
@@ -222,6 +229,12 @@ export default {
     const { $axios } = useContext()
     const { store } = useContext()
     const videoPlay = ref(false)
+    const closed = () => {
+      page.value = 'FormAuthDefault'
+    }
+    const changeComponent = (value) => {
+      page.value = value
+    }
     const comments = ref(true)
     const login = () => {
       page.value = 'FormAuthLogin'
@@ -242,6 +255,18 @@ export default {
         likeCounter.value--
         await store.dispatch('like/removeLike', props.data.id)
       }
+    }
+    const beforeEnter = (el) => {
+      el.style.height = '0'
+    }
+    const enter = (el) => {
+      el.style.height = el.scrollHeight + 'px'
+    }
+    const beforeLeave = (el) => {
+      el.style.height = el.scrollHeight + 'px'
+    }
+    const leave = (el) => {
+      el.style.height = '0'
     }
     const videoPlayingChange = () => {
       videoPlay.value = !videoPlay.value
@@ -309,8 +334,8 @@ export default {
       })
     })
     onUnmounted(() => {
-      window.addEventListener('resize', windowWidthCount)
-      window.addEventListener('resize', commentHeightSet)
+      window.removeEventListener('resize', windowWidthCount)
+      window.removeEventListener('resize', commentHeightSet)
     })
     const dateFormat = computed(() => {
       return props.data.date_event?.replace(/:(\w+)/, '')?.replace(/\s/, ' / ') ?? ''
@@ -334,6 +359,8 @@ export default {
       extraTagShow,
       addLike,
       windowWidth,
+      closed,
+      changeComponent,
       windowWidthCount,
       videoUrl,
       videoPlay,
@@ -342,7 +369,11 @@ export default {
       registration,
       loginMenu,
       closeMenu,
-      page
+      page,
+      beforeEnter,
+      enter,
+      beforeLeave,
+      leave
     }
   }
 }
@@ -546,7 +577,7 @@ export default {
           line-height: 1.7rem;
         }
         *+* {
-          margin-top: 15px;
+          margin-top: 1.5rem;
         }
       }
       h2 {

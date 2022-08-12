@@ -13,12 +13,10 @@
     >
       <client-only>
         <!-- <n-icon name="close" :class="$style.close" @click="$emit('closeMenu')" /> -->
-        <div>
-          <N-Button-Close :class="$style.close" color="#222222" background-color="rgba(34, 34, 34, 0.1)" @click="$emit('closeMenu')" />
-        </div>
+        <N-Button-Close :class="$style.close" color="#222222" background-color="rgba(34, 34, 34, 0.1)" @click="$emit('closeMenu')" />
         <slot />
-            </client-only>
-      </vue-bottom-sheet>
+      </client-only>
+    </vue-bottom-sheet>
   </div>
 </template>
 
@@ -45,7 +43,7 @@ export default {
       window.addEventListener('resize', windowWidthCount)
     })
     onUnmounted(() => {
-      window.addEventListener('resize', windowWidthCount)
+      window.removeEventListener('resize', windowWidthCount)
     })
     return {
       windowWidth,

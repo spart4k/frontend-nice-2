@@ -26,7 +26,7 @@
       <p :class="$style.wireText">
         Длина (см.):
       </p>
-      <input type="number" maxlength="4" :class="$style.wireInput">
+      <input type="text" pattern="\d*" maxlength="4" :class="$style.wireInput">
     </div>
     <N-Goods-Counter />
     <div :class="$style.wireColorSection">
