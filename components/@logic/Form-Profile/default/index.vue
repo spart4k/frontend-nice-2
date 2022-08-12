@@ -9,7 +9,7 @@
       placeholder="Nice"
       :class="$style.input"
       title="Ник"
-      color="#C83F8E"
+      :color-border="'pinkBorder'"
     />
     <!-- <n-text-field v-model="formData.surname" :value-info="formData.surname" :class="$style.input" placeholder="Фамилия" title="Фамилия" /> -->
     <n-text-field
@@ -19,7 +19,7 @@
       :value-info="formData.phone"
       :class="$style.input"
       title="Телефон"
-      color="#C83F8E"
+      :color-border="'pinkBorder'"
       type="tel"
     />
     <n-text-field
@@ -28,7 +28,7 @@
       :class="$style.input"
       placeholder="Email"
       title="Email"
-      color="#C83F8E"
+      :color-border="'pinkBorder'"
     />
     <template v-if="true">
       <n-text-field v-model="formData.address" placeholder="Город, улица, дом" :class="$style.input" title="Адрес" color="#C83F8E" />

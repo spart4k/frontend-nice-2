@@ -3,76 +3,79 @@
     <h2 :class="$style.title">
       Вход
     </h2>
-    <!-- <n-text-field
-      v-model.trim="formData.tel"
-      :error="v$.tel.$errors"
-      mask="+7 (###) ###-##-##"
-      md-fz
-      :class="[ $style.input ]"
-      title="Телефон"
-      placeholder="+7 (777) 777-77-77 "
-    /> -->
     <n-text-field
       v-model="formData.email"
       :class="$style.input"
+      :error="$errors.email[0]"
       placeholder="mail@example.com"
       title="Email"
-      color="#5289C5"
+      :color-border="'blueBorder'"
       type="email"
     />
     <n-text-field
       v-model="formData.password"
       :class="$style.input"
+      :error="$errors.password[0]"
       placeholder=""
       title="Пароль"
-      color="#5289C5"
+      :color-border="'blueBorder'"
       type="password"
     />
-    <n-button :class="$style.recovery" type-button="left" color="#5289C5" @click="$emit('changeComponent', 'FormAuthRecovery')">
+    <n-button
+      :class="$style.recovery"
+      type-button="left"
+      color="#5289C5"
+      @click="$emit('changeComponent', 'FormAuthRecovery')"
+    >
       Восстановить пароль
     </n-button>
-    <n-button :class="$style.button" :type-button="v$.$invalid ? 'disable' : '' " background-color="#5289C5" type="submit">
+    <n-button
+      :class="$style.button"
+      :disabled="$v.$invalid && $touched "
+      background-color="#5289C5"
+      type="submit"
+      @click="submit"
+    >
       <n-loading v-if="loading" />
       <template v-else>
         Войти
       </template>
     </n-button>
-    <n-button :class="$style.button" color="#5289C5" background-color="transparent" @click="$emit('changeComponent', 'FormAuthDefault')">
+    <n-button
+      :class="$style.button"
+      color="#5289C5"
+      background-color="transparent"
+      @click="$emit('changeComponent', 'FormAuthDefault')"
+    >
       Еще не зарегистрированы?
     </n-button>
   </form>
 </template>
 <script lang="js">
-import { useVuelidate } from '@vuelidate/core'
-import { email, required } from '@vuelidate/validators'
-import { reactive, ref } from '@nuxtjs/composition-api'
+import useForm from '~/compositions/useForm'
+import { email, required } from '~/utills/validations'
 
 export default {
   name: 'FormAuth',
   setup (props, ctx) {
-    const formData = reactive({
-      email: '',
-      password: ''
-    })
-    const loading = ref(false)
-    const rules = {
-      email: { required, email },
-      password: { required }
-    }
-    const v$ = useVuelidate(rules, formData)
-    const onSubmit = () => {
-      v$.value.$touch()
-      if (v$.value.$invalid) {
-        return
-      }
-      loading.value = true
+  const { formData, validate, $errors, $v, $touched } = useForm(
+      {
+        fields: {
+          email: { default: '', validations: { email, required } },
+          password: { default: '', validations: { required } }
+        }
+      })
+    const submit = () => {
+      if (!validate()) { return }
+      console.log('ads')
     }
 
     return {
       formData,
-      onSubmit,
-      loading,
-      v$
+      $errors,
+      $touched,
+      $v,
+      submit
     }
   }
 }

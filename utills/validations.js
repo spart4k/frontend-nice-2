@@ -18,7 +18,7 @@ const phone = {
 
 const sameAs = value => ({
   $validator: (val) => {
-    try { // может падать при первой проверке, когда formData еще не синициализирован
+    try {
       return val === value()
     } catch (err) {
       return false
