@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$style.card, detailPage && $style.detailPage]">
+  <div class="card" :class="[$style.card, detailPage && $style.detailPage]">
     <div ref="gallery" :class="[$style.gallery, detailPage && $style.detailPage]">
       <template v-if="data.images.length && !$props.withVideo">
         <template v-if="$props.detailPage && data.images.length > 1">
@@ -156,6 +156,7 @@
         </div>
         <div
           v-if="$props.detailPage"
+          class="comments"
           ref="commentBox"
           :class="[$style.comments,showComments ? $style.show : '']"
           :style="{maxHeight: showComments ? commentHeight : '0'}"
@@ -163,8 +164,8 @@
           <!-- <p :class="$style.comments__title">
           {{ commentCounter }} комментари{{ commentEnding }}
         </p> -->
-          <!-- <N-Input @smilies="commentHeightSet" /> -->
-          <N-Plug v-if="true" @login="login" @registration="registration" />
+          <N-Input v-if="true" swipingBlock="card" type="textarea" @smilies="commentHeightSet" />
+          <N-Plug v-else @login="login" @registration="registration" />
           <div :class="$style.commentsContainer">
             <div>
               <N-Comment />

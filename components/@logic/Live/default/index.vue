@@ -7,11 +7,7 @@
     <live-chat/>
   </div>
 </template>
-<script>
-export default {
-  name: 'live'
-}
-</script>
 
+<script lang="javascript" src="./setup.js"></script>
 <style lang="scss" module src="./style.scss">
 </style>

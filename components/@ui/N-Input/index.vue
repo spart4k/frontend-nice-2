@@ -57,6 +57,10 @@ export default {
     type: {
       type: String,
       default: 'input'
+    },
+    swipingBlock: {
+      type: String,
+      default: ''
     }
   },
   setup (props, ctx) {
@@ -64,19 +68,9 @@ export default {
   const letters = ref('')
   const input = ref()
   const smilies = ref()
-  const showSmilies = () => {
-    smilies.value = !smilies.value
-  }
-  const resize = (e) => {
-    e.target.style.height = 'auto'
-    e.target.style.height = `${e.target.scrollHeight}px`
-  }
-  const sendComment = () => {
-    input.value.style.height = ''
-    console.log(letters.value)
-    emit('sendMessage', letters.value)
-    letters.value = ''
-  }
+  const innerHeight = ref(null)
+  const mountedHeight = ref(null)
+  const transformBlock = ref(null)
   const beforeEnter = (el) => {
     el.style.height = '0'
   }
@@ -96,21 +90,29 @@ export default {
   const widthFrame = computed(() => {
     return window.innerWidth
   })
-
-  const onInputContent = (e) => {
-    console.log(e.target.innerHTML)
-    console.log(input.value.innerHTML)
-  }
-  const mobileDevice = computed(() => {
+  const androidDevice = computed(() => {
     if (/Android/i.test(navigator.userAgent)) {
         return true
     } else {
         return false
     }
   })
-
-  const innerHeight = ref(null)
-  const mountedHeight = ref(null)
+  const keyboardHeight = computed(() => {
+    return mountedHeight.value - innerHeight.value
+  })
+  const showSmilies = () => {
+    smilies.value = !smilies.value
+  }
+  const resize = (e) => {
+    e.target.style.height = 'auto'
+    e.target.style.height = `${e.target.scrollHeight}px`
+  }
+  const sendComment = () => {
+    input.value.style.height = ''
+    console.log(letters.value)
+    emit('sendMessage', letters.value)
+    letters.value = ''
+  }
   const emojiWrite = (emoji) => {
     if (letters.value.length < 199) {
       letters.value += emoji
@@ -120,39 +122,47 @@ export default {
       // }
     }
   }
+  const handleKeyboard = () => {
+    innerHeight.value = window.innerHeight
+    if (!showingKeyboard.value && androidDevice.value) {
+      setTimeout(() => {
+        transformBlock.value.style.transform = 'translate(0,0)'
+      }, 300)
+    } else if (showingKeyboard.value && androidDevice.value) {
+      transformBlock.value.style.transform = `translate(0,-${keyboardHeight.value}px)`
+    }
+  }
+
   const focusInput = () => {
-    console.log('input')
-    if (widthFrame.value < 768) {
-      // const keyboardHeight = mountedHeight.value - innerHeight.value
-      console.log(innerHeight.value)
-      console.log(mountedHeight.value)
-      const liveChat = document.querySelector('.liveChat')
-      console.log(liveChat)
-      if (liveChat) {
-        console.log(liveChat)
+    if (widthFrame.value < 768 && androidDevice.value) {
+      if (transformBlock.value) {
         setTimeout(() => {
-          liveChat.style.marginTop = -innerHeight.value + 35 + 'px'
+          transformBlock.value.style.transform = `translate(0,-${keyboardHeight.value}px)`
         }, 300)
       }
     }
   }
 
   const blurInput = () => {
-    console.log('blur')
-    const liveChat = document.querySelector('.liveChat')
-    if (liveChat) {
-        console.log(liveChat)
-        setTimeout(() => {
-          liveChat.style.marginTop = 0 + 'px'
-        }, 300)
-      }
+     if (transformBlock.value) {
+      setTimeout(() => {
+        transformBlock.value.style.transform = 'translate(0,0)'
+      }, 300)
+     }
   }
+
+  const showingKeyboard = computed(() => {
+    if (mountedHeight.value === innerHeight.value) {
+      return false
+    } else if (innerHeight.value < mountedHeight.value) {
+      return true
+    }
+  })
 
   onMounted(() => {
     mountedHeight.value = window.innerHeight
-    window.addEventListener('resize', (e) => {
-      innerHeight.value = window.innerHeight
-    })
+    transformBlock.value = document.querySelector(props.swipingBlock)
+    window.addEventListener('resize', handleKeyboard)
   })
 
   watch(() => letters.value, (newValue) => {
@@ -172,12 +182,14 @@ export default {
     leave,
     widthFrame,
     divContent,
-    onInputContent,
-    mobileDevice,
+    androidDevice,
     innerHeight,
     mountedHeight,
     focusInput,
-    blurInput
+    blurInput,
+    handleKeyboard,
+    showingKeyboard,
+    transformBlock
   }
   }
 }
@@ -208,6 +220,7 @@ export default {
       padding: 1rem 0;
       border: none;
       border-bottom: .2rem solid #D46D33;
+      border-radius: 0;
       outline: none;
       resize: none;
       background-color: transparent;
