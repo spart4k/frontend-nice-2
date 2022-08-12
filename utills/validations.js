@@ -74,7 +74,19 @@ const strongPassword = () => {
       success: false
     }
   }
-  return validators
+  const $validator = (val) => {
+    Object.values(validators).forEach((validator) => {
+      validator.success = validator.cb(val)
+      validator.touched = true
+    })
+
+    return !Object.values(validators).find(validator => !validator.success)
+  }
+  return {
+    validators,
+    $validator,
+    $message: () => 'Не выполнены все условия'
+  }
 }
 //   const $validator = (val) => {
 //     Object.values(validators).forEach((validator) => {
