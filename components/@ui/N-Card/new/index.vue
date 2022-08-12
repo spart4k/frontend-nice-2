@@ -87,10 +87,10 @@
             </template>
             <template v-else>
               <N-Goods-Counter :class="$style.goodsCounter" />
+              <N-Button :class="$style.buyButton" background-color="#C83F8E">
+                Купить
+              </N-Button>
             </template>
-            <N-Button :class="$style.buyButton" background-color="#C83F8E">
-              Купить
-            </N-Button>
           </template>
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />

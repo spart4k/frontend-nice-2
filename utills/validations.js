@@ -15,6 +15,10 @@ const phone = {
   $validator: val => val.length > 10,
   $message: () => 'Не менее 10 символов'
 }
+const nameLength = {
+  $validator: val => val.length > 4,
+  $message: () => 'Не менее 4 символов'
+}
 
 const sameAs = value => ({
   $validator: (val) => {
@@ -70,11 +74,23 @@ const strongPassword = () => {
     oneDigit: {
       cb: val => /\d/.test(val),
       touched: false,
-      message: () => 'Должен содержать цифры',
+      message: () => 'Должен содержать цифру',
       success: false
     }
   }
-  return validators
+  const $validator = (val) => {
+    Object.values(validators).forEach((validator) => {
+      validator.success = validator.cb(val)
+      validator.touched = true
+    })
+
+    return !Object.values(validators).find(validator => !validator.success)
+  }
+  return {
+    validators,
+    $validator,
+    $message: () => Object.values(validators).find(validator => !validator.success).message()
+  }
 }
 //   const $validator = (val) => {
 //     Object.values(validators).forEach((validator) => {
@@ -106,5 +122,6 @@ export {
   password,
   email,
   phone,
+  nameLength,
   strongPassword
 }

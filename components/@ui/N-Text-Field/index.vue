@@ -151,7 +151,7 @@ export default {
   }
   &.blueBorder {
     input {
-      border-color:$blue2 ;
+      border-color:$blue2;
     }
   }
 }

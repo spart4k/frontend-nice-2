@@ -52,14 +52,20 @@
         Регистрация
       </template>
     </n-button>
-    <n-button type-button="wide" color="#5289C5" background-color="transparent" :class="$style.buttonTologin" @click="$emit('changeComponent', 'FormAuthLogin')">
+    <n-button
+      type-button="wide"
+      color="#5289C5"
+      background-color="transparent"
+      :class="$style.buttonTologin"
+      @click="$emit('changeComponent', 'FormAuthLogin')"
+    >
       Уже зарегистрированы?
     </n-button>
   </form>
 </template>
 <script lang="js">
 import useForm from '~/compositions/useForm'
-import { email, required, sameAs, strongPassword } from '~/utills/validations'
+import { email, required, sameAs, strongPassword, nameLength } from '~/utills/validations'
 
 export default {
   name: 'FormAuth',
@@ -67,8 +73,8 @@ export default {
     const { formData, validate, $errors, $v, $touched } = useForm(
       {
         fields: {
-          name: { default: '', validations: { required } },
-          email: { default: '', validations: { email, required } },
+          name: { default: '', validations: { required, nameLength } },
+          email: { default: '', validations: { required, email } },
           firstPass: { default: '', validations: { required, password: strongPassword() } },
           secondPass: { default: '', validations: { required, sameAs: sameAs(() => formData.firstPass) } }
         }
