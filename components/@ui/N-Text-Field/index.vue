@@ -12,9 +12,6 @@
       {{ $props.title }}
     </h3>
     <div :class="[$style.wrapperInput]">
-      <!-- <span v-if="error" class="input-error">
-        {{ error }}
-      </span> -->
       <input
         v-model="proxyVal"
         v-mask="$props.mask"
@@ -25,10 +22,10 @@
         :placeholder="$props.placeholder"
         @keydown.enter="$emit('keydown', $event)"
       >
+      <p v-if="error" :class="$style.inputError">
+        {{ error }}
+      </p>
     </div>
-    <p v-if="error" :class="$style.inputError">
-      {{ error }}
-    </p>
   </label>
 </template>
 <script lang="js">
@@ -86,25 +83,6 @@ export default {
       emit('input', proxyVal.value)
     })
     watch(() => props.valueInfo, (newValue, oldValue) => { proxyVal.value = newValue })
-    // const errMessage = computed(() => {
-    //   if (props.error[0]) {
-    //     const text = props.error[0].$message
-    //     let newText = ''
-    //     switch (text) {
-    //       case 'Value is required':
-    //         newText = 'Обязательное поле'
-    //         break
-    //       case 'Value is not a valid email address':
-    //         newText = 'Email введен не корректно'
-    //         break
-    //       case 'This field should be at least 18 characters long':
-    //         newText = 'Введите номер полностью'
-    //         break
-    //     }
-    //     return newText
-    //   }
-    // })
-
     return {
       proxyVal
     }
@@ -139,14 +117,8 @@ export default {
     opacity: 0.5;
   }
   .wrapperInput {
-  box-sizing: border-box;
+    box-sizing: border-box;
     position: relative;
-    // span {
-    //   position: absolute;
-    //   bottom: -1.8rem;
-    //   left: 0;
-    //   color: red;
-    // }
   }
   input {
     width: 100%;

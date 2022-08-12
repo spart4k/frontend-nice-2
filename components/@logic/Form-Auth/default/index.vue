@@ -5,7 +5,6 @@
     </h2>
     <n-text-field
       v-model="formData.name"
-      :error="v$.name.$errors"
       :class="$style.input"
       placeholder="Nice"
       title="Ник"
@@ -14,7 +13,6 @@
     />
     <n-text-field
       v-model="formData.email"
-      :error="v$.email.$errors"
       :class="$style.input"
       placeholder="mail@example.com"
       title="Email"

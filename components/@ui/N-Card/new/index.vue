@@ -108,7 +108,7 @@
         <!-- <div v-if="$props.detailPage && (windowWidth > 900) && !showComments" :class="[$style.empty, detailPage && $style.detailPage]" :style="{ height: emptyBlockHeight + 'px' }" /> -->
       </template>
       <div :class="[$style.body__bottom, detailPage && $style.detailPage]">
-        <div v-if="$props.detailPage" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '1.5rem' : '' }">
+        <div v-if="$props.detailPage" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '3rem' : '' }">
           <N-Chip
             v-for="item in data.tags"
             :key="item.id"
@@ -127,7 +127,7 @@
             +{{ chipsCounter }}
           </N-Chip>
         </div>
-        <div :class="[$style.socials, detailPage && $style.detailPage]" :style="{ marginTop: $props.detailPage ? '3rem' : '2rem' }">
+        <div :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
           <div :class="$style.socialsItem">
             <N-Like v-model="like" :class="$style.likeContainer" @click="addLike" />
             <div :class="$style.parser">
@@ -142,7 +142,7 @@
             </div>
           </div>
         </div>
-        <div v-if="!$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '3rem' : '' }">
+        <div v-if="!$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '2rem' : '' }">
           <N-Chip
             v-for="item in data.tags"
             :key="item.id"
@@ -167,22 +167,14 @@
         >
           <N-Input v-if="false" type="textarea" @smilies="commentHeightSet" />
           <N-Plug v-else @login="login" @registration="registration" />
-          <transition
-            name="comments"
-            @before-enter="beforeEnter"
-            @enter="enter"
-            @before-leave="beforeLeave"
-            @leave="leave"
-          >
-            <div v-if="true" :class="$style.commentsContainer">
-              <div>
-                <N-Comment />
-                <N-Comment />
-                <N-Comment />
-                <N-Comment />
-              </div>
+          <div :class="$style.commentsContainer">
+            <div>
+              <N-Comment />
+              <N-Comment />
+              <N-Comment />
+              <N-Comment />
             </div>
-          </transition>
+          </div>
         </div>
       </div>
       <div v-if="$slots.footer" :class="$style.body__footer">
@@ -255,18 +247,6 @@ export default {
         likeCounter.value--
         await store.dispatch('like/removeLike', props.data.id)
       }
-    }
-    const beforeEnter = (el) => {
-      el.style.height = '0'
-    }
-    const enter = (el) => {
-      el.style.height = el.scrollHeight + 'px'
-    }
-    const beforeLeave = (el) => {
-      el.style.height = el.scrollHeight + 'px'
-    }
-    const leave = (el) => {
-      el.style.height = '0'
     }
     const videoPlayingChange = () => {
       videoPlay.value = !videoPlay.value
@@ -369,11 +349,7 @@ export default {
       registration,
       loginMenu,
       closeMenu,
-      page,
-      beforeEnter,
-      enter,
-      beforeLeave,
-      leave
+      page
     }
   }
 }
@@ -508,6 +484,9 @@ export default {
   .socials {
     display: flex;
     width: auto;
+    padding: 3rem 0 1rem;
+    border-top: .1rem solid rgba(34, 34, 34, 0.1);
+
     .socialsItem {
       *+div {
         margin-left: 1rem;
@@ -515,13 +494,6 @@ export default {
     }
     .socialsItem+.socialsItem{
       margin-left: 3rem;
-    }
-    &.detailPage {
-      @media (min-width: $tabletWidth) {
-        padding-top: 3.094rem;
-        border-top: .1rem solid rgba(34, 34, 34, 0.1);
-        margin-top: 3rem;
-      }
     }
     div {
       display: flex;
@@ -612,14 +584,14 @@ export default {
       }
     }
     &__footer {
-      margin-top: 3rem;
+      margin-top: 2rem;
     }
     .comment {
       margin-left: auto;
     }
     .comments {
-      transition: all .6s;
-      // overflow: hidden;
+      transition: all .5s;
+      overflow: hidden;
       opacity: 0;
       &__title {
         color: $fontColorDefault;
@@ -634,7 +606,7 @@ export default {
     }
     .show {
       opacity: 1;
-      margin-top: 2.094rem;
+      margin-top: 3rem;
     }
   }
 </style>
