@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { computed, onMounted, ref, useContext, watch } from '@nuxtjs/composition-api'
+import { computed, ref, useContext, watch } from '@nuxtjs/composition-api'
 import StepOne from './components/StepOne'
 import StepTwo from './components/StepTwo'
 import StepThree from './components/StepThree'
@@ -33,12 +33,6 @@ export default {
     }
     watch(() => store.state.stepperOrder.isShowBottomSheet, () => {
       page.value = 0
-    })
-    onMounted(() => {
-      container.value.addEventListener('scroll', (e) => {
-        e.preventDefault()
-        console.log(e)
-      })
     })
     const isCurrentPage = computed(() => {
       switch (page.value) {

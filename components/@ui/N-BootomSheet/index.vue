@@ -6,19 +6,16 @@
       :max-width="maxWidth"
       :max-height="maxHeight"
       :swipe-able="$mq === 'sm'"
-      :is-full-screen="windowWidth>450"
+      :is-full-screen="fullscreen"
       :rounded="$mq === 'sm'"
       v-on="$attrs"
       @closed="$emit('closed')"
     >
       <client-only>
-        <!-- <n-icon name="close" :class="$style.close" @click="$emit('closeMenu')" /> -->
-        <div>
-          <N-Button-Close :class="$style.close" color="#222222" background-color="rgba(34, 34, 34, 0.1)" @click="$emit('closeMenu')" />
-        </div>
+        <N-Button-Close :class="$style.close" color="#222222" background-color="rgba(34, 34, 34, 0.1)" @click="$emit('closeMenu')" />
         <slot />
-            </client-only>
-      </vue-bottom-sheet>
+      </client-only>
+    </vue-bottom-sheet>
   </div>
 </template>
 
@@ -29,6 +26,7 @@ export default {
   name: 'NBottomSheet',
   props: {
     maxWidth: String,
+    fullscreen: Boolean,
     maxHeight: {
       type: String,
       default: ''
@@ -62,7 +60,7 @@ export default {
     top: 1.5rem;
     right: 1.5rem;
   }
-  :global(.bottom-sheet__pan[data-v-61ac11a0]) {
+  :global(.bottom-sheet__pan) {
       padding-bottom: 20px;
       padding-top: 15px;
       height: 5rem;
@@ -75,14 +73,7 @@ export default {
   :global(.bottom-sheet__content) {
     overflow: auto !important;
   }
-  :global(.bottom-sheet__bar) {
-    height: 6px !important;
-    background: #222222;
-    opacity: 0.2;
-    @media (min-width: $mobileWidth) {
-      display: none;
-    }
-  }
+
   :global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-left) {
     @media (min-width: $mobileWidth) {
       transform: translate(0, 0) !important;

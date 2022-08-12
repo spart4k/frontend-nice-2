@@ -69,7 +69,6 @@ export default {
     e.target.style.height = 'auto'
     e.target.style.height = `${e.target.scrollHeight}px`
   }
-  watch(() => {})
   const sendComment = () => {
     input.value.style.height = ''
     emit('sendMessage', letters.value)

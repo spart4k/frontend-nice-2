@@ -59,6 +59,7 @@ export default {
       subtitle: 'творческое объединение',
       background: ''
     })
+
     const {
       animateBackground
     } = animationGSAP($gsap, Elastic)
@@ -71,6 +72,7 @@ export default {
         return ''
       }
     })
+
     watch(() => store.state.stepperOrder.isShowBottomSheet, () => {
       if (store.state.stepperOrder.isShowBottomSheet) {
         openMenuBasket()
