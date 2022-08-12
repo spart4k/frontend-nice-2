@@ -6,16 +6,35 @@
       <Nuxt />
     </n-intro-wrapper>
     <N-BootomSheet
+      ref="menu"
+      effect="fx-slide-from-left"
+      max-width="39rem"
+      :max-height="'100%'"
+      :fullscreen="true"
+      @closeMenu="changeState(false, 'menu')"
+      @closed="changeState(false, 'menu')"
+    >
+      <nav :class="$style.headerNav">
+        <menuUserTop
+          @openMenuBasket="changeState(true, 'basket')"
+        />
+        <n-nav-menu
+          :header-items="headerItems"
+        />
+      </nav>
+    </N-BootomSheet>
+    <N-BootomSheet
       ref="menuBasket"
       effect="fx-slide-from-left"
       max-width="39rem"
       :max-height="'100%'"
       :fullscreen="true"
-      @closeMenu="closedMenuBasket"
-      @closed="closedSwipe"
+      @closeMenu="changeState(false, 'basket')"
+      @closed="changeState(false, 'basket')"
     >
       <StepperOrder />
     </N-BootomSheet>
+
     <portal-target name="sliderPopup" />
   </div>
 </template>
@@ -31,6 +50,8 @@ export default {
   setup () {
     const headerItems = ref([])
     const body = ref(null)
+    const menu = ref(null)
+
     const menuBasket = ref(null)
     const { store, route, $gsap } = useContext()
     const isHomePage = computed(() => route.value.name === 'index')
@@ -40,7 +61,7 @@ export default {
       return response
     }
     const closedSwipe = () => {
-      store.commit('stepperOrder/changeShowStateBottomSheet', false)
+      store.commit('menu/changeShowStateBottomSheetStepper', false)
     }
 
     useFetch(async () => {
@@ -60,6 +81,14 @@ export default {
       background: ''
     })
 
+    const changeState = (value, key) => {
+      if (key === 'basket') {
+        store.commit('menu/changeShowStateBottomSheetStepper', value)
+      } else {
+        store.commit('menu/changeShowStateBottomSheetMenu', value)
+      }
+    }
+
     const {
       animateBackground
     } = animationGSAP($gsap, Elastic)
@@ -73,21 +102,33 @@ export default {
       }
     })
 
-    watch(() => store.state.stepperOrder.isShowBottomSheet, () => {
-      if (store.state.stepperOrder.isShowBottomSheet) {
+    watch(() => store.state.menu.isShowBottomSheetStepper, () => {
+      if (store.state.menu.isShowBottomSheetStepper) {
         openMenuBasket()
       } else {
         closedMenuBasket()
       }
     })
 
-    const closedMenuBasket = () => {
-      menuBasket.value.$children[0].close()
-      store.commit('stepperOrder/changeShowStateBottomSheet', false)
-    }
+    watch(() => store.state.menu.isShowBottomMenu, () => {
+      if (store.state.menu.isShowBottomMenu) {
+        openMenu()
+      } else {
+        closeMenu()
+      }
+    })
 
     const openMenuBasket = () => {
       menuBasket.value.$children[0].open()
+    }
+    const closedMenuBasket = () => {
+      menuBasket.value.$children[0].close()
+    }
+    const openMenu = () => {
+      menu.value.$children[0].open()
+    }
+    const closeMenu = () => {
+      menu.value.$children[0].close()
     }
 
     onMounted(() => {
@@ -104,10 +145,25 @@ export default {
       introTitle,
       isHomePage,
       menuBasket,
+      menu,
+      openMenu,
+      closeMenu,
       closedMenuBasket,
       openMenuBasket,
-      closedSwipe
+      closedSwipe,
+      changeState
     }
   }
 }
 </script>
+<style lang="scss" module>
+.headerNav {
+  display: block;
+  padding-top: 4.9rem;
+  backface-visibility: hidden;
+  max-height: 100%;
+  overflow: auto;
+  @include container;
+}
+
+</style>

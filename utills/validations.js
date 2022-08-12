@@ -59,35 +59,23 @@ const password = {
 //   $message: () => i18n.t('auth.validations.password.onlyLowerCase'),
 // }
 
-// const strongPassword = () => {
-//   const validators = {
-//     length: {
-//       cb: val => val.length > 8,
-//       touched: false,
-//       message: () => 'Не менее 8 симоволов',
-//       success: false
-//     },
-//     oneDigit: {
-//       cb: val => /\d/.test(val),
-//       touched: false,
-//       message: () => 'Должен содержать цифры',
-//       success: false
-//     },
-//     oneLowercase: {
-//       cb: val => /[a-zа-я]/.test(val),
-//       touched: false,
-//       message: () => 'Должен содержать строчные буквы',
-//       success: false
-//     },
-//     oneUppercase: {
-//       cb: val => /[А-ЯA-Z]/.test(val),
-//       touched: false,
-//       message: () => 'Должен содержать прописные буквы',
-//       success: false
-//     }
-//   }
-//   return validators
-// }
+const strongPassword = () => {
+  const validators = {
+    length: {
+      cb: val => val.length > 8,
+      touched: false,
+      message: () => 'Не менее 8 симоволов',
+      success: false
+    },
+    oneDigit: {
+      cb: val => /\d/.test(val),
+      touched: false,
+      message: () => 'Должен содержать цифры',
+      success: false
+    }
+  }
+  return validators
+}
 //   const $validator = (val) => {
 //     Object.values(validators).forEach((validator) => {
 //       validator.success = validator.cb(val)
@@ -117,5 +105,6 @@ export {
   sameAs,
   password,
   email,
-  phone
+  phone,
+  strongPassword
 }

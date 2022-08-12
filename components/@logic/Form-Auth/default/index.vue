@@ -59,7 +59,7 @@
 </template>
 <script lang="js">
 import useForm from '~/compositions/useForm'
-import { email, required, sameAs } from '~/utills/validations'
+import { email, required, sameAs, strongPassword } from '~/utills/validations'
 
 export default {
   name: 'FormAuth',
@@ -69,7 +69,7 @@ export default {
         fields: {
           name: { default: '', validations: { required } },
           email: { default: '', validations: { email, required } },
-          firstPass: { default: '', validations: { required } },
+          firstPass: { default: '', validations: { required, password: strongPassword() } },
           secondPass: { default: '', validations: { required, sameAs: sameAs(() => formData.firstPass) } }
         }
       })

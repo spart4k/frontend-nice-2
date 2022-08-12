@@ -31,7 +31,7 @@ export default {
         page.value -= 1
       }
     }
-    watch(() => store.state.stepperOrder.isShowBottomSheet, () => {
+    watch(() => store.state.menu.isShowBottomSheetStepper, () => {
       page.value = 0
     })
     const isCurrentPage = computed(() => {
