@@ -34,6 +34,17 @@
     >
       <StepperOrder />
     </N-BootomSheet>
+    <N-BootomSheet
+      ref="menuLive"
+      effect="fx-slide-from-left"
+      max-width="39rem"
+      :max-height="'100%'"
+      :fullscreen="true"
+      @closeMenu="changeState(false, 'live')"
+      @closed="changeState(false, 'live')"
+    >
+      <live-default />
+    </N-BootomSheet>
 
     <portal-target name="sliderPopup" />
   </div>
@@ -53,6 +64,7 @@ export default {
     const menu = ref(null)
 
     const menuBasket = ref(null)
+    const menuLive = ref(null)
     const { store, route, $gsap } = useContext()
     const isHomePage = computed(() => route.value.name === 'index')
 
@@ -84,8 +96,10 @@ export default {
     const changeState = (value, key) => {
       if (key === 'basket') {
         store.commit('menu/changeShowStateBottomSheetStepper', value)
-      } else {
+      } else if (key === 'menu') {
         store.commit('menu/changeShowStateBottomSheetMenu', value)
+      } else if (key === 'live') {
+        store.commit('menu/changeShowStateBottomSheetLive', value)
       }
     }
 
@@ -118,6 +132,14 @@ export default {
       }
     })
 
+    watch(() => store.state.menu.isShowBottomLive, () => {
+      if (store.state.menu.isShowBottomLive) {
+        openMenuLive()
+      } else {
+        closeMenuLive()
+      }
+    })
+
     const openMenuBasket = () => {
       menuBasket.value.$children[0].open()
     }
@@ -129,6 +151,12 @@ export default {
     }
     const closeMenu = () => {
       menu.value.$children[0].close()
+    }
+    const openMenuLive = () => {
+      menuLive.value.$children[0].open()
+    }
+    const closeMenuLive = () => {
+      menuLive.value.$children[0].close()
     }
 
     onMounted(() => {
@@ -146,6 +174,7 @@ export default {
       isHomePage,
       menuBasket,
       menu,
+      menuLive,
       openMenu,
       closeMenu,
       closedMenuBasket,

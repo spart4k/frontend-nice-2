@@ -4,7 +4,7 @@
       <img :class="$style.wrapper" :src="require(`~/assets/img/live/def-radio-wrap.png`)" alt="">
       <div ref="marquee" class="marquee" :class="[ $style.marquee, $style.name ]">
         <div class="inner" :class="$style.inner">
-          <p>Eli & Fur live from Courmayeur, Skyway Monte Bianco, in Italy for Cercle</p>
+          <p>Eli & Fur </p>
         </div>
       </div>
 

@@ -59,6 +59,7 @@ export default {
     position: absolute;
     top: 1.5rem;
     right: 1.5rem;
+    z-index: 5;
   }
   :global(.bottom-sheet__pan) {
       padding-bottom: 20px;

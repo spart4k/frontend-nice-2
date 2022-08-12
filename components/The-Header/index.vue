@@ -18,30 +18,6 @@
         {{ basketCount.calcBasketCard }}
       </div>
     </n-button>
-    <!--    <N-BootomSheet-->
-    <!--      ref="menu"-->
-    <!--      effect="fx-slide-from-left"-->
-    <!--      max-width="39rem"-->
-    <!--      :max-height="'100%'"-->
-    <!--      :fullscreen="true"-->
-    <!--      @closeMenu="closeMenu"-->
-    <!--    >-->
-    <!--      <nav :class="$style.headerNav">-->
-    <!--        <menuUserTop-->
-    <!--          @openMenuBasket="openMenuBasket"-->
-    <!--        />-->
-    <!--        <n-nav-menu-->
-    <!--          :header-items="headerItems"-->
-    <!--          @hideNavMenu=" active = false"-->
-    <!--        />-->
-    <!--      </nav>-->
-    <!--    </N-BootomSheet>-->
-    <vue-bottom-sheet ref="liveChat" max-height="100%" is-full-screen>
-      <client-only>
-        <live-default />
-        <n-icon name="close" :class="$style.close" @click="closeLive" />
-      </client-only>
-    </vue-bottom-sheet>
     <ul :class="[$style.headerUser__list, active && $style.hideElement]">
       <li>
         <div :class="$style.link" @click="openLive">
@@ -105,11 +81,7 @@ export default {
     }
 
     const openLive = () => {
-      liveChat.value.open()
-    }
-
-    const closeLive = () => {
-      liveChat.value.close()
+      store.commit('menu/changeShowStateBottomSheetLive', true)
     }
 
     const openProfile = () => {
@@ -136,7 +108,6 @@ export default {
       openMenuBasket,
       toggleMenu,
       openProfile,
-      closeLive,
       openLive,
 
       menuBasket,
