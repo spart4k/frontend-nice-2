@@ -57,14 +57,6 @@
           <div v-if="data.date_event" :class="$style.time">
             {{ dateFormat }}
           </div>
-          <template v-if="data.price && $props.detailPage">
-            <div :class="$style.price">
-              {{ data.price }}р.
-            </div>
-            <div :class="$style.buyButton">
-              Купить
-            </div>
-          </template>
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div>
@@ -85,7 +77,7 @@
             <div :class="$style.price">
               {{ data.price }}р.
             </div>
-            <N-Purchase :wire="false" />
+            <N-Purchase :wire="true" />
           </template>
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
