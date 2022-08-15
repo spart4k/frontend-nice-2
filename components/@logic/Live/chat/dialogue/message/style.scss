@@ -9,7 +9,7 @@
     color: $fontColorDefault;
   }
   .body {
-    @include montserratMedium;
+    @include regular-text-small;
     color: $fontColorDefault;
     .emoji {
       font-size: 1.8rem;

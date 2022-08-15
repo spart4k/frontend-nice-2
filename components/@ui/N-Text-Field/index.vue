@@ -102,7 +102,7 @@ export default {
   &.error {
     .wrapperInput {
       input {
-        border: red 1px solid
+        border-color: #D13C33
       }
     }
   }
@@ -147,6 +147,11 @@ export default {
   &.pinkBorder {
     input {
       border-color:$pink2 ;
+    }
+  }
+  &.blueBorder {
+    input {
+      border-color:$blue2;
     }
   }
 }

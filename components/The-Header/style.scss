@@ -81,7 +81,8 @@
   color: $white;
   background-color: grey;
   &__price {
-    @include text-md-2;
+    font-size: 1.6rem;
+    line-height: 1.2;
   }
   .icon {
     margin-right: 1.3rem;
@@ -157,7 +158,7 @@
   top: -1.5rem;
   right: -1rem;
   background-color: $orange2;
-  @include text-sm;
+  @include regular-text-small;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -167,7 +168,7 @@
   align-items: center;
   color: $white;
   text-transform: uppercase;
-  @include  text-sm;
+  @include  regular-text-small;
 }
 
 .close {

@@ -12,21 +12,9 @@
       @closed="$emit('closed')"
     >
       <client-only>
-        <N-Button-Icon
-          icon-name="close"
-          :class="$style.close"
-          color="#222222"
-          background-color="rgba(34, 34, 34, 0.1)"
-          @click="$emit('closeMenu')"
-        />
-        <N-Button-Icon
-          v-if="isShowButtonBack"
-          icon-name="arrow-back"
-          :class="$style.back"
-          color="#222222"
-          background-color="rgba(34, 34, 34, 0.1)"
-          @click="$emit('back')"
-        />
+        <N-Button type-button="small" color="#222222" background-color="rgba(34, 34, 34, 0.1)" :class="$style.close" @click="$emit('closeMenu')">
+          <N-Icon name="close" />
+        </N-Button>
         <slot />
       </client-only>
     </vue-bottom-sheet>
@@ -58,7 +46,7 @@ export default {
       window.addEventListener('resize', windowWidthCount)
     })
     onUnmounted(() => {
-      window.addEventListener('resize', windowWidthCount)
+      window.removeEventListener('resize', windowWidthCount)
     })
     return {
       windowWidth,

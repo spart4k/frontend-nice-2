@@ -24,7 +24,7 @@
       overflow: hidden;
       margin: 0 1rem;
       white-space: nowrap;
-      @include montserratMedium;
+      @include regular-text-small;
       color: $fontColorDefault;
       position: relative;
       // &:after {

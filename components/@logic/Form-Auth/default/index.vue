@@ -5,92 +5,91 @@
     </h2>
     <n-text-field
       v-model="formData.name"
-      :error="v$.name.$errors"
+      :error="$errors.name[0]"
       :class="$style.input"
       placeholder="Nice"
       title="Ник"
-      color="#5289C5"
+      :color-border="'blueBorder'"
       type="text"
     />
     <n-text-field
       v-model="formData.email"
-      :error="v$.email.$errors"
+      :error="$errors.email[0]"
       :class="$style.input"
       placeholder="mail@example.com"
       title="Email"
-      color="#5289C5"
+      :color-border="'blueBorder'"
       type="email"
     />
     <n-text-field
       v-model="formData.firstPass"
+      :error="$errors.firstPass[0]"
       :class="$style.input"
       placeholder=""
       title="Пароль"
-      color="#5289C5"
+      :color-border="'blueBorder'"
       type="password"
     />
     <n-text-field
       v-model="formData.secondPass"
+      :error="$errors.secondPass[0]"
+
       :class="$style.input"
       placeholder=""
       title="Повторите пароль"
-      color="#5289C5"
+      :color-border="'blueBorder'"
       type="password"
     />
-    <!-- <n-text-field
-      v-model="formData.tel"
-      mask="+7 (###) ###-##-##"
-      :error="v$.tel.$errors"
-      :class="$style.input"
-      placeholder="Телефон"
-      title="Телефон"
-    /> -->
-    <n-button :class="$style.button" :type-button="v$.$invalid ? 'disable' : '' " background-color="#5289C5" type="submit">
-      <n-loading v-if="loading" />
-      <template v-else>
+    <n-button
+      :class="$style.button"
+      :disabled="$v.$invalid && $touched "
+      background-color="#5289C5"
+      type="submit"
+      @click="submit"
+    >
+      <!-- <n-loading v-if="loading" /> -->
+      <template>
         Регистрация
       </template>
     </n-button>
-    <n-button type-button="wide" color="#5289C5" background-color="transparent" :class="$style.buttonTologin" @click="$emit('changeComponent', 'FormAuthLogin')">
+    <n-button
+      type-button="wide"
+      color="#5289C5"
+      background-color="transparent"
+      :class="$style.buttonTologin"
+      @click="$emit('changeComponent', 'FormAuthLogin')"
+    >
       Уже зарегистрированы?
     </n-button>
   </form>
 </template>
 <script lang="js">
-import { useVuelidate } from '@vuelidate/core'
-import { email, required } from '@vuelidate/validators'
-import { reactive, ref } from '@nuxtjs/composition-api'
+import useForm from '~/compositions/useForm'
+import { email, required, sameAs, strongPassword, nameLength } from '~/utills/validations'
 
 export default {
   name: 'FormAuth',
   setup (props, ctx) {
-    const formData = reactive({
-      name: '',
-      email: '',
-      firstPass: '',
-      secondPass: ''
-    })
-    const loading = ref(false)
-    const rules = {
-      name: { required },
-      email: { required, email },
-      firstPass: { required },
-      secondPass: { required }
-    }
-    const v$ = useVuelidate(rules, formData)
-    const onSubmit = () => {
-      v$.value.$touch()
-      if (v$.value.$invalid) {
-        return
-      }
-      loading.value = true
+    const { formData, validate, $errors, $v, $touched } = useForm(
+      {
+        fields: {
+          name: { default: '', validations: { required, nameLength } },
+          email: { default: '', validations: { required, email } },
+          firstPass: { default: '', validations: { required, password: strongPassword() } },
+          secondPass: { default: '', validations: { required, sameAs: sameAs(() => formData.firstPass) } }
+        }
+      })
+    const submit = () => {
+      if (!validate()) { return }
+      console.log('ads')
     }
 
     return {
       formData,
-      v$,
-      onSubmit,
-      loading
+      $errors,
+      $touched,
+      $v,
+      submit
     }
   }
 }

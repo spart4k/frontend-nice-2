@@ -71,7 +71,7 @@ export default {
     height: 100%;
     background-color: $pink2;
     border-radius: 2.5rem;
-    transition: transform 0.5s $animationTiming1;
+    transition: transform 0.25s $animationTiming1;
   }
   .item {
     width: 50%;
@@ -83,7 +83,7 @@ export default {
     position: relative;
     z-index: 4;
     @include regular-text;
-    transition: color 0.5s $animationTiming1;
+    transition: color 0.25s $animationTiming1;
     cursor: pointer;
     &.active {
       color: $white;

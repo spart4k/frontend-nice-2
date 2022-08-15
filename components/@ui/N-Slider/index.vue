@@ -18,7 +18,9 @@
       </VueSlickCarousel>
       <portal v-if="popup" to="sliderPopup">
         <div :class="$style.overlay" @click="popupChange">
-          <N-Button-icon :class="$style.closeButton" icon-name="close" />
+          <N-Button :background-color="'rgba(255, 255, 255, 0.4)'" type-button="small" :class="$style.closeButton">
+            <N-Icon :class="$style.icon" name="close" />
+          </N-Button>
           <div :class="$style.popupSlider" @click.stop>
             <VueSlickCarousel
               ref="c2"
@@ -59,21 +61,8 @@ export default {
     const c1 = ref(null)
     const c2 = ref(null)
     const popup = ref(false)
-    // const currentSlide = ref(0)
     const popupChange = () => {
       popup.value = !popup.value
-      if (popup.value === true) {
-      //   setTimeout(() => {
-      //   if (c2.value) {
-      //     c2.value.goTo(currentSlide.value)
-      //   }
-      // }, 0)
-      }
-    }
-    const syncSliders = (value, sliderOne) => {
-    // currentSlide.value = sliderOne
-      // c1.value.next()
-      // c2.value.next()
     }
     const syncSlidersBottom = (value, sliderTwo) => {
       c1.value.goTo(sliderTwo)
@@ -83,8 +72,6 @@ export default {
       c2,
       popup,
       popupChange,
-      syncSliders,
-      // currentSlide,
       syncSlidersBottom
     }
   }
@@ -185,8 +172,10 @@ export default {
     z-index: 100;
     background-color: rgba(51, 51, 51, 0.9);
     .closeButton {
+      position: absolute;
       top: 1rem;
       right: 1rem;
+      z-index: 50;
     }
     .popupSlider {
       z-index: 102;

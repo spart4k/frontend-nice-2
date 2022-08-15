@@ -123,7 +123,6 @@ export default {
 
 <style scoped lang="scss" module>
 .container{
-    margin-top: 2rem;
     overflow: hidden;
     // .input {
     //     width: 100%;

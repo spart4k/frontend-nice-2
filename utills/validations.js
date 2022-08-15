@@ -15,10 +15,14 @@ const phone = {
   $validator: val => val.length > 10,
   $message: () => 'Не менее 10 символов'
 }
+const nameLength = {
+  $validator: val => val.length > 4,
+  $message: () => 'Не менее 4 символов'
+}
 
 const sameAs = value => ({
   $validator: (val) => {
-    try { // может падать при первой проверке, когда formData еще не синициализирован
+    try {
       return val === value()
     } catch (err) {
       return false
@@ -75,7 +79,7 @@ const strongPassword = () => {
     oneDigit: {
       cb: val => /\d/.test(val),
       touched: false,
-      message: () => 'Должен содержать цифры',
+      message: () => 'Должен содержать цифру',
       success: false
     }
   }
@@ -89,7 +93,7 @@ const strongPassword = () => {
   return {
     validators,
     $validator,
-    $message: () => 'Не выполнены все условия'
+    $message: () => Object.values(validators).find(validator => !validator.success).message()
   }
 }
 //   const $validator = (val) => {
@@ -123,5 +127,6 @@ export {
   email,
   phone,
   onlyNumeric,
+  nameLength,
   strongPassword
 }

@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.author">
     <div :class="$style.author__img">
-      <img v-if="src" :src="`${$axios.defaults.baseURL}${src}`" alt="Изоброжение">
+      <img v-if="src" :src="`${$axios.defaults.baseURL}${src}`" alt="Изображение">
     </div>
     <div :class="$style.author__name">
       {{ name }}

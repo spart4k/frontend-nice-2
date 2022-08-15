@@ -30,7 +30,7 @@ export default {
     box-sizing: border-box;
     cursor: pointer;
     border: none;
-    border-radius: 2.5rem;
+    border-radius: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,5 +67,12 @@ export default {
   .left {
     padding: 0;
     background-color: transparent;
+  }
+  .small {
+    padding: 0.9rem;
+  }
+  .play {
+    padding: 2.65rem 3.1rem;
+    border-radius: 50%;
   }
 </style>

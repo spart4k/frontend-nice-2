@@ -8,9 +8,21 @@
         Мы отправим письмо на указанный email с новым паролем
       </h3>
       <div :class="$style.inputContainer">
-        <N-Text-Field v-model="formData.email" title="Email" placeholder="mail@example.com" type="email" color="#5289C5" />
+        <N-Text-Field
+          v-model="formData.email"
+          title="Email"
+          :error="$errors.email[0]"
+          placeholder="mail@example.com"
+          type="email"
+          :color-border="'blueBorder'"
+        />
       </div>
-      <N-Button :class="$style.button" :type-button="v$.$invalid ? 'disable' : ''" background-color="#5289C5">
+      <N-Button
+        :class="$style.button"
+        :disabled="$v.$invalid && $touched "
+        background-color="#5289C5"
+        @click="submit"
+      >
         <n-loading v-if="loading" />
         <template v-else>
           Восстановить пароль
@@ -22,35 +34,29 @@
 
 <script>
 // import { ref } from '@nuxtjs/composition-api'
-import { useVuelidate } from '@vuelidate/core'
-import { email, required } from '@vuelidate/validators'
-import { reactive, ref } from '@nuxtjs/composition-api'
+import useForm from '~/compositions/useForm'
+import { email, required } from '~/utills/validations'
 
 export default {
   name: 'FormAuth',
   setup (props, ctx) {
-    const formData = reactive({
-      email: ''
-    })
-
-    const loading = ref(false)
-      const rules = {
-        email: { required, email }
+  const { formData, validate, $errors, $v, $touched } = useForm(
+      {
+        fields: {
+          email: { default: '', validations: { email, required } }
+        }
+      })
+    const submit = () => {
+      if (!validate()) { return }
+      console.log('ads')
     }
-    const v$ = useVuelidate(rules, formData)
-    const onSubmit = () => {
-      v$.value.$touch()
-      if (v$.value.$invalid) {
-        return
-      }
-      loading.value = true
-      }
 
     return {
       formData,
-      onSubmit,
-      loading,
-      v$
+      $errors,
+      $touched,
+      $v,
+      submit
     }
   }
 }

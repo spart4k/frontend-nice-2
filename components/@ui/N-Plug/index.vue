@@ -24,8 +24,6 @@ export default {
         border-radius: 20px;
         padding: 1.9rem 2.2rem;
         text-align: center;
-        margin-top: 2rem;
-        margin-bottom: 3.5rem;
         color: $fontColorDefault;
         a {
           @include regular-text-bold;
