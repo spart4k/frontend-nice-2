@@ -53,29 +53,9 @@
         Цвет
       </p>
       <div ref="color" :class="$style.wireColorBox">
-        <label :class="$style.wireColor" :style="{ borderColor: 'rgb(126 100 181)' }">
-          <input name="color" type="radio" checked>
-          <span :class="$style.checkmark" :style="{ backgroundColor: 'rgb(126 100 181)' }" />
-        </label>
-        <label :class="$style.wireColor" :style="{ borderColor: '#5c9bd5' }">
-          <input name="color" type="radio">
-          <span :class="$style.checkmark" :style="{ backgroundColor: '#5c9bd5' }" />
-        </label>
-        <label :class="$style.wireColor" :style="{ borderColor: '#d53e4d' }">
-          <input name="color" type="radio">
-          <span :class="$style.checkmark" :style="{ backgroundColor: '#d53e4d' }" />
-        </label>
-        <label :class="$style.wireColor" :style="{ borderColor: '#DCC444' }">
-          <input name="color" type="radio">
-          <span :class="$style.checkmark" :style="{ backgroundColor: '#DCC444' }" />
-        </label>
-        <label :class="$style.wireColor" :style="{ borderColor: '#388262' }">
-          <input name="color" type="radio">
-          <span :class="$style.checkmark" :style="{ backgroundColor: '#388262' }" />
-        </label>
-        <label :class="$style.wireColor" :style="{ borderColor: 'rgb(78 186 206)' }">
-          <input name="color" type="radio">
-          <span :class="$style.checkmark" :style="{ backgroundColor: 'rgb(78 186 206)' }" />
+        <label v-for="color in colorArray" :key="color" :class="$style.wireColor" :style="{ borderColor: color }">
+          <input name="color" type="radio" :checked="color === formData.color">
+          <span :class="$style.checkmark" :style="{ backgroundColor: color }" />
         </label>
       </div>
     </div>
@@ -109,6 +89,7 @@ export default {
     }
   },
   setup (props) {
+  const colorArray = ref(['rgb(126 100 181)', 'rgb(92, 155, 213)', 'rgb(213, 62, 77)', 'rgb(220, 196, 68)', 'rgb(56, 130, 98)', 'rgb(78 186 206)'])
   const optionsDefault = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])
   const optionsInput = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])
   const optionsOutput = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])
@@ -132,6 +113,7 @@ export default {
       optionsOutput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
     }
   }
+
   const setSelectedOutput = (value) => {
     optionsInput.value = optionsDefault.value
     if (value === 'MIDI') {
@@ -161,7 +143,8 @@ export default {
         input: { default: '', validations: { required } },
         output: { default: '', validations: { required } },
         length: { default: '', validations: { required } },
-        count: { default: '', validations: { required } }
+        count: { default: '', validations: { required } },
+        color: { default: 'rgb(126 100 181)', validations: { } }
       }
     })
   const submit = () => {
@@ -170,17 +153,18 @@ export default {
   }
 
     return {
+      sendCount,
+      submit,
       setSelectedInput,
       setSelectedOutput,
+      colorArray,
       optionsOutput,
       optionsInput,
       optionsDefault,
       formData,
       $errors,
       $touched,
-      $v,
-      sendCount,
-      submit
+      $v
     }
   }
 }

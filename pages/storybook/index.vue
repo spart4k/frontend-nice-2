@@ -6,9 +6,9 @@
     <Row title="title">
       Фамилия Обломов не связана со словом «облом». 5 фактов о литературе из школьной программы, которых вы не знал
     </Row>
-    <Row title="Автор">
+    <!-- <Row title="Автор">
       <N-Author name="Алексей Ельцин" />
-    </Row>
+    </Row> -->
     <Row title="Иконки">
       <N-Icon name="plus" />
       <N-Icon name="message" />

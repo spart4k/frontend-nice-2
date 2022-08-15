@@ -3,7 +3,7 @@
     <li :class="$style.item">
       <n-icon name="user" :class="$style.icon" />
       <div :class="$style.item__text">
-        <nuxt-link to="yandex.ru">
+        <nuxt-link to="#">
           Профиль
         </nuxt-link>
       </div>
@@ -17,7 +17,7 @@
     <li :class="$style.item">
       <n-icon name="search" :class="$style.icon" />
       <div :class="$style.item__text">
-        <nuxt-link to="yandex.ru">
+        <nuxt-link to="#">
           Поиск
         </nuxt-link>
       </div>
@@ -25,7 +25,7 @@
     <li :class="$style.item">
       <n-icon name="connection" :class="$style.icon" />
       <div :class="$style.item__text">
-        <nuxt-link to="yandex.ru">
+        <nuxt-link to="#">
           Связь
         </nuxt-link>
       </div>
