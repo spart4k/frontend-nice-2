@@ -36,6 +36,11 @@ const password = {
   $message: () => 'Не менее 7 символов'
 }
 
+const onlyNumeric = {
+  $validator: val => /^\+[0-9](\([0-9]{3}\)|[0-9]{3})[0-9]{3}[0-9]{4}$/.test(val),
+  $message: () => 'Некорректный номер телефона'
+}
+
 // const isTrue = {
 //   $validator: val => val === true,
 //   $message: () => i18n.t('auth.validations.password.requiredField'),
@@ -83,7 +88,6 @@ const strongPassword = () => {
       validator.success = validator.cb(val)
       validator.touched = true
     })
-
     return !Object.values(validators).find(validator => !validator.success)
   }
   return {
@@ -122,6 +126,7 @@ export {
   password,
   email,
   phone,
+  onlyNumeric,
   nameLength,
   strongPassword
 }

@@ -54,6 +54,9 @@ $animationTiming1: cubic-bezier(.71,.01,.15,1);
   font-family: 'Bankir-Retro', sans-serif;
   font-weight: normal;
 }
+@mixin paddings {
+  padding: 0 1.5rem;
+}
 
 @mixin container {
   padding-left: 1.5rem;
@@ -111,4 +114,13 @@ $animationTiming1: cubic-bezier(.71,.01,.15,1);
   font-family: 'Montserrat-Black', sans-serif;
   font-weight: normal;
   font-size: 4.8rem;
+}
+
+
+@mixin styleBottomSheetStepper {
+  @include paddings;
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  height: 100%;
+  overflow-y: auto;
 }

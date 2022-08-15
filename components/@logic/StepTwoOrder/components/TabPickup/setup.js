@@ -1,6 +1,6 @@
 import { ref } from '@nuxtjs/composition-api'
 import useForm from '~/compositions/useForm'
-import { email, required, phone } from '~/utills/validations'
+import { email, required, phone, onlyNumeric } from '~/utills/validations'
 
 export default {
   name: 'TabDelivery',
@@ -27,7 +27,7 @@ export default {
         fields: {
           name: { default: '', validations: { required } },
           email: { default: '', validations: { email, required } },
-          phone: { default: '', validations: { phone, required } }
+          phone: { default: '', validations: { phone, required, onlyNumeric } }
       }
   })
 

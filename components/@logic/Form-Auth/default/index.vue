@@ -57,7 +57,7 @@
       color="#5289C5"
       background-color="transparent"
       :class="$style.buttonTologin"
-      @click="$emit('changeComponent', 'FormAuthLogin')"
+      @click="$emit('changeComponent', 'increment')"
     >
       Уже зарегистрированы?
     </n-button>

@@ -1,24 +1,31 @@
 <template>
-  <!--  v-if="$props.showNavMenu"-->
-  <transition-group
-    :class="$style.list"
-    name="staggered-fade"
-    tag="ul"
-    :css="false"
-    appear
-    v-bind="$attrs"
-    @before-enter="beforeEnter"
-    @enter="enter"
-    @leave="leave"
-  >
-    <N-Nav-Menu-Item
-      v-for="(item, index) in $props.headerItems"
-      :key="item.title"
-      ref="itemRefs"
-      :data-index="index"
-      :item="item"
+  <nav :class="$style.headerNav">
+    <menuUserTop
+      @openMenuBasket="$emit('changeStep', 'increment') "
     />
-  </transition-group>
+    <!--    <transition-group-->
+    <!--      :class="$style.list"-->
+    <!--      name="staggered-fade"-->
+    <!--      tag="ul"-->
+    <!--      :css="false"-->
+    <!--      appear-->
+    <!--      v-bind="$attrs"-->
+    <!--      @before-enter="beforeEnter"-->
+    <!--      @enter="enter"-->
+    <!--      @leave="leave"-->
+    <!--    >-->
+    <div :class="$style.list">
+      <N-Nav-Menu-Item
+        v-for="(item, index) in $props.headerItems"
+        :key="item.title"
+        ref="itemRefs"
+        :data-index="index"
+        :item="item"
+      />
+    </div>
+    <!--    </transition-group>-->
+  </nav>
+  <!--  v-if="$props.showNavMenu"-->
 </template>
 
 <script>
@@ -90,5 +97,15 @@ export default {
   @media (min-width: $tabletWidth) {
     justify-content: center;
   }
+}
+.headerNav {
+  display: block;
+  padding-top: 4.9rem;
+  backface-visibility: hidden;
+  max-height: 100%;
+  @include styleBottomSheetStepper;
+  //overflow: auto;
+  //width: 100%;
+  //@include container;
 }
 </style>

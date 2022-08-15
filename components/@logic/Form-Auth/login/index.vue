@@ -25,7 +25,7 @@
       :class="$style.recovery"
       type-button="left"
       color="#5289C5"
-      @click="$emit('changeComponent', 'FormAuthRecovery')"
+      @click="$emit('changeComponent', 'increment')"
     >
       Восстановить пароль
     </n-button>
@@ -45,7 +45,7 @@
       :class="$style.button"
       color="#5289C5"
       background-color="transparent"
-      @click="$emit('changeComponent', 'FormAuthDefault')"
+      @click="$emit('changeComponent', '')"
     >
       Еще не зарегистрированы?
     </n-button>

@@ -11,30 +11,21 @@
       max-width="39rem"
       :max-height="'100%'"
       :fullscreen="true"
+      :is-show-button-back="step > 0"
       @closeMenu="changeState(false, 'menu')"
       @closed="changeState(false, 'menu')"
+      @back="changeStep"
     >
-      <nav :class="$style.headerNav">
-        <menuUserTop
-          @openMenuBasket="changeState(true, 'basket')"
-        />
-        <n-nav-menu
+      <!--      <div :class="$style.container">-->
+      <transition :name="keyAnimation === 'prev' ? 'slideShow' : 'slideback'">
+        <component
+          :is="isCurrentPage"
           :header-items="headerItems"
+          @changeStep="changeStep"
         />
-      </nav>
+      </transition>
+      <!--      </div>-->
     </N-BootomSheet>
-    <N-BootomSheet
-      ref="menuBasket"
-      effect="fx-slide-from-left"
-      max-width="39rem"
-      :max-height="'100%'"
-      :fullscreen="true"
-      @closeMenu="changeState(false, 'basket')"
-      @closed="changeState(false, 'basket')"
-    >
-      <StepperOrder />
-    </N-BootomSheet>
-
     <portal-target name="sliderPopup" />
   </div>
 </template>
@@ -51,6 +42,10 @@ export default {
     const headerItems = ref([])
     const body = ref(null)
     const menu = ref(null)
+    const back = ref(false)
+    const keyAnimation = ref('next')
+    const step = ref(0)
+    const currentComponent = ref('n-nav-menu')
 
     const menuBasket = ref(null)
     const { store, route, $gsap } = useContext()
@@ -63,6 +58,31 @@ export default {
     const closedSwipe = () => {
       store.commit('menu/changeShowStateBottomSheetStepper', false)
     }
+
+    const changeStep = (key) => {
+      if (key === 'increment') {
+        keyAnimation.value = 'next'
+        step.value += 1
+      } else {
+        keyAnimation.value = 'prev'
+        step.value -= 1
+      }
+    }
+
+    const isCurrentPage = computed(() => {
+      switch (step.value) {
+        case 0 :
+          return 'n-nav-menu'
+        case 1 :
+          return 'StepOneBasket'
+        case 2 :
+          return 'StepTwoOrder'
+        case 3 :
+          return 'StepThreePlug'
+        default:
+          return 'n-nav-menu'
+      }
+    })
 
     useFetch(async () => {
       headerItems.value = []
@@ -102,14 +122,6 @@ export default {
       }
     })
 
-    watch(() => store.state.menu.isShowBottomSheetStepper, () => {
-      if (store.state.menu.isShowBottomSheetStepper) {
-        openMenuBasket()
-      } else {
-        closedMenuBasket()
-      }
-    })
-
     watch(() => store.state.menu.isShowBottomMenu, () => {
       if (store.state.menu.isShowBottomMenu) {
         openMenu()
@@ -118,12 +130,11 @@ export default {
       }
     })
 
-    const openMenuBasket = () => {
-      menuBasket.value.$children[0].open()
+    const changeComponent = (comp) => {
+      back.value = comp !== 'n-nav-menu'
+      currentComponent.value = comp
     }
-    const closedMenuBasket = () => {
-      menuBasket.value.$children[0].close()
-    }
+
     const openMenu = () => {
       menu.value.$children[0].open()
     }
@@ -146,10 +157,15 @@ export default {
       isHomePage,
       menuBasket,
       menu,
+      back,
+      currentComponent,
+      isCurrentPage,
+      step,
+      keyAnimation,
+      changeStep,
       openMenu,
       closeMenu,
-      closedMenuBasket,
-      openMenuBasket,
+      changeComponent,
       closedSwipe,
       changeState
     }
@@ -157,13 +173,13 @@ export default {
 }
 </script>
 <style lang="scss" module>
-.headerNav {
-  display: block;
-  padding-top: 4.9rem;
-  backface-visibility: hidden;
-  max-height: 100%;
-  overflow: auto;
-  @include container;
+.container {
+  padding-top: 3rem;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding-bottom: 1rem;
+  transform: translate3d(0, 0, 0);
+  color: $fontColorDefault;
 }
-
 </style>

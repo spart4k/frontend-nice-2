@@ -70,6 +70,8 @@ export default {
   }
   .small {
     padding: 0.9rem;
+    width: 3.2rem;
+    height: 3.2rem;
   }
   .play {
     padding: 2.65rem 3.1rem;

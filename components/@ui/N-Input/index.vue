@@ -73,7 +73,6 @@ export default {
     input.value.style.height = ''
     emit('sendMessage', letters.value)
     letters.value = ''
-    console.log(letters.value)
   }
   const beforeEnter = (el) => {
     el.style.height = '0'

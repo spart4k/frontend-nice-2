@@ -172,11 +172,12 @@
       <N-BootomSheet
         ref="loginMenu"
         :max-width="'450px'"
+        :fullscreen="true"
         effect="fx-slide-from-left"
         @closeMenu="closeMenu"
         @closed="closed"
       >
-        <N-Sheet :page="page" @changeComponent="changeComponent" />
+        <N-Sheet :step-prop="page" @changeComponent="changeComponent" />
       </N-BootomSheet>
     </portal>
   </div>
@@ -209,18 +210,18 @@ export default {
     const { store } = useContext()
     const videoPlay = ref(false)
     const closed = () => {
-      page.value = 'FormAuthDefault'
+      page.value = 0
     }
     const changeComponent = (value) => {
       page.value = value
     }
     const comments = ref(true)
     const login = () => {
-      page.value = 'FormAuthLogin'
+      page.value = 0
       loginMenu.value.$children[0].open()
     }
     const registration = () => {
-      page.value = 'FormAuthDefault'
+      page.value = 1
       loginMenu.value.$children[0].open()
     }
     const closeMenu = () => {

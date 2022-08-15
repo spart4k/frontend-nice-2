@@ -31,7 +31,18 @@
       :color-border="'pinkBorder'"
     />
     <template v-if="true">
-      <n-text-field v-model="formData.address" placeholder="Город, улица, дом" :class="$style.input" title="Адрес" color="#C83F8E" />
+      <div v-if="wire" :class="$style.wireOutcoming">
+        <p :class="$style.wireText">
+          Город, улица, дом
+        </p>
+        <v-select
+          v-model="formData.output"
+          :options="optionsOutput"
+          :class="$style.wireSelect"
+          @input="setSelectedOutput"
+        />
+      </div>
+      <n-text-field v-model="formData.address" :class="$style.input" title="Адрес" color="#C83F8E" />
     </template>
     <template v-else>
       <div>

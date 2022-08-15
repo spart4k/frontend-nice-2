@@ -12,8 +12,24 @@
       @closed="$emit('closed')"
     >
       <client-only>
-        <N-Button type-button="small" color="#222222" background-color="rgba(34, 34, 34, 0.1)" :class="$style.close" @click="$emit('closeMenu')">
+        <N-Button
+          type-button="small"
+          color="#222222"
+          background-color="rgba(34, 34, 34, 0.1)"
+          :class="$style.close"
+          @click="$emit('closeMenu')"
+        >
           <N-Icon name="close" />
+        </N-Button>
+        <N-Button
+          v-if="isShowButtonBack"
+          type-button="small"
+          :class="$style.back"
+          color="#222222"
+          background-color="rgba(34, 34, 34, 0.1)"
+          @click="$emit('back')"
+        >
+          <N-Icon name="arrow-back" />
         </N-Button>
         <slot />
       </client-only>
@@ -27,6 +43,7 @@ import { onMounted, onUnmounted, ref } from '@nuxtjs/composition-api'
 export default {
   name: 'NBottomSheet',
   props: {
+    isShowButtonBack: Boolean,
     maxWidth: String,
     fullscreen: Boolean,
     maxHeight: {
@@ -57,15 +74,22 @@ export default {
 
 <style lang="scss" module>
 .wrapper {
-  .close {
+  position: relative;
+  width: 37.5rem;
+  .close, .back {
     position: absolute;
     top: 1.5rem;
+  }
+  .back {
+    left: 1.5rem;
+  }
+  .close {
     right: 1.5rem;
   }
   :global(.bottom-sheet__pan) {
       padding-bottom: 20px;
       padding-top: 15px;
-      height: 5rem;
+      height: 5rem !important;
   }
   :global(.bottom-sheet__card) {
     @media (min-width: $mobileWidth) {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="$style.wrapper">
     <h2 :class="$style.title">
       Ваша корзина
     </h2>
@@ -46,6 +46,17 @@ export default {
 </script>
 
 <style  lang="scss" module>
+.wrapper {
+  @include paddings;
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  height: 100%;
+  overflow-y: auto;
+  @include paddings;
+  overscroll-behavior-y: contain !important;
+  transform: translate3d(0px, 0, 0);
+  color: $fontColorDefault;
+}
 .title {
   margin-bottom: 2rem;
 }
