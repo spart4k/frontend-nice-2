@@ -103,6 +103,7 @@ export default {
   padding-top: 4.9rem;
   backface-visibility: hidden;
   max-height: 100%;
+  @include styleBottomSheetStepper;
   //overflow: auto;
   //width: 100%;
   //@include container;

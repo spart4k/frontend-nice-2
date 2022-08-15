@@ -54,6 +54,9 @@ $animationTiming1: cubic-bezier(.71,.01,.15,1);
   font-family: 'Bankir-Retro', sans-serif;
   font-weight: normal;
 }
+@mixin paddings {
+  padding: 0 1.5rem;
+}
 
 @mixin container {
   padding-left: 1.5rem;

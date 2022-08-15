@@ -12,8 +12,24 @@
       @closed="$emit('closed')"
     >
       <client-only>
-        <N-Button type-button="small" color="#222222" background-color="rgba(34, 34, 34, 0.1)" :class="$style.close" @click="$emit('closeMenu')">
+        <N-Button
+          type-button="small"
+          color="#222222"
+          background-color="rgba(34, 34, 34, 0.1)"
+          :class="$style.close"
+          @click="$emit('closeMenu')"
+        >
           <N-Icon name="close" />
+        </N-Button>
+        <N-Button
+          v-if="isShowButtonBack"
+          type-button="small"
+          :class="$style.back"
+          color="#222222"
+          background-color="rgba(34, 34, 34, 0.1)"
+          @click="$emit('back')"
+        >
+          <N-Icon name="arrow-back" />
         </N-Button>
         <slot />
       </client-only>
