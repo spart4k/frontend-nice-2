@@ -12,7 +12,21 @@
       @closed="$emit('closed')"
     >
       <client-only>
-        <N-Button-Close :class="$style.close" color="#222222" background-color="rgba(34, 34, 34, 0.1)" @click="$emit('closeMenu')" />
+        <N-Button-Icon
+          icon-name="close"
+          :class="$style.close"
+          color="#222222"
+          background-color="rgba(34, 34, 34, 0.1)"
+          @click="$emit('closeMenu')"
+        />
+        <N-Button-Icon
+          v-if="isShowButtonBack"
+          icon-name="arrow-back"
+          :class="$style.back"
+          color="#222222"
+          background-color="rgba(34, 34, 34, 0.1)"
+          @click="$emit('back')"
+        />
         <slot />
       </client-only>
     </vue-bottom-sheet>
@@ -25,6 +39,7 @@ import { onMounted, onUnmounted, ref } from '@nuxtjs/composition-api'
 export default {
   name: 'NBottomSheet',
   props: {
+    isShowButtonBack: Boolean,
     maxWidth: String,
     fullscreen: Boolean,
     maxHeight: {
@@ -55,15 +70,22 @@ export default {
 
 <style lang="scss" module>
 .wrapper {
-  .close {
+  position: relative;
+  width: 37.5rem;
+  .close, .back {
     position: absolute;
     top: 1.5rem;
+  }
+  .back {
+    left: 1.5rem;
+  }
+  .close {
     right: 1.5rem;
   }
   :global(.bottom-sheet__pan) {
       padding-bottom: 20px;
       padding-top: 15px;
-      height: 5rem;
+      height: 5rem !important;
   }
   :global(.bottom-sheet__card) {
     @media (min-width: $mobileWidth) {

@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.box" v-on="$listeners">
-    <N-Icon :class="$style.icon" name="close" :style="{ color: color }" />
+    <N-Icon :class="$style.icon" :name="iconName" :style="{ color: color }" />
   </div>
 </template>
 
@@ -11,7 +11,8 @@ export default {
   components: {
   },
   props: {
-    color: { type: String, default: 'white' }
+    color: { type: String, default: 'white' },
+    iconName: { type: String }
   },
   setup (props) {
   }
@@ -28,11 +29,10 @@ export default {
     justify-content: center;
     border-radius: 50%;
     cursor: pointer;
-    .icon {
-        width: 1.4rem;
-        height: 1.4rem;
-        // color: white;
-    }
+    //.icon {
+    //    width: 1.4rem;
+    //    height: 1.4rem;
+    //}
   svg {
     width: 100%;
     height: 100%;

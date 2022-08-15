@@ -1,7 +1,7 @@
 import { ref } from '@nuxtjs/composition-api'
 import ChangeAddress from './components/ChangeAddress'
 import useForm from '~/compositions/useForm'
-import { email, phone, required } from '~/utills/validations'
+import { email, phone, required, onlyNumeric } from '~/utills/validations'
 
 export default {
   name: 'TabDelivery',
@@ -17,7 +17,7 @@ export default {
         fields: {
           name: { default: '', validations: { required } },
           email: { default: '', validations: { email, required } },
-          phone: { default: '', validations: { phone, required } }
+          phone: { default: '', validations: { phone, required, onlyNumeric } }
         }
       })
     const basketItem = {

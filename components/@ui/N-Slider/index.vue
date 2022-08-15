@@ -18,7 +18,7 @@
       </VueSlickCarousel>
       <portal v-if="popup" to="sliderPopup">
         <div :class="$style.overlay" @click="popupChange">
-          <N-Button-Close :class="$style.closeButton" />
+          <N-Button-icon :class="$style.closeButton" icon-name="close" />
           <div :class="$style.popupSlider" @click.stop>
             <VueSlickCarousel
               ref="c2"

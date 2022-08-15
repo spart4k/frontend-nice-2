@@ -13,8 +13,8 @@
       <n-row>
         <n-text-field
           v-model="formData.phone"
-          mask="+7 (###) ###-##-##"
-          placeholder="+7 (777) 777-77-77 "
+          mask="+7(###)#######"
+          placeholder="+7(777)7777777 "
           :error="$errors.phone[0]"
           title="Телефон"
           :color-border="'pinkBorder'"
