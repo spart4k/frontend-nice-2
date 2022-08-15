@@ -16,15 +16,12 @@
       @closed="changeState(false, 'menu')"
       @back="changeStep"
     >
-      <!--      <div :class="$style.container">-->
-      <transition :name="keyAnimation === 'prev' ? 'slideShow' : 'slideback'">
-        <component
-          :is="isCurrentPage"
-          :header-items="headerItems"
-          @changeStep="changeStep"
-        />
-      </transition>
-      <!--      </div>-->
+      <stepperOrder
+        :header-items="headerItems"
+        :key-animation="keyAnimation"
+        :step="step"
+        @changeStep="changeStep"
+      />
     </N-BootomSheet>
     <portal-target name="sliderPopup" />
   </div>
@@ -45,7 +42,6 @@ export default {
     const back = ref(false)
     const keyAnimation = ref('next')
     const step = ref(0)
-    const currentComponent = ref('n-nav-menu')
 
     const menuBasket = ref(null)
     const { store, route, $gsap } = useContext()
@@ -58,31 +54,6 @@ export default {
     const closedSwipe = () => {
       store.commit('menu/changeShowStateBottomSheetStepper', false)
     }
-
-    const changeStep = (key) => {
-      if (key === 'increment') {
-        keyAnimation.value = 'next'
-        step.value += 1
-      } else {
-        keyAnimation.value = 'prev'
-        step.value -= 1
-      }
-    }
-
-    const isCurrentPage = computed(() => {
-      switch (step.value) {
-        case 0 :
-          return 'n-nav-menu'
-        case 1 :
-          return 'StepOneBasket'
-        case 2 :
-          return 'StepTwoOrder'
-        case 3 :
-          return 'StepThreePlug'
-        default:
-          return 'n-nav-menu'
-      }
-    })
 
     useFetch(async () => {
       headerItems.value = []
@@ -130,9 +101,14 @@ export default {
       }
     })
 
-    const changeComponent = (comp) => {
-      back.value = comp !== 'n-nav-menu'
-      currentComponent.value = comp
+    const changeStep = (key) => {
+      if (key === 'increment') {
+        keyAnimation.value = 'next'
+        step.value += 1
+      } else {
+        keyAnimation.value = 'prev'
+        step.value -= 1
+      }
     }
 
     const openMenu = () => {
@@ -158,14 +134,12 @@ export default {
       menuBasket,
       menu,
       back,
-      currentComponent,
-      isCurrentPage,
       step,
       keyAnimation,
+
       changeStep,
       openMenu,
       closeMenu,
-      changeComponent,
       closedSwipe,
       changeState
     }
