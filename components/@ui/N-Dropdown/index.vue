@@ -47,8 +47,7 @@
 <!--.dropdown {-->
 <!--  :global(.multiselect__single) {-->
 <!--    color: $black;-->
-<!--    @include text-md;-->
-<!--    @include montserratSemiBold;-->
+<!--    @include regular-text;-->
 <!--    background-color: inherit;-->
 <!--  }-->
 <!--}-->

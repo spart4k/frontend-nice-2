@@ -79,8 +79,7 @@ export default {
     height: 5.1rem;
     background-color: $yellow2;
     color: $black;
-    @include montserratMedium;
-    @include text;
+    @include button;
     width: 100%;
     &.disable {
       background-color: #DADADA;
@@ -98,7 +97,7 @@ export default {
     }
   }
   .fz_md {
-    @include text-md;
+    @include regular-text;
   }
 }
 </style>

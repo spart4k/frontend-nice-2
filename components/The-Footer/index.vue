@@ -50,7 +50,7 @@ export default {
     position: relative;
     .container {
       @include container;
-      @include text-sm;
+      @include regular-text-small;
       display: flex;
       justify-content: space-between;
       align-items: center;

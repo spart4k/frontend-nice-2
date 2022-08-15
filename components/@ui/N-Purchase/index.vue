@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.wire">
-    <div :class="$style.wireIncoming">
+    <div v-if="wire" :class="$style.wireIncoming">
       <p :class="$style.wireText">
         Входящее соединение:
       </p>
@@ -14,7 +14,7 @@
         {{ $errors.input[0] }}
       </p>
     </div>
-    <div :class="$style.wireOutcoming">
+    <div v-if="wire" :class="$style.wireOutcoming">
       <p :class="$style.wireText">
         Исходящее соединение:
       </p>
@@ -28,13 +28,13 @@
         {{ $errors.output[0] }}
       </p>
     </div>
-    <div :class="$style.wireLength">
+    <div v-if="wire" :class="$style.wireLength">
       <p :class="$style.wireText">
         Длина (см.):
       </p>
       <input
         v-model="formData.length"
-        v-mask="'####'"
+        v-mask="'Q###'"
         type="text"
         :class="$style.wireInput"
       >
@@ -48,7 +48,7 @@
         {{ $errors.count[0] }}
       </p>
     </div>
-    <div :class="$style.wireColorSection">
+    <div v-if="wire" :class="$style.wireColorSection">
       <p :class="$style.wireText">
         Цвет
       </p>
@@ -98,11 +98,15 @@ import useForm from '~/compositions/useForm'
 import { required } from '~/utills/validations'
 
 export default {
-  name: 'NWire',
+  name: 'NPurchase',
   components: {
     vSelect
   },
   props: {
+      wire: {
+      type: Boolean,
+      default: false
+    }
   },
   setup (props) {
   const optionsDefault = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])

@@ -129,10 +129,10 @@ export default {
   align-items: center;
   margin-bottom: 5.3rem;
   &_text {
-    @include subtitle-big;
+    font-size: 2.4rem;
   }
   &_price {
-    @include title;
+    @include text-style-h1;
     color: $yellow;
   }
 }
@@ -147,14 +147,13 @@ export default {
   align-items: center;
   justify-content: center;
   h1 {
+    @include text-style-h1;
     @include Bankir-Retro;
-    @include title;
   }
 }
 .last_view_title {
   margin-bottom: 1.25rem;
-  @include text-md;
-  @include montserratSemiBold;
+  @include regular-text;
 }
 .last_view_list {
   display: flex;

@@ -45,10 +45,6 @@ export default {
   display: flex;
   flex-direction: column;
   padding: 0 1.5rem 6rem;
-  .closeButton {
-    top: 1.5rem;
-    right: 1.5rem;
-  }
   .title {
     @include text-style-h2;
     color: $fontColorDefault;

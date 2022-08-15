@@ -2,8 +2,7 @@
   display: flex;
   align-items: center;
   &__name {
-    @include text;
-    @include montserratSemiBold;
+    @include button;
     width: 100%;
   }
   &__img {

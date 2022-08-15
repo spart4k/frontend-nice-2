@@ -58,7 +58,6 @@
     <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E">
       История заказов
     </N-Button>
-    <!-- <small @click="logout">Выйти из профиля</small> -->
   </form>
 </template>
 <script>
@@ -149,16 +148,6 @@ form {
   & > .button {
     margin-top: 2.5rem;
   }
-}
-small {
-  display: block;
-  color: $orange;
-  text-decoration: underline;
-  text-align: center;
-  margin-top: 2.1rem;
-  margin-bottom: 2.8rem;
-  font-weight: 600;
-  @include text-md;
 }
 .inputTitle {
   @include regular-text;

@@ -25,8 +25,7 @@ export default {
     background-color: $blueBlack;
     padding: 1.565rem 5.5rem;
     color: $white;
-    font-weight: 600;
-    @include text;
+    @include button;
     transition: background-color .2s;
     max-width: 100%;
     &:hover {

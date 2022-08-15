@@ -63,7 +63,7 @@ ul {
   margin-bottom: 3rem;
   &__text {
     margin-bottom: .5rem;
-    @include text;
+    @include button;
   }
   &__sum {
     margin-bottom: .5rem;

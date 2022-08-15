@@ -85,7 +85,7 @@ export default {
 .container {
   overflow: auto;
   height: 100%;
-  @include paddings;
+  padding: 0 1.5rem;
   color: $fontColorDefault;
 }
 .title {

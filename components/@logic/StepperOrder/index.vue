@@ -57,11 +57,9 @@ export default {
 
 <style lang="scss" module>
 .container {
-  padding-top: 3rem;
-  padding-bottom: 1rem;
   height: 100%;
   overflow-y: auto;
-  @include paddings;
+  padding: 3rem 1.5rem 1rem;
   overscroll-behavior-y: contain !important;
   transform: translate3d(0px, 0, 0);
   color: $fontColorDefault;

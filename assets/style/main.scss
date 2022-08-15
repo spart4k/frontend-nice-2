@@ -45,8 +45,7 @@ html {
 body {
   width: 100%;
   background-color: $blueBlack3;
-  @include montserratRegular;
-  @include text-sm;
+  @include regular-text-small;
   // @include regular-text;
   min-height: 100vh;
   min-height: -webkit-fill-available;

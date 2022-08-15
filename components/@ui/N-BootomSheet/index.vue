@@ -12,7 +12,9 @@
       @closed="$emit('closed')"
     >
       <client-only>
-        <N-Button-Close :class="$style.close" color="#222222" background-color="rgba(34, 34, 34, 0.1)" @click="$emit('closeMenu')" />
+        <N-Button type-button="small" color="#222222" background-color="rgba(34, 34, 34, 0.1)" :class="$style.close" @click="$emit('closeMenu')">
+          <N-Icon name="close" />
+        </N-Button>
         <slot />
       </client-only>
     </vue-bottom-sheet>
