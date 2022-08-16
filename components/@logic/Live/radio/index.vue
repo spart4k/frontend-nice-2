@@ -3,8 +3,8 @@
     <div :class="$style.wrap">
       <img :class="$style.wrapper" :src="require(`~/assets/img/live/def-radio-wrap.png`)" alt="">
       <div ref="marquee" class="marquee" :class="[ $style.marquee, $style.name ]">
-        <div class="inner" :class="$style.inner">
-          <p>Eli & Fur </p>
+        <div class="inner" :class="[$style.inner, isMarquee ? $style.active : $style.noActive ]">
+          <p ref="marqueeContent" :class="$style.marqueeContent" class="marqueeContent">Eli & Fur live from Courmayeur Eli & Fur live from Courmayeur Eli & Fur live from Courmayeur</p>
         </div>
       </div>
 
@@ -38,6 +38,5 @@
   </div>
 </template>
 
+<style lang="scss" module src="./style.scss"></style>
 <script lang="javascript" src="./setup.js"></script>
-<style lang="scss" module src="./style.scss">
-</style>
