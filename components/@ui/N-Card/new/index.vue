@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$style.card, detailPage && $style.detailPage]">
+  <div class="card" :class="[$style.card, detailPage && $style.detailPage]">
     <div ref="gallery" :class="[$style.gallery, detailPage && $style.detailPage]">
       <template v-if="data.images.length && !$props.withVideo">
         <template v-if="$props.detailPage && data.images.length > 1">
@@ -20,11 +20,7 @@
       </template>
       <template v-else-if="$props.withVideo">
         <div :class="[$style.wrapperVideo, detailPage && $style.detailPage]" @click="videoPlayingChange">
-          <div v-if="!videoPlay" :class="$style.blackout">
-            <N-Button type-button="play" :background-color="'rgba(34, 34, 34, 0.8)'">
-              <N-Icon :class="$style.icon" name="button-play" />
-            </N-Button>
-          </div>
+          <N-Button-Play v-if="!videoPlay" />
           <video
             ref="videoRef"
             :class="detailPage && $style.detailPage"
@@ -41,6 +37,7 @@
     <div
       :class="[
         $style.body,
+        $props.withAuthor && $style.author,
         detailPage && $style.detailPage
       ]"
     >
@@ -57,6 +54,14 @@
           <div v-if="data.date_event" :class="$style.time">
             {{ dateFormat }}
           </div>
+          <template v-if="data.price && $props.detailPage">
+            <div :class="$style.price">
+              {{ data.price }}р.
+            </div>
+            <div :class="$style.buyButton">
+              Купить
+            </div>
+          </template>
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div>
@@ -77,7 +82,15 @@
             <div :class="$style.price">
               {{ data.price }}р.
             </div>
-            <N-Purchase :wire="true" />
+            <template v-if="true">
+              <N-Wire />
+            </template>
+            <template v-else>
+              <N-Goods-Counter :class="$style.goodsCounter" />
+            </template>
+            <N-Button :class="$style.buyButton" background-color="#C83F8E">
+              Купить
+            </N-Button>
           </template>
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
@@ -92,6 +105,7 @@
             <!-- <LiveRadio /> -->
           </template>
         </div>
+        <!-- <div v-if="$props.detailPage && (windowWidth > 900) && !showComments" :class="[$style.empty, detailPage && $style.detailPage]" :style="{ height: emptyBlockHeight + 'px' }" /> -->
       </template>
       <div :class="[$style.body__bottom, detailPage && $style.detailPage]">
         <div v-if="$props.detailPage" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '3rem' : '' }">
@@ -147,11 +161,15 @@
         </div>
         <div
           v-if="$props.detailPage"
+          class="comments"
           ref="commentBox"
           :class="[$style.comments,showComments ? $style.show : '']"
           :style="{maxHeight: showComments ? commentHeight : '0'}"
         >
-          <N-Input v-if="false" type="textarea" @smilies="commentHeightSet" />
+          <!-- <p :class="$style.comments__title">
+          {{ commentCounter }} комментари{{ commentEnding }}
+        </p> -->
+          <N-Input v-if="true" swipingBlock="card" type="textarea" @smilies="commentHeightSet" />
           <N-Plug v-else @login="login" @registration="registration" />
           <div :class="$style.commentsContainer">
             <div>
@@ -175,7 +193,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref, useContext } from '@nu
 import dataProps from '../props'
 
 export default {
-  name: 'NCardDefault',
+  name: 'NCardNew',
   components: {
   },
   props: { ...dataProps.props },
@@ -197,22 +215,16 @@ export default {
     const { store } = useContext()
     const videoPlay = ref(false)
     const comments = ref(true)
-
     const login = () => {
-      store.commit('menu/changeKeyMenu', {
-        key: 'registration',
-        effect: 'fx-slide-from-left'
-      })
-      store.commit('menu/changeStepMenu', { step: 2 })
-      store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+      page.value = 'FormAuthLogin'
+      loginMenu.value.$children[0].open()
     }
     const registration = () => {
-      store.commit('menu/changeKeyMenu', {
-        key: 'registration',
-        effect: 'fx-slide-from-left'
-      })
-      store.commit('menu/changeStepMenu', { step: 1 })
-      store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+      page.value = 'FormAuthDefault'
+      loginMenu.value.$children[0].open()
+    }
+    const closeMenu = () => {
+      loginMenu.value.$children[0].close()
     }
     const addLike = async () => {
       if (like.value === true) {
@@ -321,6 +333,7 @@ export default {
       login,
       registration,
       loginMenu,
+      closeMenu,
       page
     }
   }
@@ -386,16 +399,6 @@ export default {
         @media (min-width: $tabletWidth) {
           height: 100%;
         }
-      }
-      .blackout{
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        background: rgba(0, 0, 0, 0.3);
-        z-index: 5;
-        display: flex;
-        justify-content: center;
-        align-items: center;
       }
       &:after {
         display: block;
@@ -502,6 +505,16 @@ export default {
         justify-content: space-between;
       }
     }
+    &.author {
+      padding: .8rem 1rem 1.3rem;
+      p {
+        opacity: .4;
+        color: $fontColorDefault;
+        font-weight: 600;
+        @include regular-text;
+        @include montserratSemiBold;
+      }
+    }
     .title {
       text-decoration: none;
       @include text-style-h2;
@@ -526,6 +539,12 @@ export default {
       }
       h2 {
         text-decoration-line: underline;
+        font-weight: 600;
+        font-size: 1.8rem;
+      }
+      p {
+        //margin-top: 1.03rem;
+        @include regular-text;
       }
       .authorName{
         margin-bottom: 1.5rem;

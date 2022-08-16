@@ -22,7 +22,6 @@
     }
     .name {
       overflow: hidden;
-      margin: 0 1rem;
       white-space: nowrap;
       @include regular-text-small;
       color: $fontColorDefault;
@@ -49,13 +48,41 @@
   }
   .marquee .inner {
     position: relative;
-    width: 100%;
     display: flex;
     color: $fontColorDefault;
+    &.noActive {
+      justify-content: center;
+      > * {
+        padding: 0 0;
+      }
+    }
+    &.active {
+      > * {
+        padding: 0 4rem;
+      }
+    }
   }
   .marquee .inner > * {
     white-space: nowrap;
-    padding: 0 2rem;
+    @include regular-text;
   }
-
+  .marqueeContent {
+    &:first-child {
+      // animation: marqueeTranslate 8s infinite;
+    }
+  }
+  @keyframes marqueeTranslate {
+    // from {
+    //  transform: translateX(-100%);
+    // }
+    // to {
+    //  transform: translateX(100%);
+    // }
+    from {
+      margin-left: -350%;
+    }
+    to {
+      margin-left: 100%;
+    }
+  }
 }

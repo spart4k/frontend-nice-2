@@ -5,30 +5,29 @@
     <n-intro-wrapper :is-home-page="isHomePage" :color="color">
       <Nuxt />
     </n-intro-wrapper>
-    <transition :name="keyAnimation === 'prev' ? 'slideShow' : 'slideback'">
-      <N-BootomSheet
-        v-if="$store.state.menu.isShowBottomMenu"
-        ref="menu"
-        effect="fx-slide-from-left"
-        max-width="39rem"
-        :max-height="'100%'"
-        :fullscreen="true"
-        :is-show-button-back="step > 0"
-        @closeMenu="changeState(false, 'menu')"
-        @closed="changeState(false, 'menu')"
-        @back="changeStep"
-      >
-        <stepperOrder
-          :header-items="headerItems"
-          :key-animation="keyAnimation"
-          :step="step"
-          :curr-comp="currentShowComponents"
-          @clearStep="step = 0"
-          @changeComp="currentShowComponents = $event"
-          @changeStep="changeStep"
-        />
-      </N-BootomSheet>
-    </transition>
+    <N-BootomSheet
+      v-if="$store.state.menu.isShowBottomMenu"
+      ref="menu"
+      :effect="currentShowComponents.effect"
+      max-width="39rem"
+      :max-height="'100%'"
+      :fullscreen="true"
+      :is-show-button-back="step > 0"
+      @closeMenu="closeState"
+      @closed="changeState"
+      @back="changeStep"
+    >
+      <stepperOrder
+        :header-items="headerItems"
+        :key-animation="keyAnimation"
+        :step="step"
+        :curr-comp="currentShowComponents.key"
+        @clearStep="step = 0"
+        @changeComp="changeComp"
+        @changeStep="changeStep"
+      />
+    </N-BootomSheet>
+
     <portal-target name="sliderPopup" />
   </div>
 </template>
@@ -47,11 +46,20 @@ export default {
     const menu = ref(null)
     const back = ref(false)
     const keyAnimation = ref('next')
-    const currentShowComponents = ref('')
+    const currentShowComponents = ref({
+      key: '',
+      effect: ''
+    })
     const step = ref(0)
     const menuBasket = ref(null)
+    const menuLive = ref(null)
     const { store, route, $gsap } = useContext()
     const isHomePage = computed(() => route.value.name === 'index')
+
+    const changeComp = (value) => {
+      currentShowComponents.value.key = value.key
+      currentShowComponents.value.effect = value.effect
+    }
 
     const fetchData = async () => {
       const response = await store.dispatch('content/getHeader')
@@ -79,9 +87,14 @@ export default {
     })
 
     const changeState = (value) => {
-      store.commit('menu/changeShowStateBottomSheetMenu', { value })
-      store.commit('menu/changeStepMenu', { step: 0 })
-      store.commit('menu/changeKeyMenu', { key: '' })
+      setTimeout(() => {
+        store.commit('menu/changeShowStateBottomSheetMenu', { value })
+        store.commit('menu/changeStepMenu', { step: 0 })
+      }, 250)
+    }
+
+    const closeState = () => {
+      menu.value.$children[0].close()
     }
 
     const {
@@ -98,20 +111,20 @@ export default {
     })
 
    const openMenu = () => {
-   nextTick(() => {
-    menu.value.$children[0].open()
-   })
+      nextTick(() => {
+        menu.value.$children[0].open()
+      })
     }
     const closeMenu = () => {
-      menu.value.$children[0].close()
-      store.commit('menu/changeKeyMenu', { key: '' })
+      store.commit('menu/changeKeyMenu', { key: '', effect: 'fx-slide-from-left' })
       store.commit('menu/changeStepMenu', { step: 0 })
       step.value = 0
     }
     watch(() => store.state.menu.isShowBottomMenu, () => {
       if (store.state.menu.isShowBottomMenu) {
-      if (store.state.menu.componentName) {
-        currentShowComponents.value = store.state.menu.componentName
+      if (store.state.menu.component) {
+        currentShowComponents.value.key = store.state.menu.component.key
+        currentShowComponents.value.effect = store.state.menu.component.effect
       }
       if (store.state.menu.stepCurrentComponent) {
         step.value = store.state.menu.stepCurrentComponent
@@ -124,7 +137,7 @@ export default {
 
     watch(() => step.value, () => {
       if (step.value === 0) {
-        currentShowComponents.value = ''
+        currentShowComponents.value.key = ''
       }
     })
 
@@ -153,16 +166,19 @@ export default {
       isHomePage,
       menuBasket,
       menu,
+      menuLive,
       back,
       step,
       keyAnimation,
+      changeComp,
 
       changeStep,
       openMenu,
       currentShowComponents,
       closeMenu,
       closedSwipe,
-      changeState
+      changeState,
+      closeState
     }
   }
 }

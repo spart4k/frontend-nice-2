@@ -1,18 +1,18 @@
 <template>
   <ul :class="$style.list">
-    <li :class="$style.item" @click="$emit('openMenu', 'registration')">
+    <li :class="$style.item" @click="$emit('openMenu', {key:'registration', effect:''})">
       <n-icon name="user" :class="$style.icon" />
       <div :class="$style.item__text">
         Профиль
       </div>
     </li>
-    <li :class="$style.item" @click="$emit('openMenu', 'basket')">
+    <li :class="$style.item" @click="$emit('openMenu', {key:'basket', effect:''})">
       <n-icon name="basket" :class="$style.icon" />
       <div :class="$style.item__text">
         Корзина
       </div>
     </li>
-    <li :class="$style.item" @click="$emit('openMenu', 'search')">
+    <li :class="$style.item" @click="$emit('openMenu', {key:'search', effect:''})">
       <n-icon name="search" :class="$style.icon" />
       <div :class="$style.item__text">
         Поиск

@@ -85,6 +85,7 @@ export default {
   }
   .close {
     right: 1.5rem;
+    z-index: 5;
   }
   :global(.bottom-sheet__pan) {
       padding-bottom: 20px;
@@ -102,6 +103,13 @@ export default {
   }
 
   :global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-left) {
+    @media (min-width: $mobileWidth) {
+      transform: translate(0, 0) !important;
+    }
+  }
+  :global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-right) {
+    right: 0 !important;
+    left: unset !important;
     @media (min-width: $mobileWidth) {
       transform: translate(0, 0) !important;
     }

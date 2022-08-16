@@ -201,3 +201,10 @@
     transform: translate(0, 0) !important;
   }
 }
+:global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-right) {
+  @media (min-width: $mobileWidth) {
+    right: 0 !important;
+    left: unset !important;
+    transform: translate(0, 0) !important;
+  }
+}

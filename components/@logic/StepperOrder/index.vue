@@ -28,7 +28,7 @@ export default {
   const changeComponent = (value) => {
     // currentShowComponents.value = value.key
     emit('changeStep', 'increment')
-    emit('changeComp', value.key)
+    emit('changeComp', { key: value.value.key, effect: '' })
   }
 
     const isCurrentPage = computed(() => {
@@ -64,6 +64,8 @@ export default {
         case 1 :
           return 'Search-Cards'
         }
+    } else if (props.currComp === 'live-default') {
+      return 'live-default'
     }
     })
     return {

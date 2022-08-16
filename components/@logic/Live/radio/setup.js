@@ -1,4 +1,4 @@
-import { ref, onMounted } from '@vue/composition-api'
+import { ref, onMounted, nextTick, computed } from '@vue/composition-api'
 
 export default {
   name: 'live-radio',
@@ -14,6 +14,10 @@ export default {
     const audioPlay = ref(null)
     const audioPlaying = ref(false)
     const marquee = ref(null)
+    const marqueeLength = ref(null)
+    const marqueeContent = ref(null)
+    const marqueeContainerLength = ref(null)
+    const isMarquee = ref(true)
     const playAudio = () => {
       audioPlaying.value = true
       audioSource.value.play()
@@ -22,35 +26,49 @@ export default {
       audioPlaying.value = false
       audioSource.value.pause()
     }
-
+    const innerHeight = ref(null)
+    const marqueeLengthComputed = computed(() => {
+      return marqueeContent?.value?.offsetWidth
+    })
     function handleMarquee () {
+      console.log('marque start')
+      isMarquee.value = true
       // console.log(marquee.value)
       const speed = 1
-      // let lastScrollPos = 0
-      // let timer
 
       const container = marquee.value.querySelector('.inner')
-      const content = marquee.value.querySelector('.inner > *')
-      // Get total width
-      const elWidth = content.offsetWidth
-      // console.log(elWidth)
-      // Duplicate content
+      const content = marquee.value.querySelector('.marqueeContent')
+      const elWidth = marqueeLength.value
       const clone = content.cloneNode(true)
       container.appendChild(clone)
-
       let progress = 1
       function loop () {
         progress = progress - speed
         if (progress <= elWidth * -1) { progress = 0 }
         container.style.transform = 'translateX(' + progress + 'px)'
         container.style.transform += 'skewX(' + speed * 0.4 + 'deg)'
-
         window.requestAnimationFrame(loop)
       }
       loop()
     }
     onMounted(() => {
-      handleMarquee()
+      nextTick(() => {
+          // Костыль для прорисовки шрифтов
+          setTimeout(() => {
+            marqueeLength.value = marqueeContent.value.getBoundingClientRect().width
+            marqueeContainerLength.value = marquee.value.getBoundingClientRect().width
+            console.log(marqueeLength.value, marqueeContainerLength.value)
+            if (marqueeLength.value >= marqueeContainerLength.value) {
+              handleMarquee()
+            } else {
+              isMarquee.value = false
+            }
+          }, 1500)
+      })
+
+      window.addEventListener('resize', (e) => {
+        innerHeight.value = window.innerHeight
+      })
     })
 
     return {
@@ -60,7 +78,13 @@ export default {
       playAudio,
       pauseAudio,
       audioPlaying,
-      marquee
+      marquee,
+      innerHeight,
+      marqueeLength,
+      marqueeContent,
+      marqueeLengthComputed,
+      marqueeContainerLength,
+      isMarquee
     }
   }
 }

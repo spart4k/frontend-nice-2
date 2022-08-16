@@ -1,8 +1,10 @@
 export const state = () => ({
   isShowBottomSheetStepper: false,
-  componentName: '',
+  component: '',
   isShowBottomMenu: false,
+  isShowBottomLive: false,
   stepCurrentComponent: 0,
+  changeShowStateBottomSheetLive: false,
   basketLength: 0
 })
 
@@ -13,8 +15,14 @@ export const mutations = {
   changeShowStateBottomSheetMenu (store, { value }) {
     store.isShowBottomMenu = value
   },
-  changeKeyMenu (store, { key }) {
-    store.componentName = key
+  changeShowStateBottomSheetLive (store, value) {
+    store.isShowBottomLive = value
+  },
+  changeKeyMenu (store, value) {
+    store.component = {
+      key: value.key,
+      effect: value.effect
+    }
   },
   changeStepMenu (store, { step }) {
     store.stepCurrentComponent = step
