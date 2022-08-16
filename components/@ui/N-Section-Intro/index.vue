@@ -66,8 +66,7 @@ export default {
   justify-content: center;
   height: 100%;
   .title {
-    @include title;
-    @include montserratBlack;
+    @include text-style-h1;
     margin-bottom: 4rem;
     text-align: center
   }

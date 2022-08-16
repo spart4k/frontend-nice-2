@@ -1,65 +1,72 @@
 <template>
   <div :class="$style.wire">
-    <div :class="$style.wireIncoming">
+    <div v-if="wire" :class="$style.wireIncoming">
       <p :class="$style.wireText">
         Входящее соединение:
       </p>
       <v-select
-        v-model="wireInput"
+        v-model="formData.input"
         :options="optionsInput"
         :class="$style.wireSelect"
         @input="setSelectedInput"
       />
+      <p v-if="$errors.input[0]" :class="$style.inputError">
+        {{ $errors.input[0] }}
+      </p>
     </div>
-    <div :class="$style.wireOutcoming">
+    <div v-if="wire" :class="$style.wireOutcoming">
       <p :class="$style.wireText">
         Исходящее соединение:
       </p>
       <v-select
-        v-model="wireOutput"
+        v-model="formData.output"
         :options="optionsOutput"
         :class="$style.wireSelect"
         @input="setSelectedOutput"
       />
+      <p v-if="$errors.output[0]" :class="$style.inputError">
+        {{ $errors.output[0] }}
+      </p>
     </div>
-    <div :class="$style.wireLength">
+    <div v-if="wire" :class="$style.wireLength">
       <p :class="$style.wireText">
         Длина (см.):
       </p>
-      <input type="text" pattern="\d*" maxlength="4" :class="$style.wireInput">
+      <input
+        v-model="formData.length"
+        v-mask="'Q###'"
+        type="text"
+        :class="$style.wireInput"
+      >
+      <p v-if="$errors.length[0]" :class="$style.inputError">
+        {{ $errors.length[0] }}
+      </p>
     </div>
-    <N-Goods-Counter />
-    <div :class="$style.wireColorSection">
+    <div>
+      <N-Goods-Counter v-model="formData.count" @sendCount="sendCount" />
+      <p v-if="$errors.count[0]" :class="$style.inputError">
+        {{ $errors.count[0] }}
+      </p>
+    </div>
+    <div v-if="wire" :class="$style.wireColorSection">
       <p :class="$style.wireText">
         Цвет
       </p>
       <div ref="color" :class="$style.wireColorBox">
-        <label :class="$style.wireColor" :style="{ borderColor: 'rgb(126 100 181)' }">
-          <input name="color" type="radio">
-          <span :class="$style.checkmark" :style="{ backgroundColor: 'rgb(126 100 181)' }" />
-        </label>
-        <label :class="$style.wireColor" :style="{ borderColor: '#5c9bd5' }">
-          <input name="color" type="radio">
-          <span :class="$style.checkmark" :style="{ backgroundColor: '#5c9bd5' }" />
-        </label>
-        <label :class="$style.wireColor" :style="{ borderColor: '#d53e4d' }">
-          <input name="color" type="radio">
-          <span :class="$style.checkmark" :style="{ backgroundColor: '#d53e4d' }" />
-        </label>
-        <label :class="$style.wireColor" :style="{ borderColor: '#DCC444' }">
-          <input name="color" type="radio">
-          <span :class="$style.checkmark" :style="{ backgroundColor: '#DCC444' }" />
-        </label>
-        <label :class="$style.wireColor" :style="{ borderColor: '#388262' }">
-          <input name="color" type="radio">
-          <span :class="$style.checkmark" :style="{ backgroundColor: '#388262' }" />
-        </label>
-        <label :class="$style.wireColor" :style="{ borderColor: 'rgb(78 186 206)' }">
-          <input name="color" type="radio">
-          <span :class="$style.checkmark" :style="{ backgroundColor: 'rgb(78 186 206)' }" />
+        <label v-for="color in colorArray" :key="color" :class="$style.wireColor" :style="{ borderColor: color }">
+          <input name="color" type="radio" :checked="color === formData.color">
+          <span :class="$style.checkmark" :style="{ backgroundColor: color }" />
         </label>
       </div>
     </div>
+    <N-Button
+      :class="$style.buyButton"
+      background-color="#C83F8E"
+      :disabled="$v.$invalid && $touched "
+      @click="submit"
+    >
+      Купить
+    </N-Button>
   </div>
 </template>
 
@@ -67,20 +74,25 @@
 import { ref } from '@nuxtjs/composition-api'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
+import useForm from '~/compositions/useForm'
+import { required } from '~/utills/validations'
 
 export default {
-  name: 'NWire',
+  name: 'NPurchase',
   components: {
     vSelect
   },
   props: {
+      wire: {
+      type: Boolean,
+      default: false
+    }
   },
   setup (props) {
+  const colorArray = ref(['rgb(126 100 181)', 'rgb(92, 155, 213)', 'rgb(213, 62, 77)', 'rgb(220, 196, 68)', 'rgb(56, 130, 98)', 'rgb(78 186 206)'])
   const optionsDefault = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])
   const optionsInput = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])
   const optionsOutput = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])
-  const wireOutput = ref()
-  const wireInput = ref()
   const setSelectedInput = (value) => {
     optionsOutput.value = optionsDefault.value
     if (value === 'MIDI') {
@@ -101,6 +113,7 @@ export default {
       optionsOutput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
     }
   }
+
   const setSelectedOutput = (value) => {
     optionsInput.value = optionsDefault.value
     if (value === 'MIDI') {
@@ -121,14 +134,37 @@ export default {
       optionsInput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
     }
   }
+  const sendCount = (val) => {
+    formData.count = val
+  }
+  const { formData, validate, $errors, $v, $touched } = useForm(
+    {
+      fields: {
+        input: { default: '', validations: { required } },
+        output: { default: '', validations: { required } },
+        length: { default: '', validations: { required } },
+        count: { default: '', validations: { required } },
+        color: { default: 'rgb(126 100 181)', validations: { } }
+      }
+    })
+  const submit = () => {
+    if (!validate()) { return }
+    console.log()
+  }
+
     return {
+      sendCount,
+      submit,
       setSelectedInput,
       setSelectedOutput,
+      colorArray,
       optionsOutput,
       optionsInput,
       optionsDefault,
-      wireOutput,
-      wireInput
+      formData,
+      $errors,
+      $touched,
+      $v
     }
   }
 }
@@ -234,6 +270,14 @@ export default {
     }
     :global(.vs__dropdown-option--highlight) {
       background: #C83F8E;
+    }
+    .buyButton {
+      margin-top: 2rem;
+    }
+    .inputError {
+      margin-top: 1rem;
+      color: #D13C33;
+      @include regular-text;
     }
   }
 </style>

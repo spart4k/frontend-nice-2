@@ -39,6 +39,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  @include styleBottomSheetStepper;
+  @include paddings;
   .image {
     margin-bottom: 6.6rem;
   }
@@ -60,7 +62,7 @@ export default {
     width: 100%;
   }
   .btnHistory {
-    margin-top: 4.1rem;
+    margin-top: 2.1rem;
   }
 }
 

@@ -19,7 +19,6 @@ export default {
   border: solid .2rem $blueBlack2;
   border-radius: $border-radius-2;
   color: $blueBlack2;
-  @include text-md;
-  @include montserratMedium;
+  @include regular-text;
 }
 </style>

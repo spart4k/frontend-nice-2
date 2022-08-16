@@ -34,18 +34,6 @@ export default {
     flex-direction: column;
     align-items: center;
   }
-  // .subtitle {
-  //   @include Bankir-Retro;
-  //   @include text;
-  //   color: rgba($white, .85);
-  //   width: 20.5rem;
-  //   line-height: 2.9rem;
-  //   transition: opacity 0.6s ease;
-  //   text-align: center;
-  //   &.hideTextLogo {
-  //     opacity: 0;
-  //   }
-  // }
 }
 
 </style>

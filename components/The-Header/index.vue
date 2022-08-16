@@ -74,14 +74,18 @@ export default {
     }
 
     const openMenu = () => {
-      store.commit('menu/changeShowStateBottomSheetMenu', true)
+      store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
     }
     const openMenuBasket = () => {
       store.commit('menu/changeShowStateBottomSheetStepper', true)
     }
 
     const openLive = () => {
-      store.commit('menu/changeShowStateBottomSheetLive', true)
+      store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+      store.commit('menu/changeKeyMenu', {
+        key: 'live-default',
+        effect: 'fx-slide-from-right'
+      })
     }
 
     const openProfile = () => {

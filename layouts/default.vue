@@ -6,44 +6,26 @@
       <Nuxt />
     </n-intro-wrapper>
     <N-BootomSheet
+      v-if="$store.state.menu.isShowBottomMenu"
       ref="menu"
-      effect="fx-slide-from-left"
+      :effect="currentShowComponents.effect"
       max-width="39rem"
       :max-height="'100%'"
       :fullscreen="true"
+      :is-show-button-back="step > 0"
       @closeMenu="changeState(false, 'menu')"
       @closed="changeState(false, 'menu')"
+      @back="changeStep"
     >
-      <nav :class="$style.headerNav">
-        <menuUserTop
-          @openMenuBasket="changeState(true, 'basket')"
-        />
-        <n-nav-menu
-          :header-items="headerItems"
-        />
-      </nav>
-    </N-BootomSheet>
-    <N-BootomSheet
-      ref="menuBasket"
-      effect="fx-slide-from-left"
-      max-width="39rem"
-      :max-height="'100%'"
-      :fullscreen="true"
-      @closeMenu="changeState(false, 'basket')"
-      @closed="changeState(false, 'basket')"
-    >
-      <StepperOrder />
-    </N-BootomSheet>
-    <N-BootomSheet
-      ref="menuLive"
-      effect="fx-slide-from-left"
-      max-width="39rem"
-      :max-height="'100%'"
-      :fullscreen="true"
-      @closeMenu="changeState(false, 'live')"
-      @closed="changeState(false, 'live')"
-    >
-      <live-default />
+      <stepperOrder
+        :header-items="headerItems"
+        :key-animation="keyAnimation"
+        :step="step"
+        :curr-comp="currentShowComponents.key"
+        @clearStep="step = 0"
+        @changeComp="currentShowComponents.key = $event"
+        @changeStep="changeStep"
+      />
     </N-BootomSheet>
 
     <portal-target name="sliderPopup" />
@@ -51,7 +33,7 @@
 </template>
 
 <script>
-import { ref, useContext, useFetch, onMounted, computed, watch } from '@nuxtjs/composition-api'
+import { ref, useContext, useFetch, onMounted, computed, watch, nextTick } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import animationGSAP from '~/helpers/compositions/animationGSAP'
 import { BLAND_COLOR } from '~/const/blandColor'
@@ -62,7 +44,10 @@ export default {
     const headerItems = ref([])
     const body = ref(null)
     const menu = ref(null)
-
+    const back = ref(false)
+    const keyAnimation = ref('next')
+    const currentShowComponents = ref('')
+    const step = ref(0)
     const menuBasket = ref(null)
     const menuLive = ref(null)
     const { store, route, $gsap } = useContext()
@@ -93,14 +78,11 @@ export default {
       background: ''
     })
 
-    const changeState = (value, key) => {
-      if (key === 'basket') {
-        store.commit('menu/changeShowStateBottomSheetStepper', value)
-      } else if (key === 'menu') {
-        store.commit('menu/changeShowStateBottomSheetMenu', value)
-      } else if (key === 'live') {
-        store.commit('menu/changeShowStateBottomSheetLive', value)
-      }
+    const changeState = (value) => {
+      console.log(value)
+      store.commit('menu/changeShowStateBottomSheetMenu', { value })
+      store.commit('menu/changeStepMenu', { step: 0 })
+      store.commit('menu/changeKeyMenu', { key: '', effect: '' })
     }
 
     const {
@@ -116,47 +98,45 @@ export default {
       }
     })
 
-    watch(() => store.state.menu.isShowBottomSheetStepper, () => {
-      if (store.state.menu.isShowBottomSheetStepper) {
-        openMenuBasket()
-      } else {
-        closedMenuBasket()
-      }
-    })
-
+   const openMenu = () => {
+   nextTick(() => {
+    menu.value.$children[0].open()
+   })
+    }
+    const closeMenu = () => {
+      store.commit('menu/changeKeyMenu', { key: '', effect: 'fx-slide-from-left' })
+      store.commit('menu/changeStepMenu', { step: 0 })
+      step.value = 0
+    }
     watch(() => store.state.menu.isShowBottomMenu, () => {
       if (store.state.menu.isShowBottomMenu) {
+      if (store.state.menu.component) {
+        console.log('store')
+        currentShowComponents.value = store.state.menu.component
+      }
+      if (store.state.menu.stepCurrentComponent) {
+        step.value = store.state.menu.stepCurrentComponent
+      }
         openMenu()
       } else {
         closeMenu()
       }
     })
 
-    watch(() => store.state.menu.isShowBottomLive, () => {
-      if (store.state.menu.isShowBottomLive) {
-        openMenuLive()
-      } else {
-        closeMenuLive()
+     watch(() => step.value, () => {
+      if (step.value === 0) {
+        currentShowComponents.value = ''
       }
     })
 
-    const openMenuBasket = () => {
-      menuBasket.value.$children[0].open()
-    }
-    const closedMenuBasket = () => {
-      menuBasket.value.$children[0].close()
-    }
-    const openMenu = () => {
-      menu.value.$children[0].open()
-    }
-    const closeMenu = () => {
-      menu.value.$children[0].close()
-    }
-    const openMenuLive = () => {
-      menuLive.value.$children[0].open()
-    }
-    const closeMenuLive = () => {
-      menuLive.value.$children[0].close()
+    const changeStep = (value) => {
+      if (value === 'increment') {
+        keyAnimation.value = 'next'
+        step.value += 1
+      } else {
+        keyAnimation.value = 'prev'
+        step.value -= 1
+      }
     }
 
     onMounted(() => {
@@ -175,10 +155,14 @@ export default {
       menuBasket,
       menu,
       menuLive,
+      back,
+      step,
+      keyAnimation,
+
+      changeStep,
       openMenu,
+      currentShowComponents,
       closeMenu,
-      closedMenuBasket,
-      openMenuBasket,
       closedSwipe,
       changeState
     }
@@ -186,13 +170,13 @@ export default {
 }
 </script>
 <style lang="scss" module>
-.headerNav {
-  display: block;
-  padding-top: 4.9rem;
-  backface-visibility: hidden;
-  max-height: 100%;
-  overflow: auto;
-  @include container;
+.container {
+  padding-top: 3rem;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding-bottom: 1rem;
+  transform: translate3d(0, 0, 0);
+  color: $fontColorDefault;
 }
-
 </style>

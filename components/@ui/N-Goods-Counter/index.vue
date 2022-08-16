@@ -3,12 +3,19 @@
     <p :class="$style.wireText">
       Кол-во:
     </p>
-    <v-select id="" :options="options" :class="$style.wireSelect" name="" />
+    <v-select
+      id=""
+      v-model="count"
+      :options="options"
+      :class="$style.wireSelect"
+      name=""
+      @input="sendValue"
+    />
   </div>
 </template>
 
 <script>
-// import { ref } from '@nuxtjs/composition-api'
+import { ref } from '@nuxtjs/composition-api'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
@@ -25,8 +32,15 @@ export default {
       }
     }
   },
-  setup (props) {
+  setup (props, ctx) {
+    const count = ref()
+    const { emit } = ctx
+    const sendValue = () => {
+      emit('sendCount', count.value)
+    }
   return {
+    sendValue,
+    count
   }
   }
 }

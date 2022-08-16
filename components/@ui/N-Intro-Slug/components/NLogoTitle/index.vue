@@ -1,21 +1,5 @@
 <template>
   <div :class="$style.container">
-    <!--    <h1 v-if="!isHomePage" :class="[$style.title]">-->
-    <!--      {{ description.title }}-->
-    <!--    </h1>-->
-    <!--    <div v-if="!isHomePage">-->
-    <!--      <N-Icon :class="$style.quote" name="quote" />-->
-    <!--      <h2 :class="$style.subtitle">-->
-    <!--        Читая, вы проживаете несколько жизней.-->
-    <!--      </h2>-->
-    <!--      <h3 :class="$style.author">-->
-    <!--        – Уильям Стайрон-->
-    <!--      </h3>-->
-    <!--      <div :class="$style.image">-->
-    <!--        <img :src="require(`~/assets/img/background/${image}`)" alt="">-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <!--    <div>-->
     <div :class="[isHomePage && $style.wrapper]">
       <n-logo v-if="isHomePage" :class="$style.logo" size="md" />
     </div>
@@ -47,8 +31,7 @@ export default {
     align-items: center;
   }
   .title {
-      @include title;
-      @include montserratBlack;
+      @include text-style-h1;
       margin-bottom: 4rem;
       text-align: center
   }
@@ -76,18 +59,6 @@ export default {
       user-select: none;
     }
   }
-  // .subtitle {
-  //   @include Bankir-Retro;
-  //   @include text;
-  //   color: rgba($white, .85);
-  //   width: 20.5rem;
-  //   line-height: 2.9rem;
-  //   transition: opacity 0.6s ease;
-  //   text-align: center;
-  //   &.hideTextLogo {
-  //     opacity: 0;
-  //   }
-  // }
 }
 
 </style>

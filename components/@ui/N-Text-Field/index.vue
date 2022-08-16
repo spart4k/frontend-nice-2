@@ -20,6 +20,7 @@
         :max="$props.max"
         :readOnly="readOnly"
         :placeholder="$props.placeholder"
+        @input="sendValue"
         @keydown.enter="$emit('keydown', $event)"
       >
       <p v-if="error" :class="$style.inputError">
@@ -78,13 +79,17 @@ export default {
   setup (props, ctx) {
     const { emit } = ctx
     const proxyVal = ref(props.value)
+    const sendValue = () => {
+      emit('sendCount', proxyVal.value)
+    }
 
     watch(proxyVal, () => {
       emit('input', proxyVal.value)
     })
     watch(() => props.valueInfo, (newValue, oldValue) => { proxyVal.value = newValue })
     return {
-      proxyVal
+      proxyVal,
+      sendValue
     }
   }
 }
@@ -102,7 +107,7 @@ export default {
   &.error {
     .wrapperInput {
       input {
-        border: red 1px solid
+        border-color: #D13C33
       }
     }
   }
@@ -147,6 +152,11 @@ export default {
   &.pinkBorder {
     input {
       border-color:$pink2 ;
+    }
+  }
+  &.blueBorder {
+    input {
+      border-color:$blue2;
     }
   }
 }

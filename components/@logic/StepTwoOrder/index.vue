@@ -1,14 +1,16 @@
 <template>
-  <div>
+  <div :class="$style.wrapper">
     <h2 :class="$style.title">
       Оформление заказа
     </h2>
     <NTabsStepper>
       <template #body="currentTab">
-        <components
-          :is="currentTab.currentTab"
-          @changeStep="$emit('changeStep','increment')"
-        />
+        <transition name="fade-fast">
+          <components
+            :is="currentTab.currentTab"
+            @changeStep="$emit('changeStep','increment')"
+          />
+        </transition>
       </template>
     </NTabsStepper>
   </div>
@@ -30,6 +32,18 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
+.wrapper {
+  overflow: auto;
+  @include paddings;
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  height: 100%;
+  //overflow-y: auto;
+  @include paddings;
+  overscroll-behavior-y: contain !important;
+  transform: translate3d(0px, 0, 0);
+  color: $fontColorDefault;
+}
 .title {
   text-align: center;
   @include text-style-h2;

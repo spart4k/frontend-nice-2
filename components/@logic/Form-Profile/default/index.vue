@@ -9,7 +9,7 @@
       placeholder="Nice"
       :class="$style.input"
       title="Ник"
-      color="#C83F8E"
+      :color-border="'pinkBorder'"
     />
     <!-- <n-text-field v-model="formData.surname" :value-info="formData.surname" :class="$style.input" placeholder="Фамилия" title="Фамилия" /> -->
     <n-text-field
@@ -19,7 +19,7 @@
       :value-info="formData.phone"
       :class="$style.input"
       title="Телефон"
-      color="#C83F8E"
+      :color-border="'pinkBorder'"
       type="tel"
     />
     <n-text-field
@@ -28,10 +28,21 @@
       :class="$style.input"
       placeholder="Email"
       title="Email"
-      color="#C83F8E"
+      :color-border="'pinkBorder'"
     />
     <template v-if="true">
-      <n-text-field v-model="formData.address" placeholder="Город, улица, дом" :class="$style.input" title="Адрес" color="#C83F8E" />
+      <div v-if="wire" :class="$style.wireOutcoming">
+        <p :class="$style.wireText">
+          Город, улица, дом
+        </p>
+        <v-select
+          v-model="formData.output"
+          :options="optionsOutput"
+          :class="$style.wireSelect"
+          @input="setSelectedOutput"
+        />
+      </div>
+      <n-text-field v-model="formData.address" :class="$style.input" title="Адрес" color="#C83F8E" />
     </template>
     <template v-else>
       <div>
@@ -58,7 +69,6 @@
     <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E">
       История заказов
     </N-Button>
-    <!-- <small @click="logout">Выйти из профиля</small> -->
   </form>
 </template>
 <script>
@@ -149,16 +159,6 @@ form {
   & > .button {
     margin-top: 2.5rem;
   }
-}
-small {
-  display: block;
-  color: $orange;
-  text-decoration: underline;
-  text-align: center;
-  margin-top: 2.1rem;
-  margin-bottom: 2.8rem;
-  font-weight: 600;
-  @include text-md;
 }
 .inputTitle {
   @include regular-text;

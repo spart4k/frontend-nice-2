@@ -9,7 +9,12 @@
           :card="card"
           @clickTag="clickTag"
         />
-        <N-Back-Button :class="$style.back" />
+        <N-Button color="#222222" :background-color="'white'" :class="$style.back" @click="goToPrev()">
+          <N-Icon name="back" />
+          <p :class="$style.text">
+            Назад
+          </p>
+        </N-Button>
         <!-- <N-Fixed-Button v-if="card.is_product" :is-auth="isAuth" :check-auth="true" @clickButton="addBasket">
           <template v-if="!isAddedBasket">
             Добавить в корзину
@@ -91,7 +96,12 @@ export default defineComponent({
 
     }
   },
-  head: {}
+  head: {},
+  methods: {
+    goToPrev () {
+      this.$router.go(-1)
+    }
+  }
 })
 </script>
 
@@ -109,6 +119,21 @@ export default defineComponent({
   .back {
     margin-top: 2rem;
     margin-bottom: 2rem;
+    width: 100%;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    @media (min-width: $tabletWidth) {
+      margin: 2rem auto 0;
+      width: 36.2rem;
+    }
+    .text {
+      color: $fontColorDefault;
+      @include button;
+    }
   }
 }
 .button__add_basket {
@@ -126,8 +151,7 @@ export default defineComponent({
     height: 5.1rem;
     background-color: $yellow2;
     color: $black;
-    @include montserratMedium;
-    @include text;
+    @include button;
   }
 }
 </style>

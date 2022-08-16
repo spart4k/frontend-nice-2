@@ -6,20 +6,13 @@
     <Row title="title">
       Фамилия Обломов не связана со словом «облом». 5 фактов о литературе из школьной программы, которых вы не знал
     </Row>
-    <Row title="Автор">
+    <!-- <Row title="Автор">
       <N-Author name="Алексей Ельцин" />
-    </Row>
+    </Row> -->
     <Row title="Иконки">
       <N-Icon name="plus" />
       <N-Icon name="message" />
       <N-Icon name="minus" />
-    </Row>
-    <Row>
-      <!-- <N-Card-New
-        :data="NCard"
-        v-bind="NCard"
-        @clickTag="clickTag"
-      /> -->
     </Row>
     <Row title="title">
       <div :class="$style.slider">
@@ -96,12 +89,12 @@
       <N-Audio />
     </Row>
     <Row title="Contain">
-      <N-Contain>
+      <!-- <N-Contain>
         Фамилия Обломов не связана со словом «облом».
         5 фактов о литературе из школьной программы, которых вы не знал. Обломов не связана со словом «облом».
         5 фактов о литературе из школьной программы, которых вы не знал. Фамилия Обломов не связана со словом «облом».
         5 фактов о литературе из школьной программы, которых вы не знал.
-      </N-Contain>
+      </N-Contain> -->
     </Row>
     <Row title="Popup общий">
       <button @click="openPopup">
@@ -117,7 +110,7 @@
       <N-Text-Field v-model="valTextField" title="телефон" mask="+7 (###) ###-##-##" md-fz />
     </Row>
     <Row title="TextArea">
-      <N-Text-Area v-model="valTextArea" />
+      <!-- <N-Text-Area v-model="valTextArea" /> -->
     </Row>
     <Row title="Form-auth">
       <FormAuthDefault />
@@ -138,14 +131,14 @@
       <Form-Profile-Default />
     </Row>
     <Row title="vTooltip">
-      <N-Tooltip :class="$style.ml3">
+      <!-- <N-Tooltip :class="$style.ml3">
         <N-Icon name="user" />
         <template #data>
           <N-Contain>
             <N-Audio :class="$style.widthAudio" />
           </N-Contain>
         </template>
-      </N-Tooltip>
+      </N-Tooltip> -->
     </Row>
     <Row>
       <br>

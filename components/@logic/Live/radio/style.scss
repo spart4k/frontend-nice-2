@@ -23,7 +23,7 @@
     .name {
       overflow: hidden;
       white-space: nowrap;
-      @include montserratMedium;
+      @include regular-text-small;
       color: $fontColorDefault;
       position: relative;
       // &:after {
@@ -64,7 +64,7 @@
   }
   .marquee .inner > * {
     white-space: nowrap;
-    @include text-md;
+    @include regular-text;
   }
   .marqueeContent {
     &:first-child {

@@ -1,40 +1,54 @@
 <template>
   <div :class="$style.container">
-    <component :is="proxyCurrentComp" @changeComponent="$emit('changeComponent', $event)" />
+    <!-- <transition :name="keyAnimation === 'prev' ? 'slideShow' : 'slideback'"> -->
+    <component :is="proxyCurrentComp" @changeComponent="changeComponent" />
     <!-- <FormProfileDefault /> -->
     <!-- <FormAuthLogin /> -->
     <!-- <FormAuthDefault /> -->
     <!-- <FormAuthRecovery /> -->
     <!-- <N-Sheet-Search /> -->
     <!-- <HistoryOrdersDefault /> -->
+    <!-- </transition> -->
   </div>
 </template>
 
 <script>
-import { watch, ref } from 'vue-demi'
-// import { ref } from '@nuxtjs/composition-api'
+import { ref, computed } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NSheet',
   props: {
-    page: {
-      type: String,
-      default: 'FormProfileDefault'
+    stepProp: {
+      type: Number,
+      default: 0
     }
   },
   setup (props) {
-    const proxyCurrentComp = ref(props.page)
+    const step = ref(props.stepProp)
 
-    watch(() => props.page, () => {
-      proxyCurrentComp.value = props.page
-    })
-
-    const changeComponent = (value) => {
-      proxyCurrentComp.value = value
+    const changeComponent = (key) => {
+      if (key === 'increment') {
+        step.value += 1
+      } else {
+        step.value -= 1
+      }
     }
+    const proxyCurrentComp = computed(() => {
+      switch (step.value) {
+        case 0 :
+          return 'FormAuthDefault'
+        case 1 :
+          return 'FormAuthLogin'
+        case 2 :
+          return 'FormAuthRecovery'
+        default:
+          return 'FormAuthDefault'
+      }
+    })
     return {
       changeComponent,
-      proxyCurrentComp
+      proxyCurrentComp,
+      step
     }
   }
 }
@@ -45,10 +59,6 @@ export default {
   display: flex;
   flex-direction: column;
   padding: 0 1.5rem 6rem;
-  .closeButton {
-    top: 1.5rem;
-    right: 1.5rem;
-  }
   .title {
     @include text-style-h2;
     color: $fontColorDefault;

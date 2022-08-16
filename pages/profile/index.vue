@@ -46,9 +46,8 @@ export default {
       display: flex;
       align-items: center;
       color: $white;
-      font-size: 2rem;
       margin-bottom: 2.4rem;
-      @include montserratSemiBold;
+      @include regular-text-bold;
       span {
         text-decoration: underline;
       }
@@ -62,10 +61,9 @@ export default {
       margin-bottom: 3.2rem;
     }
     &__title {
-      font-size: 3.3rem;
       color:  $white;
       margin-bottom: 1.5rem;
-      @include montserratBlack;
+      @include text-style-h1;
     }
   }
 

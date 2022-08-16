@@ -73,6 +73,18 @@ export default {
   const innerHeight = ref(null)
   const mountedHeight = ref(null)
   const transformBlock = ref(null)
+  const showSmilies = () => {
+    smilies.value = !smilies.value
+  }
+  const resize = (e) => {
+    e.target.style.height = 'auto'
+    e.target.style.height = `${e.target.scrollHeight}px`
+  }
+  const sendComment = () => {
+    input.value.style.height = ''
+    emit('sendMessage', letters.value)
+    letters.value = ''
+  }
   const beforeEnter = (el) => {
     el.style.height = '0'
   }
@@ -102,19 +114,6 @@ export default {
   const keyboardHeight = computed(() => {
     return mountedHeight.value - innerHeight.value
   })
-  const showSmilies = () => {
-    smilies.value = !smilies.value
-  }
-  const resize = (e) => {
-    e.target.style.height = 'auto'
-    e.target.style.height = `${e.target.scrollHeight}px`
-  }
-  const sendComment = () => {
-    input.value.style.height = ''
-    console.log(letters.value)
-    emit('sendMessage', letters.value)
-    letters.value = ''
-  }
   const emojiWrite = (emoji) => {
     if (letters.value.length < 199) {
       letters.value += emoji
@@ -215,7 +214,6 @@ export default {
       width: 100%;
       height: 35px;
       @include regular-text;
-      @include text-md-2;
       color: $fontColorDefault;
       overflow: hidden;
       padding: 1rem 0;

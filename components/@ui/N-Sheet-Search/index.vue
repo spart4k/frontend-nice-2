@@ -4,8 +4,8 @@
       Поиск
     </h2>
     <div :class="$style.inputContainer">
-      <N-Text-Field placeholder="Начните искать ..." type="text" color="#6448B5" />
-      <N-Icon :class="$style.searchIcon" name="loupe" />
+      <N-Text-Field v-model="text" placeholder="Начните искать ..." type="text" color="#6448B5" @sendCount="sendCount" />
+      <N-Icon v-if="!text" :class="$style.searchIcon" name="loupe" />
     </div>
     <div :class="$style.searchResults">
       <div v-if="false">
@@ -21,15 +21,21 @@
 </template>
 
 <script>
-// import { ref } from '@nuxtjs/composition-api'
+import { ref } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NSheetRegister',
   props: {
   },
   setup () {
-  return {
-  }
+    const text = ref()
+    const sendCount = (val) => {
+      text.value = val
+    }
+    return {
+      text,
+      sendCount
+    }
   }
 }
 </script>
@@ -50,7 +56,7 @@ export default {
     .searchIcon {
         position: absolute;
         right: 0;
-        top: calc(50% - 1.5rem);
+        top: calc(50% - 1rem);
     }
   }
   .searchResults{

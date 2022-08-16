@@ -12,7 +12,25 @@
       @closed="$emit('closed')"
     >
       <client-only>
-        <N-Button-Close :class="$style.close" color="#222222" background-color="rgba(34, 34, 34, 0.1)" @click="$emit('closeMenu')" />
+        <N-Button
+          type-button="small"
+          color="#222222"
+          background-color="rgba(34, 34, 34, 0.1)"
+          :class="$style.close"
+          @click="$emit('closeMenu')"
+        >
+          <N-Icon name="close" />
+        </N-Button>
+        <N-Button
+          v-if="isShowButtonBack"
+          type-button="small"
+          :class="$style.back"
+          color="#222222"
+          background-color="rgba(34, 34, 34, 0.1)"
+          @click="$emit('back')"
+        >
+          <N-Icon name="arrow-back" />
+        </N-Button>
         <slot />
       </client-only>
     </vue-bottom-sheet>
@@ -25,6 +43,7 @@ import { onMounted, onUnmounted, ref } from '@nuxtjs/composition-api'
 export default {
   name: 'NBottomSheet',
   props: {
+    isShowButtonBack: Boolean,
     maxWidth: String,
     fullscreen: Boolean,
     maxHeight: {
@@ -55,18 +74,26 @@ export default {
 
 <style lang="scss" module>
 .wrapper {
-  .close {
+  position: relative;
+  width: 37.5rem;
+  .close, .back {
     position: absolute;
     top: 1.5rem;
+  }
+  .back {
+    left: 1.5rem;
+  }
+  .close {
     right: 1.5rem;
     z-index: 5;
   }
   :global(.bottom-sheet__pan) {
       padding-bottom: 20px;
       padding-top: 15px;
-      height: 5rem;
+      height: 5rem !important;
   }
   :global(.bottom-sheet__card) {
+    overflow: hidden;
     @media (min-width: $mobileWidth) {
       left: 0!important;
     }
@@ -76,6 +103,13 @@ export default {
   }
 
   :global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-left) {
+    @media (min-width: $mobileWidth) {
+      transform: translate(0, 0) !important;
+    }
+  }
+  :global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-right) {
+    right: 0 !important;
+    left: unset !important;
     @media (min-width: $mobileWidth) {
       transform: translate(0, 0) !important;
     }

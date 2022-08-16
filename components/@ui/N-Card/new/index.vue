@@ -530,7 +530,7 @@ export default {
         opacity: .4;
         color: $fontColorDefault;
         font-weight: 600;
-        @include text-md;
+        @include regular-text;
         @include montserratSemiBold;
       }
     }
@@ -559,11 +559,11 @@ export default {
       h2 {
         text-decoration-line: underline;
         font-weight: 600;
-        @include text;
+        font-size: 1.8rem;
       }
       p {
         //margin-top: 1.03rem;
-        @include text-md;
+        @include regular-text;
       }
       .authorName{
         margin-bottom: 1.5rem;

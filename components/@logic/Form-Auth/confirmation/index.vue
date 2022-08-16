@@ -110,6 +110,6 @@ export default {
   font-weight: 600;
   margin-bottom: 1.8rem;
   color: $fontColorDefault;
-  @include text;
+  @include button;
 }
 </style>

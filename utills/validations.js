@@ -15,10 +15,14 @@ const phone = {
   $validator: val => val.length > 10,
   $message: () => 'Не менее 10 символов'
 }
+const nameLength = {
+  $validator: val => val.length > 4,
+  $message: () => 'Не менее 4 символов'
+}
 
 const sameAs = value => ({
   $validator: (val) => {
-    try { // может падать при первой проверке, когда formData еще не синициализирован
+    try {
       return val === value()
     } catch (err) {
       return false
@@ -30,6 +34,11 @@ const sameAs = value => ({
 const password = {
   $validator: val => val.length > 7,
   $message: () => 'Не менее 7 символов'
+}
+
+const onlyNumeric = {
+  $validator: val => /^\+[0-9](\([0-9]{3}\)|[0-9]{3})[0-9]{3}[0-9]{4}$/.test(val),
+  $message: () => 'Некорректный номер телефона'
 }
 
 // const isTrue = {
@@ -59,35 +68,34 @@ const password = {
 //   $message: () => i18n.t('auth.validations.password.onlyLowerCase'),
 // }
 
-// const strongPassword = () => {
-//   const validators = {
-//     length: {
-//       cb: val => val.length > 8,
-//       touched: false,
-//       message: () => 'Не менее 8 симоволов',
-//       success: false
-//     },
-//     oneDigit: {
-//       cb: val => /\d/.test(val),
-//       touched: false,
-//       message: () => 'Должен содержать цифры',
-//       success: false
-//     },
-//     oneLowercase: {
-//       cb: val => /[a-zа-я]/.test(val),
-//       touched: false,
-//       message: () => 'Должен содержать строчные буквы',
-//       success: false
-//     },
-//     oneUppercase: {
-//       cb: val => /[А-ЯA-Z]/.test(val),
-//       touched: false,
-//       message: () => 'Должен содержать прописные буквы',
-//       success: false
-//     }
-//   }
-//   return validators
-// }
+const strongPassword = () => {
+  const validators = {
+    length: {
+      cb: val => val.length > 8,
+      touched: false,
+      message: () => 'Не менее 8 симоволов',
+      success: false
+    },
+    oneDigit: {
+      cb: val => /\d/.test(val),
+      touched: false,
+      message: () => 'Должен содержать цифру',
+      success: false
+    }
+  }
+  const $validator = (val) => {
+    Object.values(validators).forEach((validator) => {
+      validator.success = validator.cb(val)
+      validator.touched = true
+    })
+    return !Object.values(validators).find(validator => !validator.success)
+  }
+  return {
+    validators,
+    $validator,
+    $message: () => Object.values(validators).find(validator => !validator.success).message()
+  }
+}
 //   const $validator = (val) => {
 //     Object.values(validators).forEach((validator) => {
 //       validator.success = validator.cb(val)
@@ -117,5 +125,8 @@ export {
   sameAs,
   password,
   email,
-  phone
+  phone,
+  onlyNumeric,
+  nameLength,
+  strongPassword
 }

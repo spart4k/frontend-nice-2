@@ -1,6 +1,5 @@
 .item {
-  @include montserratBold;
-  @include text-md;
+  @include regular-text-bold;
   box-sizing: border-box;
   width: 12rem;
   line-height: 4rem;

@@ -25,8 +25,8 @@
         <n-text-field
           v-model="formData.phone"
           :error="$errors.phone[0]"
-          mask="+7 (###) ###-##-##"
-          placeholder="Введите номер телефона"
+          mask="+7(###)#######"
+          placeholder="+7(777)7777777 "
           title="Телефон"
           :color-border="'pinkBorder'"
         />

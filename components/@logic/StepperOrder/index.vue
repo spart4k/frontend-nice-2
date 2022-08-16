@@ -1,69 +1,73 @@
 <template>
-  <div ref="container" :class="$style.container">
-    <components
+  <transition :name="keyAnimation === 'prev' ? 'slideShow' : 'slideback'">
+    <component
       :is="isCurrentPage"
+      :header-items="headerItems"
       @changeStep="changeStep"
+      @changeComponent="changeComponent"
     />
-  </div>
+  </transition>
 </template>
 
 <script>
-import { computed, ref, useContext, watch } from '@nuxtjs/composition-api'
-import StepOne from './components/StepOne'
-import StepTwo from './components/StepTwo'
-import StepThree from './components/StepThree'
+import { computed } from '@nuxtjs/composition-api'
 
 export default {
   name: 'StepperOrder',
-  components: {
-    StepOne,
-    StepTwo,
-    StepThree
+  props: {
+    headerItems: Array,
+    step: Number,
+    currComp: String,
+    keyAnimation: String
   },
-  setup () {
-    const container = ref(null)
-    const page = ref(0)
-    const { store } = useContext()
-    const changeStep = (key) => {
-      if (key === 'increment') {
-        page.value += 1
-      } else {
-        page.value -= 1
-      }
-    }
-    watch(() => store.state.menu.isShowBottomSheetStepper, () => {
-      page.value = 0
-    })
+  setup (props, { emit }) {
+  const changeStep = (value) => {
+    emit('changeStep', value)
+  }
+
+  const changeComponent = (value) => {
+    console.log(value)
+    // currentShowComponents.value = value.key
+    emit('changeStep', 'increment')
+    emit('changeComp', value.key)
+  }
+
     const isCurrentPage = computed(() => {
-      switch (page.value) {
-        case 0 :
-          return 'StepOne'
+    if (props.step === 0 && !props.currComp) {
+        return 'n-nav-menu'
+    } else if (props.currComp === 'basket') {
+          switch (props.step) {
         case 1 :
-          return 'StepTwo'
+          return 'StepOneBasket'
         case 2 :
-          return 'StepThree'
+          return 'StepTwoOrder'
+        case 3 :
+          return 'StepThreePlug'
+        }
+      } else if (props.currComp === 'registration') {
+          switch (props.step) {
+        case 1 :
+          return 'FormAuthDefault'
+        case 2 :
+          return 'FormAuthLogin'
+        case 3 :
+          return 'FormAuthRecovery'
         default:
-          return 'StepOne'
-      }
+          return 'FormAuthDefault'
+        }
+    } else if (props.currComp === 'live-default') {
+      return 'live-default'
+    }
     })
     return {
       isCurrentPage,
       changeStep,
-      container
+      changeComponent
     }
   }
 }
 </script>
 
-<style lang="scss" module>
-.container {
-  padding-top: 3rem;
-  padding-bottom: 1rem;
-  height: 100%;
-  overflow-y: auto;
-  @include paddings;
-  overscroll-behavior-y: contain !important;
-  transform: translate3d(0px, 0, 0);
-  color: $fontColorDefault;
-}
+<style scoped>
+
 </style>
