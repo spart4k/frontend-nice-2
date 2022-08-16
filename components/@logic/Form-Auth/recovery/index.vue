@@ -23,7 +23,7 @@
         background-color="#5289C5"
         @click="submit"
       >
-        <n-loading v-if="loading" />
+        <n-loading v-if="false" />
         <template v-else>
           Восстановить пароль
         </template>
@@ -67,7 +67,7 @@ export default {
     @include text-style-h2;
     color: $fontColorDefault;
     text-align: center;
-    margin-top: 2.7rem;
+    margin-top: 1.7rem;
   }
   .subtitle {
     @include regular-text;

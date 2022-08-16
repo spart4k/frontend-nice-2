@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="$style.wrapper">
     <div :class="$style.title">
       История заказов
     </div>
@@ -49,16 +49,19 @@ export default {
 </script>
 
 <style lang="scss" module>
-.title {
-  @include text-style-h2;
-  color: $fontColorDefault;
-  text-align: center;
-  margin: 2.7rem 0 2rem;
-}
-.empty {
-  @include regular-text;
-  color: $fontColorDefault;
-  opacity: 0.5;
-  text-align: center;
+.wrapper {
+  padding: 0 1.5rem;
+  .title {
+    @include text-style-h2;
+    color: $fontColorDefault;
+    text-align: center;
+    margin: 1.5rem 0 2rem;
+  }
+  .empty {
+    @include regular-text;
+    color: $fontColorDefault;
+    opacity: 0.5;
+    text-align: center;
+  }
 }
 </style>

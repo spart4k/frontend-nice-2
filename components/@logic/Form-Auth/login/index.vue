@@ -86,7 +86,7 @@ export default {
       @include text-style-h2;
       color: $fontColorDefault;
       text-align: center;
-      margin: 2.7rem 0 2rem;
+      margin: 1.5rem 0 2rem;
     }
     & > .input + .input {
       margin-top: 2.5rem;

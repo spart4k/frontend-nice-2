@@ -1,28 +1,17 @@
 <template>
   <div :class="$style.item">
-    <div :class="$style.order">Заказ №223</div>
-    <div :class="$style.title">Кабель переходник, 1 шт.</div>
-    <div :class="$style.price">3 500 р.</div>
-    <div :class="$style.status">Доставка</div>
-    <!-- <div :class="$style.item__head">
-      <div :class="$style.item__date">
-        24.03.22
-      </div>
-      <div :class="$style.item__status"> -->
-        <!-- {{ $props.order.statusRu }} -->
-        <!-- cnfnec
-      </div>
+    <div :class="$style.order">
+      Заказ №223
     </div>
-    <div> -->
-      <!-- <div v-for="(item) in $props.order.basket.cards" :key="item.key" :class="$style.item__info"> -->
-        <!-- <div>{{ item.title }}</div> -->
-        <!-- <div>{{ item.price }}р.</div> -->
-      <!-- </div> -->
-      <!-- <div :class="$style.item__info">
-        <div> item.title </div>
-        <div> item.price р.</div>
-      </div>
-    </div> -->
+    <div :class="$style.title">
+      Кабель переходник, 1 шт.
+    </div>
+    <div :class="$style.price">
+      3 500 р.
+    </div>
+    <div :class="$style.status">
+      Доставка
+    </div>
   </div>
 </template>
 

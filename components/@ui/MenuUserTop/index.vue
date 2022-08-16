@@ -3,9 +3,7 @@
     <li :class="$style.item" @click="$emit('openMenu', 'registration')">
       <n-icon name="user" :class="$style.icon" />
       <div :class="$style.item__text">
-        <nuxt-link to="#">
-          Профиль
-        </nuxt-link>
+        Профиль
       </div>
     </li>
     <li :class="$style.item" @click="$emit('openMenu', 'basket')">
@@ -14,20 +12,16 @@
         Корзина
       </div>
     </li>
-    <li :class="$style.item">
+    <li :class="$style.item" @click="$emit('openMenu', 'search')">
       <n-icon name="search" :class="$style.icon" />
       <div :class="$style.item__text">
-        <nuxt-link to="#">
-          Поиск
-        </nuxt-link>
+        Поиск
       </div>
     </li>
     <li :class="$style.item">
       <n-icon name="connection" :class="$style.icon" />
       <div :class="$style.item__text">
-        <nuxt-link to="#">
-          Связь
-        </nuxt-link>
+        Связь
       </div>
     </li>
   </ul>

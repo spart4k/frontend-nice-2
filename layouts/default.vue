@@ -120,7 +120,7 @@ export default {
       }
     })
 
-     watch(() => step.value, () => {
+    watch(() => step.value, () => {
       if (step.value === 0) {
         currentShowComponents.value = ''
       }

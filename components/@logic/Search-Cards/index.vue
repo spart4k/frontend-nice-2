@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="$style.wrapper">
     <h2 :class="$style.title">
       Поиск
     </h2>
@@ -24,7 +24,7 @@
 import { ref } from '@nuxtjs/composition-api'
 
 export default {
-  name: 'NSheetRegister',
+  name: 'SearchCards',
   props: {
   },
   setup () {
@@ -41,11 +41,13 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
+.wrapper{
+  padding: 0 1.5rem;
   .title {
     @include text-style-h2;
     color: $fontColorDefault;
     text-align: center;
-    margin-top: 2.7rem;
+    margin-top: 1.5rem;
   }
   .inputContainer{
     display: flex;
@@ -74,4 +76,5 @@ export default {
       }
     }
   }
+}
 </style>

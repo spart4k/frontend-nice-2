@@ -43,7 +43,7 @@ export default {
         case 3 :
           return 'StepThreePlug'
         }
-      } else if (props.currComp === 'registration') {
+      } else if (props.currComp === 'registration' && true) {
           switch (props.step) {
         case 1 :
           return 'FormAuthDefault'
@@ -51,8 +51,18 @@ export default {
           return 'FormAuthLogin'
         case 3 :
           return 'FormAuthRecovery'
-        default:
-          return 'FormAuthDefault'
+        }
+    } else if (props.currComp === 'registration' && !true) {
+          switch (props.step) {
+        case 1 :
+          return 'FormProfileDefault'
+        case 2 :
+          return 'History-OrdersDefault'
+        }
+    } else if (props.currComp === 'search') {
+          switch (props.step) {
+        case 1 :
+          return 'Search-Cards'
         }
     }
     })

@@ -11,7 +11,6 @@
       title="Ник"
       :color-border="'pinkBorder'"
     />
-    <!-- <n-text-field v-model="formData.surname" :value-info="formData.surname" :class="$style.input" placeholder="Фамилия" title="Фамилия" /> -->
     <n-text-field
       v-model="formData.phone"
       md-fz
@@ -31,18 +30,14 @@
       :color-border="'pinkBorder'"
     />
     <template v-if="true">
-      <div v-if="wire" :class="$style.wireOutcoming">
-        <p :class="$style.wireText">
-          Город, улица, дом
-        </p>
-        <v-select
-          v-model="formData.output"
-          :options="optionsOutput"
-          :class="$style.wireSelect"
-          @input="setSelectedOutput"
-        />
-      </div>
-      <n-text-field v-model="formData.address" :class="$style.input" title="Адрес" color="#C83F8E" />
+      <p :class="$style.subtitle">
+        Адрес
+      </p>
+      <v-select
+        :options="['Moscow','Samara']"
+        :class="$style.citySelect"
+      />
+      <n-text-field v-model="formData.address" :class="$style.input" placeholder="Улица, дом, квартира" color="#C83F8E" />
     </template>
     <template v-else>
       <div>
@@ -66,7 +61,7 @@
     <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E" @click="logout">
       Выйти из профиля
     </N-Button>
-    <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E">
+    <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E" @click="$emit('changeStep', 'increment')">
       История заказов
     </N-Button>
   </form>
@@ -76,8 +71,13 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 import { ref, useContext, useRouter, computed, watch } from '@nuxtjs/composition-api'
 import { useToast } from 'vue-toastification/composition'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
 export default {
   name: 'FormProfileDefault',
+  components: {
+    vSelect
+  },
   setup () {
     const { store, $toast } = useContext()
     const router = useRouter()
@@ -92,7 +92,6 @@ export default {
     })
     const rules = {
       name: { required },
-      // surname: { required },
       email: { required, email },
       address: { required }
     }
@@ -151,7 +150,13 @@ form {
     @include text-style-h2;
     color: $fontColorDefault;
     text-align: center;
-    margin-top: 2.7rem;
+    margin-top: 1.5rem;
+  }
+  .subtitle {
+    @include regular-text;
+    color: $fontColorDefault;
+    margin-top: 2.5rem;
+    opacity: 0.5;
   }
   & > .input + .input {
     margin-top: 2.5rem;
@@ -159,6 +164,40 @@ form {
   & > .button {
     margin-top: 2.5rem;
   }
+  .citySelect {
+      width: 100%;
+      @include regular-text;
+      color: $fontColorDefault;
+      border: none;
+      border-bottom: .2rem solid #C83F8E;
+      outline: none;
+      margin-bottom: 1.5rem;
+      :global(.vs__dropdown-toggle) {
+        border: none;
+        padding: 0;
+        :global(.vs__selected-options) {
+          padding: 0;
+          :global(.vs__search) {
+            padding: 0;
+            font-size: 1.4rem !important;
+          }
+          :global(.vs__selected) {
+            margin: 0;
+            padding: 0;
+          }
+        }
+        :global(.vs__actions) {
+          margin: 1.3rem 0;
+          padding: 0;
+          :global(.vs__open-indicator) {
+            fill: #C83F8E
+          }
+          :global(.vs__clear) {
+            display: none
+          }
+        }
+      }
+    }
 }
 .inputTitle {
   @include regular-text;

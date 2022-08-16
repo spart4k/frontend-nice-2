@@ -96,12 +96,12 @@ export default {
 </script>
 <style lang="scss" module>
 form {
-  padding: 1.5rem;
+  padding: 0 1.5rem;
   .title {
     @include text-style-h2;
     color: $fontColorDefault;
     text-align: center;
-    margin: 2.7rem 0 2rem;
+    margin: 1.5rem 0 2rem;
   }
   & > .input + .input {
     margin-top: 2.5rem;
