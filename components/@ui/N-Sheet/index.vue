@@ -1,5 +1,6 @@
 <template>
   <div :class="$style.container">
+    <!-- <transition :name="keyAnimation === 'prev' ? 'slideShow' : 'slideback'"> -->
     <component :is="proxyCurrentComp" @changeComponent="changeComponent" />
     <!-- <FormProfileDefault /> -->
     <!-- <FormAuthLogin /> -->
@@ -7,6 +8,7 @@
     <!-- <FormAuthRecovery /> -->
     <!-- <N-Sheet-Search /> -->
     <!-- <HistoryOrdersDefault /> -->
+    <!-- </transition> -->
   </div>
 </template>
 

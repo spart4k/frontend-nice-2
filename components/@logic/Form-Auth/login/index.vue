@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit">
+  <form @submit.prevent="submit">
     <h2 :class="$style.title">
       Вход
     </h2>
@@ -25,7 +25,7 @@
       :class="$style.recovery"
       type-button="left"
       color="#5289C5"
-      @click="$emit('changeComponent', 'increment')"
+      @click="$emit('changeStep', 'increment')"
     >
       Восстановить пароль
     </n-button>
@@ -36,7 +36,7 @@
       type="submit"
       @click="submit"
     >
-      <n-loading v-if="loading" />
+      <n-loading v-if="false" />
       <template v-else>
         Войти
       </template>
@@ -45,7 +45,7 @@
       :class="$style.button"
       color="#5289C5"
       background-color="transparent"
-      @click="$emit('changeComponent', '')"
+      @click="$emit('changeStep', '')"
     >
       Еще не зарегистрированы?
     </n-button>

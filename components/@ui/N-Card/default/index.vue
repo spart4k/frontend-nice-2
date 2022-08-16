@@ -153,7 +153,7 @@
           :style="{maxHeight: showComments ? commentHeight : '0'}"
         >
           <N-Input v-if="false" type="textarea" @smilies="commentHeightSet" />
-          <N-Plug v-else @login="login" @registration="registration" />
+          <N-Plug v-else @login="login" />
           <div :class="$style.commentsContainer">
             <div>
               <N-Comment />
@@ -168,7 +168,7 @@
         <slot name="footer" />
       </div>
     </div>
-    <portal to="sliderPopup">
+    <!-- <portal to="sliderPopup">
       <N-BootomSheet
         ref="loginMenu"
         :max-width="'450px'"
@@ -179,7 +179,7 @@
       >
         <N-Sheet :step-prop="page" @changeComponent="changeComponent" />
       </N-BootomSheet>
-    </portal>
+    </portal> -->
   </div>
 </template>
 
@@ -209,24 +209,28 @@ export default {
     const { $axios } = useContext()
     const { store } = useContext()
     const videoPlay = ref(false)
-    const closed = () => {
-      page.value = 0
-    }
-    const changeComponent = (value) => {
-      page.value = value
-    }
+    // const closed = () => {
+    //   page.value = 0
+    // }
+    // const changeComponent = (value) => {
+    //   page.value = value
+    // }
     const comments = ref(true)
+
     const login = () => {
-      page.value = 0
-      loginMenu.value.$children[0].open()
+      // page.value = 0
+      // loginMenu.value.$children[0].open()
+      store.commit('menu/changeKeyMenu', { key: 'registration' })
+      store.commit('menu/changeStepMenu', { step: 2 })
+      store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
     }
-    const registration = () => {
-      page.value = 1
-      loginMenu.value.$children[0].open()
-    }
-    const closeMenu = () => {
-      loginMenu.value.$children[0].close()
-    }
+    // const registration = () => {
+    //   page.value = 1
+    //   loginMenu.value.$children[0].open()
+    // }
+    // const closeMenu = () => {
+    //   loginMenu.value.$children[0].close()
+    // }
     const addLike = async () => {
       if (like.value === true) {
         likeCounter.value++
@@ -327,16 +331,16 @@ export default {
       extraTagShow,
       addLike,
       windowWidth,
-      closed,
-      changeComponent,
+      // closed,
+      // changeComponent,
       windowWidthCount,
       videoUrl,
       videoPlay,
       videoPlayingChange,
       login,
-      registration,
+      // registration,
       loginMenu,
-      closeMenu,
+      // closeMenu,
       page
     }
   }

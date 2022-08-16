@@ -19,10 +19,10 @@ import { BLAND_COLOR } from '~/const/blandColor'
 export default {
   name: 'NavMenu',
   props: {
-   item: {
-     type: Object,
-     required: true
-   }
+    item: {
+      type: Object,
+      required: true
+    }
   },
   setup (props) {
     const backgroundURL = computed(() => require(`~/assets/img/menu/${props.item.slug}.png`))

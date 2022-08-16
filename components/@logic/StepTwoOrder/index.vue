@@ -5,10 +5,12 @@
     </h2>
     <NTabsStepper>
       <template #body="currentTab">
-        <components
-          :is="currentTab.currentTab"
-          @changeStep="$emit('changeStep','increment')"
-        />
+        <transition name="fade-fast">
+          <components
+            :is="currentTab.currentTab"
+            @changeStep="$emit('changeStep','increment')"
+          />
+        </transition>
       </template>
     </NTabsStepper>
   </div>

@@ -98,7 +98,7 @@ export default {
     }
 
     const openMenu = () => {
-      store.commit('menu/changeShowStateBottomSheetMenu', true)
+      store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
     }
     const openMenuBasket = () => {
       store.commit('menu/changeShowStateBottomSheetStepper', true)

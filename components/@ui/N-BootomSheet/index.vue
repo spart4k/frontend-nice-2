@@ -92,6 +92,7 @@ export default {
       height: 5rem !important;
   }
   :global(.bottom-sheet__card) {
+    overflow: hidden;
     @media (min-width: $mobileWidth) {
       left: 0!important;
     }

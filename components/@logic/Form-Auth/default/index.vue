@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit">
+  <form @submit.prevent="submit">
     <h2 :class="$style.title">
       Вход и регистрация
     </h2>
@@ -57,7 +57,7 @@
       color="#5289C5"
       background-color="transparent"
       :class="$style.buttonTologin"
-      @click="$emit('changeComponent', 'increment')"
+      @click="$emit('changeStep', 'increment')"
     >
       Уже зарегистрированы?
     </n-button>
@@ -96,6 +96,7 @@ export default {
 </script>
 <style lang="scss" module>
 form {
+  padding: 1.5rem;
   .title {
     @include text-style-h2;
     color: $fontColorDefault;

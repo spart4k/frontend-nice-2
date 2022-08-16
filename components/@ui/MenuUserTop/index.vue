@@ -1,6 +1,6 @@
 <template>
   <ul :class="$style.list">
-    <li :class="$style.item">
+    <li :class="$style.item" @click="$emit('openMenu', 'registration')">
       <n-icon name="user" :class="$style.icon" />
       <div :class="$style.item__text">
         <nuxt-link to="#">
@@ -8,7 +8,7 @@
         </nuxt-link>
       </div>
     </li>
-    <li :class="$style.item" @click="$emit('openMenuBasket')">
+    <li :class="$style.item" @click="$emit('openMenu', 'basket')">
       <n-icon name="basket" :class="$style.icon" />
       <div :class="$style.item__text">
         Корзина

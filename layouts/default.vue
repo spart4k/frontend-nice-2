@@ -6,6 +6,7 @@
       <Nuxt />
     </n-intro-wrapper>
     <N-BootomSheet
+      v-if="$store.state.menu.isShowBottomMenu"
       ref="menu"
       effect="fx-slide-from-left"
       max-width="39rem"
@@ -16,22 +17,22 @@
       @closed="changeState(false, 'menu')"
       @back="changeStep"
     >
-      <!--      <div :class="$style.container">-->
-      <transition :name="keyAnimation === 'prev' ? 'slideShow' : 'slideback'">
-        <component
-          :is="isCurrentPage"
-          :header-items="headerItems"
-          @changeStep="changeStep"
-        />
-      </transition>
-      <!--      </div>-->
+      <stepperOrder
+        :header-items="headerItems"
+        :key-animation="keyAnimation"
+        :step="step"
+        :curr-comp="currentShowComponents"
+        @clearStep="step = 0"
+        @changeComp="currentShowComponents = $event"
+        @changeStep="changeStep"
+      />
     </N-BootomSheet>
     <portal-target name="sliderPopup" />
   </div>
 </template>
 
 <script>
-import { ref, useContext, useFetch, onMounted, computed, watch } from '@nuxtjs/composition-api'
+import { ref, useContext, useFetch, onMounted, computed, watch, nextTick } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import animationGSAP from '~/helpers/compositions/animationGSAP'
 import { BLAND_COLOR } from '~/const/blandColor'
@@ -44,9 +45,8 @@ export default {
     const menu = ref(null)
     const back = ref(false)
     const keyAnimation = ref('next')
+    const currentShowComponents = ref('')
     const step = ref(0)
-    const currentComponent = ref('n-nav-menu')
-
     const menuBasket = ref(null)
     const { store, route, $gsap } = useContext()
     const isHomePage = computed(() => route.value.name === 'index')
@@ -58,31 +58,6 @@ export default {
     const closedSwipe = () => {
       store.commit('menu/changeShowStateBottomSheetStepper', false)
     }
-
-    const changeStep = (key) => {
-      if (key === 'increment') {
-        keyAnimation.value = 'next'
-        step.value += 1
-      } else {
-        keyAnimation.value = 'prev'
-        step.value -= 1
-      }
-    }
-
-    const isCurrentPage = computed(() => {
-      switch (step.value) {
-        case 0 :
-          return 'n-nav-menu'
-        case 1 :
-          return 'StepOneBasket'
-        case 2 :
-          return 'StepTwoOrder'
-        case 3 :
-          return 'StepThreePlug'
-        default:
-          return 'n-nav-menu'
-      }
-    })
 
     useFetch(async () => {
       headerItems.value = []
@@ -101,12 +76,10 @@ export default {
       background: ''
     })
 
-    const changeState = (value, key) => {
-      if (key === 'basket') {
-        store.commit('menu/changeShowStateBottomSheetStepper', value)
-      } else {
-        store.commit('menu/changeShowStateBottomSheetMenu', value)
-      }
+    const changeState = (value) => {
+      store.commit('menu/changeShowStateBottomSheetMenu', { value })
+      store.commit('menu/changeStepMenu', { step: 0 })
+      store.commit('menu/changeKeyMenu', { key: '' })
     }
 
     const {
@@ -122,24 +95,45 @@ export default {
       }
     })
 
+   const openMenu = () => {
+   nextTick(() => {
+    menu.value.$children[0].open()
+   })
+    }
+    const closeMenu = () => {
+      menu.value.$children[0].close()
+      store.commit('menu/changeKeyMenu', { key: '' })
+      store.commit('menu/changeStepMenu', { step: 0 })
+      step.value = 0
+    }
     watch(() => store.state.menu.isShowBottomMenu, () => {
       if (store.state.menu.isShowBottomMenu) {
+      if (store.state.menu.componentName) {
+        currentShowComponents.value = store.state.menu.componentName
+      }
+      if (store.state.menu.stepCurrentComponent) {
+        step.value = store.state.menu.stepCurrentComponent
+      }
         openMenu()
       } else {
         closeMenu()
       }
     })
 
-    const changeComponent = (comp) => {
-      back.value = comp !== 'n-nav-menu'
-      currentComponent.value = comp
-    }
+     watch(() => step.value, () => {
+      if (step.value === 0) {
+        currentShowComponents.value = ''
+      }
+    })
 
-    const openMenu = () => {
-      menu.value.$children[0].open()
-    }
-    const closeMenu = () => {
-      menu.value.$children[0].close()
+    const changeStep = (value) => {
+      if (value === 'increment') {
+        keyAnimation.value = 'next'
+        step.value += 1
+      } else {
+        keyAnimation.value = 'prev'
+        step.value -= 1
+      }
     }
 
     onMounted(() => {
@@ -158,14 +152,13 @@ export default {
       menuBasket,
       menu,
       back,
-      currentComponent,
-      isCurrentPage,
       step,
       keyAnimation,
+
       changeStep,
       openMenu,
+      currentShowComponents,
       closeMenu,
-      changeComponent,
       closedSwipe,
       changeState
     }
