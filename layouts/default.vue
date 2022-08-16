@@ -5,28 +5,30 @@
     <n-intro-wrapper :is-home-page="isHomePage" :color="color">
       <Nuxt />
     </n-intro-wrapper>
-    <N-BootomSheet
-      v-if="$store.state.menu.isShowBottomMenu"
-      ref="menu"
-      effect="fx-slide-from-left"
-      max-width="39rem"
-      :max-height="'100%'"
-      :fullscreen="true"
-      :is-show-button-back="step > 0"
-      @closeMenu="changeState(false, 'menu')"
-      @closed="changeState(false, 'menu')"
-      @back="changeStep"
-    >
-      <stepperOrder
-        :header-items="headerItems"
-        :key-animation="keyAnimation"
-        :step="step"
-        :curr-comp="currentShowComponents"
-        @clearStep="step = 0"
-        @changeComp="currentShowComponents = $event"
-        @changeStep="changeStep"
-      />
-    </N-BootomSheet>
+    <transition :name="keyAnimation === 'prev' ? 'slideShow' : 'slideback'">
+      <N-BootomSheet
+        v-if="$store.state.menu.isShowBottomMenu"
+        ref="menu"
+        effect="fx-slide-from-left"
+        max-width="39rem"
+        :max-height="'100%'"
+        :fullscreen="true"
+        :is-show-button-back="step > 0"
+        @closeMenu="changeState(false, 'menu')"
+        @closed="changeState(false, 'menu')"
+        @back="changeStep"
+      >
+        <stepperOrder
+          :header-items="headerItems"
+          :key-animation="keyAnimation"
+          :step="step"
+          :curr-comp="currentShowComponents"
+          @clearStep="step = 0"
+          @changeComp="currentShowComponents = $event"
+          @changeStep="changeStep"
+        />
+      </N-BootomSheet>
+    </transition>
     <portal-target name="sliderPopup" />
   </div>
 </template>

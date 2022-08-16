@@ -30,21 +30,14 @@
       :color-border="'pinkBorder'"
     />
     <template v-if="true">
-      <p :class="$style.subtitle">
-        Адрес
-      </p>
-      <v-select
-        :options="['Moscow','Samara']"
-        :class="$style.citySelect"
-      />
-      <n-text-field v-model="formData.address" :class="$style.input" placeholder="Улица, дом, квартира" color="#C83F8E" />
+      <N-Adress :class="$style.adressComp" />
     </template>
     <template v-else>
       <div>
         <h3 :class="$style.inputTitle">
           Адрес
         </h3>
-        <span :class="$style.address">
+        <span :class="$style.adress">
           443110 Самара, ул. Полевая, д. 45, кв.112
         </span>
         <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E">
@@ -71,13 +64,9 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 import { ref, useContext, useRouter, computed, watch } from '@nuxtjs/composition-api'
 import { useToast } from 'vue-toastification/composition'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
+
 export default {
   name: 'FormProfileDefault',
-  components: {
-    vSelect
-  },
   setup () {
     const { store, $toast } = useContext()
     const router = useRouter()
@@ -86,14 +75,12 @@ export default {
     const formData = ref({
       name: '',
       // surname: '',
-      address: '',
       email: 'test@test.ru',
       phone: ''
     })
     const rules = {
       name: { required },
-      email: { required, email },
-      address: { required }
+      email: { required, email }
     }
     const v$ = useVuelidate(rules, formData)
     const onSubmit = () => {
@@ -125,7 +112,6 @@ export default {
       // formData.value.surname = currentValue.surname
       formData.value.email = currentValue.email
       formData.value.phone = currentValue.phone
-      formData.value.address = currentValue.address
     })
 
     return {
@@ -162,6 +148,9 @@ form {
     margin-top: 2.5rem;
   }
   & > .button {
+    margin-top: 2.5rem;
+  }
+  .adressComp {
     margin-top: 2.5rem;
   }
   .citySelect {
@@ -205,7 +194,7 @@ form {
   opacity: 0.5;
   margin-bottom: 1rem;
 }
-.address {
+.adress {
   @include regular-text;
   color: $fontColorDefault;
 }
