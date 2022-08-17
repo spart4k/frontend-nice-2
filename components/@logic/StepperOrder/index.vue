@@ -40,8 +40,10 @@ export default {
           return 'StepOneBasket'
         case 2 :
           return 'StepTwoOrder'
-        case 3 :
+        case 4 :
           return 'StepThreePlug'
+        case 3 :
+          return 'ChangeAddress'
         }
       } else if (props.currComp === 'registration' && true) {
           switch (props.step) {

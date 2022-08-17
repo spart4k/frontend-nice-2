@@ -27,7 +27,6 @@
         @changeStep="changeStep"
       />
     </N-BootomSheet>
-
     <portal-target name="sliderPopup" />
   </div>
 </template>

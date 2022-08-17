@@ -1,13 +1,9 @@
 import { ref } from '@nuxtjs/composition-api'
-import ChangeAddress from './components/ChangeAddress'
 import useForm from '~/compositions/useForm'
 import { email, phone, required, onlyNumeric } from '~/utills/validations'
 
 export default {
   name: 'TabDelivery',
-  components: {
-    ChangeAddress
-  },
   setup (_, ctx) {
     const { emit } = ctx
     const activePayment = ref('card')

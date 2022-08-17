@@ -10,7 +10,7 @@
         :class="[$style.item, currentItem === item.value && $style.active]"
         @click="currentItem = item.value"
       >
-        <div>
+        <div :class="$style.itemText">
           {{ item.title }}
         </div>
         <n-button type-button="transparent" @click="removeItem(item.value)">
@@ -18,7 +18,7 @@
         </n-button>
       </li>
     </ul>
-    <n-row>
+    <!-- <n-row>
       <n-select
         title="Адрес"
         :color-border="'pinkBorder'"
@@ -32,7 +32,8 @@
     </n-row>
     <n-row>
       <n-text-field placeholder="Улица, дом, квартира" :color-border="'pinkBorder'" />
-    </n-row>
+    </n-row> -->
+    <N-Adress :class="$style.city" />
     <n-button
       :class="$style.btn"
       :type-button="'pink'"
@@ -124,6 +125,13 @@ li {
     border-color: $pink2;
     color: $pink2;
   }
+  .itemText {
+    display: flex;
+    align-items: center;
+  }
+}
+.city {
+  margin-bottom: 2.5rem;
 }
 .btn {
   width: 100%;

@@ -41,7 +41,7 @@
         type-button="transparent"
         :class="$style.btnChangeAddress"
         color="#C83F8E"
-        @click="openMenu"
+        @click="$emit('changeStep', 'increment')"
       >
         Изменить адрес
       </n-button>
