@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="onSubmit">
-    <div>
+    <div :class="$style.wrapper">
       <h2 :class="$style.title">
         Восстановить пароль
       </h2>
@@ -63,6 +63,8 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
+.wrapper {
+  padding: 0 1.5rem;
   .title {
     @include text-style-h2;
     color: $fontColorDefault;
@@ -85,4 +87,5 @@ export default {
   .button {
     width: 100%;
   }
+}
 </style>

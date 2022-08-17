@@ -65,7 +65,7 @@
       :disabled="$v.$invalid && $touched "
       @click="submit"
     >
-      Купить
+      В корзину
     </N-Button>
   </div>
 </template>

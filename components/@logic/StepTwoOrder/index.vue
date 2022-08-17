@@ -9,6 +9,7 @@
           <components
             :is="currentTab.currentTab"
             @changeStep="$emit('changeStep','increment')"
+            @toAddress="($event) => $emit('toAddress', $event)"
           />
         </transition>
       </template>

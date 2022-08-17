@@ -5,12 +5,13 @@
       :header-items="headerItems"
       @changeStep="changeStep"
       @changeComponent="changeComponent"
+      @toAddress="toAddress"
     />
   </transition>
 </template>
 
 <script>
-import { computed } from '@nuxtjs/composition-api'
+import { ref, computed } from '@nuxtjs/composition-api'
 
 export default {
   name: 'StepperOrder',
@@ -21,6 +22,7 @@ export default {
     keyAnimation: String
   },
   setup (props, { emit }) {
+  const isAddress = ref(false)
   const changeStep = (value) => {
     emit('changeStep', value)
   }
@@ -30,7 +32,11 @@ export default {
     emit('changeComp', { key: value.value.key, effect: value.value.effect })
   }
 
-    const isCurrentPage = computed(() => {
+  const toAddress = (value) => {
+    isAddress.value = value
+  }
+
+  const isCurrentPage = computed(() => {
     if (props.step === 0 && !props.currComp) {
         return 'n-nav-menu'
     } else if (props.currComp === 'basket') {
@@ -40,10 +46,10 @@ export default {
         case 2 :
           return 'StepTwoOrder'
         case 3 :
-          if (props.step) {
-            return 'StepThreePlug'
-          } else {
+          if (isAddress.value) {
             return 'ChangeAddress'
+          } else {
+            return 'StepThreePlug'
           }
         }
       } else if (props.currComp === 'registration' && true) {
@@ -74,7 +80,8 @@ export default {
     return {
       isCurrentPage,
       changeStep,
-      changeComponent
+      changeComponent,
+      toAddress
     }
   }
 }

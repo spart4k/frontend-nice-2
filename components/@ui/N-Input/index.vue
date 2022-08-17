@@ -6,10 +6,10 @@
       v-model="letters"
       type="text"
       maxlength="200"
-      @focus="focusInput"
-      @blur="blurInput"
       :class="$style.input"
       :placeholder="placeholder"
+      @focus="focusInput"
+      @blur="blurInput"
     >
     <textarea
       v-else-if="$props.type === 'textarea'"
@@ -17,10 +17,10 @@
       v-model="letters"
       :placeholder="placeholder"
       maxlength="200"
-      @focus="focusInput"
-      @blur="blurInput"
       :class="$style.textarea"
       rows="1"
+      @focus="focusInput"
+      @blur="blurInput"
       @input="resize($event)"
     />
     <!-- <div><span ref="input" tabindex="-1" :class="$style.textarea" role="textbox" contenteditable="true" /></div> -->

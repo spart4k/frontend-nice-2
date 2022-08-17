@@ -41,7 +41,7 @@
         type-button="transparent"
         :class="$style.btnChangeAddress"
         color="#C83F8E"
-        @click="$emit('changeStep', 'increment')"
+        @click="$emit('toAddress', true);$emit('changeStep', 'increment')"
       >
         Изменить адрес
       </n-button>
@@ -110,7 +110,7 @@
         :class="$style.btn"
         :type-button="'pink'"
         :disabled="$v.$invalid && $touched"
-        @click="submit"
+        @click="submit;$emit('toAddress', false)"
       >
         Оплатить онлайн
       </n-button>
