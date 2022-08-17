@@ -1,14 +1,12 @@
 <template>
-  <!-- <audio
-    controls
-    :src="src"
-  > </audio> -->
   <div :class="$style.container">
-    <marquee behavior="scroll" direction="left" scrolldelay="60" :class="$style.marquee">
-      <div :class="$style.title">
-        {{ title }}
+    <div ref="marquee" :class="[ $style.marquee, $style.name ]">
+      <div class="inner" :class="[$style.inner, isMarquee ? $style.active : $style.noActive ]">
+        <p ref="marqueeContent" :class="$style.marqueeContent" class="marqueeContent">
+          {{title}}
+        </p>
       </div>
-    </marquee>
+    </div>
     <div :class="$style.control">
       <N-Icon v-if="!audioPlaying" :class="$style.controlButton" name="play" @click="playAudio" />
       <N-Icon v-else-if="audioPlaying" :class="$style.controlButton" name="pause" @click="pauseAudio" />
@@ -17,7 +15,7 @@
   </div>
 </template>
 <script lang="js">
-import { ref } from '@nuxtjs/composition-api'
+import { ref, onMounted, nextTick, computed } from '@vue/composition-api'
 
 export default {
   name: 'NMusic',
@@ -34,8 +32,11 @@ export default {
   setup (props) {
     const audioPlaying = ref(false)
     const audioSource = ref(null)
-    const audio = ref(props.src)
-    const name = ref(props.title)
+    const marquee = ref(null)
+    const marqueeLength = ref(null)
+    const marqueeContent = ref(null)
+    const marqueeContainerLength = ref(null)
+    const isMarquee = ref(true)
     const playAudio = () => {
       audioPlaying.value = true
       audioSource.value.play()
@@ -44,22 +45,63 @@ export default {
       audioPlaying.value = false
       audioSource.value.pause()
     }
+    const innerHeight = ref(null)
+    const marqueeLengthComputed = computed(() => {
+      return marqueeContent?.value?.offsetWidth
+    })
+    function handleMarquee () {
+      isMarquee.value = true
+      const speed = 1
+      const container = marquee.value.querySelector('.inner')
+      const content = marquee.value.querySelector('.marqueeContent')
+      const elWidth = marqueeLength.value
+      const clone = content.cloneNode(true)
+      container.appendChild(clone)
+      let progress = 1
+      function loop () {
+        progress = progress - speed
+        if (progress <= elWidth * -1) { progress = 0 }
+        container.style.transform = 'translateX(' + progress + 'px)'
+        container.style.transform += 'skewX(' + speed * 0.4 + 'deg)'
+        window.requestAnimationFrame(loop)
+      }
+      loop()
+    }
+    onMounted(() => {
+      nextTick(() => {
+          setTimeout(() => {
+            marqueeLength.value = marqueeContent.value.getBoundingClientRect().width
+            marqueeContainerLength.value = marquee.value.getBoundingClientRect().width
+            if (marqueeLength.value >= marqueeContainerLength.value) {
+              handleMarquee()
+            } else {
+              isMarquee.value = false
+            }
+          }, 1500)
+      })
+
+      window.addEventListener('resize', (e) => {
+        innerHeight.value = window.innerHeight
+      })
+    })
     return {
       audioPlaying,
       playAudio,
       pauseAudio,
       audioSource,
-      name,
-      audio
+
+      marquee,
+      innerHeight,
+      marqueeLength,
+      marqueeContent,
+      marqueeLengthComputed,
+      marqueeContainerLength,
+      isMarquee
     }
   }
 }
 </script>
 <style lang="scss" module>
-// audio {
-//   height: 3.37rem;
-//   width: 100%;
-// }
 .container {
   width: 100%;
   background: #F5F5F5;
@@ -83,4 +125,41 @@ export default {
     }
   }
 }
+.marquee {
+    width: 100%;
+  }
+  .marquee .inner {
+    position: relative;
+    display: flex;
+    color: $fontColorDefault;
+    &.noActive {
+      > * {
+        padding: 0 0;
+      }
+    }
+    &.active {
+      > * {
+        padding: 0 4rem 0 0;
+      }
+    }
+  }
+  .name {
+    overflow: hidden;
+    white-space: nowrap;
+    @include regular-text-small;
+    color: $fontColorDefault;
+    position: relative;
+  }
+  .marquee .inner > * {
+    white-space: nowrap;
+    @include regular-text;
+  }
+  @keyframes marqueeTranslate {
+    from {
+      margin-left: -350%;
+    }
+    to {
+      margin-left: 100%;
+    }
+  }
 </style>

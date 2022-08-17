@@ -31,9 +31,7 @@ export default {
       return marqueeContent?.value?.offsetWidth
     })
     function handleMarquee () {
-      console.log('marque start')
       isMarquee.value = true
-      // console.log(marquee.value)
       const speed = 1
 
       const container = marquee.value.querySelector('.inner')
