@@ -7,13 +7,13 @@
       Загрузка ...
     </div>
     <div v-else class="content" :class="[showAnimate && $style.animateContent, $style.content]">
-      <NGridCard
+      <!--<NGridCard
         v-if="cards && cards.data"
         ref="content"
         :items="cards.data"
         home-page
         @clickTag="clickTag"
-      />
+      />-->
     </div>
   </n-intro>
 </template>
