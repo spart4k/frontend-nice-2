@@ -85,10 +85,10 @@ export default {
       background: ''
     })
 
-    const changeState = () => {
+    const changeState = (value) => {
       console.log('changeState')
       setTimeout(() => {
-        store.commit('menu/changeShowStateBottomSheetMenu', false)
+        store.commit('menu/changeShowStateBottomSheetMenu', { value })
         store.commit('menu/changeStepMenu', { step: 0 })
       }, 250)
     }
