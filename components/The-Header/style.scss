@@ -40,6 +40,7 @@
   margin: 0;
   display: flex;
   transition: opacity .1s ease-in-out;
+  cursor: pointer;
   li + li {
     margin-left: 2.3rem;
   }

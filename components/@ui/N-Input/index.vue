@@ -28,7 +28,7 @@
       <N-Icon name="smile" :class="$style.icon" :style="{ color: smilies ? '#F45532' : '#222222' }" @click="showSmilies(); $emit('smilies')" />
       <div :class="$style.send">
         <div :class="$style.letterCounter">
-          1/200
+          0/200
         </div>
         <N-Icon :class="$style.sendButton" name="send" @click="sendComment" />
       </div>
@@ -162,7 +162,9 @@ export default {
 
   onMounted(() => {
     mountedHeight.value = window.innerHeight
-    transformBlock.value = document.querySelector(props.swipingBlock)
+    if (props.swipingBlock) {
+      transformBlock.value = document.querySelector(props.swipingBlock)
+    }
     window.addEventListener('resize', handleKeyboard)
   })
 

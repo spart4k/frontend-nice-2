@@ -85,14 +85,16 @@ export default {
       background: ''
     })
 
-    const changeState = (value) => {
+    const changeState = () => {
+      console.log('changeState')
       setTimeout(() => {
-        store.commit('menu/changeShowStateBottomSheetMenu', { value })
+        store.commit('menu/changeShowStateBottomSheetMenu', false)
         store.commit('menu/changeStepMenu', { step: 0 })
       }, 250)
     }
 
     const closeState = () => {
+      console.log('closeState')
       menu.value.$children[0].close()
     }
 
@@ -109,7 +111,7 @@ export default {
       }
     })
 
-   const openMenu = () => {
+    const openMenu = () => {
       nextTick(() => {
         menu.value.$children[0].open()
       })
@@ -121,13 +123,13 @@ export default {
     }
     watch(() => store.state.menu.isShowBottomMenu, () => {
       if (store.state.menu.isShowBottomMenu) {
-      if (store.state.menu.component) {
-        currentShowComponents.value.key = store.state.menu.component.key
-        currentShowComponents.value.effect = store.state.menu.component.effect
-      }
-      if (store.state.menu.stepCurrentComponent) {
-        step.value = store.state.menu.stepCurrentComponent
-      }
+        if (store.state.menu.component) {
+          currentShowComponents.value.key = store.state.menu.component.key
+          currentShowComponents.value.effect = store.state.menu.component.effect
+        }
+        if (store.state.menu.stepCurrentComponent) {
+          step.value = store.state.menu.stepCurrentComponent
+        }
         openMenu()
       } else {
         closeMenu()

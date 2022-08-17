@@ -3,7 +3,7 @@
     <div ref="marquee" :class="[ $style.marquee, $style.name ]">
       <div class="inner" :class="[$style.inner, isMarquee ? $style.active : $style.noActive ]">
         <p ref="marqueeContent" :class="$style.marqueeContent" class="marqueeContent">
-          {{title}}
+          {{ title }}
         </p>
       </div>
     </div>
