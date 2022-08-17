@@ -40,9 +40,11 @@ export default {
         case 2 :
           return 'StepTwoOrder'
         case 3 :
-          return 'StepThreePlug'
-        case 4 :
-          return 'ChangeAddress'
+          if (props.step) {
+            return 'StepThreePlug'
+          } else {
+            return 'ChangeAddress'
+          }
         }
       } else if (props.currComp === 'registration' && true) {
           switch (props.step) {

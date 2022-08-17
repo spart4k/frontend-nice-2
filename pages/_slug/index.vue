@@ -11,9 +11,7 @@
         :items="cards"
         :description="introTitle"
         @clickTag="clickTag"
-      >
-        <!--        <n-section-intro :description="introTitle" :image="`ctivo.png`" />-->
-      </NGridCard>
+      />
     </template>
   </n-intro-slug>
 </template>
