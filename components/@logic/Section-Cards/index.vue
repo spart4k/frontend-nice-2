@@ -35,7 +35,6 @@ export default {
       required: false
     },
     setup (props) {
-      console.log(props.id)
     }
   }
 }

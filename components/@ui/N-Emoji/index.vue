@@ -138,17 +138,14 @@ export default {
                 flex-wrap: wrap;
                 justify-content: flex-start;
               }
-            .emoji+.emoji {
-              // margin-left: .6rem;
-            }
             .emoji {
                 display: inline-block;
                 font-size: 2.9rem;
                 line-height: 1;
                 user-select: none;
                 cursor: pointer;
-                  @media (min-width: $tabletWidth) {
-                    font-size: 4rem;
+                @media (min-width: $tabletWidth) {
+                  font-size: 3rem;
                 }
             }
         }
@@ -164,8 +161,7 @@ export default {
         user-select: none;
         cursor: pointer;
         @media (min-width: $tabletWidth) {
-          width: 8rem;
-          height: 8rem;
+          height: auto;
         }
       }
     }
@@ -210,6 +206,16 @@ export default {
     }
     :global(.slick-active) {
       opacity: 1 !important;
+    }
+    :global(.slick-track) {
+      @media (min-width: $tabletWidth) {
+        display: flex;
+      }
+    }
+    :global(.slick-slide) {
+      @media (min-width: $tabletWidth) {
+        margin: auto 0;
+      }
     }
 }
 </style>
