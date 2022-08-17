@@ -1,12 +1,14 @@
 <template>
   <n-intro-slug>
-    <template v-if="cards.value">
+    <div v-if="$fetchState.pending">
+      Загрузка ...
+    </div>
+    <template v-else>
       <NGridCard
-        v-if="cards.value"
         ref="content"
         class="content"
         :class="[$style.content, showAnimate && $style.animateContent]"
-        :items="cards.value"
+        :items="cards"
         :description="introTitle"
         @clickTag="clickTag"
       >
@@ -20,10 +22,9 @@
 import {
   ref,
   defineComponent,
-  useRoute,
   useRouter,
-  useAsync,
   useContext,
+  useFetch,
   computed
   // useMeta,
 } from '@nuxtjs/composition-api'
@@ -33,10 +34,12 @@ import {
 
 export default defineComponent({
   name: 'SlugCard',
+  key: ({ path }) => {
+    return path
+  },
   setup () {
-    const route = useRoute()
     const router = useRouter()
-    const { store } = useContext()
+    const { store, route } = useContext()
     const cards = ref([])
     const background = ref(null)
     const totalPage = ref([])
@@ -113,15 +116,25 @@ export default defineComponent({
       loading.value = false
     }
 
-    store.commit('content/changeBgIntro', route.value.params.slug)
-    cards.value = useAsync(async () => {
+    useFetch(async () => {
       try {
         const response = await fetchData()
-        return response.data.data
+        cards.value = [...response.data.data]
       } catch (e) {
         console.log(e)
       }
-    }, Math.random() * 1000)
+    })
+
+    // cards.value = useAsync(async () => {
+    //   try {
+    //     const response = await fetchData()
+    //     return response.data.data
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
+    // }, route.value.path)
+
+    store.commit('content/changeBgIntro', route.value.params.slug)
 
     return {
       clickTag,
@@ -133,11 +146,9 @@ export default defineComponent({
       loading,
       background,
       showAnimate
-      // getPageInfo
     }
   },
-  head: {},
-    watchQuery: ['page']
+  head: {}
 })
 </script>
 
