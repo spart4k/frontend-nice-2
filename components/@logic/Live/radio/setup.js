@@ -55,7 +55,6 @@ export default {
           setTimeout(() => {
             marqueeLength.value = marqueeContent.value.getBoundingClientRect().width
             marqueeContainerLength.value = marquee.value.getBoundingClientRect().width
-            console.log(marqueeLength.value, marqueeContainerLength.value)
             if (marqueeLength.value >= marqueeContainerLength.value) {
               handleMarquee()
             } else {

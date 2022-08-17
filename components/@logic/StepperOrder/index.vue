@@ -26,9 +26,8 @@ export default {
   }
 
   const changeComponent = (value) => {
-    // currentShowComponents.value = value.key
     emit('changeStep', 'increment')
-    emit('changeComp', { key: value.value.key, effect: '' })
+    emit('changeComp', { key: value.value.key, effect: value.value.effect })
   }
 
     const isCurrentPage = computed(() => {
@@ -40,9 +39,9 @@ export default {
           return 'StepOneBasket'
         case 2 :
           return 'StepTwoOrder'
-        case 4 :
-          return 'StepThreePlug'
         case 3 :
+          return 'StepThreePlug'
+        case 4 :
           return 'ChangeAddress'
         }
       } else if (props.currComp === 'registration' && true) {

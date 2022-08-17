@@ -47,7 +47,7 @@ export default {
     const keyAnimation = ref('next')
     const currentShowComponents = ref({
       key: '',
-      effect: ''
+      effect: 'fx-slide-from-left'
     })
     const step = ref(0)
     const menuBasket = ref(null)
@@ -58,6 +58,7 @@ export default {
     const changeComp = (value) => {
       currentShowComponents.value.key = value.key
       currentShowComponents.value.effect = value.effect
+      store.commit('menu/changeKeyMenu', { key: value.key, effect: value.effect })
     }
 
     const fetchData = async () => {
@@ -85,16 +86,14 @@ export default {
       background: ''
     })
 
-    const changeState = (value) => {
-      console.log('changeState')
+    const changeState = () => {
       setTimeout(() => {
-        store.commit('menu/changeShowStateBottomSheetMenu', { value })
+        store.commit('menu/changeShowStateBottomSheetMenu', { value: false })
         store.commit('menu/changeStepMenu', { step: 0 })
-      }, 250)
+      }, 300)
     }
 
     const closeState = () => {
-      console.log('closeState')
       menu.value.$children[0].close()
     }
 
@@ -146,9 +145,11 @@ export default {
       if (value === 'increment') {
         keyAnimation.value = 'next'
         step.value += 1
+        store.commit('menu/changeStepMenu', { step: step.value })
       } else {
         keyAnimation.value = 'prev'
         step.value -= 1
+        store.commit('menu/changeStepMenu', { step: step.value })
       }
     }
 

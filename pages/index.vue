@@ -3,11 +3,14 @@
     :description="introTitle"
     :is-show-animation="true"
   >
-    <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
+    <div v-if="$fetchState.pending">
+      Загрузка ...
+    </div>
+    <div v-else class="content" :class="[showAnimate && $style.animateContent, $style.content]">
       <NGridCard
-        v-if="cards.value && cards.value.data"
+        v-if="cards && cards.data"
         ref="content"
-        :items="cards.value.data"
+        :items="cards.data"
         home-page
         @clickTag="clickTag"
       />
@@ -22,7 +25,7 @@ import {
   defineComponent,
   useContext,
   useRouter,
-  useAsync,
+  useFetch,
   useMeta
 } from '@nuxtjs/composition-api'
 
@@ -55,15 +58,25 @@ export default defineComponent({
     }
     store.commit('content/clearBgIntro')
 
-    cards.value = useAsync(async () => {
+    // cards.value = useAsync(async () => {
+    //   try {
+    //     const response = await fetchData()
+    //     totalPage.value = response?.data.last_page
+    //     return response.data
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
+    // }, route.value.path)
+
+    useFetch(async () => {
       try {
         const response = await fetchData()
         totalPage.value = response?.data.last_page
-        return response.data
+        cards.value = response.data
       } catch (e) {
         console.log(e)
       }
-    }, Math.random() * 1000)
+    })
 
     store.commit('content/clearBgIntro')
     const metaInfo = cards.value

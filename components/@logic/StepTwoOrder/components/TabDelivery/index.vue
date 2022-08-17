@@ -116,18 +116,6 @@
       </n-button>
       <NPersonalConsent />
     </n-row>
-    <portal to="sliderPopup">
-      <N-BootomSheet
-        ref="menuAddress"
-        effect="fx-slide-from-left"
-        max-width="39rem"
-        :max-height="'100%'"
-        :fullscreen="true"
-        @closeMenu="closedMenu"
-      >
-        <ChangeAddress @closeMenu="closedMenu" />
-      </N-BootomSheet>
-    </portal>
   </div>
 </template>
 
