@@ -37,6 +37,8 @@ import { head } from '@/components/scripts/head.js'
 export default defineComponent({
   name: 'IndexPage',
   transition: 'home',
+  props: {
+  },
   setup () {
     const { store } = useContext()
     const router = useRouter()

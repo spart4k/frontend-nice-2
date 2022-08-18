@@ -1,8 +1,20 @@
 <template>
   <div ref="body" class="body">
-    <the-header :header-items="headerItems" class="header" />
+    <div :class="$style.headerContainer" :style="{ marginLeft: sheetWidth && !sheetRight ? sheetWidth+'px' : '0', marginRight: sheetWidth && sheetRight ? -sheetWidth+'px' : '0' }">
+      <the-header
+        :header-items="headerItems"
+        :class="$style.header"
+        :sheet-width="sheetWidth"
+        class="header"
+      />
+    </div>
 
-    <n-intro-wrapper :is-home-page="isHomePage" :color="color">
+    <n-intro-wrapper
+      :class="$style.main"
+      :is-home-page="isHomePage"
+      :style="{ marginLeft: sheetWidth && !sheetRight ? sheetWidth+'px' : '0', marginRight: sheetWidth && sheetRight ? -sheetWidth+'px' : '0' }"
+      :color="color"
+    >
       <Nuxt />
     </n-intro-wrapper>
     <N-BootomSheet
@@ -18,6 +30,7 @@
       @back="changeStep"
     >
       <stepperOrder
+        ref="stepper"
         :header-items="headerItems"
         :key-animation="keyAnimation"
         :step="step"
@@ -32,7 +45,7 @@
 </template>
 
 <script>
-import { ref, useContext, useFetch, onMounted, computed, watch, nextTick } from '@nuxtjs/composition-api'
+import { ref, useContext, useFetch, onMounted, computed, watch, nextTick, provide } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import animationGSAP from '~/helpers/compositions/animationGSAP'
 import { BLAND_COLOR } from '~/const/blandColor'
@@ -43,7 +56,10 @@ export default {
     const headerItems = ref([])
     const body = ref(null)
     const menu = ref(null)
+    const stepper = ref(null)
     const back = ref(false)
+    const sheetWidth = ref(0)
+    const sheetRight = ref(false)
     const keyAnimation = ref('next')
     const currentShowComponents = ref({
       key: '',
@@ -87,7 +103,9 @@ export default {
     })
 
     const changeState = () => {
+      sheetWidth.value = 0
       setTimeout(() => {
+        sheetRight.value = false
         store.commit('menu/changeShowStateBottomSheetMenu', { value: false })
         store.commit('menu/changeStepMenu', { step: 0 })
       }, 300)
@@ -113,6 +131,12 @@ export default {
     const openMenu = () => {
       nextTick(() => {
         menu.value.$children[0].open()
+        if (window.innerWidth > 450) {
+          sheetWidth.value = stepper.value.$el.offsetWidth
+          if (sheetRight.value) {
+            sheetWidth.value = -sheetWidth.value
+          }
+        }
       })
     }
     const closeMenu = () => {
@@ -125,6 +149,9 @@ export default {
         if (store.state.menu.component) {
           currentShowComponents.value.key = store.state.menu.component.key
           currentShowComponents.value.effect = store.state.menu.component.effect
+          if (currentShowComponents.value.effect === 'fx-slide-from-right') {
+            sheetRight.value = true
+          }
         }
         if (store.state.menu.stepCurrentComponent) {
           step.value = store.state.menu.stepCurrentComponent
@@ -159,7 +186,7 @@ export default {
       store.dispatch('basket/getBasket')
       animateBackground()
     })
-
+    provide('sheetWidth', sheetWidth)
     return {
       headerItems,
       body,
@@ -168,13 +195,15 @@ export default {
       isHomePage,
       menuBasket,
       menu,
+      stepper,
       menuLive,
       back,
       step,
       keyAnimation,
       changeComp,
-
       changeStep,
+      sheetWidth,
+      sheetRight,
       openMenu,
       currentShowComponents,
       closeMenu,
@@ -194,5 +223,25 @@ export default {
   padding-bottom: 1rem;
   transform: translate3d(0, 0, 0);
   color: $fontColorDefault;
+}
+.main {
+  transition-duration: .3s;
+}
+.headerContainer {
+  top: 2rem;
+  left: 0;
+  right: 0;
+  position: fixed;
+  z-index: 11;
+  transition-duration: .3s;
+  @media (min-width: $tabletWidth) {
+    top: 4rem;
+    left: 4rem;
+    right: 4rem;
+  }
+}
+.header {
+  margin: auto;
+  transition-duration: .3s;
 }
 </style>

@@ -1,8 +1,8 @@
 .header {
-  position: fixed;
-  top: 2rem;
-  left: 0;
-  right: 0;
+  // position: fixed;
+  // top: 2rem;
+  // left: 0;
+  // right: 0;
   color: $white;
   display: flex;
   justify-content: space-between;
@@ -10,9 +10,9 @@
   z-index: var(--header-z-index);
   @include container;
   @media (min-width: $tabletWidth) {
-    top: 4rem;
-    left: 4rem;
-    right: 4rem;
+    // top: 4rem;
+    // left: 4rem;
+    // right: 4rem;
   }
   &.animateContent {
     opacity: 0;
@@ -51,7 +51,8 @@
   font-family: Bankir-Retro, sans-serif;
   color: $white;
   top: 2rem;
-  left: 50%;
+  transition-duration: .3s;
+  // left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;

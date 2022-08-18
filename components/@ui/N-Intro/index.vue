@@ -12,6 +12,7 @@
       <div
         ref="logo"
         class="logo"
+        :style="{ left: sheetWidth ? `calc(50% + ${sheetWidth/2}px)` : '50%' }"
         :class="[$style.logo, showAnimate && $style.animateContent]"
       >
         <N-Logo
@@ -35,7 +36,7 @@
 </template>
 
 <script>
-import { computed, nextTick, onMounted, ref, useContext, useRoute } from '@nuxtjs/composition-api'
+import { computed, nextTick, onMounted, ref, useContext, useRoute, inject } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import { BLAND_COLOR } from '~/const/blandColor'
 import { BLAND_IMAGE } from '~/const/blandImage'
@@ -76,7 +77,7 @@ export default {
     const route = useRoute()
     const isHomePage = computed(() => route.value.name === 'index')
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
-
+    const sheetWidth = inject('sheetWidth')
     const backgroundImage = computed(() => {
       if (!isHomePage.value) {
         return require('@/assets/img/background/coin-background.png')
@@ -137,6 +138,7 @@ export default {
       color,
       image,
       hideTextLogo,
+      sheetWidth,
       backgroundImage
     }
   },

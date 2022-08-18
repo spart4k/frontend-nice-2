@@ -1,7 +1,12 @@
 <template>
   <!--  , showAnimate && $style.animateContent-->
   <header :class="[$style.header, (showAnimate && $route.name === 'index') && $style.animateContent]">
-    <div v-if="$route.name !== 'index'" :class="$style.logo" @click="$router.push('/')">
+    <div
+      v-if="$route.name !== 'index'"
+      :class="$style.logo"
+      :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}px)` : '50%'}"
+      @click="$router.push('/')"
+    >
       <n-logo size="md" />
     </div>
     <n-button
@@ -40,9 +45,13 @@ export default {
     headerItems: {
       type: Array,
       default: () => []
+    },
+    sheetWidth: {
+      type: Number,
+      default: 0
     }
   },
-  setup () {
+  setup (props) {
     const { store } = useContext()
     const menu = ref(null)
     const menuBasket = ref(null)
@@ -56,7 +65,6 @@ export default {
     const basketData = computed(() => store.state.basket.basket?.data)
     const isAuth = computed(() => store.state.authentication.authorizated)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
-
     const basketCount = computed(() => {
       const calcBasketCard = basketData.value?.cards?.reduce((acc, value) => {
          acc += value.pivot.quantity
@@ -113,7 +121,6 @@ export default {
       toggleMenu,
       openProfile,
       openLive,
-
       menuBasket,
       showAnimate,
       basketData,

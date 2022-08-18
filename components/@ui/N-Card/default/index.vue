@@ -151,7 +151,7 @@
           :class="[$style.comments,showComments ? $style.show : '']"
           :style="{maxHeight: showComments ? commentHeight : '0'}"
         >
-          <N-Input v-if="true" type="textarea" @smilies="commentHeightSet" />
+          <N-Input v-if="false" type="textarea" @smilies="commentHeightSet" />
           <N-Plug v-else @login="login" @registration="registration" />
           <div :class="$style.commentsContainer">
             <div>
@@ -336,7 +336,7 @@ export default {
     -webkit-mask-image: -webkit-radial-gradient(white, black);
     &.detailPage {
       @media (min-width: $tabletWidth) {
-        width: 114rem;
+        max-width: 114rem;
         height: calc(76vh - 7rem);
         margin: 0 auto;
         display: flex;
