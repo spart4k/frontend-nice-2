@@ -38,9 +38,7 @@ export default {
 <style scoped module>
 .img {
   width: 100%;
-  height: 100%;
+  height: auto;
   display: block;
-  object-fit: contain;
-  object-position: center;
 }
 </style>

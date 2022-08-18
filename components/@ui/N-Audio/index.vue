@@ -122,6 +122,8 @@ export default {
     align-items: center;
     .controlButton {
       margin-left: 3rem;
+      width: 1.8rem;
+      height: 2rem;
     }
   }
 }

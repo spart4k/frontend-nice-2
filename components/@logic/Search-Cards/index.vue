@@ -59,6 +59,8 @@ export default {
         position: absolute;
         right: 0;
         top: calc(50% - 1rem);
+        width: 1.828rem;
+        height: 1.8rem;
     }
   }
   .searchResults{

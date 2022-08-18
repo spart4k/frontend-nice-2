@@ -1,5 +1,5 @@
 <template>
-  <span :class="[$style.likeButton, value ? $style.liked : '']" @click="setLike">
+  <span :class="[$style.likeButton, value ? $style.liked : '']">
     <N-Icon name="like" :style="{color: value ? 'rgb(242, 61, 21)' : 'transparent'}" :class="[value ? $style.liked : '', $style.like]" />
     <div :class="$style.heartAnimation1" />
     <div :class="$style.heartAnimation2" />
@@ -7,17 +7,18 @@
 </template>
 
 <script>
+// import { ref } from '@nuxtjs/composition-api'
 export default {
   name: 'NLike',
   props: {
     value: Boolean
   },
   setup (props, { emit }) {
-    const setLike = () => {
-        emit('input', !props.value)
-    }
+    // const setLike = () => {
+    //     emit('input', !props.value)
+    // }
     return {
-    setLike
+    // setLike,
     }
   }
 }
@@ -25,6 +26,11 @@ export default {
 
 <style scoped lang="scss" module>
 $bezier: cubic-bezier(.175, .885, .32, 1.275);
+
+.like{
+  width: 2.6rem;
+  height: 2.4rem;
+}
 
 .likeIcon {
   width: 26px;

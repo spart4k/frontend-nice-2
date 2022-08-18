@@ -28,7 +28,7 @@
       <N-Icon name="smile" :class="$style.icon" :style="{ color: smilies ? '#F45532' : '#222222' }" @click="showSmilies(); $emit('smilies')" />
       <div :class="$style.send">
         <div :class="$style.letterCounter">
-          0/200
+          {{ letters.length }}/200
         </div>
         <N-Icon :class="$style.sendButton" name="send" @click="sendComment" />
       </div>
@@ -232,9 +232,13 @@ export default {
       display: flex;
       justify-content: space-between;
       .sendButton {
+        width: 2.4rem;
+        height: 2.4rem;
         cursor: pointer;
       }
     .icon {
+      width: 2.4rem;
+      height: 2.4rem;
       transition: all .2s;
       cursor: pointer;
     }

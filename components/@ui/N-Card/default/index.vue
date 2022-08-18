@@ -60,14 +60,30 @@
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div>
+          <div v-if="!$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
+            <div :class="$style.socialsItem">
+              <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
+              <div :class="$style.parser">
+                <!-- likeCounter -->
+                {{ !$props.detailPage ? '0' : 'Нравится' }}
+              </div>
+            </div>
+            <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
+              <N-Icon name="comments" :class="$style.commentsContainer" />
+              <div :class="$style.parser">
+                {{ !$props.detailPage ? '0' : 'Комментировать' }}
+              </div>
+            </div>
+          </div>
         </NuxtLink>
         <div v-if="$props.detailPage" ref="body" :class="[$style.body__top, detailPage && $style.detailPage]" tag="div">
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
             {{ data.title }}
           </h2>
-          <template v-if="$props.detailPage && data.author.length>0">
+          <template v-if="$props.detailPage">
             <p :class="$style.authorName">
-              автор {{ data.author }}
+              <!-- автор {{ data.author }} -->
+              автор Артем Nice
             </p>
           </template>
           <div v-if="data.date_event" :class="$style.time">
@@ -113,9 +129,9 @@
             +{{ chipsCounter }}
           </N-Chip>
         </div>
-        <div :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
-          <div :class="$style.socialsItem">
-            <N-Like v-model="like" :class="$style.likeContainer" @click="addLike" />
+        <div v-if="$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
+          <div :class="$style.socialsItem" @click="addLike">
+            <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
             <div :class="$style.parser">
               <!-- likeCounter -->
               {{ !$props.detailPage ? '0' : 'Нравится' }}
@@ -151,7 +167,7 @@
           :class="[$style.comments,showComments ? $style.show : '']"
           :style="{maxHeight: showComments ? commentHeight : '0'}"
         >
-          <N-Input v-if="false" type="textarea" @smilies="commentHeightSet" />
+          <N-Input v-if="true" type="textarea" @smilies="commentHeightSet" />
           <N-Plug v-else @login="login" @registration="registration" />
           <div :class="$style.commentsContainer">
             <div>
@@ -182,7 +198,8 @@ export default {
   setup (props) {
     const videoRef = ref(null)
     const showComments = ref(false)
-    const like = ref(props.data.liked)
+    // const like = ref(props.data.liked)
+    const like = ref(false)
     const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
     const chipsCounter = ref(0)
@@ -214,14 +231,15 @@ export default {
       store.commit('menu/changeStepMenu', { step: 1 })
       store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
     }
-    const addLike = async () => {
-      if (like.value === true) {
-        likeCounter.value++
-        await store.dispatch('like/addLike', props.data.id)
-      } else {
-        likeCounter.value--
-        await store.dispatch('like/removeLike', props.data.id)
-      }
+    const addLike = () => {
+      like.value = !like.value
+      // if (like.value === true) {
+      //   likeCounter.value++
+      //   await store.dispatch('like/addLike', props.data.id)
+      // } else {
+      //   likeCounter.value--
+      //   await store.dispatch('like/removeLike', props.data.id)
+      // }
     }
     const videoPlayingChange = () => {
       videoPlay.value = !videoPlay.value
@@ -470,6 +488,7 @@ export default {
     border-top: .1rem solid rgba(34, 34, 34, 0.1);
 
     .socialsItem {
+    cursor: pointer;
       *+div {
         margin-left: 1rem;
       }
@@ -485,6 +504,8 @@ export default {
       cursor: pointer;
     }
     .commentsContainer {
+      width: 2.4rem;
+      height: 2.4rem;
       cursor: pointer;
     }
   }

@@ -83,8 +83,8 @@
         </div>
         <template #customPaging="">
           <div class="custom-dot">
-            <N-Icon :class="$style.smile" name="smile" />
-            <N-Icon name="sticker" />
+            <N-Icon :class="$style.smileSvg" name="smile" />
+            <N-Icon :class="$style.stikerSvg" name="sticker" />
           </div>
         </template>
       </VueSlickCarousel>

@@ -148,9 +148,9 @@ export default {
 
 <style scoped lang="scss" module>
 .main {
-  padding-top: 27.7rem;
+  padding-top: 17.5rem;
   @media (max-width: $mobileWidth) {
-    padding-top: 31.6rem;
+    padding-top: 23.6rem;
   }
   &.paddingSlug {
     padding-top: 15.5rem;
@@ -158,13 +158,18 @@ export default {
 }
 .tabs {
   margin: 0;
-  position: fixed;
-  top: 17.5rem;
+  // position: fixed;
+  // top: 17.5rem;
   z-index: 3;
   width: 100%;
+  // max-width: 1440px;
+  // margin-left: auto;
+  // margin-right: auto;
+  margin-bottom: 5.815rem;
   will-change: transform;
   @media (max-width: $tabletWidth) {
-    top: 23.6rem;
+    // top: 23.6rem;
+    margin-bottom: 4rem;
   }
   &.animateContent {
     visibility: hidden;
