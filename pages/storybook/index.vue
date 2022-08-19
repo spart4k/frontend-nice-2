@@ -6,9 +6,9 @@
     <Row title="title">
       Фамилия Обломов не связана со словом «облом». 5 фактов о литературе из школьной программы, которых вы не знал
     </Row>
-    <Row title="Автор">
+    <!-- <Row title="Автор">
       <N-Author name="Алексей Ельцин" />
-    </Row>
+    </Row> -->
     <Row title="Иконки">
       <N-Icon name="plus" />
       <N-Icon name="message" />
@@ -35,16 +35,16 @@
         :amount-comment="32"
       />
     </Row> -->
-    <!-- <Row
+    <Row
       title="Карточка Default3"
     >
-      <N-Card-Default
+      <!-- <N-Card-Default
         v-bind="
           NCard"
         :amount-comment="32"
         :images="[{ src: require('~/assets/img/testPlug.jpg') }, { src: require('~/assets/img/testPlug.jpg') }]"
-      />
-    </Row> -->
+      /> -->
+    </Row>
     <!-- <Row title="Карточка с видео">
       <N-Card-Default
         v-bind="NCard"
@@ -74,7 +74,7 @@
     <Row title="Chip">
       <N-Chip>искусство</N-Chip>
     </Row>
-    <Row title="ROW-BASKET">
+    <!-- <Row title="ROW-BASKET">
       <div :class="$style.bakset">
         <n-basket-row
           v-for="(basketItem, index) in basketRow"
@@ -84,17 +84,17 @@
         />
         {{ countAll }}
       </div>
-    </Row>
+    </Row> -->
     <Row title="Audio">
       <N-Audio />
     </Row>
     <Row title="Contain">
-      <N-Contain>
+      <!-- <N-Contain>
         Фамилия Обломов не связана со словом «облом».
         5 фактов о литературе из школьной программы, которых вы не знал. Обломов не связана со словом «облом».
         5 фактов о литературе из школьной программы, которых вы не знал. Фамилия Обломов не связана со словом «облом».
         5 фактов о литературе из школьной программы, которых вы не знал.
-      </N-Contain>
+      </N-Contain> -->
     </Row>
     <Row title="Popup общий">
       <button @click="openPopup">
@@ -110,7 +110,7 @@
       <N-Text-Field v-model="valTextField" title="телефон" mask="+7 (###) ###-##-##" md-fz />
     </Row>
     <Row title="TextArea">
-      <N-Text-Area v-model="valTextArea" />
+      <!-- <N-Text-Area v-model="valTextArea" /> -->
     </Row>
     <Row title="Form-auth">
       <FormAuthDefault />
@@ -131,14 +131,14 @@
       <Form-Profile-Default />
     </Row>
     <Row title="vTooltip">
-      <N-Tooltip :class="$style.ml3">
+      <!-- <N-Tooltip :class="$style.ml3">
         <N-Icon name="user" />
         <template #data>
           <N-Contain>
             <N-Audio :class="$style.widthAudio" />
           </N-Contain>
         </template>
-      </N-Tooltip>
+      </N-Tooltip> -->
     </Row>
     <Row>
       <br>
@@ -150,16 +150,10 @@
   </div>
 </template>
 <script>
-import { computed, ref } from '@nuxtjs/composition-api'
-import Row from './components/row/index'
-import NButton from '~/components/@ui/N-Button'
+import { computed, ref, useRouter } from '@nuxtjs/composition-api'
 
 export default {
   name: 'StoryBook',
-  components: {
-    NButton,
-    Row
-  },
   setup () {
     const activePopup = ref(false)
     const activeAuthSteps = ref(false)
@@ -169,10 +163,11 @@ export default {
     const NCard = ref({
       images: [{ src: require('~/assets/img/testPlug.jpg') }],
       video: require('~/assets/video/testPlug.mp4'),
-      title: 'Название альбома',
-      description: 'Фамилия Обломов не связана со словом «облом». 5 фактов о литературе из школьной программы, которых вы не знал',
-      chips: ['музыка'],
+      title: 'Название поста',
+      text: 'Фамилия Обломов не связана со словом «облом». 5 фактов о литературе из школьной программы, которых вы не знал',
+      chips: ['музыка', 'хэштег', 'видео', 'искусство'],
       amountComment: 0,
+      amountLike: 0,
       audio: [
         { title: 'Название композиции', src: '/media/cc0-audio/t-rex-roar.mp3', id: '123' },
         { title: 'Название композиции', src: '/media/cc0-audio/t-rex-roar.mp3', id: '1233' },
@@ -181,14 +176,19 @@ export default {
     })
 
     const sliderItem = ref([
-      { src: require('~/assets/img/img_slider.jpeg') },
       { src: require('~/assets/img/img_slider-2.jpeg') },
-      { src: require('~/assets/img/img_slider.jpeg') },
+      { src: require('~/assets/img/img_slider-2.jpeg') },
+      { src: require('~/assets/img/img_slider-2.jpeg') },
       { src: require('~/assets/img/img_slider-2.jpeg') }
     ])
     const author = {
       name: 'Адрюша Евкакий',
       src: ''
+    }
+
+    const router = useRouter()
+    const clickTag = (value) => {
+      router.push({ path: '/tags', query: { tag: value } })
     }
 
     const cardRead = {
@@ -253,7 +253,8 @@ export default {
       test,
       activeAuthSteps,
       openPopup,
-      changeCount
+      changeCount,
+      clickTag
     }
   }
 }
@@ -285,7 +286,7 @@ export default {
   width: 29rem;
 }
 .rows {
-  //display: flex;
-  //flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 </style>

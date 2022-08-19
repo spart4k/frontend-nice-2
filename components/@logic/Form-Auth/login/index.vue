@@ -1,92 +1,108 @@
 <template>
-  <form @submit.prevent="onSubmit">
-    <n-text-field
-    v-model.trim="formData.tel"
-    :error="v$.tel.$errors"
-    mask="+7 (###) ###-##-##"
-    md-fz
-    :class="[ $style.input ]"
-    title="Телефон"
-    placeholder="+7 (777) 777-77-77 "
-     />
-    <n-button :class="$style.button" :typeButton="!filledTel ? 'disable' : '' " type="submit">
-      <n-loading v-if="loading"></n-loading>
-      <template v-else>Войти</template>
-    </n-button>
-    <n-button :class="$style.button" typeButton="sub" @click="returnRegister">
-      Назад
-    </n-button>
+  <form @submit.prevent="submit">
+    <div :class="$style.wrapper">
+      <h2 :class="$style.title">
+        Вход
+      </h2>
+      <n-text-field
+        v-model="formData.email"
+        :class="$style.input"
+        :error="$errors.email[0]"
+        placeholder="mail@example.com"
+        title="Email"
+        :color-border="'blueBorder'"
+        type="email"
+      />
+      <n-text-field
+        v-model="formData.password"
+        :class="$style.input"
+        :error="$errors.password[0]"
+        placeholder=""
+        title="Пароль"
+        :color-border="'blueBorder'"
+        type="password"
+      />
+      <n-button
+        :class="$style.recovery"
+        type-button="left"
+        color="#5289C5"
+        @click="$emit('changeStep', 'increment')"
+      >
+        Восстановить пароль
+      </n-button>
+      <n-button
+        :class="$style.button"
+        :disabled="$v.$invalid && $touched "
+        background-color="#5289C5"
+        type="submit"
+        @click="submit"
+      >
+        <n-loading v-if="false" />
+        <template v-else>
+          Войти
+        </template>
+      </n-button>
+      <n-button
+        :class="$style.button"
+        color="#5289C5"
+        background-color="transparent"
+        @click="$emit('changeStep', '')"
+      >
+        Еще не зарегистрированы?
+      </n-button>
+    </div>
   </form>
 </template>
 <script lang="js">
-import { useVuelidate } from '@vuelidate/core'
-import { required, minLength } from '@vuelidate/validators'
-import { reactive, ref, useContext, computed } from '@nuxtjs/composition-api'
+import useForm from '~/compositions/useForm'
+import { email, required } from '~/utills/validations'
 
 export default {
   name: 'FormAuth',
   setup (props, ctx) {
-    const { store } = useContext()
-    const { emit } = ctx
-    const formData = reactive({
-      tel: ''
-    })
-    const rules = {
-      tel: { required, minLength: minLength(18) }
-    }
-
-    const loading = ref(false)
-    const errorTel = ref(false)
-    const filledTel = computed(() => {
-      const number = formData.tel.replace(/\D/g, '')
-      if (number.length === 11) {
-        return true
-      } else {
-        return false
-      }
-    })
-    const v$ = useVuelidate(rules, formData)
-    const onSubmit = () => {
-      v$.value.$touch()
-      if (v$.value.$invalid) {
-        return
-      }
-      loading.value = true
-      emit('saveTel', formData.tel)
-      const number = '+' + formData.tel.replace(/\D/g, '')
-      store.dispatch('authentication/getSms', number)
-      .then((res) => {
-        const code = res.data['sms code']
-        emit('saveCode', code)
-        loading.value = false
-        emit('input', 2)
+  const { formData, validate, $errors, $v, $touched } = useForm(
+      {
+        fields: {
+          email: { default: '', validations: { email, required } },
+          password: { default: '', validations: { required } }
+        }
       })
-    }
-    const returnRegister = () => {
-      emit('input', 0)
+    const submit = () => {
+      if (!validate()) { return }
+      console.log('ads')
     }
 
     return {
       formData,
-      onSubmit,
-      returnRegister,
-      loading,
-      errorTel,
-      filledTel,
-      v$
+      $errors,
+      $touched,
+      $v,
+      submit
     }
   }
 }
 </script>
 <style lang="scss" module>
   form {
-    & > .input + .input {
-      margin-top: 1.6rem;
-    }
-    .button {
-      margin-top: 2.7rem;
-      width: 100%;
-      height: 5.1rem;
+    .wrapper {
+    padding: 0 1.5rem;
+      .title {
+        @include text-style-h2;
+        color: $fontColorDefault;
+        text-align: center;
+        margin: 1.5rem 0 2rem;
+      }
+      & > .input + .input {
+        margin-top: 2.5rem;
+      }
+      .button {
+        margin-top: 1rem;
+        width: 100%;
+      }
+        .recovery {
+        margin: 2.5rem 0;
+        font-size: 1.4rem !important;
+      }
     }
   }
 </style>

@@ -1,13 +1,13 @@
 <template>
-  <div :class="$style.history">
-    <div :class="$style.history__title">
+  <div :class="$style.wrapper">
+    <div :class="$style.title">
       История заказов
     </div>
     <div class="">
-      <div v-if="hasCards">
-        <History-Orders-Item v-for="(item) in orders.value" :key="item.id" :order="item" />
+      <div v-if="true">
+        <History-Orders-Item />
       </div>
-      <div v-else :class="$style.history__empty">
+      <div v-else :class="$style.empty">
         Заказы отсутствуют
       </div>
     </div>
@@ -49,21 +49,19 @@ export default {
 </script>
 
 <style lang="scss" module>
-  .history {
-    width: 100%;
-    padding: 1.8rem;
-    border-radius: 1rem;
-    background-color: #ffffff;
-    &__title {
-      color: $fontColorDefault;
-      margin-bottom: 2.8rem;
-      font-size: 1.8rem;
-      font-weight: 600;
-    }
-    &__empty {
-      font-size: 2.4rem;
-      font-weight: 600;
-      text-align: center;
-    }
+.wrapper {
+  padding: 0 1.5rem;
+  .title {
+    @include text-style-h2;
+    color: $fontColorDefault;
+    text-align: center;
+    margin: 1.5rem 0 2rem;
   }
+  .empty {
+    @include regular-text;
+    color: $fontColorDefault;
+    opacity: 0.5;
+    text-align: center;
+  }
+}
 </style>

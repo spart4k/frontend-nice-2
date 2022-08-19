@@ -1,5 +1,5 @@
 <template>
-  <button :class="[$style[typeButton], $style.btn]" v-on="$listeners">
+  <button :class="[$style[typeButton], $style.btn]" :style="{ color: color, backgroundColor: backgroundColor }" v-on="$listeners">
     <slot />
   </button>
 </template>
@@ -12,6 +12,14 @@ export default {
       type: String,
       default: '',
       required: false
+    },
+    color: {
+      type: String,
+      default: 'white'
+    },
+    backgroundColor: {
+      type: String,
+      default: ''
     }
   }
 }
@@ -19,22 +27,19 @@ export default {
 
 <style scoped lang="scss" module>
   .btn{
+    box-sizing: border-box;
     cursor: pointer;
-    border: 1px solid $blueBlack;
-    border-radius: .4rem;
-    background-color: $blueBlack;
+    border: none;
+    border-radius: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
-    //height: 5.1rem;
-    color: $white;
-    font-weight: 600;
-    @include text;
+    @include button;
     transition: background-color .2s;
-    max-width: 100%;
-    //&:hover {
-    //  background-color: rgba($blueBlack, .9);
-    //}
+    padding: 1.4rem 3.7rem;
+    &:disabled {
+      opacity: 0.5;
+    }
   }
   .sub {
     background: transparent;
@@ -45,6 +50,9 @@ export default {
     opacity: 0.5;
     pointer-events: none;
   }
+  .pink {
+    background-color: $pink2;
+  }
   .transparent {
     background-color: transparent;
     border: none;
@@ -52,5 +60,21 @@ export default {
     &:hover {
       background-color: transparent;
     }
+  }
+  .wide {
+    width: 100%;
+  }
+  .left {
+    padding: 0;
+    background-color: transparent;
+  }
+  .small {
+    padding: 0.9rem;
+    width: 3.2rem;
+    height: 3.2rem;
+  }
+  .play {
+    padding: 2.65rem 3.1rem;
+    border-radius: 50%;
   }
 </style>

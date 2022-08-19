@@ -1,36 +1,50 @@
 <template>
-  <n-intro :description="introTitle" :set-height="cards.value && cards.value.length === 1">
-    <n-preloader v-if="loading" />
-    <template v-for="card in cards.value">
-      <SectionCards :id="id || card.section_id" :key="card.id" :card="card" @clickTag="clickTag" />
-    </template>
-    <client-only>
-      <n-lazy-pagination
-        @lazyPagination="lazyPagination"
+  <n-intro-slug>
+    <div v-if="$fetchState.pending">
+      Загрузка ...
+    </div>
+    <template v-else>
+      <NGridCard
+        ref="content"
+        class="content"
+        :class="[$style.content, showAnimate && $style.animateContent]"
+        :items="cards"
+        :description="introTitle"
+        @clickTag="clickTag"
       />
-    </client-only>
-  </n-intro>
+    </template>
+  </n-intro-slug>
 </template>
 
 <script>
-import { ref, defineComponent, useRoute, useRouter, useAsync, useContext, computed, useMeta } from '@nuxtjs/composition-api'
-import { pagination } from '~/plugins/pagination'
-import { head } from '@/components/scripts/head.js'
+import {
+  ref,
+  defineComponent,
+  useRouter,
+  useContext,
+  useFetch,
+  computed
+  // useMeta,
+} from '@nuxtjs/composition-api'
+
+// import { pagination } from '~/plugins/pagination'
+// import { head } from '@/components/scripts/head.js'
 
 export default defineComponent({
   name: 'SlugCard',
-  head: {},
-  layout: 'default',
-  // transition: 'home',
+  key: ({ path }) => {
+    return path
+  },
   setup () {
-    const route = useRoute()
     const router = useRouter()
-    const { store } = useContext()
+    const { store, route } = useContext()
     const cards = ref([])
+    const background = ref(null)
     const totalPage = ref([])
     const id = computed(() => Number(route.value.query.id))
     const tagId = computed(() => Number(route.value.query.tag))
     const loading = ref(false)
+    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
 
     const introTitle = computed(() => {
       if (id.value) {
@@ -60,30 +74,34 @@ export default defineComponent({
       }
     })
 
+    const isPageMagazin = computed(() => route.value.path.indexOf('magazin'))
+
     const fetchData = (currentPage) => {
       const params = {
         page: currentPage,
         section_id: id.value ? id.value : '',
         tag_id: tagId.value ? tagId.value : ''
       }
-      const response = store.dispatch('pages/getData', params)
+      const path = isPageMagazin > 0 ? 'shop/getData' : 'pages/getData'
+      const response = store.dispatch(path, params)
       return response
     }
-    const getPageInfo = computed(() => {
-      const sections = store.state.content.sections
-      const result = sections.filter(section => section.slug === route.value.params.slug)
-      return result[0]
-    })
 
-    head(useMeta, getPageInfo.value)
+    // const getPageInfo = computed(() => {
+    //   const sections = store.state.content.sections
+    //   const result = sections?.filter(section => section.slug === route.value.params.slug)
+    //   return result[0]
+    // })
 
-    const { getData, dataPagination } = pagination(fetchData)
+    // head(useMeta, getPageInfo.value)
+
+    // const { getData, dataPagination } = pagination(fetchData)
 
     const lazyPagination = ($state) => {
-      getData($state, cards.value.value.last_page)
-      cards.value.value.data = [...cards.value.value.data, ...dataPagination.value]
+      // getData($state, cards.value.value.last_page)
+      // cards.value.value.data = [...cards.value.value.data, ...dataPagination.value]
+      console.log('test', route.value)
     }
-
     const clickTag = async (value) => {
       loading.value = true
       router.push({ path: 'tags', query: { tag: value } })
@@ -96,29 +114,45 @@ export default defineComponent({
       loading.value = false
     }
 
-    store.commit('content/changeBgIntro', route.value.params.slug)
-
-    cards.value = useAsync(async () => {
+    useFetch(async () => {
       try {
         const response = await fetchData()
-        return response.data.data
+        cards.value = [...response.data.data]
       } catch (e) {
         console.log(e)
       }
-    }, route.value.path)
+    })
+
+    // cards.value = useAsync(async () => {
+    //   try {
+    //     const response = await fetchData()
+    //     return response.data.data
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
+    // }, route.value.path)
+
+    store.commit('content/changeBgIntro', route.value.params.slug)
 
     return {
+      clickTag,
+      lazyPagination,
       introTitle,
       cards,
       totalPage,
       id,
       loading,
-      clickTag,
-      lazyPagination,
-      getPageInfo
+      background,
+      showAnimate
     }
-  }
+  },
+  head: {}
 })
 </script>
 
-<style scoped lang="scss" module></style>
+<style scoped lang="scss" module>
+.main {
+  @include container;
+}
+.content {}
+</style>

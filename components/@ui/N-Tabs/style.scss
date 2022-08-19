@@ -1,0 +1,22 @@
+.list {
+  width: 100%;
+  // max-width: 1440px;
+  // margin: 0 auto;
+  overflow: auto;
+  display: flex;
+  padding: 0 1.5rem;
+  margin-top: 0;
+  margin-bottom: 0;
+  justify-content: center;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  @media(max-width: $desktopWidth) {
+    justify-content: flex-start;
+  }
+  li + li {
+    margin-left: .5rem;
+  }
+}

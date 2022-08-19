@@ -1,29 +1,35 @@
 <template>
   <div :class="$style.comment">
-    <N-Icon name="message" />
-    <span>{{ $props.current }}</span>
+    <h2 :class="$style.name">LeXa</h2>
+    <p :class="$style.time">5 часов назад</p>
+    <p :class="$style.text">Отличный освежающий вкус! Приятный цвет и консистенция, очень понравилась мне и мой друзьям, советую всем!!!!!!</p>
   </div>
 </template>
 <script lang="js">
 export default {
   name: 'NComment',
   props: {
-    current: {
-      type: Number,
-      default: null
-    }
   }
 }
 </script>
 <style lang="scss" module>
   .comment {
-    display: flex;
-    align-items: center;
-    & > span {
-      margin-left: .577rem;
-      color: $fontColorDefault;
-      @include text;
-      font-weight: 600;
+  .name {
+    color: $fontColorDefault;
+    @include regular-text-bold;
     }
+  .time{
+    margin: 0.3rem 0 0.5rem;
+    color: $fontColorDefault;
+    opacity: 0.4;
+    @include regular-text-small;
+    }
+  .text {
+    color: $fontColorDefault;
+    @include regular-text;
+    }
+  }
+  div+.comment{
+    margin-top: 2rem;
   }
 </style>

@@ -1,0 +1,25 @@
+.list {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 0;
+  margin-bottom: 3rem;
+  padding: 0;
+  color: $black;
+  a {
+    @include regular-text-small;
+    color: inherit;
+  }
+  .icon {
+    margin-bottom: .5rem;
+  }
+}
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  .item__text {
+    align-self: flex-end;
+  }
+}

@@ -1,0 +1,213 @@
+.header {
+  // position: fixed;
+  // top: 2rem;
+  // left: 0;
+  // right: 0;
+  color: $white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: var(--header-z-index);
+  @include container;
+  @media (min-width: $tabletWidth) {
+    // top: 4rem;
+    // left: 4rem;
+    // right: 4rem;
+  }
+  &.animateContent {
+    opacity: 0;
+  }
+}
+
+.linkHome {
+  position: absolute;
+  top: 3.8rem;
+  a {
+    color: inherit;
+    display: flex;
+    align-items: center;
+    @include subtitle;
+    span {
+      margin-left: 1rem;
+    }
+  }
+  @include montserratSemiBold;
+  @include subtitle-sm;
+}
+.headerUser__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  transition: opacity .1s ease-in-out;
+  cursor: pointer;
+  li + li {
+    margin-left: 2.3rem;
+  }
+}
+
+.header .logo {
+  position: fixed;
+  font-family: Bankir-Retro, sans-serif;
+  color: $white;
+  top: 2.9rem;
+  transition-duration: .3s;
+  // left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  white-space: nowrap;
+  cursor: pointer;
+  img {
+    width: 100%;
+    height: 3.2rem;
+  }
+}
+
+.headerNav {
+  display: block;
+  padding-top: 4.9rem;
+  backface-visibility: hidden;
+  max-height: 100%;
+  overflow: auto;
+  @include container;
+}
+
+.headerNav.active .headerNav__inner {
+  display: flex;
+}
+.basket {
+  width: 100%;
+  margin-bottom: 3rem;
+  display: block;
+  color: $white;
+  background-color: grey;
+  &__price {
+    font-size: 1.6rem;
+    line-height: 1.2;
+  }
+  .icon {
+    margin-right: 1.3rem;
+  }
+  &__title {
+    margin-bottom: 3.1rem;
+    display: flex;
+    align-items: center;
+    @include subtitle;
+  }
+}
+
+.deviceMenu {
+  z-index: 11;
+  display: block;
+  //align-self: flex-start;
+  position: relative;
+}
+
+.deviceMenu .deviceMenu__inner {
+  width: 2.7rem;
+  height: 1.9rem;
+  position: relative;
+}
+
+.deviceMenu span {
+  background-color: white;
+  border-radius: 3px ;
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  left: 0;
+  top: 5px;
+}
+
+.deviceMenu span:nth-child(1) {
+  top: 0;
+  transition: rotate, 0.3s;
+}
+
+.deviceMenu span:nth-child(2) {
+  top: 50%;
+}
+
+.deviceMenu span:nth-child(3) {
+  top: 100%;
+  transition: rotate, 0.3s;
+}
+
+.deviceMenu.open span:nth-child(1) {
+  top: 1rem;
+  right: 0;
+  transform: rotate(45deg);
+}
+
+.deviceMenu.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.deviceMenu.open span:nth-child(3) {
+  top: 1rem;
+  right: 0;
+  transform: rotate(-45deg);
+}
+.hideElement {
+  opacity: 0;
+}
+.basketCount {
+  position: absolute;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 100%;
+  top: -1.5rem;
+  right: -1rem;
+  background-color: $orange2;
+  @include regular-text-small;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.link {
+  display: flex;
+  align-items: center;
+  color: $white;
+  text-transform: uppercase;
+  @include  regular-text-small;
+}
+
+.close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 3.2rem;
+  height: 3.2rem;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+  cursor: pointer;
+}
+:global(.bottom-sheet__card) {
+  @media (min-width: $mobileWidth) {
+    left: 0!important;
+  }
+}
+:global(.bottom-sheet__bar) {
+  height: 6px;
+  background: #222222;
+  opacity: 0.2;
+  @media (min-width: $mobileWidth) {
+    display: none;
+  }
+}
+:global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-left) {
+  @media (min-width: $mobileWidth) {
+    transform: translate(0, 0) !important;
+  }
+}
+:global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-right) {
+  @media (min-width: $mobileWidth) {
+    right: 0 !important;
+    left: unset !important;
+    transform: translate(0, 0) !important;
+  }
+}

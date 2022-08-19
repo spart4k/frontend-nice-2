@@ -1,0 +1,15 @@
+.panel {
+  .control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    .send {
+      display: flex;
+      align-items: center;
+      p {
+        margin-right: 1.5rem;
+      }
+    }
+  }
+}
