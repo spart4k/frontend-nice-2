@@ -19,8 +19,8 @@
         </template>
       </template>
       <template v-else-if="$props.withVideo">
-        <div :class="[$style.wrapperVideo, detailPage && $style.detailPage]" @click="videoPlayingChange">
-          <div v-if="!videoPlay" :class="$style.blackout">
+        <div :class="[$style.wrapperVideo, detailPage && $style.detailPage]">
+          <div v-if="!videoPlay" :class="$style.blackout" @click="videoPlayingChange">
             <N-Button type-button="play" :background-color="'rgba(34, 34, 34, 0.8)'">
               <N-Icon :class="$style.icon" name="button-play" />
             </N-Button>
@@ -242,11 +242,12 @@ export default {
       // }
     }
     const videoPlayingChange = () => {
-      videoPlay.value = !videoPlay.value
       if (videoRef.value.paused === true) {
         videoRef.value.play()
+        videoPlay.value = true
       } else {
         videoRef.value.pause()
+        videoPlay.value = false
       }
     }
     const isJsonString = computed(() => {
