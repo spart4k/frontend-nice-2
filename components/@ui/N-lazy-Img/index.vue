@@ -38,7 +38,7 @@ export default {
 <style scoped module>
 .img {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
 }
 </style>

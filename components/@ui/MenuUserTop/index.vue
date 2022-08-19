@@ -18,7 +18,7 @@
         Поиск
       </div>
     </li>
-    <li :class="$style.item">
+    <li :class="$style.item" @click="toSupport">
       <n-icon name="connection" :class="$style.icon" />
       <div :class="$style.item__text">
         Связь
@@ -32,7 +32,12 @@
 export default {
   name: 'MenuUserTop',
   setup () {
-    return {}
+  const toSupport = () => {
+    window.open('https://t.me/itisthenicesupport')
+  }
+    return {
+      toSupport
+    }
   }
 }
 </script>

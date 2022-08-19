@@ -169,7 +169,8 @@ export default {
       opacity: 0.1;
       margin: 0 .75rem;
       color: #222222;
-      transition: .2s;
+      width: 2rem;
+      height: 2rem;
     }
     :global(.slick-dots li):first-child {
       :global(.custom-dot){

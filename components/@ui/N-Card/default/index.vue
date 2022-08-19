@@ -13,7 +13,7 @@
           </div>
           <nuxt-link v-else :to="`cards/${data.id}?section=${data.section.slug}`" tag="div">
             <div :class="[$style.hat]">
-              <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+              <n-lazy-img :class="$style.sectionImg" :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
             </div>
           </nuxt-link>
         </template>
@@ -138,7 +138,7 @@
             </div>
           </div>
           <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
-            <N-Icon name="comments" />
+            <N-Icon :class="$style.commentsSvg" name="comments" />
             <div :class="$style.parser">
               {{ !$props.detailPage ? '0' : 'Комментировать' }}
             </div>
@@ -468,6 +468,9 @@ export default {
           height: 100%;
         }
       }
+      .sectionImg {
+        object-fit: contain;
+      }
     }
   }
   .price {
@@ -507,6 +510,10 @@ export default {
       width: 2.4rem;
       height: 2.4rem;
       cursor: pointer;
+    }
+    .commentsSvg {
+      width: 2.4rem;
+      height: 2.4rem;
     }
   }
   .body {

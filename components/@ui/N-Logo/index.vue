@@ -72,8 +72,12 @@ export default {
   }
   .logoImage {
     display: block;
-    padding-bottom: 0.9rem;
+    padding-bottom: 1.7rem;
     line-height: 0;
+    width: 16.3rem;
+    @media (max-width: $mobileWidth) {
+      width: 8.8rem;
+    }
   }
   .imageSubtitle {
     display: block;
@@ -86,13 +90,13 @@ export default {
   width: 7.2rem;
 }
 .md {
-  width: 16.3rem;
+  width: 18rem;
   @media (max-width: $mobileWidth) {
     width: 8.8rem;
   }
 }
 .defaultLogo {
-  width: 16.3rem;
+  width: 18rem;
 }
 
 </style>

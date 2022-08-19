@@ -214,7 +214,7 @@ export default {
     .textarea, .input {
       display: block;
       width: 100%;
-      height: 35px;
+      height: 3.5rem;
       @include regular-text;
       color: $fontColorDefault;
       overflow: hidden;
