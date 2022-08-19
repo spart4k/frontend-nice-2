@@ -76,7 +76,7 @@ export default {
     line-height: 0;
     width: 16.3rem;
     @media (max-width: $mobileWidth) {
-      width: 8.8rem;
+      width: 16.3rem;
     }
   }
   .imageSubtitle {
