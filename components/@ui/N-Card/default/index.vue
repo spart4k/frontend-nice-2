@@ -8,12 +8,12 @@
         <template v-else>
           <div v-if="$props.detailPage" :class="[$style.hatContainer, detailPage && $style.detailPage]">
             <div :class="[$style.hat, detailPage && $style.detailPage]">
-              <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
             </div>
           </div>
           <nuxt-link v-else :to="`cards/${data.id}?section=${data.section.slug}`" tag="div">
             <div :class="[$style.hat]">
-              <n-lazy-img :class="$style.sectionImg" :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
             </div>
           </nuxt-link>
         </template>
@@ -467,9 +467,6 @@ export default {
         @media (min-width: $tabletWidth) {
           height: 100%;
         }
-      }
-      .sectionImg {
-        object-fit: contain;
       }
     }
   }
