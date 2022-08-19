@@ -156,9 +156,9 @@ export default {
         if (store.state.menu.stepCurrentComponent) {
           step.value = store.state.menu.stepCurrentComponent
         }
-        setTimeout(() => {
+        nextTick(() => {
           openMenu()
-        }, 100)
+        })
       } else {
         closeMenu()
       }
