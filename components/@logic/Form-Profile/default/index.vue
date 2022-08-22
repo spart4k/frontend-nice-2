@@ -1,75 +1,77 @@
 <template>
-  <form @submit.prevent="onSubmit">
-    <h2 :class="$style.title">
-      Мой профиль
-    </h2>
-    <n-text-field
-      v-model="formData.name"
-      :value-info="formData.name"
-      placeholder="Nice"
-      :class="$style.input"
-      title="Ник"
-      :color-border="'pinkBorder'"
-    />
-    <n-text-field
-      v-model="formData.phone"
-      md-fz
-      placeholder="Телефон"
-      :value-info="formData.phone"
-      :class="$style.input"
-      title="Телефон"
-      :color-border="'pinkBorder'"
-      type="tel"
-    />
-    <n-text-field
-      v-model="formData.email"
-      :value-info="formData.email"
-      :class="$style.input"
-      placeholder="Email"
-      title="Email"
-      :color-border="'pinkBorder'"
-    />
-    <template v-if="true">
-      <N-Adress :class="$style.adressComp" />
-    </template>
-    <template v-else>
-      <div>
-        <h3 :class="$style.inputTitle">
-          Адрес
-        </h3>
-        <span :class="$style.adress">
-          443110 Самара, ул. Полевая, д. 45, кв.112
-        </span>
-        <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E">
-          Изменить адрес
-        </N-Button>
-      </div>
-    </template>
-    <n-button :class="$style.button" background-color="#C83F8E" :type-button="v$.$invalid ? 'disable' : '' " type="submit">
-      <n-loading v-if="loading" />
-      <template v-else>
-        Сохранить изменения
+  <form>
+    <div :class="$style.wrapper">
+      <h2 :class="$style.title">
+        Мой профиль
+      </h2>
+      <n-text-field
+        v-model="formData.name"
+        :value-info="formData.name"
+        placeholder="Nice"
+        :class="$style.input"
+        title="Ник"
+        :color-border="'pinkBorder'"
+      />
+      <n-text-field
+        v-model="formData.phone"
+        md-fz
+        placeholder="Телефон"
+        :value-info="formData.phone"
+        :class="$style.input"
+        title="Телефон"
+        :color-border="'pinkBorder'"
+        type="tel"
+      />
+      <n-text-field
+        v-model="formData.email"
+        :value-info="formData.email"
+        :class="$style.input"
+        placeholder="Email"
+        title="Email"
+        :color-border="'pinkBorder'"
+      />
+      <template v-if="true">
+        <N-Adress :class="$style.adressComp" />
       </template>
-    </n-button>
-    <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E" @click="logout">
-      Выйти из профиля
-    </N-Button>
-    <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E" @click="$emit('changeStep', 'increment')">
-      История заказов
-    </N-Button>
+      <template v-else>
+        <div>
+          <h3 :class="$style.inputTitle">
+            Адрес
+          </h3>
+          <span :class="$style.adress">
+            443110 Самара, ул. Полевая, д. 45, кв.112
+          </span>
+          <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E">
+            Изменить адрес
+          </N-Button>
+        </div>
+      </template>
+      <n-button :class="$style.button" background-color="#C83F8E" :type-button="v$.$invalid ? 'disable' : '' " type="submit">
+        <n-loading v-if="loading" />
+        <template v-else>
+          Сохранить изменения
+        </template>
+      </n-button>
+      <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E" @click.prevent="logout">
+        Выйти из профиля
+      </N-Button>
+      <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E" @click="$emit('changeStep', 'increment')">
+        История заказов
+      </N-Button>
+    </div>
   </form>
 </template>
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
-import { ref, useContext, useRouter, computed, watch } from '@nuxtjs/composition-api'
+import { ref, useContext, computed, watch } from '@nuxtjs/composition-api'
 import { useToast } from 'vue-toastification/composition'
 
 export default {
   name: 'FormProfileDefault',
   setup () {
     const { store, $toast } = useContext()
-    const router = useRouter()
+    // const router = useRouter()
     const loading = ref(false)
     const toast = useToast()
     const formData = ref({
@@ -98,8 +100,7 @@ export default {
     }
     const logout = () => {
       store.dispatch('authentication/logout')
-      // .then(() => { this.router.push('/') })
-      router.push('/')
+      // router.push('/')
     }
     store.dispatch('authentication/getUserInfo')
     const userData = computed(() => {
@@ -132,6 +133,8 @@ export default {
   height: 5.1rem;
 }
 form {
+  .wrapper {
+    padding: 0 1.5rem;
   .title {
     @include text-style-h2;
     color: $fontColorDefault;
@@ -187,6 +190,7 @@ form {
         }
       }
     }
+  }
 }
 .inputTitle {
   @include regular-text;

@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.cards">
-    <!-- <template v-if="spliceArray.colLeft && spliceArray.colRight">
+    <template v-if="spliceArray.colLeft && spliceArray.colRight">
       <div :class="$style.col">
         <template v-for="(card) in spliceArray.colLeft">
           <n-section-intro
@@ -27,7 +27,7 @@
           />
         </template>
       </div>
-    </template> -->
+    </template>
   </div>
 </template>
 
@@ -54,6 +54,7 @@ export default {
     const proxyArray = ref(items)
 
     const spliceArray = computed(() => {
+    console.log(proxyArray.value)
       if (!props.homePage) {
         proxyArray.value.unshift({
           image: route.value.params.slug,
@@ -66,12 +67,10 @@ export default {
           home: true,
           image: require('~/assets/img/preview/dogs.png'),
           id: Math.random()
-
         })
       }
       const middleIndex = Math.ceil(proxyArray.value?.length / 2)
       const firstHalf = proxyArray.value?.splice(0, middleIndex)
-
       const secondHalf = proxyArray.value?.splice(-middleIndex)
 
       return {

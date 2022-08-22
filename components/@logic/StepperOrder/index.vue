@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { ref, computed } from '@nuxtjs/composition-api'
+import { ref, useContext, computed } from '@nuxtjs/composition-api'
 
 export default {
   name: 'StepperOrder',
@@ -22,6 +22,7 @@ export default {
     keyAnimation: String
   },
   setup (props, { emit }) {
+  const { store } = useContext()
   const isAddress = ref(false)
   const changeStep = (value) => {
     emit('changeStep', value)
@@ -52,7 +53,7 @@ export default {
             return 'StepThreePlug'
           }
         }
-      } else if (props.currComp === 'registration' && true) {
+      } else if (props.currComp === 'registration' && !store.state.authentication.authorizated) {
           switch (props.step) {
         case 1 :
           return 'FormAuthDefault'
@@ -61,7 +62,7 @@ export default {
         case 3 :
           return 'FormAuthRecovery'
         }
-    } else if (props.currComp === 'registration' && !true) {
+    } else if (props.currComp === 'registration' && store.state.authentication.authorizated) {
           switch (props.step) {
         case 1 :
           return 'FormProfileDefault'

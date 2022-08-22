@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit">
+  <form>
     <div :class="$style.wrapper">
       <h2 :class="$style.title">
         Восстановить пароль
@@ -21,7 +21,7 @@
         :class="$style.button"
         :disabled="$v.$invalid && $touched "
         background-color="#5289C5"
-        @click="submit"
+        @click.prevent="submit"
       >
         <n-loading v-if="false" />
         <template v-else>
@@ -33,13 +33,14 @@
 </template>
 
 <script>
-// import { ref } from '@nuxtjs/composition-api'
+import { useContext } from '@nuxtjs/composition-api'
 import useForm from '~/compositions/useForm'
 import { email, required } from '~/utills/validations'
 
 export default {
   name: 'FormAuth',
   setup (props, ctx) {
+  const { store } = useContext()
   const { formData, validate, $errors, $v, $touched } = useForm(
       {
         fields: {
@@ -48,7 +49,8 @@ export default {
       })
     const submit = () => {
       if (!validate()) { return }
-      console.log('ads')
+      const recoveryData = { email: formData.email }
+      store.dispatch('authentication/resetPassword', recoveryData)
     }
 
     return {
