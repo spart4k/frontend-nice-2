@@ -1,5 +1,5 @@
 <template>
-  <div :style="{backgroundImage: `url(${backgroundImage})`}" :class="[$style.wrapper, $style.bg]">
+  <div v-lazy:background-image="backgroundImage" :class="[$style.wrapper, $style.bg]">
     <div :class="$style.overlay" :style="{backgroundColor: isHomePage ? '#292BC2' : color }" />
   </div>
 </template>
