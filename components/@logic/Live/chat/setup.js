@@ -33,6 +33,7 @@ export default {
     //   console.log(value)
     //   myWs.send(JSON.stringify({ action: 'ECHO', data: value.toString() }))
     // }
+
     onMounted(() => {
       initMesassage()
     })

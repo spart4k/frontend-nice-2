@@ -38,6 +38,29 @@ export const actions = {
       return e.response.data.message
     }
   },
+  async register ({ commit }, params) {
+    try {
+      const data = await this.$axios.post('api/v1/register', params)
+      return data
+    } catch (e) {
+      return e.response.data.message
+    }
+  },
+  async login ({ commit }, params) {
+    try {
+      const res = await this.$axios.post('api/v1/login', params)
+      // if (data.)
+      if (res.status === 200) {
+        console.log(res)
+        localStorage.setItem('token', res.data.data.access_token)
+        console.log(res.data.data.access_token)
+        commit('setToken')
+      }
+      return res
+    } catch (e) {
+      return e.response
+    }
+  },
   async sendCode ({ commit }, params) {
     try {
       const res = await this.$axios.post('api/v1/user/sms_code', params)

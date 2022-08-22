@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.cards">
-    <template v-if="spliceArray.colLeft && spliceArray.colRight">
+    <!-- <template v-if="spliceArray.colLeft && spliceArray.colRight">
       <div :class="$style.col">
         <template v-for="(card) in spliceArray.colLeft">
           <n-section-intro
@@ -27,10 +27,7 @@
           />
         </template>
       </div>
-      <!-- <div :class="$style.col">
-        <N-Card-Coin />
-      </div> -->
-    </template>
+    </template> -->
   </div>
 </template>
 
