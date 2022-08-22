@@ -24,9 +24,11 @@ export default {
   },
   setup () {
   const backgroundImage = computed(() => {
-      return require('~/assets/img/background/coin-background.png')
+      return require('~/assets/img/background/default-background.png')
   })
-  return { backgroundImage }
+  return {
+  backgroundImage
+}
   }
 }
 </script>

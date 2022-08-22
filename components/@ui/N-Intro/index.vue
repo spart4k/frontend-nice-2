@@ -80,7 +80,7 @@ export default {
     const sheetWidth = inject('sheetWidth')
     const backgroundImage = computed(() => {
       if (!isHomePage.value) {
-        return require('@/assets/img/background/coin-background.png')
+        return require('@/assets/img/background/default-background.png')
       }
         return require('@/assets/img/background/index-background.jpg')
     })
