@@ -38,7 +38,7 @@ export default {
   name: 'NGridCard',
   props: {
     items: {
-      type: Array
+      type: Object
     },
     homePage: {
       type: Boolean
@@ -49,12 +49,11 @@ export default {
   },
 
   setup (props) {
+    console.log(props.items)
     const { route } = useContext()
     const { items } = unref(props)
-    const proxyArray = ref(items)
-
+    const proxyArray = ref(items.data)
     const spliceArray = computed(() => {
-    console.log(props.items)
       if (!props.homePage) {
         proxyArray.value.unshift({
           image: route.value.params.slug,
@@ -63,7 +62,7 @@ export default {
           id: Math.random()
         })
       } else {
-        proxyArray.value.unshift({
+        proxyArray.value?.unshift({
           home: true,
           image: require('~/assets/img/preview/dogs.png'),
           id: Math.random()

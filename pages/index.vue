@@ -61,7 +61,6 @@ export default defineComponent({
       return response
     }
     store.commit('content/clearBgIntro')
-    console.log(cards.data)
 
     // cards.value = useAsync(async () => {
     //   try {

@@ -1,19 +1,19 @@
 <template>
   <div :class="[$style.card, detailPage && $style.detailPage]">
     <div ref="gallery" :class="[$style.gallery, detailPage && $style.detailPage]">
-      <template v-if="data.images.length && !$props.withVideo">
-        <template v-if="$props.detailPage && data.images.length > 1">
-          <N-Slider :slider-item="data.images" />
+      <template v-if="data.files.length && !$props.withVideo">
+        <template v-if="$props.detailPage && data.files.length > 1">
+          <N-Slider :slider-item="data.files" />
         </template>
         <template v-else>
           <div v-if="$props.detailPage" :class="[$style.hatContainer, detailPage && $style.detailPage]">
             <div :class="[$style.hat, detailPage && $style.detailPage]">
-              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.files[0].src}`" :alt="data.title" />
             </div>
           </div>
           <nuxt-link v-else :to="`cards/${data.id}?section=${data.section.slug}`" tag="div">
             <div :class="[$style.hat]">
-              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.files[0].src}`" :alt="data.title" />
             </div>
           </nuxt-link>
         </template>
@@ -110,7 +110,7 @@
         </div>
       </template>
       <div :class="[$style.body__bottom, detailPage && $style.detailPage]">
-        <div v-if="$props.detailPage" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '3rem' : '' }">
+        <div v-if="$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '3rem' : '' }">
           <N-Chip
             v-for="item in data.tags"
             :key="item.id"
