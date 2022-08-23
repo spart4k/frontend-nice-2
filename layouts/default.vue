@@ -14,6 +14,7 @@
       :is-home-page="isHomePage"
       :style="{ marginLeft: sheetWidth && !sheetRight ? sheetWidth+'px' : '0', marginRight: sheetWidth && sheetRight ? -sheetWidth+'px' : '0' }"
       :color="color"
+      @backgroundLoaded="backgroundLoaded"
     >
       <Nuxt />
     </n-intro-wrapper>
@@ -66,10 +67,15 @@ export default {
       effect: 'fx-slide-from-left'
     })
     const step = ref(0)
+    const isLoaded = ref(false)
     const menuBasket = ref(null)
     const menuLive = ref(null)
     const { store, route, $gsap } = useContext()
     const isHomePage = computed(() => route.value.name === 'index')
+
+    const backgroundLoaded = () => {
+      isLoaded.value = true
+    }
 
     const changeComp = (value) => {
       currentShowComponents.value.key = value.key
@@ -88,8 +94,8 @@ export default {
     useFetch(async () => {
       headerItems.value = []
       const response = await fetchData()
-      if (response.length) {
-        headerItems.value = response.filter((item) => {
+      if (response.data.length) {
+        headerItems.value = response.data.filter((item) => {
           return item.slug !== 'efir'
         })
       }
@@ -156,9 +162,9 @@ export default {
         if (store.state.menu.stepCurrentComponent) {
           step.value = store.state.menu.stepCurrentComponent
         }
-        setTimeout(() => {
+        nextTick(() => {
           openMenu()
-        }, 100)
+        })
       } else {
         closeMenu()
       }
@@ -188,6 +194,7 @@ export default {
       store.dispatch('basket/getBasket')
       animateBackground()
     })
+    provide('backgroundLoaded', isLoaded)
     provide('sheetWidth', sheetWidth)
     return {
       headerItems,
@@ -211,7 +218,9 @@ export default {
       closeMenu,
       closedSwipe,
       changeState,
-      closeState
+      closeState,
+      backgroundLoaded,
+      isLoaded
     }
   }
 }

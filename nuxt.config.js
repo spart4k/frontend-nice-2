@@ -34,6 +34,7 @@ export default {
     { src: '@plugins/vualidate.js' },
     '@plugins/v-mask.js',
     '@plugins/v-tooltip.js',
+    '@plugins/v-lazyload.js',
     { src: '@plugins/vue-bottom-sheet.js', ssr: false }
   ],
 

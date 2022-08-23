@@ -38,6 +38,47 @@ export const actions = {
       return e.response.data.message
     }
   },
+  async register ({ commit }, params) {
+    try {
+      const data = await this.$axios.post('api/v1/register', params)
+      return data
+    } catch (e) {
+      return e.response.data.message
+    }
+  },
+  async login ({ commit }, params) {
+    try {
+      const res = await this.$axios.post('api/v1/login', params)
+      if (res.status === 200) {
+        localStorage.setItem('token', res.data.data.access_token)
+        commit('setToken')
+      }
+      return res
+    } catch (e) {
+      return e.response
+    }
+  },
+  async logout ({ commit }) {
+    try {
+      const res = await this.$axios('api/v1/logout/current')
+      if (res.status === 200) {
+        await localStorage.removeItem('token')
+        await localStorage.removeItem('user')
+        // this.$toast.success('Вы вышли из аккаунта', { position: 'bottom-right', icon: true })
+        commit('setLogout')
+      }
+    } catch (e) {
+      return e.response.data.message
+    }
+  },
+  async resetPassword ({ commit }, params) {
+    try {
+      const data = await this.$axios.post('api/v1/resetPassword', params)
+      return data
+    } catch (e) {
+      return e.response.data.message
+    }
+  },
   async sendCode ({ commit }, params) {
     try {
       const res = await this.$axios.post('api/v1/user/sms_code', params)
@@ -57,17 +98,6 @@ export const actions = {
       localStorage.setItem('user', JSON.stringify(res.data))
       commit('setUserData', res.data)
       return res
-    } catch (e) {
-      return e.response.data.message
-    }
-  },
-  async logout ({ commit }) {
-    try {
-      // const res = await this.$axios.get('api/v1/user', params)
-      await localStorage.removeItem('token')
-      await localStorage.removeItem('user')
-      this.$toast.success('Вы вышли из аккаунта', { position: 'bottom-right', icon: true })
-      commit('setLogout')
     } catch (e) {
       return e.response.data.message
     }

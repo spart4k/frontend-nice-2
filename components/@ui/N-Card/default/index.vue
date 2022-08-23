@@ -1,26 +1,26 @@
 <template>
   <div :class="[$style.card, detailPage && $style.detailPage]">
     <div ref="gallery" :class="[$style.gallery, detailPage && $style.detailPage]">
-      <template v-if="data.images.length && !$props.withVideo">
-        <template v-if="$props.detailPage && data.images.length > 1">
-          <N-Slider :slider-item="data.images" />
+      <template v-if="data.files.length && !$props.withVideo">
+        <template v-if="$props.detailPage && data.files.length > 1">
+          <N-Slider :slider-item="data.files" />
         </template>
         <template v-else>
           <div v-if="$props.detailPage" :class="[$style.hatContainer, detailPage && $style.detailPage]">
             <div :class="[$style.hat, detailPage && $style.detailPage]">
-              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.files[0].src}`" :alt="data.title" />
             </div>
           </div>
           <nuxt-link v-else :to="`cards/${data.id}?section=${data.section.slug}`" tag="div">
             <div :class="[$style.hat]">
-              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.files[0].src}`" :alt="data.title" />
             </div>
           </nuxt-link>
         </template>
       </template>
       <template v-else-if="$props.withVideo">
-        <div :class="[$style.wrapperVideo, detailPage && $style.detailPage]" @click="videoPlayingChange">
-          <div v-if="!videoPlay" :class="$style.blackout">
+        <div :class="[$style.wrapperVideo, detailPage && $style.detailPage]">
+          <div v-if="!videoPlay" :class="$style.blackout" @click="videoPlayingChange">
             <N-Button type-button="play" :background-color="'rgba(34, 34, 34, 0.8)'">
               <N-Icon :class="$style.icon" name="button-play" />
             </N-Button>
@@ -110,7 +110,7 @@
         </div>
       </template>
       <div :class="[$style.body__bottom, detailPage && $style.detailPage]">
-        <div v-if="$props.detailPage" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '3rem' : '' }">
+        <div v-if="$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '3rem' : '' }">
           <N-Chip
             v-for="item in data.tags"
             :key="item.id"
@@ -242,11 +242,12 @@ export default {
       // }
     }
     const videoPlayingChange = () => {
-      videoPlay.value = !videoPlay.value
       if (videoRef.value.paused === true) {
         videoRef.value.play()
+        videoPlay.value = true
       } else {
         videoRef.value.pause()
+        videoPlay.value = false
       }
     }
     const isJsonString = computed(() => {
@@ -293,12 +294,12 @@ export default {
       if (windowWidth.value > 900) {
         showComments.value = true
       }
-      extraTagHide()
       commentHeightSet()
       comments.value = false
       window.addEventListener('resize', windowWidthCount)
       window.addEventListener('resize', commentHeightSet)
       nextTick(() => {
+      extraTagHide()
         if (props.withVideo) {
           videoUrl.value = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`
           videoRef.value.src = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`

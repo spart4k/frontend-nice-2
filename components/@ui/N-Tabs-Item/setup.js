@@ -7,7 +7,7 @@ export default {
       type: Object
     }
   },
-  setup () {
+  setup (props) {
     return {
       BLAND_COLOR
     }

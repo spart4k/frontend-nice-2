@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submit">
+  <form>
     <div :class="$style.wrapper">
       <h2 :class="$style.title">
         Вход и регистрация
@@ -45,8 +45,7 @@
         :class="$style.button"
         :disabled="$v.$invalid && $touched "
         background-color="#5289C5"
-        type="submit"
-        @click="submit"
+        @click.prevent="submit"
       >
         <!-- <n-loading v-if="loading" /> -->
         <template>
@@ -58,7 +57,7 @@
         color="#5289C5"
         background-color="transparent"
         :class="$style.buttonTologin"
-        @click="$emit('changeStep', 'increment')"
+        @click.prevent="$emit('changeStep', 'increment')"
       >
         Уже зарегистрированы?
       </n-button>
@@ -66,12 +65,14 @@
   </form>
 </template>
 <script lang="js">
+import { useContext } from '@nuxtjs/composition-api'
 import useForm from '~/compositions/useForm'
 import { email, required, sameAs, strongPassword, nameLength } from '~/utills/validations'
 
 export default {
   name: 'FormAuth',
   setup (props, ctx) {
+    const { store } = useContext()
     const { formData, validate, $errors, $v, $touched } = useForm(
       {
         fields: {
@@ -83,7 +84,8 @@ export default {
       })
     const submit = () => {
       if (!validate()) { return }
-      console.log('ads')
+      const registerData = { email: formData.email, nickname: formData.name, password: formData.firstPass }
+      store.dispatch('authentication/register', registerData)
     }
 
     return {

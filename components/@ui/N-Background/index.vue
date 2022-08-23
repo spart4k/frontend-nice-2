@@ -1,11 +1,11 @@
 <template>
-  <div :style="{backgroundImage: `url(${backgroundImage})`}" :class="[$style.wrapper, $style.bg]">
+  <div v-lazy:background-image="backgroundImage" :alt="backgroundImage" :class="[$style.wrapper, $style.bg]">
     <div :class="$style.overlay" :style="{backgroundColor: isHomePage ? '#292BC2' : color }" />
   </div>
 </template>
 
 <script>
-import { computed } from '@nuxtjs/composition-api'
+import { computed, onMounted } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NBackground',
@@ -22,11 +22,20 @@ export default {
     isHomePage: Boolean,
     color: String
   },
-  setup () {
+  setup (_, ctx) {
+  const { emit } = ctx
+  const { $Lazyload } = ctx.root
   const backgroundImage = computed(() => {
-      return require('~/assets/img/background/coin-background.png')
+      return require('~/assets/img/background/default-background.png')
   })
-  return { backgroundImage }
+  onMounted(() => {
+    $Lazyload.$once('loaded', ({ el, src }) => {
+      emit('backgroundLoaded')
+    })
+  })
+  return {
+  backgroundImage
+}
   }
 }
 </script>

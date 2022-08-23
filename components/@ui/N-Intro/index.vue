@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { computed, nextTick, onMounted, ref, useContext, useRoute, inject } from '@nuxtjs/composition-api'
+import { computed, nextTick, ref, useContext, useRoute, inject, watch, onMounted } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import { BLAND_COLOR } from '~/const/blandColor'
 import { BLAND_IMAGE } from '~/const/blandImage'
@@ -78,9 +78,10 @@ export default {
     const isHomePage = computed(() => route.value.name === 'index')
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
     const sheetWidth = inject('sheetWidth')
+    const backgroundLoaded = inject('backgroundLoaded')
     const backgroundImage = computed(() => {
       if (!isHomePage.value) {
-        return require('@/assets/img/background/coin-background.png')
+        return require('@/assets/img/background/default-background.png')
       }
         return require('@/assets/img/background/index-background.jpg')
     })
@@ -110,6 +111,26 @@ export default {
     } = animationGSAP($gsap, Elastic)
 
     onMounted(() => {
+      if (backgroundLoaded.value) {
+        nextTick(() => {
+          const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+          if (isPlayAnimation) {
+            store.commit('content/setAnimate', false)
+          }
+          if (!isPlayAnimation) {
+            animationTimeline('.navbarSlug')
+          }
+          //   animationTimeline('.navbarSlug')
+
+          animationlogo()
+          animateSubtitle()
+          animateNavbar('.navbarSlug')
+          // localStorage.setItem('showAnimateHomePage', 'true')
+        })
+      }
+    })
+
+    watch(() => backgroundLoaded.value, () => {
       nextTick(() => {
         const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
         if (isPlayAnimation) {
@@ -118,12 +139,9 @@ export default {
         if (!isPlayAnimation) {
           animationTimeline('.navbarSlug')
         }
-        //   animationTimeline('.navbarSlug')
-
         animationlogo()
         animateSubtitle()
         animateNavbar('.navbarSlug')
-        // localStorage.setItem('showAnimateHomePage', 'true')
       })
     })
 
@@ -139,7 +157,8 @@ export default {
       image,
       hideTextLogo,
       sheetWidth,
-      backgroundImage
+      backgroundImage,
+      backgroundLoaded
     }
   },
   watchQuery: true

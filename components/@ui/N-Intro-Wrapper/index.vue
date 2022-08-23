@@ -1,6 +1,6 @@
 <template>
   <main>
-    <n-background ref="background" :is-home-page="isHomePage" :color="color" class="background" />
+    <n-background @backgroundLoaded="$emit('backgroundLoaded')" ref="background" :is-home-page="isHomePage" :color="color" class="background" />
     <slot />
   </main>
 </template>
