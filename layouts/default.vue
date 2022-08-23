@@ -135,7 +135,7 @@ export default {
     })
 
     const openMenu = () => {
-      nextTick(() => {
+      setTimeout(() => {
         menu.value.$children[0].open()
         if (window.innerWidth > 450) {
           sheetWidth.value = stepper.value.$el.offsetWidth
@@ -143,7 +143,7 @@ export default {
             sheetWidth.value = -sheetWidth.value
           }
         }
-      })
+      }, 100)
     }
     const closeMenu = () => {
       store.commit('menu/changeKeyMenu', { key: '', effect: 'fx-slide-from-left' })
