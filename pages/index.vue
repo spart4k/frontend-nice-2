@@ -72,7 +72,7 @@ export default defineComponent({
     //   }
     // }, route.value.path)
 
-    useFetch(async () => {
+   const {fetch} = useFetch(async () => {
       try {
         const response = await fetchData()
         totalPage.value = response?.data.last_page
@@ -81,6 +81,7 @@ export default defineComponent({
         console.log(e)
       }
     })
+    fetch()
 
     store.commit('content/clearBgIntro')
     const metaInfo = cards.value
