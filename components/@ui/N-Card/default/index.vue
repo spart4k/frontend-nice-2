@@ -355,6 +355,7 @@ export default {
     -webkit-mask-image: -webkit-radial-gradient(white, black);
     &.detailPage {
       @media (min-width: $tabletWidth) {
+        min-width: 40rem;
         max-width: 114rem;
         height: calc(76vh - 7rem);
         margin: 0 auto;

@@ -38,7 +38,7 @@ export default {
   name: 'NGridCard',
   props: {
     items: {
-      type: Object
+      type: Array
     },
     homePage: {
       type: Boolean
@@ -51,7 +51,7 @@ export default {
   setup (props) {
     const { route } = useContext()
     const { items } = unref(props)
-    const proxyArray = ref(items.data)
+    const proxyArray = ref(items)
     const spliceArray = computed(() => {
       if (!props.homePage) {
         proxyArray.value.unshift({
@@ -129,9 +129,13 @@ export default {
 .col {
   max-width: 53.2rem;
   width: calc(50% - 1.5rem);
+  @media (min-width: $tabletWidth) {
+    min-width: 30rem;
+  }
   @media (max-width: $mobileWidth) {
     width: auto;
     max-width: none;
+    min-width: none;
   }
 }
 .col + .col {
