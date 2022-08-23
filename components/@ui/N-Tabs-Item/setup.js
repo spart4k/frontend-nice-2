@@ -8,7 +8,6 @@ export default {
     }
   },
   setup (props) {
-    console.log(props.item)
     return {
       BLAND_COLOR
     }

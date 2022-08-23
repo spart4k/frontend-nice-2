@@ -49,7 +49,6 @@ export default {
   },
 
   setup (props) {
-    console.log(props.items)
     const { route } = useContext()
     const { items } = unref(props)
     const proxyArray = ref(items.data)
