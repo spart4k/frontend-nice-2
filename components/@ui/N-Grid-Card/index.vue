@@ -54,7 +54,7 @@ export default {
     const proxyArray = ref(items)
 
     const spliceArray = computed(() => {
-    console.log(proxyArray.value)
+    console.log(props.items)
       if (!props.homePage) {
         proxyArray.value.unshift({
           image: route.value.params.slug,

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { computed, nextTick, ref, useContext, useRoute, inject, watch } from '@nuxtjs/composition-api'
+import { computed, nextTick, ref, useContext, useRoute, inject, watch, onMounted } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import { BLAND_COLOR } from '~/const/blandColor'
 import { BLAND_IMAGE } from '~/const/blandImage'
@@ -110,23 +110,25 @@ export default {
       animationTimeline
     } = animationGSAP($gsap, Elastic)
 
-    // onMounted(() => {
-    //   nextTick(() => {
-    //     const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
-    //     if (isPlayAnimation) {
-    //       store.commit('content/setAnimate', false)
-    //     }
-    //     if (!isPlayAnimation) {
-    //       animationTimeline('.navbarSlug')
-    //     }
-    //     //   animationTimeline('.navbarSlug')
+    onMounted(() => {
+      if (backgroundLoaded.value) {
+        nextTick(() => {
+          const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+          if (isPlayAnimation) {
+            store.commit('content/setAnimate', false)
+          }
+          if (!isPlayAnimation) {
+            animationTimeline('.navbarSlug')
+          }
+          //   animationTimeline('.navbarSlug')
 
-    //     animationlogo()
-    //     animateSubtitle()
-    //     animateNavbar('.navbarSlug')
-    //     // localStorage.setItem('showAnimateHomePage', 'true')
-    //   })
-    // })
+          animationlogo()
+          animateSubtitle()
+          animateNavbar('.navbarSlug')
+          // localStorage.setItem('showAnimateHomePage', 'true')
+        })
+      }
+    })
 
     watch(() => backgroundLoaded.value, () => {
       nextTick(() => {
