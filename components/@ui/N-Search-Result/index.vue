@@ -1,7 +1,11 @@
 <template>
   <div :class="$style.container">
-    <h2 :class="$style.title">Perrier Russian Spring</h2>
-    <p :class="$style.text">Фамилия Обломов Perrier не связана со словом «облом». 5 фактов о литературе из школьн ... 5 фактов о литературе из школьн ...</p>
+    <h2 :class="$style.title">
+      {{ $props.title }}
+    </h2>
+    <p :class="$style.text">
+      {{ $props.text }}
+    </p>
   </div>
 </template>
 
@@ -11,8 +15,15 @@
 export default {
   name: 'NSearchResult',
   props: {
+    title: {
+      type: String
+    },
+    text: {
+      type: String
+    }
   },
-  setup () {
+  setup (props) {
+  console.log(props.title)
   return {
   }
   }
@@ -29,6 +40,8 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    word-break: break-word;
+    cursor: pointer;
     .title {
         @include button;
         color: #6448B5;

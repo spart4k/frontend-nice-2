@@ -129,9 +129,13 @@ export default {
 .col {
   max-width: 53.2rem;
   width: calc(50% - 1.5rem);
+  @media (min-width: $tabletWidth) {
+    min-width: 30rem;
+  }
   @media (max-width: $mobileWidth) {
     width: auto;
     max-width: none;
+    min-width: none;
   }
 }
 .col + .col {

@@ -38,9 +38,10 @@ export const actions = {
       return e.response.data.message
     }
   },
-  async register ({ commit }, params) {
+  async register (store, params) {
     try {
       const data = await this.$axios.post('api/v1/register', params)
+      this.$toast.success('Вы успешно зарегистрировались, проверьте свою почту', { position: 'bottom-right', icon: true })
       return data
     } catch (e) {
       return e.response.data.message

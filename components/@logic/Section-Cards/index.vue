@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.wrapper">
     <template v-if="id === 2">
-      <N-Card-Default :detail-page="detailPage" with-video :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
+      <N-Card-Default :detail-page="detailPage" with-video :data="detailPage ? card.data : card" @clickTag="($event) => $emit('clickTag', $event)" />
     </template>
     <template v-else-if="id === 11">
       <N-Card-Coin />
@@ -9,7 +9,7 @@
     <template v-else>
       <N-Card-Default
         :detail-page="detailPage"
-        :data="card"
+        :data="detailPage ? card.data : card"
         @clickTag="($event) => $emit('clickTag', $event)"
       />
     </template>

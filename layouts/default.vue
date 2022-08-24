@@ -39,6 +39,7 @@
         @clearStep="step = 0"
         @changeComp="changeComp"
         @changeStep="changeStep"
+        @closeState="closeState"
       />
     </N-BootomSheet>
     <portal-target name="sliderPopup" />
@@ -46,7 +47,7 @@
 </template>
 
 <script>
-import { ref, useContext, useFetch, onMounted, computed, watch, nextTick, provide } from '@nuxtjs/composition-api'
+import { ref, useContext, useFetch, onMounted, computed, watch, provide } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import animationGSAP from '~/helpers/compositions/animationGSAP'
 import { BLAND_COLOR } from '~/const/blandColor'
@@ -146,6 +147,7 @@ export default {
       }, 100)
     }
     const closeMenu = () => {
+      sheetWidth.value = 0
       store.commit('menu/changeKeyMenu', { key: '', effect: 'fx-slide-from-left' })
       store.commit('menu/changeStepMenu', { step: 0 })
       step.value = 0

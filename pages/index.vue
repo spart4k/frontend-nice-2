@@ -3,11 +3,11 @@
     :description="introTitle"
     :is-show-animation="true"
   >
-    <div v-if="$fetchState.pending">
-      Загрузка ...
-    </div>
-    <div v-else class="content" :class="[showAnimate && $style.animateContent, $style.content]">
-      <client-only>
+    <client-only>
+      <div v-if="$fetchState.pending">
+        Загрузка ...
+      </div>
+      <div v-else class="content" :class="[showAnimate && $style.animateContent, $style.content]">
         <NGridCard
           v-if="cards && cards.data"
           ref="content"
@@ -15,8 +15,8 @@
           home-page
           @clickTag="clickTag"
         />
-      </client-only>
-    </div>
+      </div>
+    </client-only>
   </n-intro>
 </template>
 <script>
@@ -72,7 +72,7 @@ export default defineComponent({
     //   }
     // }, route.value.path)
 
-   const {fetch} = useFetch(async () => {
+   const { fetch } = useFetch(async () => {
       try {
         const response = await fetchData()
         totalPage.value = response?.data.last_page
