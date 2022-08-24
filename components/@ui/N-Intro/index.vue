@@ -3,7 +3,7 @@
   <div ref="main" :class="[$style.main, !isHomePage && $style.paddingSlug]">
     <div :class="$style.intro">
       <n-tabs
-        class="navbarSlug"
+        class="navbar"
         :class="[
           $style.tabs,
           showAnimate && $style.animateContent,
@@ -115,13 +115,13 @@ export default {
           store.commit('content/setAnimate', false)
         }
         if (!isPlayAnimation) {
-          animationTimeline('.navbarSlug')
+          animationTimeline()
         }
         //   animationTimeline('.navbarSlug')
 
         animationlogo()
         animateSubtitle()
-        animateNavbar('.navbarSlug')
+        animateNavbar()
         // localStorage.setItem('showAnimateHomePage', 'true')
       })
     })
