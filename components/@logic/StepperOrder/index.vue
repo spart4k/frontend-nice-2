@@ -6,6 +6,7 @@
       @changeStep="changeStep"
       @changeComponent="changeComponent"
       @toAddress="toAddress"
+      @closeState="$emit('closeState')"
     />
   </transition>
 </template>

@@ -8,8 +8,17 @@
       <N-Icon v-if="!text" :class="$style.searchIcon" name="loupe" />
     </div>
     <div :class="$style.searchResults">
-      <div v-if="false">
-        <N-Search-Result />
+      <div
+        v-if="result.length"
+        :class="$style.searchContainer"
+      >
+        <N-Search-Result
+          v-for="(item, index) in result"
+          :key="index"
+          :class="$style.searchItem"
+          :title="item.title"
+          :text="item.text"
+        />
       </div>
       <div v-else :class="$style.nothing">
         <p :class="$style.nothingToShow">
@@ -21,20 +30,29 @@
 </template>
 
 <script>
-import { ref } from '@nuxtjs/composition-api'
+import { useContext, ref } from '@nuxtjs/composition-api'
 
 export default {
   name: 'SearchCards',
   props: {
   },
   setup () {
+    const { store } = useContext()
     const text = ref()
-    const sendCount = (val) => {
+    const result = ref([])
+    const sendCount = async (val) => {
       text.value = val
+      const searchData = { searchField: val }
+      if (val.length % 2 === 0) {
+        const searchResult = await store.dispatch('search/searchCards', searchData)
+        result.value = searchResult.data
+        console.log(result.value)
+      }
     }
     return {
       text,
-      sendCount
+      sendCount,
+      result
     }
   }
 }
@@ -66,6 +84,14 @@ export default {
   .searchResults{
     min-height: 60vh;
     display: flex;
+    .searchContainer{
+      width: 100%;
+      div+div {
+        margin-top: 1.5rem;
+      }
+      .searchItem{
+      }
+    }
     .nothing{
       width: 100%;
       height: 100%;

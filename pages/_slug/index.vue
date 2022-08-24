@@ -4,14 +4,16 @@
       Загрузка ...
     </div>
     <template v-else>
-      <NGridCard
-        ref="content"
-        class="content"
-        :class="[$style.content, showAnimate && $style.animateContent]"
-        :items="cards"
-        :description="introTitle"
-        @clickTag="clickTag"
-      />
+      <client-only>
+        <NGridCard
+          ref="content"
+          class="content"
+          :class="[$style.content, showAnimate && $style.animateContent]"
+          :items="cards"
+          :description="introTitle"
+          @clickTag="clickTag"
+        />
+      </client-only>
     </template>
   </n-intro-slug>
 </template>

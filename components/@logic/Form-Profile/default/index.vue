@@ -100,7 +100,6 @@ export default {
     }
     const logout = () => {
       store.dispatch('authentication/logout')
-      // router.push('/')
     }
     store.dispatch('authentication/getUserInfo')
     const userData = computed(() => {

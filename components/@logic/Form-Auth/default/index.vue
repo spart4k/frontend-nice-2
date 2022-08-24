@@ -47,8 +47,8 @@
         background-color="#5289C5"
         @click.prevent="submit"
       >
-        <!-- <n-loading v-if="loading" /> -->
-        <template>
+        <n-loading v-if="loading" />
+        <template v-else>
           Регистрация
         </template>
       </n-button>
@@ -65,14 +65,16 @@
   </form>
 </template>
 <script lang="js">
-import { useContext } from '@nuxtjs/composition-api'
+import { useContext, ref } from '@nuxtjs/composition-api'
 import useForm from '~/compositions/useForm'
 import { email, required, sameAs, strongPassword, nameLength } from '~/utills/validations'
 
 export default {
   name: 'FormAuth',
   setup (props, ctx) {
+    const { emit } = ctx
     const { store } = useContext()
+    const loading = ref(false)
     const { formData, validate, $errors, $v, $touched } = useForm(
       {
         fields: {
@@ -82,17 +84,25 @@ export default {
           secondPass: { default: '', validations: { required, sameAs: sameAs(() => formData.firstPass) } }
         }
       })
-    const submit = () => {
-      if (!validate()) { return }
-      const registerData = { email: formData.email, nickname: formData.name, password: formData.firstPass }
-      store.dispatch('authentication/register', registerData)
+    const submit = async () => {
+      try {
+        if (!validate()) { return }
+        loading.value = true
+        const registerData = { email: formData.email, nickname: formData.name, password: formData.firstPass }
+        await store.dispatch('authentication/register', registerData)
+        emit('closeState')
+      } catch (e) {
+          console.log(e)
+      } finally {
+        loading.value = false
+      }
     }
-
     return {
       formData,
       $errors,
       $touched,
       $v,
+      loading,
       submit
     }
   }
@@ -114,6 +124,7 @@ form {
     .button {
       width: 100%;
       margin-top: 2.5rem;
+      height: 5rem;
     }
     .buttonTologin {
       margin-top: 1rem;
