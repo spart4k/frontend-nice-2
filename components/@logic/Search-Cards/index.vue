@@ -8,8 +8,11 @@
       <N-Icon v-if="!text" :class="$style.searchIcon" name="loupe" />
     </div>
     <div :class="$style.searchResults">
+      <div v-if="loading" :class="$style.nothing">
+        <n-loading purple :class="$style.loading" />
+      </div>
       <div
-        v-if="result.length"
+        v-else-if="result.length && text.length"
         :class="$style.searchContainer"
       >
         <N-Search-Result
@@ -40,18 +43,34 @@ export default {
     const { store } = useContext()
     const text = ref()
     const result = ref([])
+    const loading = ref(false)
+    // const throttle = (func, timeFrame) => {
+    //   const lastTime = ref(0)
+    //   return function (...args) {
+    //     const now = new Date()
+    //     if (now - lastTime >= timeFrame) {
+    //         func(...args)
+    //         lastTime.value = now
+    //     }
+    //   }
+    // }
     const sendCount = async (val) => {
       text.value = val
       const searchData = { searchField: val }
-      if (val.length % 2 === 0) {
+      if (val.length) {
+        loading.value = true
         const searchResult = await store.dispatch('search/searchCards', searchData)
         result.value = searchResult.data
-        console.log(result.value)
+        loading.value = false
+      } else {
+        result.value = {}
       }
     }
     return {
       text,
       sendCount,
+      loading,
+      // throttle,
       result
     }
   }
@@ -74,16 +93,17 @@ export default {
     gap: 2.5rem;
     position: relative;
     .searchIcon {
-        position: absolute;
-        right: 0;
-        top: calc(50% - 1rem);
-        width: 1.828rem;
-        height: 1.8rem;
+      position: absolute;
+      right: 0;
+      top: calc(50% - 1rem);
+      width: 1.828rem;
+      height: 1.8rem;
     }
   }
   .searchResults{
     min-height: 60vh;
     display: flex;
+    padding-bottom: 2.5rem;
     .searchContainer{
       width: 100%;
       div+div {
@@ -97,6 +117,10 @@ export default {
       height: 100%;
       text-align: center;
       margin: auto 0;
+      .loading {
+        display: block;
+        margin: 0 auto
+      }
       .nothingToShow {
         @include regular-text;
         color: $fontColorDefault;

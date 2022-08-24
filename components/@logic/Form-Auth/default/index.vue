@@ -89,8 +89,10 @@ export default {
         if (!validate()) { return }
         loading.value = true
         const registerData = { email: formData.email, nickname: formData.name, password: formData.firstPass }
-        await store.dispatch('authentication/register', registerData)
-        emit('closeState')
+        const result = await store.dispatch('authentication/register', registerData)
+        if (!result.data.error) {
+          emit('closeState')
+        }
       } catch (e) {
           console.log(e)
       } finally {

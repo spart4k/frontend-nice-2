@@ -23,7 +23,7 @@
         background-color="#5289C5"
         @click.prevent="submit"
       >
-        <n-loading v-if="false" />
+        <n-loading color="#5289C5" v-if="loading" />
         <template v-else>
           Восстановить пароль
         </template>
@@ -33,24 +33,36 @@
 </template>
 
 <script>
-import { useContext } from '@nuxtjs/composition-api'
+import { useContext, ref } from '@nuxtjs/composition-api'
 import useForm from '~/compositions/useForm'
 import { email, required } from '~/utills/validations'
 
 export default {
   name: 'FormAuth',
   setup (props, ctx) {
+  const { emit } = ctx
   const { store } = useContext()
+  const loading = ref(false)
   const { formData, validate, $errors, $v, $touched } = useForm(
       {
         fields: {
           email: { default: '', validations: { email, required } }
         }
       })
-    const submit = () => {
-      if (!validate()) { return }
-      const recoveryData = { email: formData.email }
-      store.dispatch('authentication/resetPassword', recoveryData)
+    const submit = async () => {
+      try {
+        if (!validate()) { return }
+        loading.value = true
+        const recoveryData = { email: formData.email }
+        const result = await store.dispatch('authentication/resetPassword', recoveryData)
+        if (!result.data.error) {
+          emit('closeState')
+        }
+      } catch (e) {
+        console.log(e)
+      } finally {
+        loading.value = false
+      }
     }
 
     return {
@@ -58,7 +70,8 @@ export default {
       $errors,
       $touched,
       $v,
-      submit
+      submit,
+      loading
     }
   }
 }
@@ -87,6 +100,7 @@ export default {
     gap: 2.5rem;
   }
   .button {
+    height: 5rem;
     width: 100%;
   }
 }

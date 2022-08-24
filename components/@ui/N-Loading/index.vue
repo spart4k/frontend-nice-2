@@ -1,48 +1,49 @@
 <template>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 200 200"
-    fill="none"
-    color="#ffffff"
-  >
-    <defs>
-      <linearGradient id="spinner-secondHalf">
-        <stop offset="0%" stop-opacity="0" stop-color="currentColor" />
-        <stop offset="100%" stop-opacity="0.5" stop-color="currentColor" />
-      </linearGradient>
-      <linearGradient id="spinner-firstHalf">
-        <stop offset="0%" stop-opacity="1" stop-color="currentColor" />
-        <stop offset="100%" stop-opacity="0.5" stop-color="currentColor" />
-      </linearGradient>
-    </defs>
-
-    <g stroke-width="8">
-      <path stroke="url(#spinner-secondHalf)" d="M 4 100 A 96 96 0 0 1 196 100" />
-      <path stroke="url(#spinner-firstHalf)" d="M 196 100 A 96 96 0 0 1 4 100" />
-
-      <!-- 1deg extra path to have the round end cap -->
-      <path
-        stroke="currentColor"
-        stroke-linecap="round"
-        d="M 4 100 A 96 96 0 0 1 4 98"
-      />
-    </g>
-
-    <animateTransform
-      from="0 0 0"
-      to="360 0 0"
-      attributeName="transform"
-      type="rotate"
-      repeatCount="indefinite"
-      dur="1300ms"
-    />
-  </svg>
+  <span :class="[$style.loader,purple && $style.purple]" />
 </template>
 
 <script>
   export default {
-    name: 'n-loading'
+    name: 'NLoading',
+    props: {
+      purple: {
+        type: Boolean,
+        default: false
+      }
+    }
   }
 </script>
+
+<style scoped lang="scss" module>
+.loader {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  position: relative;
+  animation: rotate 1s linear infinite
+}
+.loader::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  inset: 0px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  animation: prixClipFix 2s linear infinite ;
+}
+.purple.loader::before {
+  border-color:#6448B5;
+}
+
+@keyframes rotate {
+  100%   {transform: rotate(360deg)}
+}
+
+@keyframes prixClipFix {
+  0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
+  25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
+  50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
+  75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)}
+  100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)}
+}
+</style>

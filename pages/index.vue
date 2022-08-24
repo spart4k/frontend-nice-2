@@ -3,20 +3,18 @@
     :description="introTitle"
     :is-show-animation="true"
   >
-    <client-only>
-      <div v-if="$fetchState.pending">
-        Загрузка ...
-      </div>
-      <div v-else class="content" :class="[showAnimate && $style.animateContent, $style.content]">
-        <NGridCard
-          v-if="cards && cards.data"
-          ref="content"
-          :items="cards.data"
-          home-page
-          @clickTag="clickTag"
-        />
-      </div>
-    </client-only>
+    <div v-if="$fetchState.pending">
+      Загрузка ...
+    </div>
+    <div v-else class="content" :class="[showAnimate && $style.animateContent, $style.content]">
+      <NGridCard
+        v-if="cards && cards.data"
+        ref="content"
+        :items="cards.data"
+        home-page
+        @clickTag="clickTag"
+      />
+    </div>
   </n-intro>
 </template>
 <script>
