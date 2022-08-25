@@ -9,18 +9,6 @@
           showAnimate && $style.animateContent,
         ]"
       />
-      <!--      <div-->
-      <!--        ref="logo"-->
-      <!--        class="logo"-->
-      <!--        :style="{ left: sheetWidth ? `calc(50% + ${sheetWidth/2}px)` : '50%' }"-->
-      <!--        :class="[$style.logo, showAnimate && $style.animateContent]"-->
-      <!--      >-->
-      <!--        <N-Logo-->
-      <!--          :is-home-page="isHomePage"-->
-      <!--          :hide-text-logo="hideTextLogo"-->
-      <!--          default-logo-->
-      <!--        />-->
-      <!--      </div>-->
       <div
         v-if="!isHomePage"
         ref="anchor"
@@ -37,12 +25,8 @@
 
 <script>
 import { computed, ref, useContext, useRoute, inject } from '@nuxtjs/composition-api'
-// import { Elastic } from 'gsap'
 import { BLAND_COLOR } from '~/const/blandColor'
 import { BLAND_IMAGE } from '~/const/blandImage'
-// import animationGSAP from '~/helpers/compositions/animationGSAP'
-
-// import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default {
   name: 'NIntro',
@@ -104,48 +88,6 @@ export default {
       }
     })
 
-    // const {
-    //   animationlogo,
-    //   animateSubtitle,
-    //   animateNavbar,
-    //   animationTimeline
-    // } = animationGSAP($gsap, Elastic)
-    //
-    // onMounted(() => {
-    //   // if (backgroundLoaded.value) {
-    //     nextTick(() => {
-    //       // const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
-    //       // if (isPlayAnimation) {
-    //       //   store.commit('content/setAnimate', false)
-    //       // }
-    //       // if (true) {
-    //         animationTimeline('.navbarSlug', elementAnimate.value)
-    //       // }
-    //       //   animationTimeline('.navbarSlug')
-    //
-    //       animationlogo()
-    //       animateSubtitle()
-    //       animateNavbar('.navbarSlug')
-    //       // localStorage.setItem('showAnimateHomePage', 'true')
-    //     })
-    //   // }
-    // })
-
-    // watch(() => backgroundLoaded.value, () => {
-    //   nextTick(() => {
-    //     const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
-    //     if (isPlayAnimation) {
-    //       store.commit('content/setAnimate', false)
-    //     }
-    //     if (!isPlayAnimation) {
-    //       animationTimeline('.navbarSlug')
-    //     }
-    //     animationlogo()
-    //     animateSubtitle()
-    //     animateNavbar('.navbarSlug')
-    //   })
-    // })
-
     return {
       elementAnimate,
       anchor,
@@ -189,12 +131,10 @@ export default {
   z-index: 10;
   width: 100%;
   margin-bottom: 5.815rem;
+  transition: opacity 0.3s;
   will-change: transform;
   @media (max-width: $tabletWidth) {
     margin-bottom: 4rem;
-  }
-  &.animateContent {
-    visibility: hidden;
   }
 }
 
@@ -215,9 +155,6 @@ export default {
   }
   @media (max-width: $mobileWidth) {
     top: 7rem;
-  }
-  @media (min-width: $desktopWidth) {
-    top: 1rem !important;
   }
 }
 .wrapper__content {

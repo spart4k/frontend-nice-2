@@ -21,7 +21,8 @@
     <!--    v-if="$route.name !== 'index'"-->
     <n-button
       type-button="transparent"
-      :class="[active && $style.open, $style.deviceMenu]"
+      class="elementHeader"
+      :class="[active && $style.open, $style.deviceMenu, (showAnimate && $route.name === 'index') && $style.showAnimate]"
       @click="openMenu"
     >
       <div :class="$style.deviceMenu__inner">
@@ -33,7 +34,13 @@
         {{ basketCount.calcBasketCard }}
       </div>
     </n-button>
-    <div :class="[$style.headerUser__list, active && $style.hideElement]">
+    <div
+      :class="[
+        $style.headerUser__list,
+        active && $style.hideElement,
+        (showAnimate && $route.name === 'index') && $style.showAnimate]"
+      class="elementHeader"
+    >
       <div :class="$style.link" @click="openLive">
         <span :class="$style.link__text">эфир</span>
         <n-icon name="domofon" :class="$style.link__icon" />

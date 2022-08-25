@@ -79,7 +79,6 @@ export default defineComponent({
           $gsap.to('.subtitleLogo', {
             scrollTrigger: {
               trigger: '.content',
-              markers: true,
               start: 10,
               end: () => 100,
               scrub: true
@@ -136,20 +135,10 @@ export default defineComponent({
       try {
         const response = await fetchData()
         cards.value = [...response.data]
-        console.log(cards.value[0], response.data)
       } catch (e) {
         console.log(e)
       }
     })
-
-    // cards.value = useAsync(async () => {
-    //   try {
-    //     const response = await fetchData()
-    //     return response.data.data
-    //   } catch (e) {
-    //     console.log(e)
-    //   }
-    // }, route.value.path)
 
     store.commit('content/changeBgIntro', route.value.params.slug)
 

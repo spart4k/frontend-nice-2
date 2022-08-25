@@ -10,6 +10,11 @@
   //}
 }
 
+.showAnimate {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
 .linkHome {
   position: absolute;
   top: 3.8rem;

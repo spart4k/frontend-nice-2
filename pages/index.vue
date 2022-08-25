@@ -32,7 +32,7 @@ import {
   defineComponent,
   useContext,
   useFetch,
-  useMeta, onMounted, nextTick
+  useMeta, onMounted, nextTick, onUnmounted
 } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import { BLAND_COLOR } from '~/const/blandColor'
@@ -53,6 +53,11 @@ export default defineComponent({
     const content = ref(null)
     const background = ref(null)
     const elementAnimate = ref(null)
+    const resize = () => {
+      if (window.innerWidth > 450) {
+        document.querySelector('.logo').style.top = null
+      }
+    }
     const introTitle = ref({
       title: 'Главная',
       subtitle: 'творческое объединение',
@@ -88,6 +93,7 @@ export default defineComponent({
         } else {
           animationTimeline('.navbarSlug', elementAnimate.value, root.$mq)
         }
+         window.addEventListener('resize', resize)
 
         animationlogo()
         animateSubtitle()
@@ -105,6 +111,9 @@ export default defineComponent({
       } catch (e) {
         console.log(e)
       }
+    })
+    onUnmounted(() => {
+      window.removeEventListener('resize', resize)
     })
 
     store.commit('content/clearBgIntro')
@@ -152,7 +161,66 @@ export default defineComponent({
     width: 100%;
     max-width: 53.2rem;
   }
-
+}
+$heightSmall: 1.2rem;
+$heightBig: 4.6rem;
+.wrapperAnimateElement {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .animate {
+    border-radius: 4rem;
+    transform: translateX(-100%);
+  }
+  .muzyka {
+    width: 5.9rem;
+    height: $heightSmall;
+  }
+  .video {
+    width: 34.4rem;
+    height: $heightSmall;
+  }
+  .ctivo {
+    width: 34.4rem;
+    height: $heightBig;
+  }
+  .iskusstvo {
+    width: 27.1rem;
+    height: $heightBig;
+  }
+  .kuxnia {
+    width: 15rem;
+    height: $heightBig;
+  }
+  .magazin {
+    width: 35.5rem;
+    height: $heightSmall;
+  }
+  .foto {
+    width: 25.5rem;
+    height: $heightSmall;
+  }
+  .odezda {
+    width: 9rem;
+    height: $heightBig;
+  }
+  .meropriiatiia {
+    width: 31.8rem;
+    height: $heightBig;
+  }
+  .efir {
+    width: 9rem;
+    height: $heightBig;
+  }
+  .moneta {
+    width: 31.8rem;
+    height: $heightBig;
+  }
 }
 .content {
   @include container;

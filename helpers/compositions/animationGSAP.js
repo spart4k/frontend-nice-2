@@ -11,7 +11,7 @@ const animation = ($gsap, Elastic) => {
       const logo = document.querySelector('.logo')
       const content = document.querySelector('.content')
       window.addEventListener('resize', () => {
-        if (window.innerWidth > 400 && content.getBoundingClientRect().top > 0) {
+        if (window.innerWidth > 450 && content.getBoundingClientRect().top > 0) {
           logo.style.top = '9rem'
         }
       })
@@ -26,11 +26,16 @@ const animation = ($gsap, Elastic) => {
     const logo = document.querySelector('.logo')
     const nav = document.querySelectorAll(`${NAVBAR} > ul > li`)
     const content = document.querySelector('.content')
-
+    tl.set(SUBTITLE, {
+      opacity: 0
+    }, '-=0.3')
     tl.set(logo, {
       scale: 0,
       visibility: 'visible',
       top: '50%'
+    })
+    tl.set('body', {
+      overflow: 'hidden'
     })
 
     tl.to(logo, {
@@ -73,8 +78,9 @@ const animation = ($gsap, Elastic) => {
       ease: 'cubic-bezier(.71,.01,.15,1)'
     }, '-=0.5')
 
-    tl.to(SUBTITLE, {
-      opacity: 1
+    $gsap.to(SUBTITLE, {
+      opacity: 1,
+      delay: 2
     })
 
     let timing = 0.3 - 0.015
@@ -113,6 +119,15 @@ const animation = ($gsap, Elastic) => {
           duration: 0.5
           // ease: 'cubic-bezier(.71,.01,.15,1)'
         }, '-=1')
+      tl.to('.elementHeader', {
+        opacity: 1
+      })
+      tl.to(SUBTITLE, {
+        opacity: 1
+      })
+      tl.to('body', {
+        overflow: null
+      })
   }
   const getConntetDomElementBounding = () => {
     const element = document.querySelector(TRIGGER)
@@ -125,22 +140,20 @@ const animation = ($gsap, Elastic) => {
   const animationlogo = () => {
     ScrollTrigger.matchMedia({
       '(max-width: 450px)' () {
-        const tl = $gsap.timeline({
-          scrollTrigger: {
-            trigger: TRIGGER,
-            start: 10,
-            end: () => 'top +=50',
-            scrub: true
-          },
-          force3D: true
-        })
-        tl.set('.logo', {
-          visibility: 'visible'
-        })
-        tl.to('.logo', {
-          top: '1rem',
-          scale: 0.6
-        })
+        setTimeout(() => {
+          $gsap.to('.logo', {
+            scrollTrigger: {
+              // trigger: TRIGGER,
+              // start: 'top 7rem',
+              end: '+=300',
+              scrub: true,
+              markers: true
+            },
+            top: '1rem',
+            scale: 0.6,
+            force3D: true
+          })
+        }, 300)
       }
     })
   }
@@ -150,10 +163,10 @@ const animation = ($gsap, Elastic) => {
         trigger: TRIGGER,
         // start: () => `top ${top}px`,
         start: 10,
-        opacity: 1,
-        end: () => 100,
+        end: () => 20,
         scrub: true
-      }
+      },
+      opacity: 0
     })
   }
 
@@ -167,10 +180,10 @@ const animation = ($gsap, Elastic) => {
         // start: `top ${top}`,
         markers: true,
         start: 10,
-        end: 40,
+        end: 20,
         scrub: true
       },
-      y: -30,
+      y: -5,
       opacity: 0
     })
   }
