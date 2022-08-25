@@ -1,7 +1,8 @@
 export const state = () => ({
   user: {
     email: '',
-    nickname: ''
+    nickname: '',
+    id: ''
   },
   token: '',
   authorizated: false,
@@ -33,6 +34,7 @@ export const mutations = {
   setUserInfo (state, value) {
     state.user.email = value.email
     state.user.nickname = value.nickname
+    state.user.id = value.user_id
   }
 }
 

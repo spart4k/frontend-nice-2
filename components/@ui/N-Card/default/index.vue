@@ -64,8 +64,7 @@
             <div :class="$style.socialsItem">
               <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
               <div :class="$style.parser">
-                <!-- likeCounter -->
-                {{ !$props.detailPage ? '0' : 'Нравится' }}
+                {{ !$props.detailPage ? data.like_count : 'Нравится' }}
               </div>
             </div>
             <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
@@ -133,8 +132,7 @@
           <div :class="$style.socialsItem" @click="addLike">
             <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
             <div :class="$style.parser">
-              <!-- likeCounter -->
-              {{ !$props.detailPage ? '0' : 'Нравится' }}
+              {{ 'Нравится' }}
             </div>
           </div>
           <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
@@ -198,8 +196,8 @@ export default {
   setup (props) {
     const videoRef = ref(null)
     const showComments = ref(false)
-    // const like = ref(props.data.liked)
-    const like = ref(false)
+    const like = ref(props.data.liked)
+    // const like = ref(false)
     const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
     const chipsCounter = ref(0)
@@ -231,15 +229,15 @@ export default {
       store.commit('menu/changeStepMenu', { step: 1 })
       store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
     }
-    const addLike = () => {
+    const addLike = async () => {
       like.value = !like.value
-      // if (like.value === true) {
-      //   likeCounter.value++
-      //   await store.dispatch('like/addLike', props.data.id)
-      // } else {
-      //   likeCounter.value--
-      //   await store.dispatch('like/removeLike', props.data.id)
-      // }
+      if (like.value === true) {
+        likeCounter.value++
+        await store.dispatch('like/addLike', props.data.id)
+      } else {
+        likeCounter.value--
+        await store.dispatch('like/removeLike', props.data.id)
+      }
     }
     const videoPlayingChange = () => {
       if (videoRef.value.paused === true) {
