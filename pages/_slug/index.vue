@@ -4,16 +4,14 @@
       Загрузка ...
     </div>
     <template v-else>
-      <client-only>
-        <NGridCard
-          ref="content"
-          class="content"
-          :class="[$style.content, showAnimate && $style.animateContent]"
-          :items="cards"
-          :description="introTitle"
-          @clickTag="clickTag"
-        />
-      </client-only>
+      <NGridCard
+        ref="content"
+        class="content"
+        :class="[$style.content, showAnimate && $style.animateContent]"
+        :items="cards"
+        :description="introTitle"
+        @clickTag="clickTag"
+      />
     </template>
   </n-intro-slug>
 </template>
@@ -50,7 +48,7 @@ export default defineComponent({
 
     const introTitle = computed(() => {
       if (id.value) {
-        const findSection = store?.state?.content.sections.find((item) => {
+        const findSection = store?.state?.content.sections.data.find((item) => {
           return Number(item.id) === id.value
         })
         return {

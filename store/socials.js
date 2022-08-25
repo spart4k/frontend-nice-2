@@ -18,6 +18,14 @@ export const actions = {
     } catch (e) {
       console.log(e)
     }
+  },
+  async addComment (state, params) {
+    try {
+      const data = await this.$axios.post('api/v1/comment/add', params)
+      return data
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 

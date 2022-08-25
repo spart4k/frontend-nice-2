@@ -64,7 +64,7 @@
             <div :class="$style.socialsItem">
               <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
               <div :class="$style.parser">
-                {{ !$props.detailPage ? data.like_count : 'Нравится' }}
+                {{ data.like_count }}
               </div>
             </div>
             <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
@@ -165,7 +165,7 @@
           :class="[$style.comments,showComments ? $style.show : '']"
           :style="{maxHeight: showComments ? commentHeight : '0'}"
         >
-          <N-Input v-if="true" type="textarea" @smilies="commentHeightSet" />
+          <N-Input v-if="true" type="textarea" @smilies="commentHeightSet" @sendMessage="sendComment" />
           <N-Plug v-else @login="login" @registration="registration" />
           <div :class="$style.commentsContainer">
             <div>
@@ -233,11 +233,16 @@ export default {
       like.value = !like.value
       if (like.value === true) {
         likeCounter.value++
-        await store.dispatch('like/addLike', props.data.id)
+        await store.dispatch('socials/addLike', props.data.id)
       } else {
         likeCounter.value--
-        await store.dispatch('like/removeLike', props.data.id)
+        await store.dispatch('socials/removeLike', props.data.id)
       }
+    }
+    const sendComment = async (val) => {
+        const commentData = { card_id: props.data.id, text: val, sticker_id: null }
+        const result = await store.dispatch('socials/addComment', commentData)
+        console.log(result)
     }
     const videoPlayingChange = () => {
       if (videoRef.value.paused === true) {
@@ -338,6 +343,7 @@ export default {
       login,
       registration,
       loginMenu,
+      sendComment,
       page
     }
   }

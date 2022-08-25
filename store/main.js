@@ -7,7 +7,6 @@ export const actions = {
     try {
       // this.$axios.defaults.headers.common.Authorization = 'Bearer 2|TeUVUgPl8axidfScynskYjPgeJRzCdxXcyIqDINY'
       const data = await this.$axios('api/v1/cards/main', { params })
-      console.log(data)
       return data
     } catch (e) {
       console.log(e)
