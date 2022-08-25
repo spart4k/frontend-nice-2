@@ -216,6 +216,9 @@ export default {
   @media (max-width: $mobileWidth) {
     top: 7rem;
   }
+  @media (min-width: $desktopWidth) {
+    top: 1rem !important;
+  }
 }
 .wrapper__content {
   position: relative;

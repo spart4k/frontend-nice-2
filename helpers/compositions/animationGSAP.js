@@ -7,8 +7,15 @@ const animation = ($gsap, Elastic) => {
 
   const background = ref(null)
   const animationTimeline = (NAVBAR = '.navbar', elementAnimate, display) => {
-    const onComplete = (a, v) => {
-      document.querySelector('.logo').classList.add('animationEnd')
+    const onComplete = () => {
+      const logo = document.querySelector('.logo')
+      const content = document.querySelector('.content')
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 400 && content.getBoundingClientRect().top > 0) {
+          logo.style.top = '9rem'
+        }
+      })
+      logo.classList.add('animationEnd')
     }
     const tl = $gsap.timeline({
       delay: 1,
@@ -21,7 +28,9 @@ const animation = ($gsap, Elastic) => {
     const content = document.querySelector('.content')
 
     tl.set(logo, {
-      scale: 0
+      scale: 0,
+      visibility: 'visible',
+      top: '50%'
     })
 
     tl.to(logo, {
@@ -60,7 +69,7 @@ const animation = ($gsap, Elastic) => {
     })
 
     tl.to(logo, 0.5, {
-      top: display === 'sm' ? '7.9rem' : '2.9rem',
+      top: display === 'sm' ? '9rem' : '2.9rem',
       ease: 'cubic-bezier(.71,.01,.15,1)'
     }, '-=0.5')
 
@@ -121,10 +130,12 @@ const animation = ($gsap, Elastic) => {
             trigger: TRIGGER,
             start: 10,
             end: () => 'top +=50',
-            scrub: true,
-            markers: true
+            scrub: true
           },
           force3D: true
+        })
+        tl.set('.logo', {
+          visibility: 'visible'
         })
         tl.to('.logo', {
           top: '1rem',
@@ -134,14 +145,12 @@ const animation = ($gsap, Elastic) => {
     })
   }
   const animateSubtitle = () => {
-    const top = getConntetDomElementBounding().top
-    if (!top) { return }
-
     $gsap.to('.subtitleLogo', {
       scrollTrigger: {
         trigger: TRIGGER,
         // start: () => `top ${top}px`,
         start: 10,
+        opacity: 1,
         end: () => 100,
         scrub: true
       }
@@ -156,11 +165,12 @@ const animation = ($gsap, Elastic) => {
       scrollTrigger: {
         trigger: TRIGGER,
         // start: `top ${top}`,
+        markers: true,
         start: 10,
-        end: 100,
+        end: 40,
         scrub: true
       },
-      y: -60,
+      y: -30,
       opacity: 0
     })
   }

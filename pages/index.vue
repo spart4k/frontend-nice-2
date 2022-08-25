@@ -13,7 +13,6 @@
         :style="{backgroundColor: value}"
       />
     </div>
-    <!--    <client-only>-->
     <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
       <NGridCard
         v-if="cards && cards.data"
@@ -23,7 +22,6 @@
         @clickTag="clickTag"
       />
     </div>
-    <!--    </client-only>-->
   </n-intro>
 </template>
 <script>
@@ -82,19 +80,18 @@ export default defineComponent({
     onMounted(() => {
       // if (backgroundLoaded.value) {
       nextTick(() => {
-        // const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
-        // if (isPlayAnimation) {
-        //   store.commit('content/setAnimate', false)
-        // }
-        // if (true) {
-        // animationTimeline('.navbarSlug', elementAnimate.value)
-        // }
-        //   animationTimeline('.navbarSlug')
-        animationTimeline('.navbarSlug', elementAnimate.value, root.$mq)
+        const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+        if (isPlayAnimation) {
+          store.commit('content/setAnimate', false)
+          document.querySelector('.logo').style.visibility = 'visible'
+        } else {
+          animationTimeline('.navbarSlug', elementAnimate.value, root.$mq)
+        }
+
         animationlogo()
         animateSubtitle()
         animateNavbar('.navbarSlug')
-        // localStorage.setItem('showAnimateHomePage', 'true')
+        localStorage.setItem('showAnimateHomePage', 'true')
       })
       // }
     })
@@ -142,66 +139,6 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" module>
-$heightSmall: 1.2rem;
-$heightBig: 4.6rem;
-.wrapperAnimateElement {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  .animate {
-    border-radius: 4rem;
-    transform: translateX(-100%);
-  }
-  .muzyka {
-    width: 5.9rem;
-    height: $heightSmall;
-  }
-  .video {
-    width: 34.4rem;
-    height: $heightSmall;
-  }
-  .ctivo {
-    width: 34.4rem;
-    height: $heightBig;
-  }
-  .iskusstvo {
-    width: 27.1rem;
-    height: $heightBig;
-  }
-  .kuxnia {
-    width: 15rem;
-    height: $heightBig;
-  }
-  .magazin {
-    width: 35.5rem;
-    height: $heightSmall;
-  }
-  .foto {
-    width: 25.5rem;
-    height: $heightSmall;
-  }
-  .odezda {
-    width: 9rem;
-    height: $heightBig;
-  }
-  .meropriiatiia {
-    width: 31.8rem;
-    height: $heightBig;
-  }
-  .efir {
-    width: 9rem;
-    height: $heightBig;
-  }
-  .moneta {
-    width: 31.8rem;
-    height: $heightBig;
-  }
-}
 .cards {
   width: 100%;
   display: flex;

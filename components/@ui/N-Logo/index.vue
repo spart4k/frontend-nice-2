@@ -79,18 +79,12 @@ export default {
     will-change: transform;
     width: 100%;
     transition: opacity 0.3s ease;
-    opacity: 0;
+    opacity: 1;
   }
 }
 .sm {
   width: 7.2rem;
 }
-//.md {
-  //width: 18rem;
-  //@media (max-width: $mobileWidth) {
-  //  width: 8.8rem;
-  //}
-//}
 .defaultLogo {
   width: 18rem;
 }

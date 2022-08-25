@@ -2,7 +2,7 @@
   <!--  , showAnimate && $style.animateContent-->
   <header :class="[$style.header, (showAnimate && $route.name === 'index') && $style.animateContent]">
     <div
-      v-if="$route.name === 'index'"
+      v-show="$route.name === 'index'"
       class="logo"
       :class="$style.logo"
       :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}px)` : '50%'}"
@@ -11,7 +11,7 @@
       <n-logo />
     </div>
     <div
-      v-else
+      v-show="$route.name !== 'index'"
       :class="$style.logoSlug"
       :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}px)` : '50%'}"
       @click="$router.push('/')"

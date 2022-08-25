@@ -23,7 +23,7 @@ import {
   useRouter,
   useContext,
   useFetch,
-  computed
+  computed, onMounted, nextTick
   // useMeta,
 } from '@nuxtjs/composition-api'
 
@@ -37,7 +37,7 @@ export default defineComponent({
   },
   setup () {
     const router = useRouter()
-    const { store, route } = useContext()
+    const { store, route, $gsap } = useContext()
     const cards = ref([])
     const background = ref(null)
     const totalPage = ref([])
@@ -72,6 +72,22 @@ export default defineComponent({
           background: route.value.params.slug
         }
       }
+    })
+
+    onMounted(() => {
+        nextTick(() => {
+          $gsap.to('.subtitleLogo', {
+            scrollTrigger: {
+              trigger: '.content',
+              markers: true,
+              start: 10,
+              end: () => 100,
+              scrub: true
+            },
+            opacity: 0
+          })
+          // const content = document.querySelector('.content')
+        })
     })
 
     const isPageMagazin = computed(() => route.value.path.indexOf('magazin'))
