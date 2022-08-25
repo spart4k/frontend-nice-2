@@ -3,7 +3,7 @@
     v-if="ready"
     loading="lazy"
     :src="src"
-    :class="$style.img"
+    :class="[$style.img, detailPage && $style.detailPage]"
     :alt="alt"
   >
   <N-Loader v-else img />
@@ -16,7 +16,8 @@ export default {
   name: 'RImg',
   props: {
     src: String,
-    alt: String
+    alt: String,
+    detailPage: Boolean
   },
   setup (props) {
     const ready = ref(true)
@@ -40,7 +41,9 @@ export default {
   width: 100%;
   height: 100%;
   display: block;
+  /* object-fit: contain; */
+}
+.detailPage {
   object-fit: contain;
-  object-position: center;
 }
 </style>

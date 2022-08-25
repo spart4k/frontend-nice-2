@@ -18,7 +18,7 @@ export default {
     ]
   },
   server: {
-    port: 8000 // default: 3000
+    port: process.env.PORT || 3030 // default: 3000
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -34,6 +34,7 @@ export default {
     { src: '@plugins/vualidate.js' },
     '@plugins/v-mask.js',
     '@plugins/v-tooltip.js',
+    '@plugins/v-lazyload.js',
     { src: '@plugins/vue-bottom-sheet.js', ssr: false }
   ],
 

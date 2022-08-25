@@ -31,9 +31,7 @@ export default {
       return marqueeContent?.value?.offsetWidth
     })
     function handleMarquee () {
-      console.log('marque start')
       isMarquee.value = true
-      // console.log(marquee.value)
       const speed = 1
 
       const container = marquee.value.querySelector('.inner')
@@ -57,7 +55,6 @@ export default {
           setTimeout(() => {
             marqueeLength.value = marqueeContent.value.getBoundingClientRect().width
             marqueeContainerLength.value = marquee.value.getBoundingClientRect().width
-            console.log(marqueeLength.value, marqueeContainerLength.value)
             if (marqueeLength.value >= marqueeContainerLength.value) {
               handleMarquee()
             } else {

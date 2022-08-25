@@ -27,9 +27,6 @@
           />
         </template>
       </div>
-      <!-- <div :class="$style.col">
-        <N-Card-Coin />
-      </div> -->
     </template>
   </div>
 </template>
@@ -41,7 +38,7 @@ export default {
   name: 'NGridCard',
   props: {
     items: {
-      type: Array
+      type: Object
     },
     homePage: {
       type: Boolean
@@ -54,8 +51,7 @@ export default {
   setup (props) {
     const { route } = useContext()
     const { items } = unref(props)
-    const proxyArray = ref(items)
-
+    const proxyArray = ref(items.data)
     const spliceArray = computed(() => {
       if (!props.homePage) {
         proxyArray.value.unshift({
@@ -65,16 +61,14 @@ export default {
           id: Math.random()
         })
       } else {
-        proxyArray.value.unshift({
+        proxyArray.value?.unshift({
           home: true,
           image: require('~/assets/img/preview/dogs.png'),
           id: Math.random()
-
         })
       }
       const middleIndex = Math.ceil(proxyArray.value?.length / 2)
       const firstHalf = proxyArray.value?.splice(0, middleIndex)
-
       const secondHalf = proxyArray.value?.splice(-middleIndex)
 
       return {
@@ -135,9 +129,13 @@ export default {
 .col {
   max-width: 53.2rem;
   width: calc(50% - 1.5rem);
+  @media (min-width: $tabletWidth) {
+    min-width: 30rem;
+  }
   @media (max-width: $mobileWidth) {
     width: auto;
     max-width: none;
+    min-width: none;
   }
 }
 .col + .col {

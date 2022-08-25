@@ -4,6 +4,7 @@ export const state = () => ({
   bgIntro: '',
   imgIntro: '',
   bgDetails: '',
+  animationEnd: false,
   sections: [],
   headerItems: [],
   isShowAnimationHomePage: true
@@ -21,6 +22,9 @@ export const mutations = {
   },
   changeLogo (state, value) {
     state.showLogo = value
+  },
+  changeAnimationEnd (state, value) {
+    state.animationEnd = value
   },
   changeSections (state, value) {
     state.sections = value

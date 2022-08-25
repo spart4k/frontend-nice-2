@@ -1,9 +1,24 @@
 <template>
   <!--  , showAnimate && $style.animateContent-->
   <header :class="[$style.header, (showAnimate && $route.name === 'index') && $style.animateContent]">
-    <div v-if="$route.name !== 'index'" :class="$style.logo" @click="$router.push('/')">
-      <n-logo size="md" />
+    <div
+      v-if="$route.name === 'index'"
+      class="logo"
+      :class="$style.logo"
+      :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}px)` : '50%'}"
+      @click="$router.push('/')"
+    >
+      <n-logo />
     </div>
+    <div
+      v-else
+      :class="$style.logoSlug"
+      :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}px)` : '50%'}"
+      @click="$router.push('/')"
+    >
+      <n-logo />
+    </div>
+    <!--    v-if="$route.name !== 'index'"-->
     <n-button
       type-button="transparent"
       :class="[active && $style.open, $style.deviceMenu]"
@@ -18,14 +33,12 @@
         {{ basketCount.calcBasketCard }}
       </div>
     </n-button>
-    <ul :class="[$style.headerUser__list, active && $style.hideElement]">
-      <li>
-        <div :class="$style.link" @click="openLive">
-          <span :class="$style.link__text">эфир</span>
-          <n-icon name="domofon" :class="$style.link__icon" />
-        </div>
-      </li>
-    </ul>
+    <div :class="[$style.headerUser__list, active && $style.hideElement]">
+      <div :class="$style.link" @click="openLive">
+        <span :class="$style.link__text">эфир</span>
+        <n-icon name="domofon" :class="$style.link__icon" />
+      </div>
+    </div>
     <FormAuthSteps v-model="activeAuthSteps" />
   </header>
 </template>
@@ -40,6 +53,10 @@ export default {
     headerItems: {
       type: Array,
       default: () => []
+    },
+    sheetWidth: {
+      type: Number,
+      default: 0
     }
   },
   setup () {
@@ -56,7 +73,6 @@ export default {
     const basketData = computed(() => store.state.basket.basket?.data)
     const isAuth = computed(() => store.state.authentication.authorizated)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
-
     const basketCount = computed(() => {
       const calcBasketCard = basketData.value?.cards?.reduce((acc, value) => {
          acc += value.pivot.quantity
@@ -113,7 +129,6 @@ export default {
       toggleMenu,
       openProfile,
       openLive,
-
       menuBasket,
       showAnimate,
       basketData,

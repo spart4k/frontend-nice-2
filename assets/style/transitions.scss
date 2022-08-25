@@ -240,8 +240,6 @@
   right: calc(-100% - 1.5rem);
 }
 
-
-
 .slideback-leave-active,
 .slideback-enter-active {
   transition: all .25s $animationTiming1;
@@ -253,7 +251,7 @@
 
 .slideback-enter {
   position: absolute;
-  right: calc(-100% - 1.5rem);
+right: calc(-100% - 1.5rem);
 }
 
 .slideback-enter-to {

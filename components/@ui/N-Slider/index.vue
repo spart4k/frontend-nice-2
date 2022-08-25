@@ -10,7 +10,6 @@
         :infinite="true"
         :focus-on-select="true"
         :adaptive-height="true"
-        @beforeChange="syncSliders"
       >
         <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
           <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="">

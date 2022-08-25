@@ -5,12 +5,14 @@
       :header-items="headerItems"
       @changeStep="changeStep"
       @changeComponent="changeComponent"
+      @toAddress="toAddress"
+      @closeState="$emit('closeState')"
     />
   </transition>
 </template>
 
 <script>
-import { computed } from '@nuxtjs/composition-api'
+import { ref, useContext, computed } from '@nuxtjs/composition-api'
 
 export default {
   name: 'StepperOrder',
@@ -21,17 +23,22 @@ export default {
     keyAnimation: String
   },
   setup (props, { emit }) {
+  const { store } = useContext()
+  const isAddress = ref(false)
   const changeStep = (value) => {
     emit('changeStep', value)
   }
 
   const changeComponent = (value) => {
-    // currentShowComponents.value = value.key
     emit('changeStep', 'increment')
-    emit('changeComp', { key: value.value.key, effect: '' })
+    emit('changeComp', { key: value.value.key, effect: value.value.effect })
   }
 
-    const isCurrentPage = computed(() => {
+  const toAddress = (value) => {
+    isAddress.value = value
+  }
+
+  const isCurrentPage = computed(() => {
     if (props.step === 0 && !props.currComp) {
         return 'n-nav-menu'
     } else if (props.currComp === 'basket') {
@@ -41,9 +48,13 @@ export default {
         case 2 :
           return 'StepTwoOrder'
         case 3 :
-          return 'StepThreePlug'
+          if (isAddress.value) {
+            return 'ChangeAddress'
+          } else {
+            return 'StepThreePlug'
+          }
         }
-      } else if (props.currComp === 'registration' && true) {
+      } else if (props.currComp === 'registration' && !store.state.authentication.authorizated) {
           switch (props.step) {
         case 1 :
           return 'FormAuthDefault'
@@ -52,7 +63,7 @@ export default {
         case 3 :
           return 'FormAuthRecovery'
         }
-    } else if (props.currComp === 'registration' && !true) {
+    } else if (props.currComp === 'registration' && store.state.authentication.authorizated) {
           switch (props.step) {
         case 1 :
           return 'FormProfileDefault'
@@ -71,7 +82,8 @@ export default {
     return {
       isCurrentPage,
       changeStep,
-      changeComponent
+      changeComponent,
+      toAddress
     }
   }
 }

@@ -114,6 +114,10 @@ export default {
       transform: translate(0, 0) !important;
     }
   }
+  :global(.bottom-sheet.closed .bottom-sheet__card.fx-slide-from-right) {
+    right: 0 !important;
+    left: unset !important;
+  }
 }
 :global(.bottom-sheet__bar) {
   height: 6px !important;

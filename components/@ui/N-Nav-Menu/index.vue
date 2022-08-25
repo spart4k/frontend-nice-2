@@ -3,7 +3,7 @@
     <menuUserTop
       @openMenu="($event) => $emit('changeComponent', {mathAction: 'increment', value: $event })"
     />
-      <!-- @openMenu="($event) => $emit('changeStep', {mathAction: 'increment', key: $event })" -->
+    <!-- @openMenu="($event) => $emit('changeStep', {mathAction: 'increment', key: $event })" -->
     <!--    <transition-group-->
     <!--      :class="$style.list"-->
     <!--      name="staggered-fade"-->

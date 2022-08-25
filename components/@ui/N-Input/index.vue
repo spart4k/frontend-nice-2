@@ -6,10 +6,10 @@
       v-model="letters"
       type="text"
       maxlength="200"
-      @focus="focusInput"
-      @blur="blurInput"
       :class="$style.input"
       :placeholder="placeholder"
+      @focus="focusInput"
+      @blur="blurInput"
     >
     <textarea
       v-else-if="$props.type === 'textarea'"
@@ -17,10 +17,10 @@
       v-model="letters"
       :placeholder="placeholder"
       maxlength="200"
-      @focus="focusInput"
-      @blur="blurInput"
       :class="$style.textarea"
       rows="1"
+      @focus="focusInput"
+      @blur="blurInput"
       @input="resize($event)"
     />
     <!-- <div><span ref="input" tabindex="-1" :class="$style.textarea" role="textbox" contenteditable="true" /></div> -->
@@ -28,7 +28,7 @@
       <N-Icon name="smile" :class="$style.icon" :style="{ color: smilies ? '#F45532' : '#222222' }" @click="showSmilies(); $emit('smilies')" />
       <div :class="$style.send">
         <div :class="$style.letterCounter">
-          1/200
+          {{ letters.length }}/200
         </div>
         <N-Icon :class="$style.sendButton" name="send" @click="sendComment" />
       </div>
@@ -162,7 +162,9 @@ export default {
 
   onMounted(() => {
     mountedHeight.value = window.innerHeight
-    transformBlock.value = document.querySelector(props.swipingBlock)
+    if (props.swipingBlock) {
+      transformBlock.value = document.querySelector(props.swipingBlock)
+    }
     window.addEventListener('resize', handleKeyboard)
   })
 
@@ -212,7 +214,7 @@ export default {
     .textarea, .input {
       display: block;
       width: 100%;
-      height: 35px;
+      height: 3.5rem;
       @include regular-text;
       color: $fontColorDefault;
       overflow: hidden;
@@ -230,9 +232,13 @@ export default {
       display: flex;
       justify-content: space-between;
       .sendButton {
+        width: 2.4rem;
+        height: 2.4rem;
         cursor: pointer;
       }
     .icon {
+      width: 2.4rem;
+      height: 2.4rem;
       transition: all .2s;
       cursor: pointer;
     }

@@ -104,7 +104,7 @@
       :class="$style.btn"
       :disabled="$v.$invalid && $touched"
       :type-button="'pink'"
-      @click="() => submit()"
+      @click="() => (submit(),$emit('toAddress', false))"
     >
       Оплатить онлайн
     </n-button>

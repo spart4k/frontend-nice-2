@@ -1,8 +1,21 @@
 <template>
   <div ref="body" class="body">
-    <the-header :header-items="headerItems" class="header" />
+    <div :class="$style.headerContainer" :style="{ marginLeft: sheetWidth && !sheetRight ? sheetWidth+'px' : '0', marginRight: sheetWidth && sheetRight ? -sheetWidth+'px' : '0' }">
+      <the-header
+        :header-items="headerItems"
+        :class="$style.header"
+        :sheet-width="sheetWidth"
+        class="header"
+      />
+    </div>
 
-    <n-intro-wrapper :is-home-page="isHomePage" :color="color">
+    <n-intro-wrapper
+      :class="$style.main"
+      :is-home-page="isHomePage"
+      :style="{ marginLeft: sheetWidth && !sheetRight ? sheetWidth+'px' : '0', marginRight: sheetWidth && sheetRight ? -sheetWidth+'px' : '0' }"
+      :color="color"
+      @backgroundLoaded="backgroundLoaded"
+    >
       <Nuxt />
     </n-intro-wrapper>
     <N-BootomSheet
@@ -18,6 +31,7 @@
       @back="changeStep"
     >
       <stepperOrder
+        ref="stepper"
         :header-items="headerItems"
         :key-animation="keyAnimation"
         :step="step"
@@ -25,15 +39,15 @@
         @clearStep="step = 0"
         @changeComp="changeComp"
         @changeStep="changeStep"
+        @closeState="closeState"
       />
     </N-BootomSheet>
-
     <portal-target name="sliderPopup" />
   </div>
 </template>
 
 <script>
-import { ref, useContext, useFetch, onMounted, computed, watch, nextTick } from '@nuxtjs/composition-api'
+import { ref, useContext, useFetch, onMounted, computed, watch, provide } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import animationGSAP from '~/helpers/compositions/animationGSAP'
 import { BLAND_COLOR } from '~/const/blandColor'
@@ -44,21 +58,30 @@ export default {
     const headerItems = ref([])
     const body = ref(null)
     const menu = ref(null)
+    const stepper = ref(null)
     const back = ref(false)
+    const sheetWidth = ref(0)
+    const sheetRight = ref(false)
     const keyAnimation = ref('next')
     const currentShowComponents = ref({
       key: '',
-      effect: ''
+      effect: 'fx-slide-from-left'
     })
     const step = ref(0)
+    const isLoaded = ref(false)
     const menuBasket = ref(null)
     const menuLive = ref(null)
     const { store, route, $gsap } = useContext()
     const isHomePage = computed(() => route.value.name === 'index')
 
+    const backgroundLoaded = () => {
+      isLoaded.value = true
+    }
+
     const changeComp = (value) => {
       currentShowComponents.value.key = value.key
       currentShowComponents.value.effect = value.effect
+      store.commit('menu/changeKeyMenu', { key: value.key, effect: value.effect })
     }
 
     const fetchData = async () => {
@@ -72,8 +95,8 @@ export default {
     useFetch(async () => {
       headerItems.value = []
       const response = await fetchData()
-      if (response.length) {
-        headerItems.value = response.filter((item) => {
+      if (response.data.length) {
+        headerItems.value = response.data.filter((item) => {
           return item.slug !== 'efir'
         })
       }
@@ -86,11 +109,13 @@ export default {
       background: ''
     })
 
-    const changeState = (value) => {
+    const changeState = () => {
+      sheetWidth.value = 0
       setTimeout(() => {
-        store.commit('menu/changeShowStateBottomSheetMenu', { value })
+        sheetRight.value = false
+        store.commit('menu/changeShowStateBottomSheetMenu', { value: false })
         store.commit('menu/changeStepMenu', { step: 0 })
-      }, 250)
+      }, 300)
     }
 
     const closeState = () => {
@@ -110,26 +135,38 @@ export default {
       }
     })
 
-   const openMenu = () => {
-      nextTick(() => {
+    const openMenu = () => {
+      setTimeout(() => {
         menu.value.$children[0].open()
-      })
+        if (window.innerWidth > 450) {
+          sheetWidth.value = stepper.value.$el.offsetWidth
+          if (sheetRight.value) {
+            sheetWidth.value = -sheetWidth.value
+          }
+        }
+      }, 100)
     }
     const closeMenu = () => {
+      sheetWidth.value = 0
       store.commit('menu/changeKeyMenu', { key: '', effect: 'fx-slide-from-left' })
       store.commit('menu/changeStepMenu', { step: 0 })
       step.value = 0
     }
     watch(() => store.state.menu.isShowBottomMenu, () => {
       if (store.state.menu.isShowBottomMenu) {
-      if (store.state.menu.component) {
-        currentShowComponents.value.key = store.state.menu.component.key
-        currentShowComponents.value.effect = store.state.menu.component.effect
-      }
-      if (store.state.menu.stepCurrentComponent) {
-        step.value = store.state.menu.stepCurrentComponent
-      }
-        openMenu()
+        if (store.state.menu.component) {
+          currentShowComponents.value.key = store.state.menu.component.key
+          currentShowComponents.value.effect = store.state.menu.component.effect
+          if (currentShowComponents.value.effect === 'fx-slide-from-right') {
+            sheetRight.value = true
+          }
+        }
+        if (store.state.menu.stepCurrentComponent) {
+          step.value = store.state.menu.stepCurrentComponent
+        }
+        setTimeout(() => {
+          openMenu()
+        }, 100)
       } else {
         closeMenu()
       }
@@ -145,9 +182,11 @@ export default {
       if (value === 'increment') {
         keyAnimation.value = 'next'
         step.value += 1
+        store.commit('menu/changeStepMenu', { step: step.value })
       } else {
         keyAnimation.value = 'prev'
         step.value -= 1
+        store.commit('menu/changeStepMenu', { step: step.value })
       }
     }
 
@@ -157,7 +196,8 @@ export default {
       store.dispatch('basket/getBasket')
       animateBackground()
     })
-
+    provide('backgroundLoaded', isLoaded)
+    provide('sheetWidth', sheetWidth)
     return {
       headerItems,
       body,
@@ -166,19 +206,23 @@ export default {
       isHomePage,
       menuBasket,
       menu,
+      stepper,
       menuLive,
       back,
       step,
       keyAnimation,
       changeComp,
-
       changeStep,
+      sheetWidth,
+      sheetRight,
       openMenu,
       currentShowComponents,
       closeMenu,
       closedSwipe,
       changeState,
-      closeState
+      closeState,
+      backgroundLoaded,
+      isLoaded
     }
   }
 }
@@ -192,5 +236,24 @@ export default {
   padding-bottom: 1rem;
   transform: translate3d(0, 0, 0);
   color: $fontColorDefault;
+}
+.main {
+  transition-duration: .3s;
+}
+.headerContainer {
+  top: 2rem;
+  left: 4rem;
+  right: 4rem;
+  position: fixed;
+  z-index: 11;
+  transition-duration: .3s;
+  @media (max-width: $mobileWidth) {
+    left: 1.5rem;
+    right: 1.5rem;
+  }
+}
+.header {
+  margin: auto;
+  transition-duration: .3s;
 }
 </style>

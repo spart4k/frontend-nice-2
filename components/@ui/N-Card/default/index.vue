@@ -1,26 +1,26 @@
 <template>
   <div :class="[$style.card, detailPage && $style.detailPage]">
     <div ref="gallery" :class="[$style.gallery, detailPage && $style.detailPage]">
-      <template v-if="data.images.length && !$props.withVideo">
-        <template v-if="$props.detailPage && data.images.length > 1">
-          <N-Slider :slider-item="data.images" />
+      <template v-if="data.files.length && !$props.withVideo">
+        <template v-if="$props.detailPage && data.files.length > 1">
+          <N-Slider :slider-item="data.files" />
         </template>
         <template v-else>
           <div v-if="$props.detailPage" :class="[$style.hatContainer, detailPage && $style.detailPage]">
             <div :class="[$style.hat, detailPage && $style.detailPage]">
-              <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.files[0].src}`" :alt="data.title" />
             </div>
           </div>
           <nuxt-link v-else :to="`cards/${data.id}?section=${data.section.slug}`" tag="div">
             <div :class="[$style.hat]">
-              <n-lazy-img :src="`${$axios.defaults.baseURL}${data.images[0].src}`" :alt="data.title" />
+              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.files[0].src}`" :alt="data.title" />
             </div>
           </nuxt-link>
         </template>
       </template>
       <template v-else-if="$props.withVideo">
-        <div :class="[$style.wrapperVideo, detailPage && $style.detailPage]" @click="videoPlayingChange">
-          <div v-if="!videoPlay" :class="$style.blackout">
+        <div :class="[$style.wrapperVideo, detailPage && $style.detailPage]">
+          <div v-if="!videoPlay" :class="$style.blackout" @click="videoPlayingChange">
             <N-Button type-button="play" :background-color="'rgba(34, 34, 34, 0.8)'">
               <N-Icon :class="$style.icon" name="button-play" />
             </N-Button>
@@ -60,14 +60,30 @@
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div>
+          <div v-if="!$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
+            <div :class="$style.socialsItem">
+              <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
+              <div :class="$style.parser">
+                <!-- likeCounter -->
+                {{ !$props.detailPage ? '0' : 'Нравится' }}
+              </div>
+            </div>
+            <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
+              <N-Icon name="comments" :class="$style.commentsContainer" />
+              <div :class="$style.parser">
+                {{ !$props.detailPage ? '0' : 'Комментировать' }}
+              </div>
+            </div>
+          </div>
         </NuxtLink>
         <div v-if="$props.detailPage" ref="body" :class="[$style.body__top, detailPage && $style.detailPage]" tag="div">
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
             {{ data.title }}
           </h2>
-          <template v-if="$props.detailPage && data.author.length>0">
+          <template v-if="$props.detailPage">
             <p :class="$style.authorName">
-              автор {{ data.author }}
+              <!-- автор {{ data.author }} -->
+              автор Артем Nice
             </p>
           </template>
           <div v-if="data.date_event" :class="$style.time">
@@ -94,7 +110,7 @@
         </div>
       </template>
       <div :class="[$style.body__bottom, detailPage && $style.detailPage]">
-        <div v-if="$props.detailPage" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '3rem' : '' }">
+        <div v-if="$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: $props.detailPage ? '3rem' : '' }">
           <N-Chip
             v-for="item in data.tags"
             :key="item.id"
@@ -113,16 +129,16 @@
             +{{ chipsCounter }}
           </N-Chip>
         </div>
-        <div :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
-          <div :class="$style.socialsItem">
-            <N-Like v-model="like" :class="$style.likeContainer" @click="addLike" />
+        <div v-if="$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
+          <div :class="$style.socialsItem" @click="addLike">
+            <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
             <div :class="$style.parser">
               <!-- likeCounter -->
               {{ !$props.detailPage ? '0' : 'Нравится' }}
             </div>
           </div>
           <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
-            <N-Icon name="comments" />
+            <N-Icon :class="$style.commentsSvg" name="comments" />
             <div :class="$style.parser">
               {{ !$props.detailPage ? '0' : 'Комментировать' }}
             </div>
@@ -151,7 +167,7 @@
           :class="[$style.comments,showComments ? $style.show : '']"
           :style="{maxHeight: showComments ? commentHeight : '0'}"
         >
-          <N-Input v-if="false" type="textarea" @smilies="commentHeightSet" />
+          <N-Input v-if="true" type="textarea" @smilies="commentHeightSet" />
           <N-Plug v-else @login="login" @registration="registration" />
           <div :class="$style.commentsContainer">
             <div>
@@ -182,7 +198,8 @@ export default {
   setup (props) {
     const videoRef = ref(null)
     const showComments = ref(false)
-    const like = ref(props.data.liked)
+    // const like = ref(props.data.liked)
+    const like = ref(false)
     const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
     const chipsCounter = ref(0)
@@ -214,21 +231,23 @@ export default {
       store.commit('menu/changeStepMenu', { step: 1 })
       store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
     }
-    const addLike = async () => {
-      if (like.value === true) {
-        likeCounter.value++
-        await store.dispatch('like/addLike', props.data.id)
-      } else {
-        likeCounter.value--
-        await store.dispatch('like/removeLike', props.data.id)
-      }
+    const addLike = () => {
+      like.value = !like.value
+      // if (like.value === true) {
+      //   likeCounter.value++
+      //   await store.dispatch('like/addLike', props.data.id)
+      // } else {
+      //   likeCounter.value--
+      //   await store.dispatch('like/removeLike', props.data.id)
+      // }
     }
     const videoPlayingChange = () => {
-      videoPlay.value = !videoPlay.value
       if (videoRef.value.paused === true) {
         videoRef.value.play()
+        videoPlay.value = true
       } else {
         videoRef.value.pause()
+        videoPlay.value = false
       }
     }
     const isJsonString = computed(() => {
@@ -275,12 +294,12 @@ export default {
       if (windowWidth.value > 900) {
         showComments.value = true
       }
-      extraTagHide()
       commentHeightSet()
       comments.value = false
       window.addEventListener('resize', windowWidthCount)
       window.addEventListener('resize', commentHeightSet)
       nextTick(() => {
+      extraTagHide()
         if (props.withVideo) {
           videoUrl.value = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`
           videoRef.value.src = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`
@@ -336,7 +355,8 @@ export default {
     -webkit-mask-image: -webkit-radial-gradient(white, black);
     &.detailPage {
       @media (min-width: $tabletWidth) {
-        width: 114rem;
+        min-width: 40rem;
+        max-width: 114rem;
         height: calc(76vh - 7rem);
         margin: 0 auto;
         display: flex;
@@ -470,6 +490,7 @@ export default {
     border-top: .1rem solid rgba(34, 34, 34, 0.1);
 
     .socialsItem {
+    cursor: pointer;
       *+div {
         margin-left: 1rem;
       }
@@ -485,7 +506,13 @@ export default {
       cursor: pointer;
     }
     .commentsContainer {
+      width: 2.4rem;
+      height: 2.4rem;
       cursor: pointer;
+    }
+    .commentsSvg {
+      width: 2.4rem;
+      height: 2.4rem;
     }
   }
   .body {

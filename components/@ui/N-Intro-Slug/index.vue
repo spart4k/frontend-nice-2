@@ -106,9 +106,9 @@ export default {
 
 <style scoped lang="scss" module>
 .main {
-  padding-top: 30.5rem;
+    padding-top: 17.5rem;
   @media (max-width: $mobileWidth) {
-    padding-top: 10.3rem;
+    padding-top: 23.6rem;
   }
 }
 .container {
@@ -116,13 +116,12 @@ export default {
 }
 .tabs {
   margin: 0;
-  position: fixed;
-  top: 17.5rem;
   z-index: 3;
   width: 100%;
+  margin-bottom: 5.815rem;
   will-change: transform;
   @media (max-width: $tabletWidth) {
-    top: 23.6rem;
+    margin-bottom: 4rem;
   }
   @media (max-width: $mobileWidth) {
     display: none;

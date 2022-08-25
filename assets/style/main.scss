@@ -17,10 +17,12 @@
 
 .logoTop {
   position: fixed;
-  z-index: 11;
+  z-index: 110;
   top: 2.9rem;
-  left: 50%;
+  // left: 50%;
+  transition-duration: .3s;
   transform: translateX(-50%);
+  cursor: pointer;
   @media (max-width:$mobileWidth) {
     top: 7rem;
   }
@@ -64,7 +66,11 @@ a {
   margin-left: auto;
   max-width: 60rem;
 }
-
+.animationEnd {
+  @media (min-width: $mobileWidth) {
+    top: 2.9rem !important;
+  }
+}
 .smallText {
   font-size: 1.4rem !important;
   line-height: 143%;

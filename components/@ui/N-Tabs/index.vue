@@ -1,7 +1,7 @@
 <template>
-  <nav>
+  <nav :class="$style.nav">
     <ul :class="$style.list">
-      <N-Tabs-Item v-for="(item, index) in tabsItem" :key="index" :item="item" />
+      <N-Tabs-Item v-for="(item, index) in tabsItem.data" :key="index" :item="item" />
     </ul>
   </nav>
 </template>

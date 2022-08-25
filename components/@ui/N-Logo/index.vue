@@ -43,7 +43,6 @@ export default {
     isHomePage: {
       type: Boolean
     }
-
   },
   setup (props) {
     const { store } = useContext()
@@ -62,37 +61,38 @@ export default {
   align-items: center;
   width: 100%;
   will-change: transform;
-  .wrapperImage {
-    //overflow: hidden;
-    //clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);end
-  //clip-path: polygon(0 0%, 100% 0%, 100% 100%, 0% 100%)
-  }
   img {
     width: 100%;
   }
   .logoImage {
     display: block;
-    padding-bottom: 0.9rem;
+    padding-bottom: 1.7rem;
     line-height: 0;
+    @media (max-width: $mobileWidth) {
+      //width: 16.3rem;
+      padding-bottom: .91rem;
+    }
   }
   .imageSubtitle {
     display: block;
     line-height: 0;
     will-change: transform;
     width: 100%;
+    transition: opacity 0.3s ease;
+    opacity: 0;
   }
 }
 .sm {
   width: 7.2rem;
 }
-.md {
-  width: 16.3rem;
-  @media (max-width: $mobileWidth) {
-    width: 8.8rem;
-  }
-}
+//.md {
+  //width: 18rem;
+  //@media (max-width: $mobileWidth) {
+  //  width: 8.8rem;
+  //}
+//}
 .defaultLogo {
-  width: 16.3rem;
+  width: 18rem;
 }
 
 </style>

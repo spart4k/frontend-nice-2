@@ -41,7 +41,7 @@
         type-button="transparent"
         :class="$style.btnChangeAddress"
         color="#C83F8E"
-        @click="openMenu"
+        @click="$emit('toAddress', true);$emit('changeStep', 'increment')"
       >
         Изменить адрес
       </n-button>
@@ -110,24 +110,12 @@
         :class="$style.btn"
         :type-button="'pink'"
         :disabled="$v.$invalid && $touched"
-        @click="submit"
+        @click="submit;$emit('toAddress', false)"
       >
         Оплатить онлайн
       </n-button>
       <NPersonalConsent />
     </n-row>
-    <portal to="sliderPopup">
-      <N-BootomSheet
-        ref="menuAddress"
-        effect="fx-slide-from-left"
-        max-width="39rem"
-        :max-height="'100%'"
-        :fullscreen="true"
-        @closeMenu="closedMenu"
-      >
-        <ChangeAddress @closeMenu="closedMenu" />
-      </N-BootomSheet>
-    </portal>
   </div>
 </template>
 

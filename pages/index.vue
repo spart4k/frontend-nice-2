@@ -3,10 +3,18 @@
     :description="introTitle"
     :is-show-animation="true"
   >
-    <div v-if="$fetchState.pending">
-      Загрузка ...
+    <div :class="$style.wrapperAnimateElement">
+      <div
+        v-for="[key,value] in Object.entries(BLAND_COLOR)"
+        :key="key"
+        ref="elementAnimate"
+        class="elementAnimate"
+        :class="[$style[key], $style.animate]"
+        :style="{backgroundColor: value}"
+      />
     </div>
-    <div v-else class="content" :class="[showAnimate && $style.animateContent, $style.content]">
+    <!--    <client-only>-->
+    <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
       <NGridCard
         v-if="cards && cards.data"
         ref="content"
@@ -15,6 +23,7 @@
         @clickTag="clickTag"
       />
     </div>
+    <!--    </client-only>-->
   </n-intro>
 </template>
 <script>
@@ -24,24 +33,28 @@ import {
   computed,
   defineComponent,
   useContext,
-  useRouter,
   useFetch,
-  useMeta
+  useMeta, onMounted, nextTick
 } from '@nuxtjs/composition-api'
+import { Elastic } from 'gsap'
+import { BLAND_COLOR } from '~/const/blandColor'
 
 import { pagination } from '~/plugins/pagination'
 import { head } from '@/components/scripts/head.js'
+import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default defineComponent({
   name: 'IndexPage',
   transition: 'home',
-  setup () {
-    const { store } = useContext()
-    const router = useRouter()
+  props: {
+  },
+  setup (_, { root }) {
+    const { store, $gsap, router } = useContext()
     const cards = ref([])
     const totalPage = ref(0)
     const content = ref(null)
     const background = ref(null)
+    const elementAnimate = ref(null)
     const introTitle = ref({
       title: 'Главная',
       subtitle: 'творческое объединение',
@@ -53,22 +66,40 @@ export default defineComponent({
       const params = {
         page: currentPage
       }
+
       const response = await store.dispatch('main/getData', params)
       return response
     }
     store.commit('content/clearBgIntro')
 
-    // cards.value = useAsync(async () => {
-    //   try {
-    //     const response = await fetchData()
-    //     totalPage.value = response?.data.last_page
-    //     return response.data
-    //   } catch (e) {
-    //     console.log(e)
-    //   }
-    // }, route.value.path)
+    const {
+      animationlogo,
+      animateSubtitle,
+      animateNavbar,
+      animationTimeline
+    } = animationGSAP($gsap, Elastic)
 
-    useFetch(async () => {
+    onMounted(() => {
+      // if (backgroundLoaded.value) {
+      nextTick(() => {
+        // const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+        // if (isPlayAnimation) {
+        //   store.commit('content/setAnimate', false)
+        // }
+        // if (true) {
+        // animationTimeline('.navbarSlug', elementAnimate.value)
+        // }
+        //   animationTimeline('.navbarSlug')
+        animationTimeline('.navbarSlug', elementAnimate.value, root.$mq)
+        animationlogo()
+        animateSubtitle()
+        animateNavbar('.navbarSlug')
+        // localStorage.setItem('showAnimateHomePage', 'true')
+      })
+      // }
+    })
+
+   useFetch(async () => {
       try {
         const response = await fetchData()
         totalPage.value = response?.data.last_page
@@ -95,6 +126,8 @@ export default defineComponent({
     return {
       lazyPagination,
       clickTag,
+      BLAND_COLOR,
+      elementAnimate,
 
       introTitle,
       background,
@@ -109,6 +142,66 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" module>
+$heightSmall: 1.2rem;
+$heightBig: 4.6rem;
+.wrapperAnimateElement {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .animate {
+    border-radius: 4rem;
+    transform: translateX(-100%);
+  }
+  .muzyka {
+    width: 5.9rem;
+    height: $heightSmall;
+  }
+  .video {
+    width: 34.4rem;
+    height: $heightSmall;
+  }
+  .ctivo {
+    width: 34.4rem;
+    height: $heightBig;
+  }
+  .iskusstvo {
+    width: 27.1rem;
+    height: $heightBig;
+  }
+  .kuxnia {
+    width: 15rem;
+    height: $heightBig;
+  }
+  .magazin {
+    width: 35.5rem;
+    height: $heightSmall;
+  }
+  .foto {
+    width: 25.5rem;
+    height: $heightSmall;
+  }
+  .odezda {
+    width: 9rem;
+    height: $heightBig;
+  }
+  .meropriiatiia {
+    width: 31.8rem;
+    height: $heightBig;
+  }
+  .efir {
+    width: 9rem;
+    height: $heightBig;
+  }
+  .moneta {
+    width: 31.8rem;
+    height: $heightBig;
+  }
+}
 .cards {
   width: 100%;
   display: flex;

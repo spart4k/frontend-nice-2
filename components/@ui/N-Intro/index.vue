@@ -3,23 +3,24 @@
   <div ref="main" :class="[$style.main, !isHomePage && $style.paddingSlug]">
     <div :class="$style.intro">
       <n-tabs
-        class="navbar"
+        class="navbarSlug"
         :class="[
           $style.tabs,
           showAnimate && $style.animateContent,
         ]"
       />
-      <div
-        ref="logo"
-        class="logo"
-        :class="[$style.logo, showAnimate && $style.animateContent]"
-      >
-        <N-Logo
-          :is-home-page="isHomePage"
-          :hide-text-logo="hideTextLogo"
-          default-logo
-        />
-      </div>
+      <!--      <div-->
+      <!--        ref="logo"-->
+      <!--        class="logo"-->
+      <!--        :style="{ left: sheetWidth ? `calc(50% + ${sheetWidth/2}px)` : '50%' }"-->
+      <!--        :class="[$style.logo, showAnimate && $style.animateContent]"-->
+      <!--      >-->
+      <!--        <N-Logo-->
+      <!--          :is-home-page="isHomePage"-->
+      <!--          :hide-text-logo="hideTextLogo"-->
+      <!--          default-logo-->
+      <!--        />-->
+      <!--      </div>-->
       <div
         v-if="!isHomePage"
         ref="anchor"
@@ -35,11 +36,11 @@
 </template>
 
 <script>
-import { computed, nextTick, onMounted, ref, useContext, useRoute } from '@nuxtjs/composition-api'
-import { Elastic } from 'gsap'
+import { computed, ref, useContext, useRoute, inject } from '@nuxtjs/composition-api'
+// import { Elastic } from 'gsap'
 import { BLAND_COLOR } from '~/const/blandColor'
 import { BLAND_IMAGE } from '~/const/blandImage'
-import animationGSAP from '~/helpers/compositions/animationGSAP'
+// import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 // import animationGSAP from '~/helpers/compositions/animationGSAP'
 
@@ -66,20 +67,22 @@ export default {
     }
   },
   setup () {
-    const { store, $gsap } = useContext()
+    const { store } = useContext()
     const anchor = ref(null)
     const logo = ref(null)
     const main = ref(null)
     const wrapper = ref(null)
+    const elementAnimate = ref(null)
     const scrollingContent = ref(null)
     const hideTextLogo = ref(false)
     const route = useRoute()
     const isHomePage = computed(() => route.value.name === 'index')
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
-
+    const sheetWidth = inject('sheetWidth')
+    const backgroundLoaded = inject('backgroundLoaded')
     const backgroundImage = computed(() => {
       if (!isHomePage.value) {
-        return require('@/assets/img/background/coin-background.png')
+        return require('@/assets/img/background/default-background.png')
       }
         return require('@/assets/img/background/index-background.jpg')
     })
@@ -101,32 +104,50 @@ export default {
       }
     })
 
-    const {
-      animationlogo,
-      animateSubtitle,
-      animateNavbar,
-      animationTimeline
-    } = animationGSAP($gsap, Elastic)
+    // const {
+    //   animationlogo,
+    //   animateSubtitle,
+    //   animateNavbar,
+    //   animationTimeline
+    // } = animationGSAP($gsap, Elastic)
+    //
+    // onMounted(() => {
+    //   // if (backgroundLoaded.value) {
+    //     nextTick(() => {
+    //       // const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+    //       // if (isPlayAnimation) {
+    //       //   store.commit('content/setAnimate', false)
+    //       // }
+    //       // if (true) {
+    //         animationTimeline('.navbarSlug', elementAnimate.value)
+    //       // }
+    //       //   animationTimeline('.navbarSlug')
+    //
+    //       animationlogo()
+    //       animateSubtitle()
+    //       animateNavbar('.navbarSlug')
+    //       // localStorage.setItem('showAnimateHomePage', 'true')
+    //     })
+    //   // }
+    // })
 
-    onMounted(() => {
-      nextTick(() => {
-        const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
-        if (isPlayAnimation) {
-          store.commit('content/setAnimate', false)
-        }
-        if (!isPlayAnimation) {
-          animationTimeline()
-        }
-        //   animationTimeline('.navbarSlug')
-
-        animationlogo()
-        animateSubtitle()
-        animateNavbar()
-        // localStorage.setItem('showAnimateHomePage', 'true')
-      })
-    })
+    // watch(() => backgroundLoaded.value, () => {
+    //   nextTick(() => {
+    //     const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+    //     if (isPlayAnimation) {
+    //       store.commit('content/setAnimate', false)
+    //     }
+    //     if (!isPlayAnimation) {
+    //       animationTimeline('.navbarSlug')
+    //     }
+    //     animationlogo()
+    //     animateSubtitle()
+    //     animateNavbar('.navbarSlug')
+    //   })
+    // })
 
     return {
+      elementAnimate,
       anchor,
       wrapper,
       scrollingContent,
@@ -137,7 +158,10 @@ export default {
       color,
       image,
       hideTextLogo,
-      backgroundImage
+      sheetWidth,
+      backgroundImage,
+      backgroundLoaded,
+      BLAND_COLOR
     }
   },
   watchQuery: true
@@ -145,24 +169,29 @@ export default {
 </script>
 
 <style scoped lang="scss" module>
+
+.animate {
+  width: 400px;
+  height: 100px;
+}
 .main {
-  padding-top: 27.7rem;
+  padding-top: 17.5rem;
   @media (max-width: $mobileWidth) {
-    padding-top: 31.6rem;
+    padding-top: 23.6rem;
   }
   &.paddingSlug {
     padding-top: 15.5rem;
   }
 }
 .tabs {
+  position: relative;
   margin: 0;
-  position: fixed;
-  top: 17.5rem;
-  z-index: 3;
+  z-index: 10;
   width: 100%;
+  margin-bottom: 5.815rem;
   will-change: transform;
   @media (max-width: $tabletWidth) {
-    top: 23.6rem;
+    margin-bottom: 4rem;
   }
   &.animateContent {
     visibility: hidden;
@@ -178,7 +207,6 @@ export default {
   padding-top: var(--padding-top-logo);
   transform: translate(-50%, 0);
   cursor: pointer;
-  //width: 35rem;
   //height: 15.9rem;
   &.animateContent {
     top: 50%;

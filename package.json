@@ -5,11 +5,12 @@
   "scripts": {
     "dev": "cross-env NUXT_HOST=0.0.0.0 NUXT_PORT=3333 nuxt",
     "build": "nuxt build",
-    "start": "nuxt start",
+    "start": "nuxt start --max-old-space-size=8192",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint": "npm run lint:js",
-    "lintfix": "npm run lint:js -- --fix"
+    "lintfix": "npm run lint:js -- --fix",
+    "deploy_test": "ssh nice@178.20.44.99 'cd /opt/test.nice/; ./dep_frontend.sh'"
   },
   "dependencies": {
     "@egstad/marquee": "^3.0.2",
@@ -33,6 +34,7 @@
     "v-tooltip": "^2.1.3",
     "vue": "^2.6.14",
     "vue-infinite-loading": "^2.4.5",
+    "vue-lazyload": "^1.3.3",
     "vue-select": "^3.20.0",
     "vue-server-renderer": "^2.6.14",
     "vue-slick-carousel": "^1.0.6",
