@@ -11,7 +11,7 @@
               <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.files[0].src}`" :alt="data.title" />
             </div>
           </div>
-          <nuxt-link v-else :to="`cards/${data.id}?section=${data.section.slug}`" tag="div">
+          <nuxt-link v-else :to="`cards/${data.id}?section=${data.slug}`" tag="div">
             <div :class="[$style.hat]">
               <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.files[0].src}`" :alt="data.title" />
             </div>
@@ -45,7 +45,7 @@
       ]"
     >
       <template>
-        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`cards/${data.id}?section=${data.section.slug}`">
+        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`cards/${data.id}?section=${data.slug}`">
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
             {{ data.title }}
           </h2>
@@ -165,15 +165,13 @@
           :class="[$style.comments,showComments ? $style.show : '']"
           :style="{maxHeight: showComments ? commentHeight : '0'}"
         >
-          <N-Input v-if="true" type="textarea" @smilies="commentHeightSet" @sendMessage="sendComment" />
+          <N-Input v-if="$store.state.authentication.authorizated" type="textarea" @smilies="commentHeightSet" @sendMessage="sendComment" />
           <N-Plug v-else @login="login" @registration="registration" />
           <div :class="$style.commentsContainer">
-            <div>
-              <N-Comment />
-              <N-Comment />
-              <N-Comment />
-              <N-Comment />
-            </div>
+            <N-Comment />
+            <N-Comment />
+            <N-Comment />
+            <N-Comment />
           </div>
         </div>
       </div>
@@ -197,7 +195,6 @@ export default {
     const videoRef = ref(null)
     const showComments = ref(false)
     const like = ref(props.data.liked)
-    // const like = ref(false)
     const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
     const chipsCounter = ref(0)
@@ -243,6 +240,7 @@ export default {
         const commentData = { card_id: props.data.id, text: val, sticker_id: null }
         const result = await store.dispatch('socials/addComment', commentData)
         console.log(result)
+        console.log(new Date(result.data.created_at))
     }
     const videoPlayingChange = () => {
       if (videoRef.value.paused === true) {

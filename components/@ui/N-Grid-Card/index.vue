@@ -13,17 +13,17 @@
           <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
             <img :src="card.image" alt="DOG ">
           </div>
-          <section-cards v-else :id="card.section.id" :key="card.id" :class="$style.cards__item" :card="card" />
+          <section-cards v-else :id="card.section_id" :key="card.id" :class="$style.cards__item" :card="card" />
         </template>
       </div>
       <div v-if="spliceArray.colRight.length" :class="$style.col">
         <template v-for="(card) in spliceArray.colRight">
           <section-cards
-            :id="card.section.id"
+            :id="card.section_id"
             :key="card.id"
             :card="card"
             :class="$style.cards__item"
-            @clickTag="($event) => $emit('clickTag', card.section.id)"
+            @clickTag="($event) => $emit('clickTag', card.section_id)"
           />
         </template>
       </div>
@@ -52,6 +52,7 @@ export default {
     const { route } = useContext()
     const { items } = unref(props)
     const proxyArray = ref(items)
+    // console.log(items, proxyArray.value)
     const spliceArray = computed(() => {
       if (!props.homePage) {
         proxyArray.value.unshift({

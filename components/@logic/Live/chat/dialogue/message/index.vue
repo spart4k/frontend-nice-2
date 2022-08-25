@@ -3,8 +3,8 @@
     <div :class="$style.author">
       {{ $props.message.author }}
     </div>
-    <div v-html="$props.message.body" :class="$style.body">
-      {{ $props.message.body }}
+    <div v-html="$props.message.message_text" :class="$style.body">
+      {{ $props.message.message_text }}
     </div>
   </div>
 </template>
