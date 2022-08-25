@@ -5,8 +5,8 @@ export const mutations = {}
 export const actions = {
   async getData (state, params) {
     try {
-      // this.$axios.defaults.headers.common.Authorization = 'Bearer 2|TeUVUgPl8axidfScynskYjPgeJRzCdxXcyIqDINY'
-      const data = await this.$axios('api/v1/cards/main', { params })
+      const data = await this.$axios.post('api/v1/cardsSearch', { params })
+      console.log(data.data)
       return data
     } catch (e) {
       console.log(e)

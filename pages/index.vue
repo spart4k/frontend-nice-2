@@ -64,7 +64,8 @@ export default defineComponent({
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
     const fetchData = async (currentPage) => {
       const params = {
-        page: currentPage
+        page: currentPage,
+        count: 10
       }
 
       const response = await store.dispatch('main/getData', params)
