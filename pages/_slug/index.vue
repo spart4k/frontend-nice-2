@@ -95,8 +95,9 @@ export default defineComponent({
     const fetchData = (currentPage) => {
       const params = {
         page: currentPage,
-        section_id: id.value ? id.value : '',
-        tag_id: tagId.value ? tagId.value : ''
+        count: 10
+        // section_id: id.value ? id.value : '',
+        // tag_id: tagId.value ? tagId.value : ''
       }
       const path = isPageMagazin > 0 ? 'shop/getData' : 'pages/getData'
       const response = store.dispatch(path, params)
@@ -123,17 +124,19 @@ export default defineComponent({
       router.push({ path: 'tags', query: { tag: value } })
       const params = {
         page: 1,
-        tag_id: value
+        count: 10
+        // tag_id: value
       }
       const response = await store.dispatch('pages/getData', params)
-      cards.value.value = [...response.data.data]
+      cards.value.value = [...response.data]
       loading.value = false
     }
 
     useFetch(async () => {
       try {
         const response = await fetchData()
-        cards.value = [...response.data.data]
+        cards.value = [...response.data]
+        console.log(cards.value[0], response.data)
       } catch (e) {
         console.log(e)
       }
