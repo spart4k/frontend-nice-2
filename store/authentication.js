@@ -1,5 +1,9 @@
 export const state = () => ({
-  user: {},
+  user: {
+    email: '',
+    nickname: '',
+    id: ''
+  },
   token: '',
   authorizated: false,
   showLogin: false
@@ -16,8 +20,8 @@ export const mutations = {
     const token = localStorage.getItem('token')
     if (token) {
       this.$axios.defaults.headers.common.Authorization = `Bearer ${token}`
-      state.authorizated = true
       state.token = token
+      state.authorizated = true
     }
   },
   setLogout (state) {
@@ -26,6 +30,11 @@ export const mutations = {
   },
   showLogin (state, value) {
     state.showLogin = value
+  },
+  setUserInfo (state, value) {
+    state.user.email = value.email
+    state.user.nickname = value.nickname
+    state.user.id = value.user_id
   }
 }
 
@@ -51,8 +60,11 @@ export const actions = {
     try {
       const res = await this.$axios.post('api/v1/login', params)
       if (res.status === 200) {
+        commit('setUserInfo', res.data.data)
         localStorage.setItem('token', res.data.data.access_token)
-        commit('setToken')
+        setTimeout(() => {
+          commit('setToken')
+        }, 300)
       }
       return res
     } catch (e) {

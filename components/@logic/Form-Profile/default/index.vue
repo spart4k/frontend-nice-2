@@ -46,7 +46,13 @@
           </N-Button>
         </div>
       </template>
-      <n-button :class="$style.button" background-color="#C83F8E" :type-button="v$.$invalid ? 'disable' : '' " type="submit">
+      <n-button
+        :class="$style.button"
+        background-color="#C83F8E"
+        :type-button="v$.$invalid ? 'disable' : '' "
+        type="submit"
+        @click.prevent="onSubmit"
+      >
         <n-loading v-if="loading" />
         <template v-else>
           Сохранить изменения
@@ -76,7 +82,6 @@ export default {
     const toast = useToast()
     const formData = ref({
       name: '',
-      // surname: '',
       email: 'test@test.ru',
       phone: ''
     })
@@ -104,14 +109,15 @@ export default {
     store.dispatch('authentication/getUserInfo')
     const userData = computed(() => {
       const user = store.state.authentication.user
+      formData.value.name = user.nickname
+      formData.value.email = user.email
       return user
     })
 
     watch(userData, (currentValue, oldValue) => {
-      formData.value.name = currentValue.name
-      // formData.value.surname = currentValue.surname
-      formData.value.email = currentValue.email
-      formData.value.phone = currentValue.phone
+      // formData.value.name = currentValue.name
+      // formData.value.email = currentValue.email
+      // formData.value.phone = currentValue.phone
     })
 
     return {

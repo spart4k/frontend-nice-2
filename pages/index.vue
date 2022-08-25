@@ -99,11 +99,11 @@ export default defineComponent({
       // }
     })
 
-   useFetch(async () => {
+    useFetch(async () => {
       try {
         const response = await fetchData()
         totalPage.value = response?.data.last_page
-        cards.value = response.data
+        cards.value = response.data.data
       } catch (e) {
         console.log(e)
       }

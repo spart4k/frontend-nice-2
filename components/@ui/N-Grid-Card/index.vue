@@ -38,7 +38,7 @@ export default {
   name: 'NGridCard',
   props: {
     items: {
-      type: Object
+      type: Array
     },
     homePage: {
       type: Boolean
@@ -51,7 +51,7 @@ export default {
   setup (props) {
     const { route } = useContext()
     const { items } = unref(props)
-    const proxyArray = ref(items.data)
+    const proxyArray = ref(items)
     const spliceArray = computed(() => {
       if (!props.homePage) {
         proxyArray.value.unshift({

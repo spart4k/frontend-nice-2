@@ -35,6 +35,10 @@ export default {
   name: 'NTextField',
   props: {
     valueInfo: undefined,
+    value: {
+      type: String,
+      default: ''
+    },
     title: {
       type: String,
       default: ''
