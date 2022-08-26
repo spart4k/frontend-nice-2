@@ -5,7 +5,7 @@ export default {
     htmlAttrs: {
       lang: 'ru'
     },
-    transition: 'home',
+    // transition: 'home',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1, user-scalable=no' },
@@ -16,14 +16,9 @@ export default {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
-
   },
-  // transition: {
-  //   mode: 'in-out'
-  // },
-  // cache: false,
   server: {
-    port: 8000 // default: 3000
+    port: process.env.PORT || 3030 // default: 3000
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -38,7 +33,9 @@ export default {
     { src: '@plugins/infiniteloading.js', ssr: false },
     { src: '@plugins/vualidate.js' },
     '@plugins/v-mask.js',
-    '@plugins/v-tooltip.js'
+    '@plugins/v-tooltip.js',
+    '@plugins/v-lazyload.js',
+    { src: '@plugins/vue-bottom-sheet.js', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -67,7 +64,9 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
     '@nuxtjs/auth-next',
-    'vue-toastification/nuxt'
+    'nuxt-mq',
+    'vue-toastification/nuxt',
+    ['portal-vue/nuxt']
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

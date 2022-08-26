@@ -1,0 +1,22 @@
+.list {
+  width: 100%;
+  max-width: $desktopWidth;
+  overflow: auto;
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  justify-items: center;
+  padding: 0 4rem;
+  margin: 0 auto;
+  gap: 0.5rem;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  @media(max-width: $mobileWidth) {
+    padding: 0 1.5rem;
+  }
+  @media(min-width: $desktopWidth) {
+    padding: 0 0;
+  }
+}

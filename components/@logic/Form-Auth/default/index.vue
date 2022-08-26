@@ -1,99 +1,136 @@
 <template>
-  <form @submit.prevent="onSubmit">
-    <n-text-field
-      v-model="formData.name"
-      :error="v$.name.$errors"
-      :class="$style.input"
-      placeholder="Никнейм"
-      title="Никнейм"
-    />
-    <n-text-field
-      v-model="formData.email"
-      :error="v$.email.$errors"
-      :class="$style.input"
-      placeholder="Email"
-      title="Email"
-    />
-    <n-text-field
-      v-model="formData.tel"
-      mask="+7 (###) ###-##-##"
-      :error="v$.tel.$errors"
-      :class="$style.input"
-      placeholder="Телефон"
-      title="Телефон"
-    />
-    <n-button :class="$style.button" :type-button="v$.$invalid ? 'disable' : '' " type="submit">
-      <n-loading v-if="loading" />
-      <template v-else>
-        Зарегистрироваться
-      </template>
-    </n-button>
-    <n-button type-button="sub" :class="$style.button" @click="openLogin">
-      Уже есть аккаунт
-    </n-button>
+  <form>
+    <div :class="$style.wrapper">
+      <h2 :class="$style.title">
+        Вход и регистрация
+      </h2>
+      <n-text-field
+        v-model="formData.name"
+        :error="$errors.name[0]"
+        :class="$style.input"
+        placeholder="Nice"
+        title="Ник"
+        :color-border="'blueBorder'"
+        type="text"
+      />
+      <n-text-field
+        v-model="formData.email"
+        :error="$errors.email[0]"
+        :class="$style.input"
+        placeholder="mail@example.com"
+        title="Email"
+        :color-border="'blueBorder'"
+        type="email"
+      />
+      <n-text-field
+        v-model="formData.firstPass"
+        :error="$errors.firstPass[0]"
+        :class="$style.input"
+        placeholder=""
+        title="Пароль"
+        :color-border="'blueBorder'"
+        type="password"
+      />
+      <n-text-field
+        v-model="formData.secondPass"
+        :error="$errors.secondPass[0]"
+
+        :class="$style.input"
+        placeholder=""
+        title="Повторите пароль"
+        :color-border="'blueBorder'"
+        type="password"
+      />
+      <n-button
+        :class="$style.button"
+        :disabled="$v.$invalid && $touched "
+        background-color="#5289C5"
+        @click.prevent="submit"
+      >
+        <n-loading v-if="loading" />
+        <template v-else>
+          Регистрация
+        </template>
+      </n-button>
+      <n-button
+        type-button="wide"
+        color="#5289C5"
+        background-color="transparent"
+        :class="$style.buttonTologin"
+        @click.prevent="$emit('changeStep', 'increment')"
+      >
+        Уже зарегистрированы?
+      </n-button>
+    </div>
   </form>
 </template>
 <script lang="js">
-import { useVuelidate } from '@vuelidate/core'
-import { email, required, minLength } from '@vuelidate/validators'
-import { reactive, ref, useContext } from '@nuxtjs/composition-api'
+import { useContext, ref } from '@nuxtjs/composition-api'
+import useForm from '~/compositions/useForm'
+import { email, required, sameAs, strongPassword, nameLength } from '~/utills/validations'
 
 export default {
   name: 'FormAuth',
   setup (props, ctx) {
-    const { store } = useContext()
     const { emit } = ctx
-    const formData = reactive({
-      name: '',
-      email: '',
-      tel: ''
-    })
-    const openLogin = () => {
-      emit('input', 1)
-    }
+    const { store } = useContext()
     const loading = ref(false)
-    const rules = {
-      name: { required },
-      email: { required, email },
-      tel: { required, minLength: minLength(18) }
-    }
-    const v$ = useVuelidate(rules, formData)
-    const onSubmit = () => {
-      v$.value.$touch()
-      if (v$.value.$invalid) {
-        return
-      }
-      loading.value = true
-      const number = '+' + formData.tel.replace(/\D/g, '')
-      store.dispatch('authentication/getSms', number)
-      .then((res) => {
-        const code = res.data['sms code']
-        emit('saveTel', formData.tel)
-        emit('saveCode', code)
-        emit('input', 2)
-        loading.value = false
+    const { formData, validate, $errors, $v, $touched } = useForm(
+      {
+        fields: {
+          name: { default: '', validations: { required, nameLength } },
+          email: { default: '', validations: { required, email } },
+          firstPass: { default: '', validations: { required, password: strongPassword() } },
+          secondPass: { default: '', validations: { required, sameAs: sameAs(() => formData.firstPass) } }
+        }
       })
+    const submit = async () => {
+      try {
+        if (!validate()) { return }
+        loading.value = true
+        const registerData = { email: formData.email, nickname: formData.name, password: formData.firstPass }
+        const result = await store.dispatch('authentication/register', registerData)
+        if (!result.data.error) {
+          emit('closeState')
+        }
+      } catch (e) {
+          console.log(e)
+      } finally {
+        loading.value = false
+      }
     }
-
     return {
       formData,
-      v$,
-      onSubmit,
+      $errors,
+      $touched,
+      $v,
       loading,
-      openLogin
+      submit
     }
   }
 }
 </script>
 <style lang="scss" module>
 form {
-  & > .input + .input {
-    margin-top: 2.2rem;
-  }
-  .button {
-    width: 100%;
-    margin-top: 2.7rem;
-    height: 5.1rem;
+  .wrapper {
+    padding: 0 1.5rem;
+    .title {
+      @include text-style-h2;
+      color: $fontColorDefault;
+      text-align: center;
+      margin: 1.5rem 0 2rem;
+    }
+    & > .input + .input {
+      margin-top: 2.5rem;
+    }
+    .button {
+      width: 100%;
+      margin-top: 2.5rem;
+      height: 5rem;
+    }
+    .buttonTologin {
+      margin-top: 1rem;
+    }
   }
 }
 </style>

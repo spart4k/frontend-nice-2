@@ -1,0 +1,14 @@
+.dialogue {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: auto;
+  margin-bottom: 2rem;
+  .wrap {
+    overflow: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-x: hidden;
+    position: relative;
+  }
+}

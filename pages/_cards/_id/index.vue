@@ -1,7 +1,6 @@
 <template>
-  <N-Intro no-preview>
+  <main :class="$style.main">
     <div :class="$style.wrapper">
-      <N-Background :description="description" hide-image />
       <template v-if="card">
         <SectionCards
           :id="card.section_id"
@@ -10,18 +9,23 @@
           :card="card"
           @clickTag="clickTag"
         />
-        <N-Fixed-Button v-if="card.is_product" :is-auth="isAuth" :check-auth="true" @clickButton="addBasket">
+        <N-Button color="#222222" :background-color="'white'" :class="$style.back" @click="goToPrev()">
+          <N-Icon name="back" />
+          <p :class="$style.text">
+            Назад
+          </p>
+        </N-Button>
+        <!-- <N-Fixed-Button v-if="card.is_product" :is-auth="isAuth" :check-auth="true" @clickButton="addBasket">
           <template v-if="!isAddedBasket">
             Добавить в корзину
           </template>
           <template v-else>
             Перейти в корзину
           </template>
-        <!--        {{ !isAddedBasket ? 'Добавить в корзину' : 'Добавлено' }}-->
-        </N-Fixed-Button>
+        </N-Fixed-Button> -->
       </template>
     </div>
-  </N-Intro>
+  </main>
 </template>
 
 <script>
@@ -32,7 +36,7 @@ export default defineComponent({
   name: 'DetailCards',
   layout: 'default',
   // middleware: 'background',
-  transition: 'home',
+  // transition: 'home',
   setup () {
     const isAddedBasket = ref(false)
     const { route, store } = useContext()
@@ -44,7 +48,6 @@ export default defineComponent({
       return {
         background: bgName?.value?.slug
       }
-      // title: bgName.value
     })
 
     const clickTag = (value) => {
@@ -93,14 +96,45 @@ export default defineComponent({
 
     }
   },
-  head: {}
+  head: {},
+  methods: {
+    goToPrev () {
+      this.$router.go(-1)
+    }
+  }
 })
 </script>
 
 <style scoped module lang="scss">
+.main {
+  @include container;
+}
 .wrapper {
   width: 100%;
-  padding-top: 5rem;
+  padding-top: 10.3rem;
+  padding-bottom: 4.5rem;
+  @media (min-width: $tabletWidth) {
+    padding-top: 15rem;
+  }
+  .back {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    @media (min-width: $tabletWidth) {
+      margin: 2rem auto 0;
+      width: 36.2rem;
+    }
+    .text {
+      color: $fontColorDefault;
+      @include button;
+    }
+  }
 }
 .button__add_basket {
   background-color: rgba($black, 0.8);
@@ -117,8 +151,7 @@ export default defineComponent({
     height: 5.1rem;
     background-color: $yellow2;
     color: $black;
-    @include montserratMedium;
-    @include text;
+    @include button;
   }
 }
 </style>

@@ -4,7 +4,10 @@ export const state = () => ({
   bgIntro: '',
   imgIntro: '',
   bgDetails: '',
-  sections: []
+  animationEnd: false,
+  sections: [],
+  headerItems: [],
+  isShowAnimationHomePage: true
 })
 
 export const mutations = {
@@ -20,8 +23,17 @@ export const mutations = {
   changeLogo (state, value) {
     state.showLogo = value
   },
+  changeAnimationEnd (state, value) {
+    state.animationEnd = value
+  },
   changeSections (state, value) {
     state.sections = value
+  },
+  changeHeaderItems (state, value) {
+    state.headerItems = value
+  },
+  setAnimate (state, value) {
+    state.isShowAnimationHomePage = value
   }
 }
 
@@ -35,5 +47,12 @@ export const getters = {
       }
     }
     return state.sections
+  }
+}
+
+export const actions = {
+  async getHeader ({ commit }) {
+   const response = await this.$axios('api/v1/sections')
+    return response.data
   }
 }

@@ -1,27 +1,19 @@
 <template>
   <div :class="$style.wrapper">
-    <template v-if="id === 1">
-      <N-Card-MusicDetail :detail-page="detailPage" :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
+    <template v-if="id === 2">
+      <N-Card-Default :detail-page="detailPage" with-video :data="detailPage ? card.data : card" @clickTag="($event) => $emit('clickTag', $event)" />
     </template>
-    <template v-else-if="id === 2">
-      <N-Card-Default :detail-page="detailPage" with-video :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
-    </template>
-    <template v-else-if="id === 3">
-      <N-Card-Read :detail-page="detailPage" :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
-    </template>
-    <template v-else-if="id === 4">
-      <N-Card-Default :detail-page="detailPage" :data="card" :hat-height="12.4" @clickTag="($event) => $emit('clickTag', $event)" />
-    </template>
-    <template v-else-if="id === 7">
-      <N-Card-Default :detail-page="detailPage" :with-author="!detailPage" :data="card" @clickTag="($event) => $emit('clickTag', $event)" />
+    <template v-else-if="id === 11">
+      <N-Card-Coin />
     </template>
     <template v-else>
       <N-Card-Default
         :detail-page="detailPage"
-        :data="card"
+        :data="detailPage ? card.data : card"
         @clickTag="($event) => $emit('clickTag', $event)"
       />
     </template>
+    <!-- <N-Card-Author /> -->
   </div>
 </template>
 
@@ -41,6 +33,8 @@ export default {
     detailPage: {
       type: Boolean,
       required: false
+    },
+    setup (props) {
     }
   }
 }
@@ -49,6 +43,6 @@ export default {
 <style scoped lang="scss" module>
 .wrapper {
   width: 100%;
-}
 
+}
 </style>
