@@ -6,7 +6,8 @@
           :id="card.section_id"
           :key="card.id"
           detail-page
-          :card="card"
+          :card="card.card"
+          :comments="card.comments"
           @clickTag="clickTag"
         />
         <N-Button color="#222222" :background-color="'white'" :class="$style.back" @click="goToPrev()">
@@ -55,14 +56,24 @@ export default defineComponent({
     }
 
     const card = useAsync(async () => {
-      try {
-        const response = await store.dispatch('detailPage/getData', route.value.params.id)
-        return response.data
-      } catch (e) {
-        console.log(e)
+      const params = {
+        card_id: route.value.params.id,
+        count: 99
       }
-    }, route.value.params.id)
+      try {
+        const responseCard = await store.dispatch('detailPage/getData', route.value.params.id)
+        const responseComments = await store.dispatch('detailPage/getComments', params)
+        return {
+          card: responseCard.data,
+          comments: responseComments.data
+        }
+        } catch (e) {
+          console.log(e)
+        }
+      }, route.value.params.id)
+
     head(useMeta, card.value)
+
     const bgName = computed(() => {
       const find = sections.value?.find(item => Number(item.id) === +card.value?.section_id)
       return find

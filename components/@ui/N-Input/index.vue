@@ -5,7 +5,7 @@
       ref="input"
       v-model="letters"
       type="text"
-      maxlength="200"
+      maxlength="100"
       :class="$style.input"
       :placeholder="placeholder"
       @focus="focusInput"
@@ -16,7 +16,7 @@
       ref="input"
       v-model="letters"
       :placeholder="placeholder"
-      maxlength="200"
+      maxlength="100"
       :class="$style.textarea"
       rows="1"
       @focus="focusInput"
@@ -28,7 +28,7 @@
       <N-Icon name="smile" :class="$style.icon" :style="{ color: smilies ? '#F45532' : '#222222' }" @click="showSmilies(); $emit('smilies')" />
       <div :class="$style.send">
         <div :class="$style.letterCounter">
-          {{ letters.length }}/200
+          {{ letters.length }}/100
         </div>
         <N-Icon :class="$style.sendButton" name="send" @click="sendComment" />
       </div>

@@ -10,6 +10,7 @@
     color: $fontColorDefault;
   }
   .body {
+    word-break: break-all;
     @include regular-text-small;
     color: $fontColorDefault;
     .emoji {

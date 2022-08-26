@@ -78,9 +78,9 @@ export default defineComponent({
 
     const fetchData = (currentPage) => {
       const params = {
-        page: currentPage,
-        count: 10
-        // section_id: id.value ? id.value : '',
+        page: 1,
+        count: 10,
+        section_id: id.value ? id.value : ''
         // tag_id: tagId.value ? tagId.value : ''
       }
       const path = isPageMagazin > 0 ? 'shop/getData' : 'pages/getData'
@@ -120,7 +120,6 @@ export default defineComponent({
       try {
         const response = await fetchData()
         cards.value = [...response.data]
-        console.log(cards.value[0], response.data)
       } catch (e) {
         console.log(e)
       }

@@ -1,4 +1,4 @@
-import { ref, onMounted } from '@vue/composition-api'
+import { ref, onMounted, useContext } from '@nuxtjs/composition-api'
 
 export default {
   name: 'live-chat',
@@ -6,46 +6,31 @@ export default {
   },
   setup (_, props) {
     const messages = ref([])
-    const initMesassage = () => {
-      messages.value = [
-        {
-          author: 'Илья',
-          message_text: 'Да кого вы слушаете))'
+    const { store } = useContext()
+    const loading = ref(true)
+    const ws = new WebSocket('ws://192.168.1.19:8999')
+    ws.onmessage = async (event) => {
+      if (loading.value) {
+        messages.value = JSON.parse(event.data)
+        loading.value = false
+      } else {
+        await messages.value.push(JSON.parse(event.data))
+        if (messages.value.length > 99) {
+          messages.value.shift()
         }
-      ]
-    }
-    const sendMessage = (message) => {
-      const newMessage = {
-        author: 'Aleksey',
-        message_text: message
       }
-      // wsSendEcho(newMessage)
-      const ws = new WebSocket('ws://192.168.1.19:8999')
-      ws.onmessage = (event) => {
-        console.log(event.data)
-      }
-      ws.send(JSON.stringify({ user_id: 9, message_text: 'zxczxc' }))
-      messages.value.push(newMessage)
     }
 
-    // const myWs = new WebSocket('ws://localhost:9000')
-    // myWs.onmessage = function (message) {
-    //   // messages.value.push(message.data)
-    //   console.log(message)
-    // }
-    // const wsSendEcho = (value) => {
-    //   console.log(value)
-    //   myWs.send(JSON.stringify({ action: 'ECHO', data: value.toString() }))
-    // }
+    const sendMessage = (message) => {
+      ws.send(JSON.stringify({ user_id: store?.state?.authentication?.user?.id, message_text: message }))
+    }
 
     onMounted(() => {
-      initMesassage()
     })
     return {
       messages,
-      initMesassage,
+      loading,
       sendMessage
-      // wsSendEcho
     }
   }
 }

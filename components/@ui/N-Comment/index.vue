@@ -1,14 +1,44 @@
 <template>
   <div :class="$style.comment">
-    <h2 :class="$style.name">LeXa</h2>
-    <p :class="$style.time">5 часов назад</p>
-    <p :class="$style.text">Отличный освежающий вкус! Приятный цвет и консистенция, очень понравилась мне и мой друзьям, советую всем!!!!!!</p>
+    <h2 :class="$style.name">
+      {{ nickname }}
+    </h2>
+    <p :class="$style.time">
+      {{ reducedTime }}
+    </p>
+    <p :class="$style.text">
+      {{ text }}
+    </p>
   </div>
 </template>
 <script lang="js">
+import { computed } from '@nuxtjs/composition-api'
+
 export default {
   name: 'NComment',
   props: {
+    nickname: {
+      type: String
+    },
+    text: {
+      type: String
+    },
+    time: {
+      type: String
+    }
+  },
+  setup (props) {
+    const reducedTime = computed(() => new Intl.DateTimeFormat('ru-RU', {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: false
+    }).format(new Date(props.time)))
+    return {
+      reducedTime
+    }
   }
 }
 </script>

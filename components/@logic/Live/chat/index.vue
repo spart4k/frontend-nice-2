@@ -1,11 +1,10 @@
 <template>
-  <div class="chat" :class="$style.chat" >
-    <live-chat-dialogue :messages="messages"></live-chat-dialogue>
-    <live-chat-panel v-if="true"  @sendText="sendMessage"></live-chat-panel>
-    <N-Plug v-else @login="login" style="margin-bottom: 0;" @registration="registration" />
+  <div class="chat" :class="$style.chat">
+    <live-chat-dialogue :messages="messages" />
+    <live-chat-panel v-if="true" @sendText="sendMessage" />
+    <N-Plug v-else style="margin-bottom: 0;" @login="login" @registration="registration" />
   </div>
 </template>
 
-<script lang="javascript" src="./setup.js"></script>
-<style lang="scss" module src="./style.scss">
-</style>
+<script src="./setup.js"></script>
+<style lang="scss" module src="./style.scss"></style>

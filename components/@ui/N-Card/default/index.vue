@@ -70,7 +70,7 @@
             <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
               <N-Icon name="comments" :class="$style.commentsContainer" />
               <div :class="$style.parser">
-                {{ !$props.detailPage ? '0' : 'Комментировать' }}
+                {{ !$props.detailPage ? data.comments_count : 'Комментировать' }}
               </div>
             </div>
           </div>
@@ -99,12 +99,8 @@
           </div>
           <template v-if="data.files && $props.detailPage && !$props.withVideo">
             <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
-              <!-- <p :class="$style.audioName">
-                {{ item.title }}
-              </p> -->
               <N-Audio v-if="item.src" :title="item.title" :src="`https://nice.c.roky.rocks/${item.src}`" />
             </div>
-            <!-- <LiveRadio /> -->
           </template>
         </div>
       </template>
@@ -167,11 +163,14 @@
         >
           <N-Input v-if="$store.state.authentication.authorizated" type="textarea" @smilies="commentHeightSet" @sendMessage="sendComment" />
           <N-Plug v-else @login="login" @registration="registration" />
-          <div :class="$style.commentsContainer">
-            <N-Comment />
-            <N-Comment />
-            <N-Comment />
-            <N-Comment />
+          <div v-if="comments" :class="$style.commentsContainer">
+            <N-Comment
+              v-for="(item, index) in proxyComments.data"
+              :key="index"
+              :nickname="item.user.nickname"
+              :text="item.text"
+              :time="item.created_at"
+            />
           </div>
         </div>
       </div>
@@ -197,6 +196,7 @@ export default {
     const like = ref(props.data.liked)
     const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
+    const proxyComments = computed(() => props.comments)
     const chipsCounter = ref(0)
     const chipsWidth = ref(-10)
     const chipsArray = ref()
@@ -208,8 +208,6 @@ export default {
     const { $axios } = useContext()
     const { store } = useContext()
     const videoPlay = ref(false)
-    const comments = ref(true)
-
     const login = () => {
       store.commit('menu/changeKeyMenu', {
         key: 'registration',
@@ -237,10 +235,22 @@ export default {
       }
     }
     const sendComment = async (val) => {
-        const commentData = { card_id: props.data.id, text: val, sticker_id: null }
-        const result = await store.dispatch('socials/addComment', commentData)
-        console.log(result)
-        console.log(new Date(result.data.created_at))
+      const commentData = {
+        card_id: props.data.id,
+        text: val,
+        sticker_id: null
+      }
+      const result = await store.dispatch('socials/addComment', commentData)
+      if (!result.error) {
+        proxyComments.value.data.unshift({
+          user: {
+            nickname: result.data.user.nickname
+          },
+          text: result.data.text,
+          created_at: result.data.created_at
+        })
+        commentHeightSet()
+      }
     }
     const videoPlayingChange = () => {
       if (videoRef.value.paused === true) {
@@ -270,33 +280,35 @@ export default {
     const extraTagHide = () => {
       if (chipsArray.value?.length) {
         for (let i = 0; i < chipsArray.value.length; i++) {
-            chipsWidth.value += chipsArray.value[i].$el.offsetWidth + 10
+          chipsWidth.value += chipsArray.value[i].$el.offsetWidth + 10
+        }
+        if (chipsWidth.value > 315) {
+          for (let i = chipsArray.value.length - 1; chipsWidth.value > 245; i--) {
+            chipsWidth.value = chipsWidth.value - (chipsArray.value[i].$el.offsetWidth + 10)
+            chipsArray.value[i].$el.style.display = 'none'
+            chipsCounter.value++
           }
-          if (chipsWidth.value > 315) {
-            for (let i = chipsArray.value.length - 1; chipsWidth.value > 245; i--) {
-                chipsWidth.value = chipsWidth.value - (chipsArray.value[i].$el.offsetWidth + 10)
-                chipsArray.value[i].$el.style.display = 'none'
-                chipsCounter.value++
-            }
-          }
+        }
       }
     }
     const extraTagShow = () => {
-        chipsArray.value.forEach(function (item) {
-          item.$el.style.display = 'flex'
-        })
-        chipExtra.value.$el.style.display = 'none'
-      }
+      chipsArray.value.forEach(function (item) {
+        item.$el.style.display = 'flex'
+      })
+      chipExtra.value.$el.style.display = 'none'
+    }
     const windowWidthCount = () => {
       windowWidth.value = window.innerWidth
     }
     onMounted(() => {
+      if (props.detailPage === true) {
+        proxyComments.value.data.reverse()
+      }
       windowWidthCount()
       if (windowWidth.value > 900) {
         showComments.value = true
       }
       commentHeightSet()
-      comments.value = false
       window.addEventListener('resize', windowWidthCount)
       window.addEventListener('resize', commentHeightSet)
       nextTick(() => {
@@ -327,10 +339,10 @@ export default {
       dateFormat,
       commentHeight,
       commentBox,
-      comments,
       videoRef,
       commentHeightSet,
       extraTagHide,
+      proxyComments,
       extraTagShow,
       addLike,
       windowWidth,

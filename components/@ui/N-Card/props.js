@@ -52,6 +52,10 @@ export default {
     author: {
       type: String,
       default: ''
+    },
+    comments: {
+      type: Object,
+      default: () => {}
     }
   }
 }

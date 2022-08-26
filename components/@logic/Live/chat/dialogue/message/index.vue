@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.message">
     <div :class="$style.author">
-      {{ $props.message.author }}
+      {{ $props.message.user.nickname }}
     </div>
     <div v-html="$props.message.message_text" :class="$style.body">
       {{ $props.message.message_text }}

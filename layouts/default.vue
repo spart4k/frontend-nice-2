@@ -6,6 +6,7 @@
         :class="$style.header"
         :sheet-width="sheetWidth"
         class="header"
+        @closeState="closeState"
       />
     </div>
 
@@ -85,7 +86,11 @@ export default {
     }
 
     const fetchData = async () => {
-      const response = await store.dispatch('content/getHeader')
+      const params = {
+        page: 1,
+        count: 11
+      }
+      const response = await store.dispatch('content/getHeader', params)
       return response
     }
     const closedSwipe = () => {
@@ -115,7 +120,7 @@ export default {
         sheetRight.value = false
         store.commit('menu/changeShowStateBottomSheetMenu', { value: false })
         store.commit('menu/changeStepMenu', { step: 0 })
-      }, 300)
+      }, 100)
     }
 
     const closeState = () => {

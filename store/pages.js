@@ -4,8 +4,7 @@ export const mutations = {}
 
 export const actions = {
   async getData (state, params) {
-    const data = await this.$axios.post('api/v1/cardsSearch', { params })
-    // console.log(data.data.data)
+    const data = await this.$axios.post('api/v1/cardsSearch', params)
     return data.data.data
   }
 }

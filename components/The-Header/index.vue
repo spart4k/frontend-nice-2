@@ -59,7 +59,7 @@ export default {
       default: 0
     }
   },
-  setup () {
+  setup (props, { emit }) {
     const { store } = useContext()
     const menu = ref(null)
     const menuBasket = ref(null)
@@ -75,7 +75,7 @@ export default {
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
     const basketCount = computed(() => {
       const calcBasketCard = basketData.value?.cards?.reduce((acc, value) => {
-         acc += value.pivot.quantity
+          acc += value.pivot.quantity
         return acc
       }, 0)
       return {
@@ -90,18 +90,36 @@ export default {
     }
 
     const openMenu = () => {
-      store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+      if (store.state.menu.isShowBottomMenu) {
+        emit('closeState')
+        setTimeout(() => {
+          store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+        }, 100)
+      } else {
+        store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+      }
     }
     const openMenuBasket = () => {
       store.commit('menu/changeShowStateBottomSheetStepper', true)
     }
 
     const openLive = () => {
-      store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
-      store.commit('menu/changeKeyMenu', {
-        key: 'live-default',
-        effect: 'fx-slide-from-right'
-      })
+      if (store.state.menu.isShowBottomMenu) {
+        emit('closeState')
+        setTimeout(() => {
+          store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+          store.commit('menu/changeKeyMenu', {
+            key: 'live-default',
+            effect: 'fx-slide-from-right'
+          })
+        }, 100)
+      } else {
+        store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+        store.commit('menu/changeKeyMenu', {
+          key: 'live-default',
+          effect: 'fx-slide-from-right'
+        })
+      }
     }
 
     const openProfile = () => {
