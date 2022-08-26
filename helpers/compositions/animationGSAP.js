@@ -178,7 +178,6 @@ const animation = ($gsap, Elastic) => {
       scrollTrigger: {
         trigger: TRIGGER,
         // start: `top ${top}`,
-        markers: true,
         start: 10,
         end: 20,
         scrub: true

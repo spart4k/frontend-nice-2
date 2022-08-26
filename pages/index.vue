@@ -87,7 +87,7 @@ export default defineComponent({
       // if (backgroundLoaded.value) {
       nextTick(() => {
         const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
-        if (isPlayAnimation) {
+        if (!isPlayAnimation) {
           store.commit('content/setAnimate', false)
           document.querySelector('.logo').style.visibility = 'visible'
         } else {
