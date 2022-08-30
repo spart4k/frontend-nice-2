@@ -8,6 +8,7 @@
         v-model="formData.input"
         :options="optionsInput"
         :class="$style.wireSelect"
+        :loading="loadingInput"
         @input="setSelectedInput"
       />
       <p v-if="$errors.input[0]" :class="$style.inputError">
@@ -22,6 +23,7 @@
         v-model="formData.output"
         :options="optionsOutput"
         :class="$style.wireSelect"
+        :loading="loadingOutput"
         @input="setSelectedOutput"
       />
       <p v-if="$errors.output[0]" :class="$style.inputError">
@@ -35,6 +37,7 @@
       <input
         v-model="formData.length"
         v-mask="'Q###'"
+        v-debounce:350ms="responceLengthPrice"
         type="text"
         :class="$style.wireInput"
       >
@@ -43,7 +46,7 @@
       </p>
     </div>
     <div>
-      <N-Goods-Counter v-model="formData.count" @sendCount="sendCount" />
+      <N-Goods-Counter v-model="formData.count" :counter="!wire ? '1 шт.' : ''" @sendCount="responceCountPrice" />
       <p v-if="$errors.count[0]" :class="$style.inputError">
         {{ $errors.count[0] }}
       </p>
@@ -71,7 +74,7 @@
 </template>
 
 <script>
-import { ref } from '@nuxtjs/composition-api'
+import { ref, useFetch, useAsync, useContext, watch, computed } from '@nuxtjs/composition-api'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 import useForm from '~/compositions/useForm'
@@ -88,54 +91,50 @@ export default {
       default: false
     }
   },
-  setup (props) {
+  setup (props, ctx) {
+  const { store } = useContext()
   const colorArray = ref(['rgb(126 100 181)', 'rgb(92, 155, 213)', 'rgb(213, 62, 77)', 'rgb(220, 196, 68)', 'rgb(56, 130, 98)', 'rgb(78 186 206)'])
-  const optionsDefault = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])
-  const optionsInput = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])
-  const optionsOutput = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])
-  const setSelectedInput = (value) => {
-    optionsOutput.value = optionsDefault.value
-    if (value === 'MIDI') {
-      optionsOutput.value = ['MIDI']
-    } else if (value === 'RCA') {
-      optionsOutput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
-    } else if (value === 'XLR M') {
-      optionsOutput.value = ['RCA', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO']
-    } else if (value === 'XLR F') {
-      optionsOutput.value = ['RCA', 'XLR M', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO']
-    } else if (value === 'JACK 6.3 STEREO') {
-      optionsOutput.value = ['XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 3.5 STEREO']
-    } else if (value === 'JACK 6.3 MONO') {
-      optionsOutput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
-    } else if (value === 'JACK 3.5 STEREO') {
-      optionsOutput.value = ['XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 3.5 STEREO']
-    } else if (value === 'JACK 3.5 MONO') {
-      optionsOutput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
+  const optionsInput = ref([])
+  const optionsOutput = ref([])
+  const optionsDefault = ref([])
+  const optionsDefaultName = ref([])
+  const startCounter = computed(() => {
+    if (props.wire) {
+      return ''
+    } else {
+      return '1 шт.'
+    }
+  })
+  const loadingInput = ref(true)
+  const loadingOutput = ref(true)
+  const wireId = ref(0)
+  const { emit } = ctx
+  const responceLengthPrice = (val) => {
+    formData.length = val
+    responceTotalPrice(formData.length, formData.count)
+  }
+  const responceCountPrice = (val) => {
+    if (props.wire) {
+      formData.count = val
+      responceTotalPrice(formData.length, formData.count)
+    } else {
+      emit('changeTotalPrice', Number(val.value.slice(0, -4)))
     }
   }
-
-  const setSelectedOutput = (value) => {
-    optionsInput.value = optionsDefault.value
-    if (value === 'MIDI') {
-      optionsInput.value = ['MIDI']
-    } else if (value === 'RCA') {
-      optionsInput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
-    } else if (value === 'XLR M') {
-      optionsInput.value = ['RCA', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO']
-    } else if (value === 'XLR F') {
-      optionsInput.value = ['RCA', 'XLR M', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO']
-    } else if (value === 'JACK 6.3 STEREO') {
-      optionsInput.value = ['XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 3.5 STEREO']
-    } else if (value === 'JACK 6.3 MONO') {
-      optionsInput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
-    } else if (value === 'JACK 3.5 STEREO') {
-      optionsInput.value = ['XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 3.5 STEREO']
-    } else if (value === 'JACK 3.5 MONO') {
-      optionsInput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
+  const responceTotalPrice = (length, count) => {
+    if (count === null) {
+      const countData = {
+        length: Number(length),
+        count: 0
+      }
+      emit('changeTotalPrice', countData)
+    } else {
+      const countData = {
+        length: Number(length),
+        count: Number(count.slice(0, -4))
+      }
+      emit('changeTotalPrice', countData)
     }
-  }
-  const sendCount = (val) => {
-    formData.count = val
   }
   const { formData, validate, $errors, $v, $touched } = useForm(
     {
@@ -143,7 +142,7 @@ export default {
         input: { default: '', validations: { required } },
         output: { default: '', validations: { required } },
         length: { default: '', validations: { required } },
-        count: { default: '', validations: { required } },
+        count: { default: startCounter, validations: { required } },
         color: { default: 'rgb(126 100 181)', validations: { } }
       }
     })
@@ -152,19 +151,116 @@ export default {
     console.log()
   }
 
+  const setSelectedInput = () => {
+    if (formData.input !== null) {
+      optionsDefault.value.forEach((item) => {
+        if (formData.input === item.name) {
+          wireId.value = item.id
+        }
+      })
+      useAsync(async () => {
+        const wireData = {
+          id: wireId.value,
+          page: 1,
+          count: 10
+        }
+        try {
+          loadingOutput.value = true
+          const responseWire = await store.dispatch('shop/getWires', wireData)
+          loadingOutput.value = false
+          const wiresName = []
+          responseWire.data.data.forEach((item) => {
+            wiresName.push(item.name)
+          })
+          optionsOutput.value = wiresName
+        } catch (e) {
+          console.log(e)
+        }
+      })
+    }
+  }
+
+  const setSelectedOutput = () => {
+    if (formData.output !== null) {
+      optionsDefault.value.forEach((item) => {
+        if (formData.output === item.name) {
+          wireId.value = item.id
+        }
+      })
+      useAsync(async () => {
+        const wireData = {
+          id: wireId.value,
+          page: 1,
+          count: 10
+        }
+        try {
+          loadingInput.value = true
+          const responseWire = await store.dispatch('shop/getWires', wireData)
+          loadingInput.value = false
+          const wiresName = []
+          responseWire.data.data.forEach((item) => {
+            wiresName.push(item.name)
+          })
+          optionsInput.value = wiresName
+        } catch (e) {
+          console.log(e)
+        }
+      })
+    }
+  }
+
+  useFetch(async () => {
+    const wireData = {
+      page: 1,
+      count: 10
+    }
+    try {
+      const responseWire = await store.dispatch('shop/getWires', wireData)
+      loadingOutput.value = false
+      loadingInput.value = false
+      const wiresName = []
+      responseWire.data.data.forEach((item) => {
+        wiresName.push(item.name)
+      })
+      optionsInput.value = wiresName
+      optionsOutput.value = wiresName
+      optionsDefault.value = responseWire.data.data
+      optionsDefaultName.value = wiresName
+    } catch (e) {
+      console.log(e)
+    }
+  })
+
+    watch(() => ([formData.input, formData.output]), () => {
+      if (formData.input === null && formData.output === null) {
+        optionsInput.value = optionsDefaultName.value
+        optionsOutput.value = optionsDefaultName.value
+      } else if (formData.input === null) {
+        optionsOutput.value = optionsDefaultName.value
+      } else if (formData.output === null) {
+        optionsInput.value = optionsDefaultName.value
+      }
+    })
+
     return {
-      sendCount,
+      responceLengthPrice,
+      responceCountPrice,
+      responceTotalPrice,
       submit,
-      setSelectedInput,
-      setSelectedOutput,
       colorArray,
       optionsOutput,
       optionsInput,
       optionsDefault,
+      optionsDefaultName,
       formData,
       $errors,
       $touched,
-      $v
+      $v,
+      setSelectedInput,
+      setSelectedOutput,
+      loadingInput,
+      startCounter,
+      loadingOutput
     }
   }
 }
@@ -249,8 +345,8 @@ export default {
           position: absolute;
           width: 3.2rem;
           height: 3.2rem;
-          top: -2px;
-          left: -2px;
+          top: -0.16rem;
+          left: -0.16rem;
           border-radius: 50%;
         }
         input:checked ~ .checkmark {
@@ -278,6 +374,10 @@ export default {
       margin-top: 1rem;
       color: #D13C33;
       @include regular-text;
+    }
+    :global(.vs__spinner) {
+      border-left-color: #C83F8E;
+      font-size: .3rem;
     }
   }
 </style>

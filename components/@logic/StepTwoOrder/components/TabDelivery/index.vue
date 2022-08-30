@@ -106,14 +106,28 @@
           </div>
         </div>
       </div>
-      <n-button
+      <!-- <n-button
         :class="$style.btn"
         :type-button="'pink'"
         :disabled="$v.$invalid && $touched"
         @click="submit;$emit('toAddress', false)"
       >
         Оплатить онлайн
-      </n-button>
+      </n-button> -->
+      <style>.tinkoffPayRow{display:block;margin:1%;width:160px;}</style>
+      <script src="https://securepay.tinkoff.ru/html/payForm/js/tinkoff_v2.js" />
+      <form name="TinkoffPayForm" onsubmit="pay(this); return false;">
+        <input class="tinkoffPayRow" type="hidden" name="terminalkey" value="1658916651586DEMO">
+        <input class="tinkoffPayRow" type="hidden" name="frame" value="true">
+        <input class="tinkoffPayRow" type="hidden" name="language" value="ru">
+        <input class="tinkoffPayRow" type="text" placeholder="Сумма заказа" name="amount" required>
+        <input class="tinkoffPayRow" type="text" placeholder="Номер заказа" name="order">
+        <input class="tinkoffPayRow" type="text" placeholder="Описание заказа" name="description">
+        <input class="tinkoffPayRow" type="text" placeholder="ФИО плательщика" name="name">
+        <input class="tinkoffPayRow" type="text" placeholder="E-mail" name="email">
+        <input class="tinkoffPayRow" type="text" placeholder="Контактный телефон" name="phone">
+        <input class="tinkoffPayRow" type="submit" value="Оплатить">
+      </form>
       <NPersonalConsent />
     </n-row>
   </div>

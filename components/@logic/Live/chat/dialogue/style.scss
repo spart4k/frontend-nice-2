@@ -9,6 +9,8 @@
     flex-direction: column-reverse;
     position: relative;
     overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
   .wrap::-webkit-scrollbar {
     display: none;

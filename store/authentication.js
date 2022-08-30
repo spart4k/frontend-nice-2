@@ -114,6 +114,15 @@ export const actions = {
     } catch (e) {
       return e.response.data.message
     }
+  },
+  async verifyToken ({ commit }, params) {
+    try {
+      const data = await this.$axios('api/v1/verifyToken')
+      console.log(data)
+      return data
+    } catch (e) {
+      return e.response.data.message
+    }
   }
 }
 

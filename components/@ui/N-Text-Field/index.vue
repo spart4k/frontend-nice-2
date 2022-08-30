@@ -13,6 +13,19 @@
     </h3>
     <div :class="[$style.wrapperInput]">
       <input
+        v-if="debounce"
+        v-model="proxyVal"
+        v-mask="$props.mask"
+        v-debounce:350ms="sendValue"
+        :style="{ borderColor: color }"
+        :type="$props.type"
+        :max="$props.max"
+        :readOnly="readOnly"
+        :placeholder="$props.placeholder"
+        @keydown.enter="$emit('keydown', $event)"
+      >
+      <input
+        v-else
         v-model="proxyVal"
         v-mask="$props.mask"
         :style="{ borderColor: color }"
@@ -78,6 +91,10 @@ export default {
     colorBorder: {
       type: String,
       default: ''
+    },
+    debounce: {
+      type: Boolean,
+      default: false
     }
   },
   setup (props, ctx) {

@@ -1,9 +1,9 @@
 <template>
   <div :class="$style.wrapper">
-    <template v-if="id === 2">
+    <template v-if="section.id === 2">
       <N-Card-Default :detail-page="detailPage" :comments="comments" with-video :data="detailPage ? card.data : card" @clickTag="($event) => $emit('clickTag', $event)" />
     </template>
-    <template v-else-if="id === 11">
+    <template v-else-if="section.id === 10">
       <N-Card-Coin />
     </template>
     <template v-else>
@@ -22,10 +22,9 @@
 export default {
   name: 'SectionCards',
   props: {
-    id: {
-      type: Number,
-      required: true,
-      default: 0
+    section: {
+      type: Object,
+      required: true
     },
     card: {
       type: [Array, Object],

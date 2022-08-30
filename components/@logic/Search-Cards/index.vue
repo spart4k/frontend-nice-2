@@ -4,7 +4,14 @@
       Поиск
     </h2>
     <div :class="$style.inputContainer">
-      <N-Text-Field v-model="text" placeholder="Начните искать ..." type="text" color="#6448B5" @sendCount="sendCount" />
+      <N-Text-Field
+        v-model="text"
+        debounce
+        placeholder="Начните искать ..."
+        type="text"
+        color="#6448B5"
+        @sendCount="sendCount"
+      />
       <N-Icon v-if="!text" :class="$style.searchIcon" name="loupe" />
     </div>
     <div :class="$style.searchResults">
@@ -15,13 +22,18 @@
         v-else-if="result.length && text.length"
         :class="$style.searchContainer"
       >
-        <N-Search-Result
+        <NuxtLink
           v-for="(item, index) in result"
           :key="index"
+          tag="div"
+          :to="`/cards/${item.id}?section=${item.section.slug}`"
           :class="$style.searchItem"
-          :title="item.title"
-          :text="item.text"
-        />
+        >
+          <N-Search-Result
+            :title="item.title"
+            :text="item.text"
+          />
+        </NuxtLink>
       </div>
       <div v-else :class="$style.nothing">
         <p :class="$style.nothingToShow">
@@ -44,23 +56,14 @@ export default {
     const text = ref()
     const result = ref([])
     const loading = ref(false)
-    // const throttle = (func, timeFrame) => {
-    //   const lastTime = ref(0)
-    //   return function (...args) {
-    //     const now = new Date()
-    //     if (now - lastTime >= timeFrame) {
-    //         func(...args)
-    //         lastTime.value = now
-    //     }
-    //   }
-    // }
+    const wait = ref(false)
     const sendCount = async (val) => {
       text.value = val
       const searchData = { searchField: val }
       if (val.length) {
         loading.value = true
         const searchResult = await store.dispatch('search/searchCards', searchData)
-        result.value = searchResult.data
+        result.value = searchResult.data.data
         loading.value = false
       } else {
         result.value = {}
@@ -70,7 +73,7 @@ export default {
       text,
       sendCount,
       loading,
-      // throttle,
+      wait,
       result
     }
   }

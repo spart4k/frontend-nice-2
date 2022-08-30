@@ -7,6 +7,7 @@
     placeholder="Скажите что-то ..."
     type="textarea"
     @sendMessage="sendMessage"
+    @sendSticker="sendSticker"
     :valueProxy="newMessage" />
 
     <!--<div :class="$style.control">

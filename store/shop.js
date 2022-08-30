@@ -18,6 +18,22 @@ export const actions = {
     } catch (e) {
       console.log(e)
     }
+  },
+  async getWires (state, params) {
+    try {
+      const data = await this.$axios.post('api/v1/interfacePairSearch', params)
+      return data.data
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  async getPrice (state, params) {
+    try {
+      const data = await this.$axios.post('api/v1/computePrice', params)
+      return data.data
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 

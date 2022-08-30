@@ -45,7 +45,7 @@
       ]"
     >
       <template>
-        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`cards/${data.id}?section=${data.slug}`">
+        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`cards/${data.id}?section=${data.section.slug}`">
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
             {{ data.title }}
           </h2>
@@ -89,10 +89,11 @@
             {{ dateFormat }}
           </div>
           <template v-if="data.price && $props.detailPage">
-            <div :class="$style.price">
-              {{ data.price }}р.
+            <n-loading v-if="priceLoading" :class="$style.loading" purple />
+            <div v-else :class="$style.price">
+              {{ data.type.name === 'Wire' && $props.detailPage ? wirePrice : totalPrice*itemCounter }}р.
             </div>
-            <N-Purchase :wire="true" />
+            <N-Purchase :wire="data.type.name === 'Wire'" @changeTotalPrice="changeTotalPrice" />
           </template>
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
@@ -113,7 +114,7 @@
             :class="$style.chip"
             @click="$emit('clickTag', item.id)"
           >
-            {{ item.title }}
+            {{ item.name }}
           </N-Chip>
           <N-Chip
             v-if="chipsCounter > 0"
@@ -146,7 +147,7 @@
             :class="$style.chip"
             @click="$emit('clickTag', item.id)"
           >
-            {{ item.title }}
+            {{ item.name }}
           </N-Chip>
           <N-Chip
             v-if="chipsCounter > 0"
@@ -161,7 +162,7 @@
           :class="[$style.comments,showComments ? $style.show : '']"
           :style="{maxHeight: showComments ? commentHeight : '0'}"
         >
-          <N-Input v-if="$store.state.authentication.authorizated" type="textarea" @smilies="commentHeightSet" @sendMessage="sendComment" />
+          <N-Input v-if="$store.state.authentication.authorizated" type="textarea" @smilies="commentHeightSet" @sendSticker="sendSticker" @sendMessage="sendComment" />
           <N-Plug v-else @login="login" @registration="registration" />
           <div v-if="comments" :class="$style.commentsContainer">
             <N-Comment
@@ -170,6 +171,7 @@
               :nickname="item.user.nickname"
               :text="item.text"
               :time="item.created_at"
+              :sticker="item.sticker"
             />
           </div>
         </div>
@@ -182,7 +184,7 @@
 </template>
 
 <script lang="js">
-import { computed, nextTick, onMounted, onUnmounted, ref, useContext } from '@nuxtjs/composition-api'
+import { computed, nextTick, onMounted, onUnmounted, ref, useContext, useAsync } from '@nuxtjs/composition-api'
 import dataProps from '../props'
 
 export default {
@@ -208,6 +210,10 @@ export default {
     const { $axios } = useContext()
     const { store } = useContext()
     const videoPlay = ref(false)
+    const totalPrice = ref(props.data.price)
+    const wirePrice = ref(0)
+    const priceLoading = ref(false)
+    const itemCounter = ref(1)
     const login = () => {
       store.commit('menu/changeKeyMenu', {
         key: 'registration',
@@ -237,7 +243,7 @@ export default {
     const sendComment = async (val) => {
       const commentData = {
         card_id: props.data.id,
-        text: val,
+        text: unescape(encodeURIComponent(val)),
         sticker_id: null
       }
       const result = await store.dispatch('socials/addComment', commentData)
@@ -247,7 +253,27 @@ export default {
             nickname: result.data.user.nickname
           },
           text: result.data.text,
-          created_at: result.data.created_at
+          created_at: result.data.created_at,
+          sticker: result.data.sticker
+        })
+        commentHeightSet()
+      }
+    }
+    const sendSticker = async (val) => {
+      const stickerData = {
+        card_id: props.data.id,
+        text: null,
+        sticker_id: val
+      }
+      const result = await store.dispatch('socials/addComment', stickerData)
+      if (!result.error) {
+        proxyComments.value.data.unshift({
+          user: {
+            nickname: result.data.user.nickname
+          },
+          text: result.data.text,
+          created_at: result.data.created_at,
+          sticker: result.data.sticker
         })
         commentHeightSet()
       }
@@ -299,6 +325,26 @@ export default {
     }
     const windowWidthCount = () => {
       windowWidth.value = window.innerWidth
+    }
+    const changeTotalPrice = (val) => {
+      if (props.data.type.name === 'Wire') {
+        if (val.length && val.count) {
+          useAsync(async () => {
+            try {
+                priceLoading.value = true
+                const responseCount = await store.dispatch('shop/getPrice', val)
+                wirePrice.value = responseCount.data
+                priceLoading.value = false
+            } catch (e) {
+              console.log(e)
+            }
+          })
+        } else {
+          wirePrice.value = 0
+        }
+      } else {
+        itemCounter.value = val
+      }
     }
     onMounted(() => {
       if (props.detailPage === true) {
@@ -354,12 +400,25 @@ export default {
       registration,
       loginMenu,
       sendComment,
+      sendSticker,
+      totalPrice,
+      wirePrice,
+      changeTotalPrice,
+      priceLoading,
+      itemCounter,
       page
     }
   }
 }
 </script>
 <style lang="scss" module>
+.container {
+  border-radius: $border-radius-1;
+  background-color: $white;
+  position: relative;
+  overflow: hidden;
+  transform: translate3d(0,0,0);
+}
   .card {
     background-color: $white;
     //width: 36rem;
@@ -574,6 +633,12 @@ export default {
       }
       .goodsCounter {
         margin-bottom: 3rem;
+      }
+      .loading {
+        display: block;
+        width: 2rem;
+        height: 2rem;
+        margin-bottom: 1.5rem;
       }
     }
     .cardAudio {

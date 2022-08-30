@@ -1,14 +1,29 @@
 <template>
   <div :class="$style.comment">
-    <h2 :class="$style.name">
-      {{ nickname }}
-    </h2>
-    <p :class="$style.time">
-      {{ reducedTime }}
-    </p>
-    <p :class="$style.text">
-      {{ text }}
-    </p>
+    <template v-if="sticker">
+      <h2 :class="$style.name">
+        {{ nickname }}
+      </h2>
+      <p :class="$style.time">
+        {{ reducedTime }}
+      </p>
+      <img
+        :class="$style.sticker"
+        :src="`http://192.168.1.19:80/${sticker.file.src}`"
+        alt=""
+      >
+    </template>
+    <template v-else>
+      <h2 :class="$style.name">
+        {{ nickname }}
+      </h2>
+      <p :class="$style.time">
+        {{ reducedTime }}
+      </p>
+      <p :class="$style.text">
+        {{ decodeText }}
+      </p>
+    </template>
   </div>
 </template>
 <script lang="js">
@@ -25,9 +40,13 @@ export default {
     },
     time: {
       type: String
+    },
+    sticker: {
+      type: Object
     }
   },
   setup (props) {
+    const decodeText = computed(() => decodeURIComponent(escape(props.text)))
     const reducedTime = computed(() => new Intl.DateTimeFormat('ru-RU', {
       year: 'numeric',
       month: 'numeric',
@@ -37,7 +56,8 @@ export default {
       hour12: false
     }).format(new Date(props.time)))
     return {
-      reducedTime
+      reducedTime,
+      decodeText
     }
   }
 }
@@ -58,6 +78,10 @@ export default {
     color: $fontColorDefault;
     @include regular-text;
     }
+  }
+  .sticker{
+    width: 14rem;
+    height: 14rem;
   }
   div+.comment{
     margin-top: 2rem;

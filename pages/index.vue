@@ -13,7 +13,6 @@
         :style="{backgroundColor: value}"
       />
     </div>
-    <!--    <client-only>-->
     <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
       <NGridCard
         v-if="cards && cards.data"
@@ -23,7 +22,6 @@
         @clickTag="clickTag"
       />
     </div>
-    <!--    </client-only>-->
   </n-intro>
 </template>
 <script>
@@ -34,7 +32,7 @@ import {
   defineComponent,
   useContext,
   useFetch,
-  useMeta, onMounted, nextTick
+  useMeta, onMounted, nextTick, onUnmounted
 } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import { BLAND_COLOR } from '~/const/blandColor'
@@ -55,6 +53,11 @@ export default defineComponent({
     const content = ref(null)
     const background = ref(null)
     const elementAnimate = ref(null)
+    const resize = () => {
+      if (window.innerWidth > 450) {
+        document.querySelector('.logo').style.top = null
+      }
+    }
     const introTitle = ref({
       title: 'Главная',
       subtitle: 'творческое объединение',
@@ -83,19 +86,19 @@ export default defineComponent({
     onMounted(() => {
       // if (backgroundLoaded.value) {
       nextTick(() => {
-        // const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
-        // if (isPlayAnimation) {
-        //   store.commit('content/setAnimate', false)
-        // }
-        // if (true) {
-        // animationTimeline('.navbarSlug', elementAnimate.value)
-        // }
-        //   animationTimeline('.navbarSlug')
-        animationTimeline('.navbarSlug', elementAnimate.value, root.$mq)
+        const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+        if (!isPlayAnimation) {
+          store.commit('content/setAnimate', false)
+          document.querySelector('.logo').style.visibility = 'visible'
+        } else {
+          animationTimeline('.navbarSlug', elementAnimate.value, root.$mq)
+        }
+         window.addEventListener('resize', resize)
+
         animationlogo()
         animateSubtitle()
         animateNavbar('.navbarSlug')
-        // localStorage.setItem('showAnimateHomePage', 'true')
+        localStorage.setItem('showAnimateHomePage', 'true')
       })
       // }
     })
@@ -108,6 +111,9 @@ export default defineComponent({
       } catch (e) {
         console.log(e)
       }
+    })
+    onUnmounted(() => {
+      window.removeEventListener('resize', resize)
     })
 
     store.commit('content/clearBgIntro')
@@ -143,6 +149,19 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" module>
+.cards {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  .col:first-child {
+    margin-right: 2rem;
+  }
+  .col {
+    width: 100%;
+    max-width: 53.2rem;
+  }
+}
 $heightSmall: 1.2rem;
 $heightBig: 4.6rem;
 .wrapperAnimateElement {
@@ -202,20 +221,6 @@ $heightBig: 4.6rem;
     width: 31.8rem;
     height: $heightBig;
   }
-}
-.cards {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  .col:first-child {
-    margin-right: 2rem;
-  }
-  .col {
-    width: 100%;
-    max-width: 53.2rem;
-  }
-
 }
 .content {
   @include container;

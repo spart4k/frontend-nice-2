@@ -108,6 +108,10 @@ export default {
       store.commit('content/changeSections', response)
     })
 
+    // useFetch(async () => {
+    //   await store.commit('authentication/verifyToken')
+    // })
+
     const introTitle = ref({
       title: 'Главная',
       subtitle: 'творческое объединение',

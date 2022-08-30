@@ -56,29 +56,12 @@
         </div>
         <div :class="$style.stikerContainer">
           <img
+            v-for="(item, index) in stickers"
+            :key="index"
             :class="$style.sticker"
-            src="~/assets/img/sticker/sticker.png"
+            :src="`http://192.168.1.19:80/${item.file.src}`"
             alt=""
-          >
-          <img
-            :class="$style.sticker"
-            src="~/assets/img/sticker/sticker2.png"
-            alt=""
-          >
-          <img
-            :class="$style.sticker"
-            src="~/assets/img/sticker/sticker3.png"
-            alt=""
-          >
-          <img
-            :class="$style.sticker"
-            src="~/assets/img/sticker/sticker4.png"
-            alt=""
-          >
-          <img
-            :class="$style.sticker"
-            src="~/assets/img/sticker/sticker5.png"
-            alt=""
+            @click="$emit('stickerWrite', item.id)"
           >
         </div>
         <template #customPaging="">
@@ -94,6 +77,7 @@
 
 <script>
 // import { ref } from '@nuxtjs/composition-api'
+import { useAsync, useContext } from '@nuxtjs/composition-api'
 import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
@@ -106,7 +90,22 @@ export default {
   props: {
   },
   setup () {
+    const { store } = useContext()
+    const stickers = useAsync(async () => {
+      const params = {
+        entity: 'stickers',
+        page: 1,
+        count: 5
+      }
+      try {
+        const getStickers = await store.dispatch('socials/getStickers', params)
+        return getStickers.data.data
+      } catch (e) {
+        console.log(e)
+      }
+    })
     return {
+      stickers
     }
   }
 }
@@ -154,12 +153,14 @@ export default {
       padding: 0.8rem .2rem;
       display: flex !important;
       justify-content: space-around;
+      outline: none;
       .sticker {
         display: inline-block;
         width: 6.2rem;
         height: 6.2rem;
         user-select: none;
         cursor: pointer;
+        background-color: transparent;
         @media (min-width: $tabletWidth) {
           height: auto;
         }

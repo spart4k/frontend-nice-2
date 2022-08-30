@@ -11,12 +11,12 @@
         :class="$style.logoImage"
       >
     </div>
-    <div :class="[$style.wrapperImage, showAnimate && $style.animateContent]">
+    <div :class="$style.wrapperImage">
       <img
         src="@/assets/img/subtitle.png"
         alt="subtitle"
         class="subtitleLogo"
-        :class="$style.imageSubtitle"
+        :class="[$style.imageSubtitle, showAnimate && $style.animateContent]"
       >
     </div>
   </div>
@@ -44,9 +44,9 @@ export default {
       type: Boolean
     }
   },
-  setup (props) {
+  setup () {
     const { store } = useContext()
-    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage && props.isHomePage)
+    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
     return {
       showAnimate
     }
@@ -79,18 +79,15 @@ export default {
     will-change: transform;
     width: 100%;
     transition: opacity 0.3s ease;
-    opacity: 0;
+    opacity: 1;
+    //&.animateContent {
+    //  opacity: 0;
+    //}
   }
 }
 .sm {
   width: 7.2rem;
 }
-//.md {
-  //width: 18rem;
-  //@media (max-width: $mobileWidth) {
-  //  width: 8.8rem;
-  //}
-//}
 .defaultLogo {
   width: 18rem;
 }

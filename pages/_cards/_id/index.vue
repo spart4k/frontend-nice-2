@@ -3,8 +3,8 @@
     <div :class="$style.wrapper">
       <template v-if="card">
         <SectionCards
-          :id="card.section_id"
           :key="card.id"
+          :section="card.card.data.section"
           detail-page
           :card="card.card"
           :comments="card.comments"
@@ -71,11 +71,12 @@ export default defineComponent({
           console.log(e)
         }
       }, route.value.params.id)
+    console.log(card.card)
 
     head(useMeta, card.value)
 
     const bgName = computed(() => {
-      const find = sections.value?.find(item => Number(item.id) === +card.value?.section_id)
+      const find = sections.value?.find(item => Number(item.id) === +card.value?.section.id)
       return find
     })
 
@@ -125,7 +126,7 @@ export default defineComponent({
   padding-top: 10.3rem;
   padding-bottom: 4.5rem;
   @media (min-width: $tabletWidth) {
-    padding-top: 15rem;
+    padding-top: 19rem;
   }
   .back {
     margin-top: 2rem;

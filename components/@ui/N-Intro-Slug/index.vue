@@ -44,7 +44,7 @@ export default {
     const { $gsap } = useContext()
 
     const {
-      animationlogo,
+      // animationlogo,
       animateSubtitle
       // animateNavbar
     } = animationGSAP($gsap, Elastic)
@@ -72,7 +72,7 @@ export default {
     const imagePreview = ref('ctivo')
 
     onMounted(() => {
-      animationlogo()
+      // animationlogo()
       animateSubtitle()
       // animateNavbar('.navbarq')
       $gsap.to('.navbarq', {

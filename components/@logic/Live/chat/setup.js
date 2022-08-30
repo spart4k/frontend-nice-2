@@ -25,10 +25,15 @@ export default {
       ws.send(JSON.stringify({ user_id: store?.state?.authentication?.user?.id, message_text: message }))
     }
 
+    const sendSticker = (val) => {
+      ws.send(JSON.stringify({ user_id: store?.state?.authentication?.user?.id, message_text: null, sticker_id: val }))
+    }
+
     onMounted(() => {
     })
     return {
       messages,
+      sendSticker,
       loading,
       sendMessage
     }

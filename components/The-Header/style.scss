@@ -10,6 +10,11 @@
   //}
 }
 
+.showAnimate {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
 .linkHome {
   position: absolute;
   top: 3.8rem;
@@ -42,13 +47,14 @@
   font-family: Bankir-Retro, sans-serif;
   color: $white;
   width: 16.3rem;
-  //top: 2.9rem;
-  //@media (min-width: $mobileWidth ) {
-  //  top: 7.9rem;
-  //}
-  top: 50%;
+  visibility: hidden;
+  top: 2.9rem;
+  transition: left .3s;
+  @media (max-width: $mobileWidth ) {
+    top: 9rem;
+  }
   z-index: var(--logo-z-index);
-  transform: translateX(-50%) scale(0);
+  transform: translateX(-50%);
   cursor: pointer;
   img {
     width: 100%;
@@ -63,6 +69,7 @@
   font-family: Bankir-Retro, sans-serif;
   color: $white;
   width: 16.3rem;
+  cursor: pointer;
   @media (max-width: $mobileWidth ) {
     width: 8.3rem;
   }
