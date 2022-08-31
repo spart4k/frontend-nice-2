@@ -8,6 +8,7 @@ export default {
     const { emit } = ctx
     const activePayment = ref('card')
     const menuAddress = ref(null)
+    const totalPrice = ref(14000)
     const { formData, validate, $errors, $v, $touched } = useForm(
       {
         fields: {
@@ -42,7 +43,8 @@ export default {
       $errors,
       $touched,
       $v,
-      submit
+      submit,
+      totalPrice
     }
   }
 }

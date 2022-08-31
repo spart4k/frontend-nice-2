@@ -108,10 +108,6 @@ export default {
       store.commit('content/changeSections', response)
     })
 
-    // useFetch(async () => {
-    //   await store.commit('authentication/verifyToken')
-    // })
-
     const introTitle = ref({
       title: 'Главная',
       subtitle: 'творческое объединение',
@@ -200,6 +196,9 @@ export default {
     }
 
     onMounted(() => {
+      if (localStorage.getItem('token') !== null) {
+        store.dispatch('authentication/verifyToken')
+      }
       store.commit('authentication/setUserData')
       store.commit('authentication/setToken')
       store.dispatch('basket/getBasket')

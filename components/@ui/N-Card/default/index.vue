@@ -49,17 +49,13 @@
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
             {{ data.title }}
           </h2>
-          <template v-if="$props.detailPage && data.author.length>0">
-            <p :class="$style.authorName">
-              автор {{ data.author }}
-            </p>
-          </template>
           <div v-if="data.date_event" :class="$style.time">
             {{ dateFormat }}
           </div>
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div>
+          {{ data.text }}
           <div v-if="!$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
             <div :class="$style.socialsItem">
               <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
@@ -81,8 +77,7 @@
           </h2>
           <template v-if="$props.detailPage">
             <p :class="$style.authorName">
-              <!-- автор {{ data.author }} -->
-              автор Артем Nice
+              автор {{ data.author.user.nickname }}
             </p>
           </template>
           <div v-if="data.date_event" :class="$style.time">
@@ -93,14 +88,19 @@
             <div v-else :class="$style.price">
               {{ data.type.name === 'Wire' && $props.detailPage ? wirePrice : totalPrice*itemCounter }}р.
             </div>
-            <N-Purchase :wire="data.type.name === 'Wire'" @changeTotalPrice="changeTotalPrice" />
+            <template v-if="data.type.name === 'Wire'">
+              <N-Purchase-Wire :colors="JSON.parse(data.type.blueprint).color" :card_id="data.id" @changeTotalPrice="changeTotalPrice" />
+            </template>
+            <template v-else>
+              <N-Purchase :card_id="data.id" @changeTotalPrice="changeTotalPrice" />
+            </template>
           </template>
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div>
           <template v-if="data.files && $props.detailPage && !$props.withVideo">
             <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
-              <N-Audio v-if="item.src" :title="item.title" :src="`https://nice.c.roky.rocks/${item.src}`" />
+              <N-Audio v-if="item.type === 'audio'" :title="item.title" :src="`https://nice.c.roky.rocks/${item.src}`" />
             </div>
           </template>
         </div>
@@ -292,6 +292,7 @@ export default {
         JSON.parse(props?.data?.text)
       } catch (e) {
         return false
+        // return true
       }
       return true
     })

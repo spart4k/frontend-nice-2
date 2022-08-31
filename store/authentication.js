@@ -2,7 +2,8 @@ export const state = () => ({
   user: {
     email: '',
     nickname: '',
-    id: ''
+    id: '',
+    phone: ''
   },
   token: '',
   authorizated: false,
@@ -34,7 +35,7 @@ export const mutations = {
   setUserInfo (state, value) {
     state.user.email = value.email
     state.user.nickname = value.nickname
-    state.user.id = value.user_id
+    state.user.id = value.id
   }
 }
 
@@ -117,9 +118,9 @@ export const actions = {
   },
   async verifyToken ({ commit }, params) {
     try {
-      const data = await this.$axios('api/v1/verifyToken')
-      console.log(data)
-      return data
+      const response = await this.$axios('api/v1/verifyToken')
+      console.log(response.data.data)
+      commit('setUserInfo', response.data.data)
     } catch (e) {
       return e.response.data.message
     }

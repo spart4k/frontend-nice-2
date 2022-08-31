@@ -30,7 +30,7 @@ export const actions = {
   async getBasket ({ commit, rootState }) {
     try {
       if (rootState.authentication.authorizated) {
-        const data = await this.$axios('api/v1/basket')
+        const data = await this.$axios('api/v1/getBasket')
         commit('setBasket', data)
         return data
       }
@@ -43,6 +43,17 @@ export const actions = {
       const data = await this.$axios.post('api/v1/basket/send')
       this.$toast.success('Вы успешно вошли', { position: 'bottom-right', icon: true })
       commit('setBasket', data)
+      return data
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  async addToBasket ({ commit }, params) {
+    try {
+      console.log(params)
+      const data = await this.$axios.post('api/v1/addToBasket', params)
+      console.log(data)
+      // commit('setBasket', data)
       return data
     } catch (e) {
       console.log(e)

@@ -95,9 +95,7 @@ export default defineComponent({
       const params = {
         page: 1,
         count: 10,
-        section: {
-          id: id.value ? id.value : ''
-        }
+        section_id: id.value ? id.value : ''
         // tag_id: tagId.value ? tagId.value : ''
       }
       const path = isPageMagazin > 0 ? 'shop/getData' : 'pages/getData'

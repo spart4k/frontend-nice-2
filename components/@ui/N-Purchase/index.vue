@@ -1,66 +1,10 @@
 <template>
   <div :class="$style.wire">
-    <div v-if="wire" :class="$style.wireIncoming">
-      <p :class="$style.wireText">
-        Входящее соединение:
-      </p>
-      <v-select
-        v-model="formData.input"
-        :options="optionsInput"
-        :class="$style.wireSelect"
-        :loading="loadingInput"
-        @input="setSelectedInput"
-      />
-      <p v-if="$errors.input[0]" :class="$style.inputError">
-        {{ $errors.input[0] }}
-      </p>
-    </div>
-    <div v-if="wire" :class="$style.wireOutcoming">
-      <p :class="$style.wireText">
-        Исходящее соединение:
-      </p>
-      <v-select
-        v-model="formData.output"
-        :options="optionsOutput"
-        :class="$style.wireSelect"
-        :loading="loadingOutput"
-        @input="setSelectedOutput"
-      />
-      <p v-if="$errors.output[0]" :class="$style.inputError">
-        {{ $errors.output[0] }}
-      </p>
-    </div>
-    <div v-if="wire" :class="$style.wireLength">
-      <p :class="$style.wireText">
-        Длина (см.):
-      </p>
-      <input
-        v-model="formData.length"
-        v-mask="'Q###'"
-        v-debounce:350ms="responceLengthPrice"
-        type="text"
-        :class="$style.wireInput"
-      >
-      <p v-if="$errors.length[0]" :class="$style.inputError">
-        {{ $errors.length[0] }}
-      </p>
-    </div>
     <div>
-      <N-Goods-Counter v-model="formData.count" :counter="!wire ? '1 шт.' : ''" @sendCount="responceCountPrice" />
+      <N-Goods-Counter v-model="formData.count" :counter="'1 шт.'" @sendCount="responceCountPrice" />
       <p v-if="$errors.count[0]" :class="$style.inputError">
         {{ $errors.count[0] }}
       </p>
-    </div>
-    <div v-if="wire" :class="$style.wireColorSection">
-      <p :class="$style.wireText">
-        Цвет
-      </p>
-      <div ref="color" :class="$style.wireColorBox">
-        <label v-for="color in colorArray" :key="color" :class="$style.wireColor" :style="{ borderColor: color }">
-          <input name="color" type="radio" :checked="color === formData.color">
-          <span :class="$style.checkmark" :style="{ backgroundColor: color }" />
-        </label>
-      </div>
     </div>
     <N-Button
       :class="$style.buyButton"
@@ -68,199 +12,79 @@
       :disabled="$v.$invalid && $touched "
       @click="submit"
     >
-      В корзину
+      <n-loading v-if="loading" />
+      <template v-else>
+        В корзину
+      </template>
     </N-Button>
   </div>
 </template>
 
 <script>
-import { ref, useFetch, useAsync, useContext, watch, computed } from '@nuxtjs/composition-api'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
+import { ref, useContext } from '@nuxtjs/composition-api'
 import useForm from '~/compositions/useForm'
 import { required } from '~/utills/validations'
 
 export default {
-  name: 'NPurchase',
+  name: 'NPurchaseWire',
   components: {
-    vSelect
   },
   props: {
-      wire: {
-      type: Boolean,
-      default: false
+    card_id: {
+      type: Number
     }
   },
   setup (props, ctx) {
   const { store } = useContext()
-  const colorArray = ref(['rgb(126 100 181)', 'rgb(92, 155, 213)', 'rgb(213, 62, 77)', 'rgb(220, 196, 68)', 'rgb(56, 130, 98)', 'rgb(78 186 206)'])
-  const optionsInput = ref([])
-  const optionsOutput = ref([])
-  const optionsDefault = ref([])
-  const optionsDefaultName = ref([])
-  const startCounter = computed(() => {
-    if (props.wire) {
-      return ''
-    } else {
-      return '1 шт.'
-    }
-  })
-  const loadingInput = ref(true)
-  const loadingOutput = ref(true)
-  const wireId = ref(0)
+  const startCounter = ref('1 шт.')
+  const loading = ref(false)
   const { emit } = ctx
-  const responceLengthPrice = (val) => {
-    formData.length = val
-    responceTotalPrice(formData.length, formData.count)
-  }
+  const quantity = ref(1)
   const responceCountPrice = (val) => {
-    if (props.wire) {
-      formData.count = val
-      responceTotalPrice(formData.length, formData.count)
-    } else {
+    startCounter.value = val.value
+    if (val.value !== null) {
       emit('changeTotalPrice', Number(val.value.slice(0, -4)))
+      quantity.value = Number(val.value.slice(0, -4))
     }
   }
-  const responceTotalPrice = (length, count) => {
-    if (count === null) {
-      const countData = {
-        length: Number(length),
-        count: 0
-      }
-      emit('changeTotalPrice', countData)
-    } else {
-      const countData = {
-        length: Number(length),
-        count: Number(count.slice(0, -4))
-      }
-      emit('changeTotalPrice', countData)
-    }
-  }
+
   const { formData, validate, $errors, $v, $touched } = useForm(
     {
       fields: {
-        input: { default: '', validations: { required } },
-        output: { default: '', validations: { required } },
-        length: { default: '', validations: { required } },
-        count: { default: startCounter, validations: { required } },
-        color: { default: 'rgb(126 100 181)', validations: { } }
+        count: { default: startCounter, validations: { required } }
       }
     })
-  const submit = () => {
-    if (!validate()) { return }
-    console.log()
-  }
 
-  const setSelectedInput = () => {
-    if (formData.input !== null) {
-      optionsDefault.value.forEach((item) => {
-        if (formData.input === item.name) {
-          wireId.value = item.id
-        }
-      })
-      useAsync(async () => {
-        const wireData = {
-          id: wireId.value,
-          page: 1,
-          count: 10
-        }
-        try {
-          loadingOutput.value = true
-          const responseWire = await store.dispatch('shop/getWires', wireData)
-          loadingOutput.value = false
-          const wiresName = []
-          responseWire.data.data.forEach((item) => {
-            wiresName.push(item.name)
-          })
-          optionsOutput.value = wiresName
-        } catch (e) {
-          console.log(e)
-        }
-      })
-    }
-  }
-
-  const setSelectedOutput = () => {
-    if (formData.output !== null) {
-      optionsDefault.value.forEach((item) => {
-        if (formData.output === item.name) {
-          wireId.value = item.id
-        }
-      })
-      useAsync(async () => {
-        const wireData = {
-          id: wireId.value,
-          page: 1,
-          count: 10
-        }
-        try {
-          loadingInput.value = true
-          const responseWire = await store.dispatch('shop/getWires', wireData)
-          loadingInput.value = false
-          const wiresName = []
-          responseWire.data.data.forEach((item) => {
-            wiresName.push(item.name)
-          })
-          optionsInput.value = wiresName
-        } catch (e) {
-          console.log(e)
-        }
-      })
-    }
-  }
-
-  useFetch(async () => {
-    const wireData = {
-      page: 1,
-      count: 10
-    }
+  const submit = async () => {
     try {
-      const responseWire = await store.dispatch('shop/getWires', wireData)
-      loadingOutput.value = false
-      loadingInput.value = false
-      const wiresName = []
-      responseWire.data.data.forEach((item) => {
-        wiresName.push(item.name)
-      })
-      optionsInput.value = wiresName
-      optionsOutput.value = wiresName
-      optionsDefault.value = responseWire.data.data
-      optionsDefaultName.value = wiresName
-    } catch (e) {
-      console.log(e)
-    }
-  })
-
-    watch(() => ([formData.input, formData.output]), () => {
-      if (formData.input === null && formData.output === null) {
-        optionsInput.value = optionsDefaultName.value
-        optionsOutput.value = optionsDefaultName.value
-      } else if (formData.input === null) {
-        optionsOutput.value = optionsDefaultName.value
-      } else if (formData.output === null) {
-        optionsInput.value = optionsDefaultName.value
+        if (!validate()) { return }
+        loading.value = true
+        const goodsData = {
+            card_id: props.card_id,
+            quantity: quantity.value,
+            details: null
+        }
+        const result = await store.dispatch('basket/addToBasket', goodsData)
+        if (!result.data.error) {
+          emit('closeState')
+        }
+      } catch (e) {
+        console.log(e)
+      } finally {
+        loading.value = false
       }
-    })
+  }
 
     return {
-      responceLengthPrice,
       responceCountPrice,
-      responceTotalPrice,
       submit,
-      colorArray,
-      optionsOutput,
-      optionsInput,
-      optionsDefault,
-      optionsDefaultName,
       formData,
       $errors,
       $touched,
       $v,
-      setSelectedInput,
-      setSelectedOutput,
-      loadingInput,
       startCounter,
-      loadingOutput
+      loading,
+      quantity
     }
   }
 }
