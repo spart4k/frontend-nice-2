@@ -76,9 +76,6 @@ export default {
     const tinkoffURL = computed(() => { return store.state.shop.TinkoffPaymentURL })
     const isHomePage = computed(() => route.value.name === 'index')
 
-  const iframeChange = () => {
-    console.log('change')
-  }
     const backgroundLoaded = () => {
       isLoaded.value = true
     }
@@ -123,6 +120,7 @@ export default {
       setTimeout(() => {
         sheetRight.value = false
         store.commit('menu/changeShowStateBottomSheetMenu', { value: false })
+        store.commit('menu/changeShowStateBottomSheetLive', { value: false })
         store.commit('menu/changeStepMenu', { step: 0 })
       }, 100)
     }
@@ -235,8 +233,7 @@ export default {
       changeState,
       closeState,
       backgroundLoaded,
-      isLoaded,
-      iframeChange
+      isLoaded
     }
   }
 }

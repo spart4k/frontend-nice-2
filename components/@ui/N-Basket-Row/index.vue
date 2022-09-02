@@ -25,8 +25,6 @@
         <n-icon name="delete" />
       </div>
     </div>
-    {{ item.count }}
-    <!-- {{ totalCount }} -->
   </li>
 </template>
 
@@ -78,7 +76,14 @@ export default {
         }
         oldquantity.value = Number(value.slice(0, -4))
         const result = await store.dispatch('basket/deleteFromBasket', goodsData)
-        console.log(result)
+        if (!result.error) {
+        const changeItemData = {
+          card_id: props.item.pivot.card_id,
+          quantity: goodsData.quantity,
+          price: props.item.price * goodsData.quantity
+        }
+          store.commit('basket/changeCountItem', changeItemData)
+        }
       }
     }
     const quantity = ref(props.item.pivot.quantity)
