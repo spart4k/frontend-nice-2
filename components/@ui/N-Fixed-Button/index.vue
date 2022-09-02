@@ -71,7 +71,7 @@ export default {
   justify-content: center;
   padding: 2.4rem 2.4rem;
   &.disabled {
-    background-color: #000000;
+    background-color: #222222;
     color: #ffffff;
   }
   button {

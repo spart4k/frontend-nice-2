@@ -34,8 +34,8 @@
       <h4 :class="$style.title">
         Адрес
       </h4>
-      <n-row :class="$style.addressText">
-        443110 Самара, ул. Полевая, д. 45, кв.112
+      <n-row v-if="addressItem[0][0]" :class="$style.addressText">
+        {{ addressItem[0][0].city.name }}, {{ addressItem[0][0].address }}
       </n-row>
       <n-button
         type-button="transparent"
@@ -51,7 +51,7 @@
         <h4 :class="$style.title">
           Состав заказа
         </h4>
-        <N-Basket-row :item="basketItem" readonly />
+        <n-basket-row v-for="(item, index) in basketData" :key="index" :item="item" readonly />
       </n-row>
       <n-row>
         <h4 :class="$style.title">
@@ -77,7 +77,7 @@
               Товары
             </div>
             <div :class="$style.col__right">
-              3 500 р.
+              {{ basketPrice }} р.
             </div>
           </div>
           <div :class="$style.col">
@@ -85,7 +85,7 @@
               Стоимость доставки
             </div>
             <div :class="$style.col__right">
-              3 500 р.
+              {{ addressItem[0][0].city.name === 'Нижний Новгород' ? '300 р.' : '1000 р.' }}
             </div>
           </div>
           <div :class="$style.col">
@@ -93,7 +93,7 @@
               Скидка
             </div>
             <div :class="$style.col__right">
-              3 500 р.
+              0 р.
             </div>
           </div>
         </div>
@@ -112,7 +112,7 @@
           :class="$style.btn"
           :type-button="'pink'"
           :disabled="$v.$invalid && $touched"
-          @click="submit;$emit('toAddress', false);"
+          @click="$emit('toAddress', false);$emit('changeStep', 'increment')"
         >
           Оплатить онлайн
         </n-button>

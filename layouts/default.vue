@@ -73,8 +73,12 @@ export default {
     const menuBasket = ref(null)
     const menuLive = ref(null)
     const { store, route, $gsap } = useContext()
+    const tinkoffURL = computed(() => { return store.state.shop.TinkoffPaymentURL })
     const isHomePage = computed(() => route.value.name === 'index')
 
+  const iframeChange = () => {
+    console.log('change')
+  }
     const backgroundLoaded = () => {
       isLoaded.value = true
     }
@@ -212,6 +216,7 @@ export default {
       color,
       introTitle,
       isHomePage,
+      tinkoffURL,
       menuBasket,
       menu,
       stepper,
@@ -230,7 +235,8 @@ export default {
       changeState,
       closeState,
       backgroundLoaded,
-      isLoaded
+      isLoaded,
+      iframeChange
     }
   }
 }

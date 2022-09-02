@@ -612,6 +612,7 @@ export default {
       margin-bottom: .8rem;
     }
     &__top {
+    word-break: break-word;
       &.detailPage {
         @media (min-width: $tabletWidth) {
         }

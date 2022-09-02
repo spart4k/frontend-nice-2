@@ -20,7 +20,8 @@ export default {
     headerItems: Array,
     step: Number,
     currComp: String,
-    keyAnimation: String
+    keyAnimation: String,
+    basketData: Object
   },
   setup (props, { emit }) {
   const { store } = useContext()
@@ -35,6 +36,7 @@ export default {
   }
 
   const toAddress = (value) => {
+  console.log(value)
     isAddress.value = value
   }
 

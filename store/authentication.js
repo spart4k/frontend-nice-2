@@ -5,6 +5,7 @@ export const state = () => ({
     id: '',
     phone: ''
   },
+  adress: [],
   token: '',
   authorizated: false,
   showLogin: false
@@ -36,6 +37,15 @@ export const mutations = {
     state.user.email = value.email
     state.user.nickname = value.nickname
     state.user.id = value.id
+  },
+  loadUserAdress (state, value) {
+    state.adress.push(value)
+  },
+  addUserAdress (state, value) {
+    state.adress[0].push(value)
+  },
+  removeUserAdress (state, value) {
+    state.adress[0].splice(value, 1)
   }
 }
 
@@ -77,7 +87,7 @@ export const actions = {
       const res = await this.$axios('api/v1/logout/current')
       if (res.status === 200) {
         await localStorage.removeItem('token')
-        await localStorage.removeItem('user')
+        // await localStorage.removeItem('user')
         // this.$toast.success('Вы вышли из аккаунта', { position: 'bottom-right', icon: true })
         commit('setLogout')
       }
@@ -119,8 +129,25 @@ export const actions = {
   async verifyToken ({ commit }, params) {
     try {
       const response = await this.$axios('api/v1/verifyToken')
-      console.log(response.data.data)
-      commit('setUserInfo', response.data.data)
+      commit('setUserInfo', response.data.data[0])
+      commit('loadUserAdress', response.data.data[1])
+    } catch (e) {
+      return e.response.data.message
+    }
+  },
+  async addAdress ({ commit }, params) {
+    try {
+      const res = await this.$axios.post('api/v1/addAddress', params)
+      commit('addUserAdress', res.data.data)
+      return res.data
+    } catch (e) {
+      return e.response.data.message
+    }
+  },
+  async removeAdress ({ commit }, params) {
+    try {
+      const res = await this.$axios(`api/v1/deleteAddress/${params}`)
+      return res.data
     } catch (e) {
       return e.response.data.message
     }

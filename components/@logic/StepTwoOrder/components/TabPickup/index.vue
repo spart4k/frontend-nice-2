@@ -45,7 +45,7 @@
       <h4 :class="$style.title">
         Состав заказа
       </h4>
-      <N-Basket-row :item="basketItem" readonly />
+      <n-basket-row v-for="(item, index) in basketData" :key="index" :item="item" readonly />
     </n-row>
     <n-row>
       <h4 :class="$style.title">
@@ -71,7 +71,7 @@
             Товары
           </div>
           <div :class="$style.col__right">
-            3 500 р.
+            {{ basketPrice }} р.
           </div>
         </div>
         <div :class="$style.col">
@@ -79,7 +79,7 @@
             Стоимость доставки
           </div>
           <div :class="$style.col__right">
-            3 500 р.
+            0 р.
           </div>
         </div>
         <div :class="$style.col">
@@ -87,7 +87,7 @@
             Скидка
           </div>
           <div :class="$style.col__right">
-            3 500 р.
+            0 р.
           </div>
         </div>
       </div>
@@ -100,14 +100,26 @@
         </div>
       </div>
     </div>
-    <n-button
-      :class="$style.btn"
-      :disabled="$v.$invalid && $touched"
-      :type-button="'pink'"
-      @click="() => (submit(),$emit('toAddress', false))"
-    >
-      Оплатить онлайн
-    </n-button>
+    <form name="TinkoffPayForm" onsubmit="pay(this); return false;">
+      <n-button
+        :class="$style.btn"
+        :type-button="'pink'"
+        :disabled="$v.$invalid && $touched"
+        @click="$emit('toAddress', false);$emit('changeStep', 'increment')"
+      >
+        Оплатить онлайн
+      </n-button>
+      <input class="tinkoffPayRow" type="hidden" name="terminalkey" value="1658916651586DEMO">
+      <input class="tinkoffPayRow" type="hidden" name="frame" value="true">
+      <input class="tinkoffPayRow" type="hidden" name="language" value="ru">
+      <input v-model="totalPrice" type="hidden" class="tinkoffPayRow" name="amount">
+      <input v-model="formData.name" class="tinkoffPayRow" type="hidden" placeholder="Номер заказа" name="order">
+      <input v-model="formData.name" class="tinkoffPayRow" type="hidden" placeholder="Описание заказа" name="description">
+      <input v-model="formData.name" class="tinkoffPayRow" type="hidden" placeholder="ФИО плательщика" name="name">
+      <input v-model="formData.email" class="tinkoffPayRow" type="hidden" placeholder="E-mail" name="email">
+      <input v-model="formData.phone" class="tinkoffPayRow" type="hidden" placeholder="Контактный телефон" name="phone">
+      <!-- <input class="tinkoffPayRow" type="submit" value="Оплатить"> -->
+    </form>
     <NPersonalConsent />
   </div>
 </template>

@@ -23,6 +23,37 @@
     margin-bottom: 1.1rem;
     border-radius: .6rem;
     color: $fontColorDefault;
+    :global(.vs__dropdown-toggle) {
+      border: 2px solid #222222;
+      padding: 0;
+      background-color: #F5F5F5;
+      height: 3.1rem;
+      width: 12rem;
+      :global(.vs__selected-options) {
+        padding: 0;
+        :global(.vs__search) {
+          padding: 0 1.3rem;
+          font-size: 1.4rem !important;
+        }
+        :global(.vs__selected) {
+          margin: 0;
+          padding: 0 1.3rem;
+          @include regular-text;
+          font-size: 1.7rem;
+        }
+      }
+      :global(.vs__actions) {
+        margin: 0;
+        padding: 0;
+        padding-right: 0.6rem;
+        :global(.vs__open-indicator) {
+          fill: #222222
+        }
+        :global(.vs__clear) {
+          display: none
+        }
+      }
+    }
 
     select {
       background-position: calc(100% - 1.3rem) center;
