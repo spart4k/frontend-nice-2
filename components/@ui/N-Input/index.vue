@@ -5,30 +5,32 @@
       ref="input"
       v-model="letters"
       type="text"
-      maxlength="200"
+      maxlength="100"
       :class="$style.input"
       :placeholder="placeholder"
       @focus="focusInput"
       @blur="blurInput"
+      @keyup.enter="sendComment"
     >
     <textarea
       v-else-if="$props.type === 'textarea'"
       ref="input"
       v-model="letters"
       :placeholder="placeholder"
-      maxlength="200"
+      maxlength="100"
       :class="$style.textarea"
       rows="1"
       @focus="focusInput"
       @blur="blurInput"
       @input="resize($event)"
+      @keyup.enter="sendComment"
     />
     <!-- <div><span ref="input" tabindex="-1" :class="$style.textarea" role="textbox" contenteditable="true" /></div> -->
     <div :class="$style.emoji">
       <N-Icon name="smile" :class="$style.icon" :style="{ color: smilies ? '#F45532' : '#222222' }" @click="showSmilies(); $emit('smilies')" />
       <div :class="$style.send">
         <div :class="$style.letterCounter">
-          {{ letters.length }}/200
+          {{ letters.length }}/100
         </div>
         <N-Icon :class="$style.sendButton" name="send" @click="sendComment" />
       </div>
@@ -41,7 +43,7 @@
       @before-leave="beforeLeave"
       @leave="leave"
     >
-      <N-Emoji v-if="smilies" @emojiWrite="emojiWrite" @click="emojiWrite" />
+      <N-Emoji v-if="smilies" @emojiWrite="emojiWrite" @stickerWrite="sendSticker" @click="emojiWrite" />
     </transition>
   </div>
 </template>
@@ -115,13 +117,16 @@ export default {
     return mountedHeight.value - innerHeight.value
   })
   const emojiWrite = (emoji) => {
-    if (letters.value.length < 199) {
+    if (letters.value.length < 99) {
       letters.value += emoji
       // РАСКОМЕНТИТЬ
       // if (widthFrame.value > 768) {
       //  input.value.focus()
       // }
     }
+  }
+  const sendSticker = (val) => {
+    emit('sendSticker', val)
   }
   const handleKeyboard = () => {
     innerHeight.value = window.innerHeight
@@ -192,6 +197,7 @@ export default {
     blurInput,
     handleKeyboard,
     showingKeyboard,
+    sendSticker,
     transformBlock
   }
   }

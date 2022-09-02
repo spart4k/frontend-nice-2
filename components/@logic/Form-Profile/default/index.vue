@@ -30,21 +30,21 @@
         title="Email"
         :color-border="'pinkBorder'"
       />
-      <template v-if="true">
-        <N-Adress :class="$style.adressComp" />
-      </template>
-      <template v-else>
-        <div>
+      <template v-if="addressItem[0]">
+        <div :class="$style.adressComp">
           <h3 :class="$style.inputTitle">
             Адрес
           </h3>
-          <span :class="$style.adress">
-            443110 Самара, ул. Полевая, д. 45, кв.112
+          <span v-if="addressItem[0]" :class="$style.adress">
+            {{ addressItem[0].city.name }}, {{ addressItem[0].address }}
           </span>
           <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E">
             Изменить адрес
           </N-Button>
         </div>
+      </template>
+      <template v-else>
+        <N-Adress :class="$style.adressComp" />
       </template>
       <n-button
         :class="$style.button"
@@ -77,6 +77,7 @@ export default {
   name: 'FormProfileDefault',
   setup () {
     const { store, $toast } = useContext()
+    const addressItem = ref(store.state.authentication.adress[0])
     // const router = useRouter()
     const loading = ref(false)
     const toast = useToast()
@@ -127,6 +128,7 @@ export default {
       v$,
       toast,
       logout,
+      addressItem,
       userData
     }
   }

@@ -4,7 +4,7 @@ export default {
   name: 'live-chat-dialogue',
   props: {
     messages: {
-      type: Array,
+      type: [Object, Array],
       default: () => []
     }
   },

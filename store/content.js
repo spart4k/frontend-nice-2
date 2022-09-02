@@ -51,8 +51,9 @@ export const getters = {
 }
 
 export const actions = {
-  async getHeader ({ commit }) {
-   const response = await this.$axios('api/v1/sections')
-    return response.data
+  async getHeader ({ commit }, params) {
+    // const response = await this.$axios('api/v1/sections')
+    const response = await this.$axios.post('api/v1/sectionsSearch', params)
+    return response.data.data
   }
 }

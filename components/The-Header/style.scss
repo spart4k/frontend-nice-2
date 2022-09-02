@@ -49,6 +49,7 @@
   width: 16.3rem;
   visibility: hidden;
   top: 2.9rem;
+  transition: left .3s;
   @media (max-width: $mobileWidth ) {
     top: 9rem;
   }

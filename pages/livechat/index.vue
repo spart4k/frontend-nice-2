@@ -45,7 +45,7 @@ export default {
 <style lang="scss" module>
   .open {
     position: relative;
-    color: #000;
+    color: #222;
     background: #fff;
     width: 100px;
     height: 40px;

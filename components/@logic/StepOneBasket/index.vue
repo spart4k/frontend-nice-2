@@ -4,14 +4,14 @@
       Ваша корзина
     </h2>
     <ul :class="$style.list">
-      <n-basket-row :item="basketItem" />
+      <n-basket-row v-for="(item, index) in basketData" :key="index" :item="item" @deleteFromBasket="deleteFromBasket(item, index)" />
     </ul>
     <div :class="$style.totalPrice">
       <div :class="$style.totalPrice__text">
         Итого
       </div>
       <div :class="$style.totalPrice__sum">
-        3500 р.
+        {{ basketPrice }} р.
       </div>
     </div>
     <n-button
@@ -25,21 +25,33 @@
 </template>
 
 <script>
+import { useContext, useAsync, reactive, computed } from '@nuxtjs/composition-api'
 export default {
   name: 'StepOne',
   setup () {
-    const basketItem = {
-      title: 'Провод midi/midi 0.2m синий',
-      price: 3200,
-      pivot: {
-        quantity: 2
-      },
-      images: [
-        { src: 'https://media-exp1.licdn.com/dms/image/C560BAQHMnA03XDdf3w/company-logo_200_200/0/1519855918965?e=2147483647&v=beta&t=J3kUMZwIphc90TFKH5oOO9Sa9K59fimgJf-s_okU3zs' }
-      ]
+    const { store } = useContext()
+    const basketData = reactive(store.state.basket.basket)
+    const basketPrice = computed(() => { return store.state.basket.basketSum })
+    const deleteFromBasket = (item, index) => {
+      useAsync(async () => {
+        const cardData = {
+          card_id: item.pivot.card_id,
+          quantity: item.pivot.quantity
+        }
+        try {
+          const responseDelete = await store.dispatch('basket/deleteFromBasket', cardData)
+          if (!responseDelete.error) {
+            store.commit('basket/removeFromBasket', index)
+          }
+        } catch (e) {
+          console.log(e)
+        }
+      })
     }
     return {
-      basketItem
+      basketData,
+      basketPrice,
+      deleteFromBasket
     }
   }
 }
@@ -66,9 +78,13 @@ ul {
 .list {
   border-radius: 2rem;
   margin-bottom: 3rem;
+    li+li {
+    margin-top: 2rem;
+  }
 }
 .btn {
   width: 100%;
+  margin-bottom: 2.5rem;
 }
 .totalPrice {
   margin-bottom: 3rem;

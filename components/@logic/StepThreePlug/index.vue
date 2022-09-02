@@ -16,6 +16,7 @@
     <n-button
       :class="$style.btn"
       :type-button="'pink'"
+      @click="$emit('closeState')"
     >
       Продолжить
     </n-button>

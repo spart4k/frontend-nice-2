@@ -1,48 +1,68 @@
-import { ref } from '@nuxtjs/composition-api'
+import { ref, computed, useContext } from '@nuxtjs/composition-api'
 import useForm from '~/compositions/useForm'
 import { email, phone, required, onlyNumeric } from '~/utills/validations'
 
 export default {
   name: 'TabDelivery',
   setup (_, ctx) {
-    const { emit } = ctx
+    // const { emit } = ctx
+    const { store } = useContext()
+    const addressItem = computed(() => { return store.state.authentication.adress })
     const activePayment = ref('card')
+    const basketData = ref(store.state.basket.basket)
+    const basketPrice = computed(() => { return store.state.basket.basketSum })
     const menuAddress = ref(null)
+    const totalPrice = computed(() => { return (basketPrice.value + 300) })
     const { formData, validate, $errors, $v, $touched } = useForm(
       {
         fields: {
           name: { default: '', validations: { required } },
-          email: { default: '', validations: { email, required } },
+          email: { default: store.state.authentication.user.email, validations: { email, required } },
           phone: { default: '', validations: { phone, required, onlyNumeric } }
         }
       })
-    const basketItem = {
-      title: 'Провод midi/midi 0.2m синий',
-      price: 3200,
-      pivot: {
-        quantity: 2
-      },
-      images: [
-        { src: 'https://media-exp1.licdn.com/dms/image/C560BAQHMnA03XDdf3w/company-logo_200_200/0/1519855918965?e=2147483647&v=beta&t=J3kUMZwIphc90TFKH5oOO9Sa9K59fimgJf-s_okU3zs' }
-      ]
-    }
     const paymentsMethodSelect = [
       { text: 'Картой', icon: 'card-stepper', value: 'card' }
     ]
-    const submit = () => {
-      if (!validate()) { return }
-      emit('changeStep', 'increment')
+    const submit = async () => {
+      try {
+        if (!validate()) { return }
+        await console.log('zxc')
+        // loading.value = true
+        // const params = {
+        //   TerminalKey: '1658916651586DEMO',
+        //   Amount: String(totalPrice.value) + '00',
+        //   OrderId: '4',
+        //   DATA: {
+        //     Phone: formData.phone,
+        //     Email: formData.email
+        //   }
+        // }
+        // await store.dispatch('shop/tinkoff', params)
+        // if (!result.data.error) {
+        //   emit('closeState')
+        // }
+      } catch (e) {
+          console.log(e)
+      } finally {
+        // loading.value = false
+      }
+      // emit('changeStep', 'increment')
     }
     return {
-      basketItem,
       paymentsMethodSelect,
       activePayment,
       menuAddress,
       formData,
       $errors,
       $touched,
+      addressItem,
       $v,
-      submit
+      submit,
+      basketData,
+      basketPrice,
+      totalPrice
+      // tinkoff
     }
   }
 }

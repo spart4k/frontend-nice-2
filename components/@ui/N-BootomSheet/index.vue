@@ -90,6 +90,9 @@ export default {
     right: 1.5rem;
     z-index: 5;
   }
+  :global(.bottom-sheet) {
+    z-index: 9999 !important;
+  }
   :global(.bottom-sheet__pan) {
       padding-bottom: 20px;
       padding-top: 15px;

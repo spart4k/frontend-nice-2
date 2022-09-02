@@ -19,8 +19,12 @@ export default {
     const messageLength = computed(() => {
       return newMessage.value.length
     })
+    const sendSticker = (val) => {
+      emit('sendSticker', val)
+    }
     return {
       sendMessage,
+      sendSticker,
       newMessage,
       messageLength
     }

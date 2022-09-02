@@ -5,39 +5,40 @@
     </h3>
     <ul :class="$style.list">
       <li
-        v-for="item in addressItem"
-        :key="item.value"
-        :class="[$style.item, currentItem === item.value && $style.active]"
-        @click="currentItem = item.value"
+        v-for="(item, index) in addressItem"
+        :key="index"
+        :class="[$style.item, currentItem === index && $style.active]"
+        @click="currentItem = index"
       >
         <div :class="$style.itemText">
-          {{ item.title }}
+          {{ item.city.name }}, {{ item.address }}
         </div>
-        <n-button type-button="transparent" @click="removeItem(item.value)">
+        <n-button type-button="transparent" @click="removeAddress(item.id, index)">
           <n-icon name="delete" />
         </n-button>
       </li>
     </ul>
-    <!-- <n-row>
-      <n-select
-        title="Адрес"
-        :color-border="'pinkBorder'"
-        :select-items="selectItems"
-        :position-arrow="{
-          right: 0,
-        }"
-        has-border-bottom
-        :class="$style.form__select"
-      />
-    </n-row>
-    <n-row>
-      <n-text-field placeholder="Улица, дом, квартира" :color-border="'pinkBorder'" />
-    </n-row> -->
-    <N-Adress :class="$style.city" />
+    <!-- <N-Adress :class="$style.city" /> -->
+    <div :class="$style.city">
+      <p :class="$style.subtitle">
+        Адрес
+      </p>
+      <v-select
+        v-model="city"
+        v-debounce:350ms="searchCity"
+        :options="citiesArray"
+        :class="$style.citySelect"
+      >
+        <template #no-options="{ }">
+          Подождите.
+        </template>
+      </v-select>
+      <n-text-field v-model="adress" :class="$style.input" placeholder="Улица, дом, квартира" color="#C83F8E" />
+    </div>
     <n-button
       :class="$style.btn"
       :type-button="'pink'"
-      @click="$emit('addAddress')"
+      @click="changeAdress"
     >
       Добавить
     </n-button>
@@ -45,7 +46,7 @@
       :class="$style.btnBack"
       color="#C83F8E"
       :type-button="'transparent'"
-      @click="$emit('closedMenu')"
+      @click="$emit('changeStep', '')"
     >
       Назад
     </n-button>
@@ -53,30 +54,102 @@
 </template>
 
 <script>
-import { ref } from '@nuxtjs/composition-api'
+import { useAsync, useContext, ref, onMounted, computed } from '@nuxtjs/composition-api'
+import vSelect from 'vue-select'
 import NButton from '~/components/@ui/N-Button'
+import 'vue-select/dist/vue-select.css'
+
 export default {
   name: 'ChangeAddress',
-  components: { NButton },
+  components: { NButton, vSelect },
   setup () {
-    const currentItem = ref(1)
-    const addressItem = ref([
-      { title: '443110 Самара, ул. Полевая, д. 45, кв.112 ', value: 1 },
-      { title: '443110 Самара, ул. Полевая, д. 45, кв.11244 ', value: 2 },
-      { title: '443110 Самара, ул. Полевая, д. 45, кв.112 ', value: 3 }
-    ])
-    const selectItems = [
-      { text: 'Нижний Новгород', value: 1 },
-      { text: 'Samara', value: 2 }
-    ]
-    const removeItem = (value) => {
-      addressItem.value = addressItem.value.filter(item => item.value !== value)
+    const { store } = useContext()
+    const currentItem = ref(0)
+    const addressItem = computed(() => { return store.state.authentication.adress[0] })
+
+    const removeAddress = (value) => {
+      useAsync(async () => {
+        try {
+          const removeResponce = await store.dispatch('authentication/removeAdress', value)
+          if (!removeResponce.error) {
+            store.commit('basket/removeFromBasket')
+          }
+        } catch (e) {
+          console.log(e)
+        }
+      })
     }
+
+    const adress = ref()
+    const city = ref()
+    const citiesArray = ref([])
+    const cityId = ref([])
+    const defaulArray = ref([])
+    const searchCity = (val) => {
+      useAsync(async () => {
+        const cityData = {
+          entity: 'cities',
+          page: 1,
+          count: 10,
+          searchField: val
+        }
+        try {
+          const responseCity = await store.dispatch('search/searchCities', cityData)
+          defaulArray.value = []
+          citiesArray.value = []
+          defaulArray.value = responseCity.data.data
+          responseCity.data.data.forEach((item) => {
+            citiesArray.value.push(item.name)
+          })
+        } catch (e) {
+          console.log(e)
+        }
+      })
+    }
+    const fetchCities = async () => {
+      const cityData = {
+        entity: 'cities',
+        page: 1,
+        count: 10
+      }
+      const responseCity = await store.dispatch('search/searchCities', cityData)
+      defaulArray.value = responseCity.data.data
+      responseCity.data.data.forEach((item) => {
+        citiesArray.value.push(item.name)
+      })
+    }
+    const changeAdress = async () => {
+      defaulArray.value.forEach((item) => {
+        if (item.name === city.value) {
+          cityId.value = item.id
+        }
+      })
+      const params = {
+        user_address: adress.value,
+        city_id: cityId.value
+      }
+      try {
+        const addAdress = await store.dispatch('authentication/addAdress', params)
+        console.log(addAdress.error)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    onMounted(() => {
+      fetchCities()
+    })
     return {
       addressItem,
-      selectItems,
       currentItem,
-      removeItem
+      removeAddress,
+      searchCity,
+      fetchCities,
+      citiesArray,
+      cityId,
+      defaulArray,
+      adress,
+      city,
+      changeAdress
     }
   }
 }
@@ -132,6 +205,54 @@ li {
 }
 .city {
   margin-bottom: 2.5rem;
+  .subtitle {
+    @include regular-text;
+    color: $fontColorDefault;
+    opacity: 0.5;
+  }
+  .citySelect {
+      width: 100%;
+      @include regular-text;
+      color: $fontColorDefault;
+      border: none;
+      border-bottom: .2rem solid #C83F8E;
+      outline: none;
+      margin-bottom: 1.5rem;
+      :global(.vs__dropdown-toggle) {
+          border: none;
+          padding: 0;
+          :global(.vs__selected-options) {
+              padding: 0;
+              :global(.vs__search) {
+                  padding: 0;
+                  font-size: 1.4rem !important;
+              }
+              :global(.vs__selected) {
+                  margin: 0;
+                  padding: 0;
+              }
+          }
+          :global(.vs__actions) {
+              margin: 1.3rem 0;
+              padding: 0;
+              :global(.vs__open-indicator) {
+                  fill: #C83F8E
+              }
+              :global(.vs__clear) {
+                  display: none
+              }
+          }
+      }
+      :global(.vs__dropdown-option) {
+          height: 4.5rem;
+          display: flex;
+          font-size: 1.6rem;
+          align-items: center;
+      }
+      :global(.vs__dropdown-option--highlight) {
+          background: #C83F8E;
+      }
+  }
 }
 .btn {
   width: 100%;

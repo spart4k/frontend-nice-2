@@ -1,36 +1,45 @@
 <template>
   <li :class="$style.product">
     <div :class="$style.product__img">
-      <N-Lazy-Img :src="require('~/assets/img/cabel.jpeg')" alt="изоображение товара" />
+      <!-- <N-Lazy-Img :src="`${$axios.defaults.baseURL}${item.files[0].src}`" alt="изоображение товара" /> -->
     </div>
     <div :class="$style.product__description">
       <h3 :class="$style.product__title">
         {{ item.title }}
       </h3>
       <div v-if="!readonly" :class="$style.product__select">
-        <n-select
-          :select-items="selectItems"
-          :position-arrow="{ right: '1.3rem' }"
+        <v-select
+          v-model="quantity"
+          :options="totalCount"
+          :class="$style.wireSelect"
+          @input="changeCount(quantity)"
         />
       </div>
-      <div v-else :class="$style.count">
-        1 шт
+      <div v-if="readonly" :class="$style.count">
+        {{ item.pivot.quantity }} шт.
       </div>
       <div :class="$style.product__price">
-        {{ item.price }}р.
+        {{ item.pivot.price }} р.
       </div>
-      <div v-if="!readonly" :class="$style.product__iconDelete">
+      <div v-if="!readonly" :class="$style.product__iconDelete" @click="$emit('deleteFromBasket', item)">
         <n-icon name="delete" />
       </div>
     </div>
+    {{ item.count }}
+    <!-- {{ totalCount }} -->
   </li>
 </template>
 
 <script>
-import { computed, ref } from '@nuxtjs/composition-api'
+import { ref, computed, useContext, onMounted } from '@nuxtjs/composition-api'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
 
 export default {
   name: 'NBasketRow',
+  components: {
+    vSelect
+  },
   props: {
     item: {
       type: Object
@@ -41,28 +50,48 @@ export default {
     }
   },
   setup (props, { emit }) {
+  const { store } = useContext()
     const countProducts = ref(0)
-    const selectItems = [
-      { text: '1шт', value: 1 },
-      { text: '2шт', value: 2 },
-      { text: '3шт', value: 3 },
-      { text: '4шт', value: 4 }
-    ]
-    const decrement = () => {
-      // if (countProducts.value === 0) { return }
-      emit('decrement', props.item.pivot.card_id)
+    const totalCount = computed(() => {
+      const count = props.item.pivot.quantity + props.item.count
+      const array = []
+      for (let i = 1; i <= count; i++) {
+        array.push(i + ' шт.')
+      }
+      return (array)
+    })
+    const changeCount = async (value) => {
+      if (Number(value.slice(0, -4)) - oldquantity.value > 0) {
+        const goodsData = {
+          card_id: props.item.pivot.card_id,
+          quantity: Math.abs(Number(value.slice(0, -4)) - oldquantity.value),
+          details: null
+        }
+        oldquantity.value = Number(value.slice(0, -4))
+        const result = await store.dispatch('basket/addToBasket', goodsData)
+        console.log(result)
+      } else if (Number(value.slice(0, -4)) - oldquantity.value < 0) {
+        const goodsData = {
+          card_id: props.item.pivot.card_id,
+          quantity: Math.abs(Number(value.slice(0, -4)) - oldquantity.value),
+          details: null
+        }
+        oldquantity.value = Number(value.slice(0, -4))
+        const result = await store.dispatch('basket/deleteFromBasket', goodsData)
+        console.log(result)
+      }
     }
-    const increment = () => {
-      emit('increment', props.item.pivot.card_id)
-    }
-    const totalPrice = computed(() => props.item?.pivot?.price * props?.item?.pivot?.quantity)
+    const quantity = ref(props.item.pivot.quantity)
+    const oldquantity = ref(0)
+    onMounted(() => {
+      oldquantity.value = quantity.value
+    })
     return {
       countProducts,
-      totalPrice,
-      selectItems,
-
-      decrement,
-      increment
+      quantity,
+      totalCount,
+      oldquantity,
+      changeCount
     }
   }
 }

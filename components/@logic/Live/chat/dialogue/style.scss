@@ -2,13 +2,17 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  overflow: auto;
+  overflow: hidden;
   margin-bottom: 2rem;
   .wrap {
-    overflow: auto;
     display: flex;
     flex-direction: column-reverse;
-    overflow-x: hidden;
     position: relative;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .wrap::-webkit-scrollbar {
+    display: none;
   }
 }

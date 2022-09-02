@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-    <audio ref="audioSource" src="http://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Sevish_-__nbsp_.mp3" />
+    <audio ref="audioSource" src="http://192.168.1.19:3001/stream" />
   </div>
 </template>
 

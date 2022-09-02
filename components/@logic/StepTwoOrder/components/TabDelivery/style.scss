@@ -62,6 +62,8 @@
   .total {
     &__sum {
       @include text-style-h2;
+      max-width: 300px;
+      margin-top: .5rem;
     }
   }
 }

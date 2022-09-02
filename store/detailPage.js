@@ -5,9 +5,16 @@ export const mutations = {}
 export const actions = {
   async getData (state, id = 0) {
     try {
-      // this.$axios.defaults.headers.common.Authorization = 'Bearer 2|TeUVUgPl8axidfScynskYjPgeJRzCdxXcyIqDINY'
-      const data = await this.$axios(`api/v1/cards/${id}`)
+      const data = await this.$axios(`api/v1/card/${id}`)
       return data
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  async getComments (state, params) {
+    try {
+      const data = await this.$axios.post('api/v1/commentSearch', params)
+      return data.data
     } catch (e) {
       console.log(e)
     }

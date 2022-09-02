@@ -30,13 +30,16 @@ export default {
       default () {
         return ['1 шт.', '2 шт.', '3 шт.', '4 шт.', '5 шт.', '6 шт.', '7 шт.', '8 шт.', '9 шт.', '10 шт.', '11 шт.', '12 шт.', '13 шт.', '14 шт.', '15 шт.', '16 шт.', '17 шт.', '18 шт.', '19 шт.', '20 шт.']
       }
+    },
+    counter: {
+      type: String
     }
   },
   setup (props, ctx) {
-    const count = ref()
+    const count = ref(props.counter)
     const { emit } = ctx
     const sendValue = () => {
-      emit('sendCount', count.value)
+      emit('sendCount', count)
     }
   return {
     sendValue,

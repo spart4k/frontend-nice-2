@@ -1,63 +1,10 @@
 <template>
   <div :class="$style.wire">
-    <div v-if="wire" :class="$style.wireIncoming">
-      <p :class="$style.wireText">
-        Входящее соединение:
-      </p>
-      <v-select
-        v-model="formData.input"
-        :options="optionsInput"
-        :class="$style.wireSelect"
-        @input="setSelectedInput"
-      />
-      <p v-if="$errors.input[0]" :class="$style.inputError">
-        {{ $errors.input[0] }}
-      </p>
-    </div>
-    <div v-if="wire" :class="$style.wireOutcoming">
-      <p :class="$style.wireText">
-        Исходящее соединение:
-      </p>
-      <v-select
-        v-model="formData.output"
-        :options="optionsOutput"
-        :class="$style.wireSelect"
-        @input="setSelectedOutput"
-      />
-      <p v-if="$errors.output[0]" :class="$style.inputError">
-        {{ $errors.output[0] }}
-      </p>
-    </div>
-    <div v-if="wire" :class="$style.wireLength">
-      <p :class="$style.wireText">
-        Длина (см.):
-      </p>
-      <input
-        v-model="formData.length"
-        v-mask="'Q###'"
-        type="text"
-        :class="$style.wireInput"
-      >
-      <p v-if="$errors.length[0]" :class="$style.inputError">
-        {{ $errors.length[0] }}
-      </p>
-    </div>
     <div>
-      <N-Goods-Counter v-model="formData.count" @sendCount="sendCount" />
+      <N-Goods-Counter v-model="formData.count" :counter="'1 шт.'" @sendCount="responceCountPrice" />
       <p v-if="$errors.count[0]" :class="$style.inputError">
         {{ $errors.count[0] }}
       </p>
-    </div>
-    <div v-if="wire" :class="$style.wireColorSection">
-      <p :class="$style.wireText">
-        Цвет
-      </p>
-      <div ref="color" :class="$style.wireColorBox">
-        <label v-for="color in colorArray" :key="color" :class="$style.wireColor" :style="{ borderColor: color }">
-          <input name="color" type="radio" :checked="color === formData.color">
-          <span :class="$style.checkmark" :style="{ backgroundColor: color }" />
-        </label>
-      </div>
     </div>
     <N-Button
       :class="$style.buyButton"
@@ -65,106 +12,79 @@
       :disabled="$v.$invalid && $touched "
       @click="submit"
     >
-      В корзину
+      <n-loading v-if="loading" />
+      <template v-else>
+        В корзину
+      </template>
     </N-Button>
   </div>
 </template>
 
 <script>
-import { ref } from '@nuxtjs/composition-api'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
+import { ref, useContext } from '@nuxtjs/composition-api'
 import useForm from '~/compositions/useForm'
 import { required } from '~/utills/validations'
 
 export default {
-  name: 'NPurchase',
+  name: 'NPurchaseWire',
   components: {
-    vSelect
   },
   props: {
-      wire: {
-      type: Boolean,
-      default: false
+    card_id: {
+      type: Number
     }
   },
-  setup (props) {
-  const colorArray = ref(['rgb(126 100 181)', 'rgb(92, 155, 213)', 'rgb(213, 62, 77)', 'rgb(220, 196, 68)', 'rgb(56, 130, 98)', 'rgb(78 186 206)'])
-  const optionsDefault = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])
-  const optionsInput = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])
-  const optionsOutput = ref(['MIDI', 'RCA', 'XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO'])
-  const setSelectedInput = (value) => {
-    optionsOutput.value = optionsDefault.value
-    if (value === 'MIDI') {
-      optionsOutput.value = ['MIDI']
-    } else if (value === 'RCA') {
-      optionsOutput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
-    } else if (value === 'XLR M') {
-      optionsOutput.value = ['RCA', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO']
-    } else if (value === 'XLR F') {
-      optionsOutput.value = ['RCA', 'XLR M', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO']
-    } else if (value === 'JACK 6.3 STEREO') {
-      optionsOutput.value = ['XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 3.5 STEREO']
-    } else if (value === 'JACK 6.3 MONO') {
-      optionsOutput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
-    } else if (value === 'JACK 3.5 STEREO') {
-      optionsOutput.value = ['XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 3.5 STEREO']
-    } else if (value === 'JACK 3.5 MONO') {
-      optionsOutput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
+  setup (props, ctx) {
+  const { store } = useContext()
+  const startCounter = ref('1 шт.')
+  const loading = ref(false)
+  const { emit } = ctx
+  const quantity = ref(1)
+  const responceCountPrice = (val) => {
+    startCounter.value = val.value
+    if (val.value !== null) {
+      emit('changeTotalPrice', Number(val.value.slice(0, -4)))
+      quantity.value = Number(val.value.slice(0, -4))
     }
   }
 
-  const setSelectedOutput = (value) => {
-    optionsInput.value = optionsDefault.value
-    if (value === 'MIDI') {
-      optionsInput.value = ['MIDI']
-    } else if (value === 'RCA') {
-      optionsInput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
-    } else if (value === 'XLR M') {
-      optionsInput.value = ['RCA', 'XLR F', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO']
-    } else if (value === 'XLR F') {
-      optionsInput.value = ['RCA', 'XLR M', 'JACK 6.3 STEREO', 'JACK 6.3 MONO', 'JACK 3.5 STEREO', 'JACK 3.5 MONO']
-    } else if (value === 'JACK 6.3 STEREO') {
-      optionsInput.value = ['XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 3.5 STEREO']
-    } else if (value === 'JACK 6.3 MONO') {
-      optionsInput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
-    } else if (value === 'JACK 3.5 STEREO') {
-      optionsInput.value = ['XLR M', 'XLR F', 'JACK 6.3 STEREO', 'JACK 3.5 STEREO']
-    } else if (value === 'JACK 3.5 MONO') {
-      optionsInput.value = ['RCA', 'XLR M', 'XLR F', 'JACK 6.3 MONO', 'JACK 3.5 MONO']
-    }
-  }
-  const sendCount = (val) => {
-    formData.count = val
-  }
   const { formData, validate, $errors, $v, $touched } = useForm(
     {
       fields: {
-        input: { default: '', validations: { required } },
-        output: { default: '', validations: { required } },
-        length: { default: '', validations: { required } },
-        count: { default: '', validations: { required } },
-        color: { default: 'rgb(126 100 181)', validations: { } }
+        count: { default: startCounter, validations: { required } }
       }
     })
-  const submit = () => {
-    if (!validate()) { return }
-    console.log()
+
+  const submit = async () => {
+    try {
+        if (!validate()) { return }
+        loading.value = true
+        const goodsData = {
+            card_id: props.card_id,
+            quantity: quantity.value,
+            details: null
+        }
+        const result = await store.dispatch('basket/addToBasket', goodsData)
+        if (!result.data.error) {
+          emit('closeState')
+        }
+      } catch (e) {
+        console.log(e)
+      } finally {
+        loading.value = false
+      }
   }
 
     return {
-      sendCount,
+      responceCountPrice,
       submit,
-      setSelectedInput,
-      setSelectedOutput,
-      colorArray,
-      optionsOutput,
-      optionsInput,
-      optionsDefault,
       formData,
       $errors,
       $touched,
-      $v
+      $v,
+      startCounter,
+      loading,
+      quantity
     }
   }
 }
@@ -249,8 +169,8 @@ export default {
           position: absolute;
           width: 3.2rem;
           height: 3.2rem;
-          top: -2px;
-          left: -2px;
+          top: -0.16rem;
+          left: -0.16rem;
           border-radius: 50%;
         }
         input:checked ~ .checkmark {
@@ -278,6 +198,10 @@ export default {
       margin-top: 1rem;
       color: #D13C33;
       @include regular-text;
+    }
+    :global(.vs__spinner) {
+      border-left-color: #C83F8E;
+      font-size: .3rem;
     }
   }
 </style>

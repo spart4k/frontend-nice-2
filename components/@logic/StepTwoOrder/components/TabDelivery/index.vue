@@ -34,8 +34,8 @@
       <h4 :class="$style.title">
         Адрес
       </h4>
-      <n-row :class="$style.addressText">
-        443110 Самара, ул. Полевая, д. 45, кв.112
+      <n-row v-if="addressItem[0][0]" :class="$style.addressText">
+        {{ addressItem[0][0].city.name }}, {{ addressItem[0][0].address }}
       </n-row>
       <n-button
         type-button="transparent"
@@ -51,7 +51,7 @@
         <h4 :class="$style.title">
           Состав заказа
         </h4>
-        <N-Basket-row :item="basketItem" readonly />
+        <n-basket-row v-for="(item, index) in basketData" :key="index" :item="item" readonly />
       </n-row>
       <n-row>
         <h4 :class="$style.title">
@@ -77,7 +77,7 @@
               Товары
             </div>
             <div :class="$style.col__right">
-              3 500 р.
+              {{ basketPrice }} р.
             </div>
           </div>
           <div :class="$style.col">
@@ -85,7 +85,7 @@
               Стоимость доставки
             </div>
             <div :class="$style.col__right">
-              3 500 р.
+              {{ addressItem[0][0].city.name === 'Нижний Новгород' ? '300 р.' : '1000 р.' }}
             </div>
           </div>
           <div :class="$style.col">
@@ -93,7 +93,7 @@
               Скидка
             </div>
             <div :class="$style.col__right">
-              3 500 р.
+              0 р.
             </div>
           </div>
         </div>
@@ -102,18 +102,32 @@
             Итого
           </div>
           <div :class="$style.total__sum">
-            4 500 р.
+            {{ totalPrice }} р.
           </div>
         </div>
       </div>
-      <n-button
-        :class="$style.btn"
-        :type-button="'pink'"
-        :disabled="$v.$invalid && $touched"
-        @click="submit;$emit('toAddress', false)"
-      >
-        Оплатить онлайн
-      </n-button>
+      <!-- @click="submit;$emit('toAddress', false)" -->
+      <form name="TinkoffPayForm" onsubmit="pay(this); return false;">
+        <n-button
+          :class="$style.btn"
+          :type-button="'pink'"
+          :disabled="$v.$invalid && $touched"
+          @click="$emit('toAddress', false);$emit('changeStep', 'increment')"
+        >
+          Оплатить онлайн
+        </n-button>
+        <input class="tinkoffPayRow" type="hidden" name="terminalkey" value="1658916651586DEMO">
+        <input class="tinkoffPayRow" type="hidden" name="frame" value="true">
+        <input class="tinkoffPayRow" type="hidden" name="language" value="ru">
+        <input v-model="totalPrice" type="hidden" class="tinkoffPayRow" name="amount">
+        <input v-model="formData.name" class="tinkoffPayRow" type="hidden" placeholder="Номер заказа" name="order">
+        <input v-model="formData.name" class="tinkoffPayRow" type="hidden" placeholder="Описание заказа" name="description">
+        <input v-model="formData.name" class="tinkoffPayRow" type="hidden" placeholder="ФИО плательщика" name="name">
+        <input v-model="formData.email" class="tinkoffPayRow" type="hidden" placeholder="E-mail" name="email">
+        <input v-model="formData.phone" class="tinkoffPayRow" type="hidden" placeholder="Контактный телефон" name="phone">
+        <!-- <input class="tinkoffPayRow" type="submit" value="Оплатить"> -->
+      </form>
+      <script src="https://securepay.tinkoff.ru/html/payForm/js/tinkoff_v2.js" />
       <NPersonalConsent />
     </n-row>
   </div>

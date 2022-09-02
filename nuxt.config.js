@@ -35,6 +35,7 @@ export default {
     '@plugins/v-mask.js',
     '@plugins/v-tooltip.js',
     '@plugins/v-lazyload.js',
+    '@plugins/v-debounce.js',
     { src: '@plugins/vue-bottom-sheet.js', ssr: false }
   ],
 

@@ -1,14 +1,15 @@
 <template>
   <div :class="$style.wrapper">
-    <template v-if="id === 2">
-      <N-Card-Default :detail-page="detailPage" with-video :data="detailPage ? card.data : card" @clickTag="($event) => $emit('clickTag', $event)" />
+    <template v-if="section.id === 2">
+      <N-Card-Default :detail-page="detailPage" :comments="comments" with-video :data="detailPage ? card.data : card" @clickTag="($event) => $emit('clickTag', $event)" />
     </template>
-    <template v-else-if="id === 11">
+    <template v-else-if="section.id === 10">
       <N-Card-Coin />
     </template>
     <template v-else>
       <N-Card-Default
         :detail-page="detailPage"
+        :comments="comments"
         :data="detailPage ? card.data : card"
         @clickTag="($event) => $emit('clickTag', $event)"
       />
@@ -21,14 +22,17 @@
 export default {
   name: 'SectionCards',
   props: {
-    id: {
-      type: Number,
-      required: true,
-      default: 0
+    section: {
+      type: Object,
+      required: true
     },
     card: {
       type: [Array, Object],
       required: true
+    },
+    comments: {
+      type: [Array, Object],
+      required: false
     },
     detailPage: {
       type: Boolean,

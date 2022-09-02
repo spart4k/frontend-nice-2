@@ -45,21 +45,17 @@
       ]"
     >
       <template>
-        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`cards/${data.id}?section=${data.slug}`">
+        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`cards/${data.id}?section=${data.section.slug}`">
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
             {{ data.title }}
           </h2>
-          <template v-if="$props.detailPage && data.author.length>0">
-            <p :class="$style.authorName">
-              автор {{ data.author }}
-            </p>
-          </template>
           <div v-if="data.date_event" :class="$style.time">
             {{ dateFormat }}
           </div>
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div>
+          {{ data.text }}
           <div v-if="!$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
             <div :class="$style.socialsItem">
               <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
@@ -70,7 +66,7 @@
             <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
               <N-Icon name="comments" :class="$style.commentsContainer" />
               <div :class="$style.parser">
-                {{ !$props.detailPage ? '0' : 'Комментировать' }}
+                {{ !$props.detailPage ? data.comments_count : 'Комментировать' }}
               </div>
             </div>
           </div>
@@ -81,30 +77,31 @@
           </h2>
           <template v-if="$props.detailPage">
             <p :class="$style.authorName">
-              <!-- автор {{ data.author }} -->
-              автор Артем Nice
+              автор {{ data.author.user.nickname }}
             </p>
           </template>
           <div v-if="data.date_event" :class="$style.time">
             {{ dateFormat }}
           </div>
           <template v-if="data.price && $props.detailPage">
-            <div :class="$style.price">
-              {{ data.price }}р.
+            <n-loading v-if="priceLoading" :class="$style.loading" purple />
+            <div v-else :class="$style.price">
+              {{ data.type.name === 'Wire' && $props.detailPage ? wirePrice : totalPrice*itemCounter }}р.
             </div>
-            <N-Purchase :wire="true" />
+            <template v-if="data.type.name === 'Wire'">
+              <N-Purchase-Wire :colors="JSON.parse(data.type.blueprint).color" :card_id="data.id" @changeTotalPrice="changeTotalPrice" />
+            </template>
+            <template v-else>
+              <N-Purchase :card_id="data.id" @changeTotalPrice="changeTotalPrice" />
+            </template>
           </template>
           <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div>
           <template v-if="data.files && $props.detailPage && !$props.withVideo">
             <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
-              <!-- <p :class="$style.audioName">
-                {{ item.title }}
-              </p> -->
-              <N-Audio v-if="item.src" :title="item.title" :src="`https://nice.c.roky.rocks/${item.src}`" />
+              <N-Audio v-if="item.type === 'audio'" :title="item.title" :src="`https://nice.c.roky.rocks/${item.src}`" />
             </div>
-            <!-- <LiveRadio /> -->
           </template>
         </div>
       </template>
@@ -117,7 +114,7 @@
             :class="$style.chip"
             @click="$emit('clickTag', item.id)"
           >
-            {{ item.title }}
+            {{ item.name }}
           </N-Chip>
           <N-Chip
             v-if="chipsCounter > 0"
@@ -150,7 +147,7 @@
             :class="$style.chip"
             @click="$emit('clickTag', item.id)"
           >
-            {{ item.title }}
+            {{ item.name }}
           </N-Chip>
           <N-Chip
             v-if="chipsCounter > 0"
@@ -165,13 +162,17 @@
           :class="[$style.comments,showComments ? $style.show : '']"
           :style="{maxHeight: showComments ? commentHeight : '0'}"
         >
-          <N-Input v-if="$store.state.authentication.authorizated" type="textarea" @smilies="commentHeightSet" @sendMessage="sendComment" />
+          <N-Input v-if="$store.state.authentication.authorizated" type="textarea" @smilies="commentHeightSet" @sendSticker="sendSticker" @sendMessage="sendComment" />
           <N-Plug v-else @login="login" @registration="registration" />
-          <div :class="$style.commentsContainer">
-            <N-Comment />
-            <N-Comment />
-            <N-Comment />
-            <N-Comment />
+          <div v-if="comments" :class="$style.commentsContainer">
+            <N-Comment
+              v-for="(item, index) in proxyComments.data"
+              :key="index"
+              :nickname="item.user.nickname"
+              :text="item.text"
+              :time="item.created_at"
+              :sticker="item.sticker"
+            />
           </div>
         </div>
       </div>
@@ -183,7 +184,7 @@
 </template>
 
 <script lang="js">
-import { computed, nextTick, onMounted, onUnmounted, ref, useContext } from '@nuxtjs/composition-api'
+import { computed, nextTick, onMounted, onUnmounted, ref, useContext, useAsync } from '@nuxtjs/composition-api'
 import dataProps from '../props'
 
 export default {
@@ -197,6 +198,7 @@ export default {
     const like = ref(props.data.liked)
     const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
+    const proxyComments = computed(() => props.comments)
     const chipsCounter = ref(0)
     const chipsWidth = ref(-10)
     const chipsArray = ref()
@@ -208,8 +210,10 @@ export default {
     const { $axios } = useContext()
     const { store } = useContext()
     const videoPlay = ref(false)
-    const comments = ref(true)
-
+    const totalPrice = ref(props.data.price)
+    const wirePrice = ref(0)
+    const priceLoading = ref(false)
+    const itemCounter = ref(1)
     const login = () => {
       store.commit('menu/changeKeyMenu', {
         key: 'registration',
@@ -237,10 +241,42 @@ export default {
       }
     }
     const sendComment = async (val) => {
-        const commentData = { card_id: props.data.id, text: val, sticker_id: null }
-        const result = await store.dispatch('socials/addComment', commentData)
-        console.log(result)
-        console.log(new Date(result.data.created_at))
+      const commentData = {
+        card_id: props.data.id,
+        text: unescape(encodeURIComponent(val)),
+        sticker_id: null
+      }
+      const result = await store.dispatch('socials/addComment', commentData)
+      if (!result.error) {
+        proxyComments.value.data.unshift({
+          user: {
+            nickname: result.data.user.nickname
+          },
+          text: result.data.text,
+          created_at: result.data.created_at,
+          sticker: result.data.sticker
+        })
+        commentHeightSet()
+      }
+    }
+    const sendSticker = async (val) => {
+      const stickerData = {
+        card_id: props.data.id,
+        text: null,
+        sticker_id: val
+      }
+      const result = await store.dispatch('socials/addComment', stickerData)
+      if (!result.error) {
+        proxyComments.value.data.unshift({
+          user: {
+            nickname: result.data.user.nickname
+          },
+          text: result.data.text,
+          created_at: result.data.created_at,
+          sticker: result.data.sticker
+        })
+        commentHeightSet()
+      }
     }
     const videoPlayingChange = () => {
       if (videoRef.value.paused === true) {
@@ -256,6 +292,7 @@ export default {
         JSON.parse(props?.data?.text)
       } catch (e) {
         return false
+        // return true
       }
       return true
     })
@@ -270,33 +307,55 @@ export default {
     const extraTagHide = () => {
       if (chipsArray.value?.length) {
         for (let i = 0; i < chipsArray.value.length; i++) {
-            chipsWidth.value += chipsArray.value[i].$el.offsetWidth + 10
+          chipsWidth.value += chipsArray.value[i].$el.offsetWidth + 10
+        }
+        if (chipsWidth.value > 315) {
+          for (let i = chipsArray.value.length - 1; chipsWidth.value > 245; i--) {
+            chipsWidth.value = chipsWidth.value - (chipsArray.value[i].$el.offsetWidth + 10)
+            chipsArray.value[i].$el.style.display = 'none'
+            chipsCounter.value++
           }
-          if (chipsWidth.value > 315) {
-            for (let i = chipsArray.value.length - 1; chipsWidth.value > 245; i--) {
-                chipsWidth.value = chipsWidth.value - (chipsArray.value[i].$el.offsetWidth + 10)
-                chipsArray.value[i].$el.style.display = 'none'
-                chipsCounter.value++
-            }
-          }
+        }
       }
     }
     const extraTagShow = () => {
-        chipsArray.value.forEach(function (item) {
-          item.$el.style.display = 'flex'
-        })
-        chipExtra.value.$el.style.display = 'none'
-      }
+      chipsArray.value.forEach(function (item) {
+        item.$el.style.display = 'flex'
+      })
+      chipExtra.value.$el.style.display = 'none'
+    }
     const windowWidthCount = () => {
       windowWidth.value = window.innerWidth
     }
+    const changeTotalPrice = (val) => {
+      if (props.data.type.name === 'Wire') {
+        if (val.length && val.count) {
+          useAsync(async () => {
+            try {
+                priceLoading.value = true
+                const responseCount = await store.dispatch('shop/getPrice', val)
+                wirePrice.value = responseCount.data
+                priceLoading.value = false
+            } catch (e) {
+              console.log(e)
+            }
+          })
+        } else {
+          wirePrice.value = 0
+        }
+      } else {
+        itemCounter.value = val
+      }
+    }
     onMounted(() => {
+      if (props.detailPage === true) {
+        proxyComments.value.data.reverse()
+      }
       windowWidthCount()
       if (windowWidth.value > 900) {
         showComments.value = true
       }
       commentHeightSet()
-      comments.value = false
       window.addEventListener('resize', windowWidthCount)
       window.addEventListener('resize', commentHeightSet)
       nextTick(() => {
@@ -325,9 +384,12 @@ export default {
       chipsWidth,
       chipExtra,
       dateFormat,
+      commentHeight,
+      commentBox,
       videoRef,
       commentHeightSet,
       extraTagHide,
+      proxyComments,
       extraTagShow,
       addLike,
       windowWidth,
@@ -339,6 +401,12 @@ export default {
       registration,
       loginMenu,
       sendComment,
+      sendSticker,
+      totalPrice,
+      wirePrice,
+      changeTotalPrice,
+      priceLoading,
+      itemCounter,
       page
     }
   }
@@ -544,6 +612,7 @@ export default {
       margin-bottom: .8rem;
     }
     &__top {
+    word-break: break-word;
       &.detailPage {
         @media (min-width: $tabletWidth) {
         }
@@ -566,6 +635,12 @@ export default {
       }
       .goodsCounter {
         margin-bottom: 3rem;
+      }
+      .loading {
+        display: block;
+        width: 2rem;
+        height: 2rem;
+        margin-bottom: 1.5rem;
       }
     }
     .cardAudio {

@@ -73,7 +73,7 @@ const strongPassword = () => {
     length: {
       cb: val => val.length > 8,
       touched: false,
-      message: () => 'Не менее 8 симоволов',
+      message: () => 'Не менее 9 симоволов',
       success: false
     },
     oneDigit: {

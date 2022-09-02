@@ -4,14 +4,20 @@
       Адрес
     </p>
     <v-select
-      :options="['Moscow','Samara']"
+      v-debounce:350ms="searchCity"
+      :options="citiesArray"
       :class="$style.citySelect"
-    />
+    >
+      <template #no-options="{ }">
+        Подождите.
+      </template>
+    </v-select>
     <n-text-field :class="$style.input" placeholder="Улица, дом, квартира" color="#C83F8E" />
   </div>
 </template>
 
 <script>
+import { useAsync, useContext, ref, onMounted } from '@nuxtjs/composition-api'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
@@ -21,6 +27,52 @@ export default {
     vSelect
   },
   props: {
+  },
+  setup () {
+  const { store } = useContext()
+  const citiesArray = ref([])
+  const searchCity = (val) => {
+    useAsync(async () => {
+      const cityData = {
+        entity: 'cities',
+        page: 1,
+        count: 10,
+        searchField: val
+      }
+      try {
+        // loadingOutput.value = true
+        const responseCity = await store.dispatch('search/searchCities', cityData)
+        // loadingOutput.value = false
+        // const wiresName = []
+        citiesArray.value = []
+        responseCity.data.data.forEach((item) => {
+          citiesArray.value.push(item.name)
+        })
+        // optionsOutput.value = wiresName
+      } catch (e) {
+        console.log(e)
+      }
+    })
+  }
+  const fetchCities = async () => {
+    const cityData = {
+    entity: 'cities',
+    page: 1,
+    count: 10
+  }
+    const responseCity = await store.dispatch('search/searchCities', cityData)
+    responseCity.data.data.forEach((item) => {
+      citiesArray.value.push(item.name)
+    })
+  }
+  onMounted(() => {
+    fetchCities()
+  })
+    return {
+      searchCity,
+      fetchCities,
+      citiesArray
+    }
   }
 }
 </script>

@@ -6,6 +6,7 @@
         :class="$style.header"
         :sheet-width="sheetWidth"
         class="header"
+        @closeState="closeState"
       />
     </div>
 
@@ -72,8 +73,12 @@ export default {
     const menuBasket = ref(null)
     const menuLive = ref(null)
     const { store, route, $gsap } = useContext()
+    const tinkoffURL = computed(() => { return store.state.shop.TinkoffPaymentURL })
     const isHomePage = computed(() => route.value.name === 'index')
 
+  const iframeChange = () => {
+    console.log('change')
+  }
     const backgroundLoaded = () => {
       isLoaded.value = true
     }
@@ -85,7 +90,11 @@ export default {
     }
 
     const fetchData = async () => {
-      const response = await store.dispatch('content/getHeader')
+      const params = {
+        page: 1,
+        count: 11
+      }
+      const response = await store.dispatch('content/getHeader', params)
       return response
     }
     const closedSwipe = () => {
@@ -115,7 +124,7 @@ export default {
         sheetRight.value = false
         store.commit('menu/changeShowStateBottomSheetMenu', { value: false })
         store.commit('menu/changeStepMenu', { step: 0 })
-      }, 300)
+      }, 100)
     }
 
     const closeState = () => {
@@ -191,6 +200,9 @@ export default {
     }
 
     onMounted(() => {
+      if (localStorage.getItem('token') !== null) {
+        store.dispatch('authentication/verifyToken')
+      }
       store.commit('authentication/setUserData')
       store.commit('authentication/setToken')
       store.dispatch('basket/getBasket')
@@ -204,6 +216,7 @@ export default {
       color,
       introTitle,
       isHomePage,
+      tinkoffURL,
       menuBasket,
       menu,
       stepper,
@@ -222,7 +235,8 @@ export default {
       changeState,
       closeState,
       backgroundLoaded,
-      isLoaded
+      isLoaded,
+      iframeChange
     }
   }
 }
