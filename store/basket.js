@@ -29,6 +29,14 @@ export const mutations = {
   },
   removeFromBasket (state, value) {
     state.basket.splice(value, 1)
+  },
+  changeCountItem (state, value) {
+    state.basket.forEach((item, index) => {
+      if (item.pivot.card_id === value.card_id) {
+        item.pivot.price -= value.price
+        item.count -= value.quantity
+      }
+    })
   }
 }
 
@@ -70,6 +78,7 @@ export const actions = {
   async addToBasket ({ commit, state }, params) {
     try {
       const response = await this.$axios.post('api/v1/addToBasket', params)
+      console.log(response.data.data[0])
       commit('addToBasket', response.data.data[0])
       commit('setBasketSum', response.data.data[1])
       return response

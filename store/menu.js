@@ -4,7 +4,6 @@ export const state = () => ({
   isShowBottomMenu: false,
   isShowBottomLive: false,
   stepCurrentComponent: 0,
-  changeShowStateBottomSheetLive: false,
   basketLength: 0
 })
 
@@ -15,7 +14,7 @@ export const mutations = {
   changeShowStateBottomSheetMenu (store, { value }) {
     store.isShowBottomMenu = value
   },
-  changeShowStateBottomSheetLive (store, value) {
+  changeShowStateBottomSheetLive (store, { value }) {
     store.isShowBottomLive = value
   },
   changeKeyMenu (store, value) {

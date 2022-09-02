@@ -96,6 +96,10 @@ export default {
       active.value = false
     }
 
+    const openMenuBasket = () => {
+      store.commit('menu/changeShowStateBottomSheetStepper', true)
+    }
+
     const openMenu = () => {
       if (store.state.menu.isShowBottomMenu) {
         emit('closeState')
@@ -105,9 +109,6 @@ export default {
       } else {
         store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
       }
-    }
-    const openMenuBasket = () => {
-      store.commit('menu/changeShowStateBottomSheetStepper', true)
     }
 
     const openLive = () => {

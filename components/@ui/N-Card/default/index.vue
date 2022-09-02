@@ -52,10 +52,13 @@
           <div v-if="data.date_event" :class="$style.time">
             {{ dateFormat }}
           </div>
-          <div v-if="isJsonString" :class="$style.cardText">
+          <!-- <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
+          </div> -->
+          <!-- {{ data.text }} -->
+          <div :class="$style.cardText">
+            <div :class="$style.parser" v-html="data.text" />
           </div>
-          {{ data.text }}
           <div v-if="!$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
             <div :class="$style.socialsItem">
               <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
@@ -95,12 +98,15 @@
               <N-Purchase :card_id="data.id" @changeTotalPrice="changeTotalPrice" />
             </template>
           </template>
-          <div v-if="isJsonString" :class="$style.cardText">
+          <!-- <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
+          </div> -->
+          <div :class="$style.cardText">
+            <div :class="$style.parser" v-html="data.text" />
           </div>
-          <template v-if="data.files && $props.detailPage && !$props.withVideo">
+          <template>
             <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
-              <N-Audio v-if="item.type === 'audio'" :title="item.title" :src="`https://nice.c.roky.rocks/${item.src}`" />
+              <N-Audio v-if="item.file_type_id === 3" :title="item.title" :src="`${$axios.defaults.baseURL}${item.src}`" />
             </div>
           </template>
         </div>

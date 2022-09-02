@@ -9,8 +9,12 @@
     @include regular-text-small;
     color: inherit;
   }
-  .icon {
+  .iconContainer{
+    height: 2.2rem;
     margin-bottom: .5rem;
+    .icon {
+      width: 100%;
+    }
   }
 }
 .item {
