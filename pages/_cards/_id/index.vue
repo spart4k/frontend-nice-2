@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { ref, useAsync, useContext, defineComponent, useRouter, computed, useMeta } from '@nuxtjs/composition-api'
+import { ref, useAsync, useContext, defineComponent, useRouter, computed, useMeta, onMounted } from '@nuxtjs/composition-api'
 import { head } from '@/components/scripts/head.js'
 
 export default defineComponent({
@@ -97,6 +97,10 @@ export default defineComponent({
       return store.state.authentication.authorizated
     })
 
+    onMounted(() => {
+      store.commit('content/cancelAnimate')
+    })
+
     return {
       card,
       addBasket,
@@ -136,7 +140,7 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
+    gap: 1.5rem;
     cursor: pointer;
     @media (min-width: $tabletWidth) {
       margin: 2rem auto 0;

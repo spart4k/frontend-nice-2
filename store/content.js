@@ -7,7 +7,8 @@ export const state = () => ({
   animationEnd: false,
   sections: [],
   headerItems: [],
-  isShowAnimationHomePage: true
+  isShowAnimationHomePage: true,
+  singleAnimation: true
 })
 
 export const mutations = {
@@ -34,6 +35,9 @@ export const mutations = {
   },
   setAnimate (state, value) {
     state.isShowAnimationHomePage = value
+  },
+  cancelAnimate (state, value) {
+    state.singleAnimation = false
   }
 }
 

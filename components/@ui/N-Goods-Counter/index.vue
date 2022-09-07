@@ -5,8 +5,8 @@
     </p>
     <v-select
       id=""
-      v-model="count"
-      :options="options"
+      v-model="amount"
+      :options="totalCount"
       :class="$style.wireSelect"
       name=""
       @input="sendValue"
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { ref } from '@nuxtjs/composition-api'
+import { ref, computed } from '@nuxtjs/composition-api'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
@@ -25,25 +25,31 @@ export default {
     vSelect
   },
   props: {
-    options: {
-      type: Array,
-      default () {
-        return ['1 шт.', '2 шт.', '3 шт.', '4 шт.', '5 шт.', '6 шт.', '7 шт.', '8 шт.', '9 шт.', '10 шт.', '11 шт.', '12 шт.', '13 шт.', '14 шт.', '15 шт.', '16 шт.', '17 шт.', '18 шт.', '19 шт.', '20 шт.']
-      }
-    },
     counter: {
       type: String
+    },
+    count: {
+      type: Number
     }
   },
   setup (props, ctx) {
-    const count = ref(props.counter)
+    const amount = ref(props.counter)
     const { emit } = ctx
+    const totalCount = computed(() => {
+      const count = props.count
+      const array = []
+      for (let i = 1; i <= count; i++) {
+        array.push(i + ' шт.')
+      }
+      return (array)
+    })
     const sendValue = () => {
-      emit('sendCount', count)
+      emit('sendCount', amount)
     }
   return {
     sendValue,
-    count
+    amount,
+    totalCount
   }
   }
 }

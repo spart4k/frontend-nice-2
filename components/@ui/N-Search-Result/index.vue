@@ -3,9 +3,7 @@
     <h2 :class="$style.title">
       {{ $props.title }}
     </h2>
-    <p :class="$style.text">
-      {{ $props.text }}
-    </p>
+    <p :class="$style.text" v-html="$props.text" />
   </div>
 </template>
 

@@ -8,7 +8,7 @@
         Профиль
       </div>
     </li>
-    <li :class="$style.item" @click="$emit('openMenu', {key:'basket', effect:'fx-slide-from-left'})">
+    <li :class="$style.item" @click="openBasket">
       <div :class="$style.iconContainer">
         <n-icon name="basket" :class="$style.icon" />
       </div>
@@ -36,15 +36,35 @@
 </template>
 
 <script>
-
+import { useContext } from '@nuxtjs/composition-api'
 export default {
   name: 'MenuUserTop',
-  setup () {
+  setup (props, { emit }) {
+  const { store } = useContext()
   const toSupport = () => {
     window.open('https://t.me/itisthenicesupport')
   }
+  const openBasket = () => {
+    if (store.state.authentication.authorizated) {
+      emit('openMenu', { key: 'basket', effect: 'fx-slide-from-left' })
+    } else if (!store.state.menu.isShowBottomMenu) {
+      store.commit('menu/changeKeyMenu', {
+        key: 'registration',
+        effect: 'fx-slide-from-left'
+      })
+      store.commit('menu/changeStepMenu', { step: 1 })
+      store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+    } else if (store.state.menu.isShowBottomMenu) {
+      store.commit('menu/changeKeyMenu', {
+        key: 'registration',
+        effect: 'fx-slide-from-left'
+      })
+      store.commit('menu/changeStepMenu', { step: 1 })
+    }
+  }
     return {
-      toSupport
+      toSupport,
+      openBasket
     }
   }
 }

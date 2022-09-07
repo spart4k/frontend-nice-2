@@ -113,8 +113,8 @@ export default {
       background-color: rgba(255,255,255,0.2);
       background-repeat: no-repeat;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 4rem;
+      height: 4rem;
       z-index: 5;
       &::before {
         content: "";
@@ -137,26 +137,26 @@ export default {
 
   :global(.slick-dots li button:before) {
       content: '';
-      border: 1.5px solid #222222;
+      border: .15rem solid #222222;
       border-radius: 3px;
       line-height: 0px;
       position: absolute;
-      width: 10px;
+      width: 1rem;
       height: 0px;
-      transition: all .6s ease;
+      transition: width .6s ease, opacity .6s ease;
   }
 
   :global(.slick-dots) {
     :global(li) {
-      width: 10px;
-      height: 3px;
-      transition: all .6s ease;
+      width: 1rem;
+      height: .3rem;
+      transition: width .6s ease;
     }
     :global(.slick-active) {
-      width: 35px;
+      width: 3.5rem;
     }
     :global(.slick-active button:before) {
-      width: 35px;
+      width: 3.5rem;
       height: 0;
     }
   }
@@ -183,7 +183,7 @@ export default {
       :global(.slick-slider) {
         height: inherit !important;
         display: flex;
-        padding: 10px 10px;
+        padding: 1rem 1rem;
         :global(.slick-list) {
           height: 100% !important;
           margin: auto 0;
@@ -212,8 +212,8 @@ export default {
       background-color: rgba(255,255,255,0.2);
       background-repeat: no-repeat;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 4rem;
+      height: 4rem;
       z-index: 105;
       &::before {
         content: "";

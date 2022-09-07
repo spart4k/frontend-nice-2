@@ -269,8 +269,8 @@ export default {
 .slider {
   width: 33.5rem;
   margin: 0 auto;
-  border: 1px solid white;
-  padding-bottom: 100px;
+  border: .1rem solid white;
+  padding-bottom: 10rem;
   border-radius: 10px;
   background-color: $gray;
   overflow: hidden;

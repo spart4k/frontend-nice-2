@@ -10,7 +10,7 @@ export default {
   },
   setup (props) {
     const { store } = useContext()
-    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
+    const showAnimate = computed(() => store.state.content.singleAnimation)
 
     return {
       BLAND_COLOR,

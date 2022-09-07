@@ -4,7 +4,7 @@
        Эфир
     </div>-->
     <live-radio/>
-    <live-chat/>
+    <live-chat :messages="messages" @sendMessage="($event) => $emit('sendMessage', $event)" />
   </div>
 </template>
 

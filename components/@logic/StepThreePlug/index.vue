@@ -4,7 +4,7 @@
       Спасибо за заказ!
     </h3>
     <div :class="$style.subtitle">
-      Номер вашего заказа №122
+      Номер вашего заказа №{{orderId}}
     </div>
     <div :class="$style.text">
       Менеджер свяжется с вами
@@ -27,10 +27,15 @@
 </template>
 
 <script>
+import { computed, useContext } from '@nuxtjs/composition-api'
 export default {
   name: 'StepOne',
   setup () {
-    return {}
+    const { store } = useContext()
+    const orderId = computed(() => { return store.state.basket.lastOrder })
+    return {
+      orderId
+    }
   }
 }
 </script>

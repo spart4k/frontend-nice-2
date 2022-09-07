@@ -84,46 +84,46 @@ export default {
     opacity: 0.5;
 }
 .citySelect {
-    width: 100%;
-    @include regular-text;
-    color: $fontColorDefault;
+  width: 100%;
+  @include regular-text;
+  color: $fontColorDefault;
+  border: none;
+  border-bottom: .2rem solid #C83F8E;
+  outline: none;
+  margin-bottom: 1.5rem;
+  :global(.vs__dropdown-toggle) {
     border: none;
-    border-bottom: .2rem solid #C83F8E;
-    outline: none;
-    margin-bottom: 1.5rem;
-    :global(.vs__dropdown-toggle) {
-        border: none;
+    padding: 0;
+    :global(.vs__selected-options) {
+      padding: 0;
+      :global(.vs__search) {
         padding: 0;
-        :global(.vs__selected-options) {
-            padding: 0;
-            :global(.vs__search) {
-                padding: 0;
-                font-size: 1.4rem !important;
-            }
-            :global(.vs__selected) {
-                margin: 0;
-                padding: 0;
-            }
-        }
-        :global(.vs__actions) {
-            margin: 1.3rem 0;
-            padding: 0;
-            :global(.vs__open-indicator) {
-                fill: #C83F8E
-            }
-            :global(.vs__clear) {
-                display: none
-            }
-        }
+        font-size: 1.4rem !important;
+      }
+      :global(.vs__selected) {
+        margin: 0;
+        padding: 0;
+      }
     }
-    :global(.vs__dropdown-option) {
-        height: 4.5rem;
-        display: flex;
-        font-size: 1.6rem;
-        align-items: center;
+    :global(.vs__actions) {
+      margin: 1.3rem 0;
+      padding: 0;
+      :global(.vs__open-indicator) {
+        fill: #C83F8E
+      }
+      :global(.vs__clear) {
+        display: none
+      }
     }
-    :global(.vs__dropdown-option--highlight) {
-        background: #C83F8E;
-    }
+  }
+  :global(.vs__dropdown-option) {
+    height: 4.5rem;
+    display: flex;
+    font-size: 1.6rem;
+    align-items: center;
+  }
+  :global(.vs__dropdown-option--highlight) {
+    background: #C83F8E;
+  }
 }
 </style>
