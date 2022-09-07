@@ -75,6 +75,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      store.commit('content/cancelAnimate')
         nextTick(() => {
           $gsap.to('.subtitleLogo', {
             scrollTrigger: {

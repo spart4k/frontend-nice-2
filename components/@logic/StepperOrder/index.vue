@@ -3,10 +3,12 @@
     <component
       :is="isCurrentPage"
       :header-items="headerItems"
+      :messages="messages"
       @changeStep="changeStep"
       @changeComponent="changeComponent"
       @toAddress="toAddress"
       @closeState="$emit('closeState')"
+      @sendMessage="($event) => $emit('sendMessage', $event)"
     />
   </transition>
 </template>
@@ -21,7 +23,8 @@ export default {
     step: Number,
     currComp: String,
     keyAnimation: String,
-    basketData: Object
+    basketData: Object,
+    messages: Array
   },
   setup (props, { emit }) {
   const { store } = useContext()
@@ -36,7 +39,6 @@ export default {
   }
 
   const toAddress = (value) => {
-  console.log(value)
     isAddress.value = value
   }
 
@@ -59,9 +61,9 @@ export default {
       } else if (props.currComp === 'registration' && !store.state.authentication.authorizated) {
           switch (props.step) {
         case 1 :
-          return 'FormAuthDefault'
-        case 2 :
           return 'FormAuthLogin'
+        case 2 :
+          return 'FormAuthDefault'
         case 3 :
           return 'FormAuthRecovery'
         }

@@ -57,7 +57,7 @@
         color="#5289C5"
         background-color="transparent"
         :class="$style.buttonTologin"
-        @click.prevent="$emit('changeStep', 'increment')"
+        @click.prevent="$emit('changeStep', '')"
       >
         Уже зарегистрированы?
       </n-button>

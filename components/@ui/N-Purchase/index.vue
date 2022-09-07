@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.wire">
     <div>
-      <N-Goods-Counter v-model="formData.count" :counter="'1 шт.'" @sendCount="responceCountPrice" />
+      <N-Goods-Counter v-model="formData.count" :count="count" :counter="'1 шт.'" @sendCount="responceCountPrice" />
       <p v-if="$errors.count[0]" :class="$style.inputError">
         {{ $errors.count[0] }}
       </p>
@@ -32,6 +32,9 @@ export default {
   props: {
     card_id: {
       type: Number
+    },
+    count: {
+      type: Number
     }
   },
   setup (props, ctx) {
@@ -56,23 +59,45 @@ export default {
     })
 
   const submit = async () => {
-    try {
+    if (store.state.authentication.authorizated) {
+      try {
         if (!validate()) { return }
         loading.value = true
         const goodsData = {
-            card_id: props.card_id,
-            quantity: quantity.value,
-            details: null
+          card_id: props.card_id,
+          quantity: quantity.value,
+          details: null
         }
         const result = await store.dispatch('basket/addToBasket', goodsData)
         if (!result.data.error) {
-          emit('closeState')
+          const changeItemData = {
+            card_id: props.card_id,
+            quantity: quantity.value,
+            price: result.data[0].price * quantity.value
+          }
+          store.commit('basket/setBasketSum', result.data[1])
+          store.commit('basket/increaseCountItem', changeItemData)
+          store.commit('basket/addToBasket', result.data[0])
         }
       } catch (e) {
         console.log(e)
       } finally {
         loading.value = false
       }
+    } else if (!store.state.menu.isShowBottomMenu) {
+      store.commit('menu/changeKeyMenu', {
+        key: 'registration',
+        effect: 'fx-slide-from-left'
+      })
+      store.commit('menu/changeStepMenu', { step: 1 })
+      store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+    } else if (store.state.menu.isShowBottomMenu) {
+      store.commit('menu/changeKeyMenu', {
+        key: 'registration',
+        effect: 'fx-slide-from-left'
+      })
+      store.commit('menu/changeStepMenu', { step: 1 })
+    }
   }
 
     return {

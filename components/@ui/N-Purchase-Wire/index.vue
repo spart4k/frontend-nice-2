@@ -158,7 +158,14 @@ export default {
         }
         const result = await store.dispatch('basket/addToBasket', goodsData)
         if (!result.data.error) {
-          emit('closeState')
+          const changeItemData = {
+            card_id: props.card_id,
+            quantity: Number(formData.count.slice(0, -4)),
+            price: result.data[0].price * Number(formData.count.slice(0, -4))
+          }
+          store.commit('basket/setBasketSum', result.data[1])
+          store.commit('basket/increaseCountItem', changeItemData)
+          store.commit('basket/addToBasket', result.data[0])
         }
       } catch (e) {
         console.log(e)
@@ -204,22 +211,37 @@ export default {
         }
       })
       useAsync(async () => {
-        const wireData = {
-          id: wireOutputId.value,
-          page: 1,
-          count: 10
-        }
-        try {
-          loadingInput.value = true
-          const responseWire = await store.dispatch('shop/getWires', wireData)
-          loadingInput.value = false
-          const wiresName = []
-          responseWire.data.data.forEach((item) => {
-            wiresName.push(item.name)
+        if (store.state.authentication.authorizated) {
+          const wireData = {
+            id: wireOutputId.value,
+            page: 1,
+            count: 10
+          }
+          try {
+            loadingInput.value = true
+            const responseWire = await store.dispatch('shop/getWires', wireData)
+            loadingInput.value = false
+            const wiresName = []
+            responseWire.data.data.forEach((item) => {
+              wiresName.push(item.name)
+            })
+            optionsInput.value = wiresName
+          } catch (e) {
+            console.log(e)
+          }
+        } else if (!store.state.menu.isShowBottomMenu) {
+          store.commit('menu/changeKeyMenu', {
+            key: 'registration',
+            effect: 'fx-slide-from-left'
           })
-          optionsInput.value = wiresName
-        } catch (e) {
-          console.log(e)
+          store.commit('menu/changeStepMenu', { step: 1 })
+          store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+        } else if (store.state.menu.isShowBottomMenu) {
+          store.commit('menu/changeKeyMenu', {
+            key: 'registration',
+            effect: 'fx-slide-from-left'
+          })
+          store.commit('menu/changeStepMenu', { step: 1 })
         }
       })
     }

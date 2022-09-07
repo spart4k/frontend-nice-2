@@ -43,7 +43,7 @@ export default {
   }
   .sub {
     background: transparent;
-    border: 1px solid $blueBlack2;
+    border: .1rem solid $blueBlack2;
     color: $blueBlack2;
   }
   .disable {
@@ -74,7 +74,7 @@ export default {
     height: 3.2rem;
   }
   .play {
-    padding: 2.65rem 3.1rem;
+    padding: 2.6rem 2.9rem 2.7rem 3.3rem;
     border-radius: 50%;
   }
 </style>

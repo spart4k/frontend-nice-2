@@ -27,7 +27,7 @@ export default {
 .row {
   //display: block;
   padding-bottom: 2rem;
-  border-bottom: solid 1px $white;
+  border-bottom: solid .1rem $white;
   width: 100%;
   & + .row {
     margin-top: 3rem;

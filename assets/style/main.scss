@@ -18,7 +18,7 @@
 .logoTop {
   position: fixed;
   z-index: 110;
-  top: 2.9rem;
+  top: 3.9rem;
   // left: 50%;
   transition-duration: .3s;
   transform: translateX(-50%);
@@ -68,7 +68,7 @@ a {
 }
 .animationEnd {
   @media (min-width: $mobileWidth) {
-    top: 2.9rem !important;
+    top: 3.9rem !important;
   }
 }
 .smallText {

@@ -68,10 +68,12 @@ export default defineComponent({
     const fetchData = async (currentPage) => {
       const params = {
         page: currentPage,
-        count: 10
+        count: 10,
+        show_in_main: 1
       }
 
       const response = await store.dispatch('main/getData', params)
+      console.log(response)
       return response
     }
     store.commit('content/clearBgIntro')
@@ -85,6 +87,10 @@ export default defineComponent({
 
     onMounted(() => {
       // if (backgroundLoaded.value) {
+      if (store.state.content.singleAnimation) {
+        localStorage.setItem('showAnimateHomePage', 'true')
+        store.commit('content/cancelAnimate')
+      }
       nextTick(() => {
         const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
         if (!isPlayAnimation) {
@@ -98,7 +104,7 @@ export default defineComponent({
         animationlogo()
         animateSubtitle()
         animateNavbar('.navbarSlug')
-        localStorage.setItem('showAnimateHomePage', 'true')
+        localStorage.setItem('showAnimateHomePage', 'false')
       })
       // }
     })

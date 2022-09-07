@@ -95,14 +95,14 @@
               <N-Purchase-Wire :colors="JSON.parse(data.type.blueprint).color" :card_id="data.id" @changeTotalPrice="changeTotalPrice" />
             </template>
             <template v-else>
-              <N-Purchase :card_id="data.id" @changeTotalPrice="changeTotalPrice" />
+              <N-Purchase :count="data.count" :card_id="data.id" @changeTotalPrice="changeTotalPrice" />
             </template>
           </template>
           <!-- <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div> -->
           <div :class="$style.cardText">
-            <div :class="$style.parser" v-html="data.text" />
+            <div :class="$style.parserDetail" v-html="data.text" />
           </div>
           <template>
             <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
@@ -221,29 +221,60 @@ export default {
     const priceLoading = ref(false)
     const itemCounter = ref(1)
     const login = () => {
-      store.commit('menu/changeKeyMenu', {
-        key: 'registration',
-        effect: 'fx-slide-from-left'
-      })
-      store.commit('menu/changeStepMenu', { step: 2 })
-      store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+      if (!store.state.menu.isShowBottomMenu) {
+        store.commit('menu/changeKeyMenu', {
+          key: 'registration',
+          effect: 'fx-slide-from-left'
+        })
+        store.commit('menu/changeStepMenu', { step: 1 })
+        store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+      } else if (store.state.menu.isShowBottomMenu) {
+        store.commit('menu/changeKeyMenu', {
+          key: 'registration',
+          effect: 'fx-slide-from-left'
+        })
+        store.commit('menu/changeStepMenu', { step: 1 })
+      }
     }
     const registration = () => {
-      store.commit('menu/changeKeyMenu', {
-        key: 'registration',
-        effect: 'fx-slide-from-left'
-      })
-      store.commit('menu/changeStepMenu', { step: 1 })
-      store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+        if (!store.state.menu.isShowBottomMenu) {
+        store.commit('menu/changeKeyMenu', {
+          key: 'registration',
+          effect: 'fx-slide-from-left'
+        })
+        store.commit('menu/changeStepMenu', { step: 2 })
+        store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+      } else if (store.state.menu.isShowBottomMenu) {
+        store.commit('menu/changeKeyMenu', {
+          key: 'registration',
+          effect: 'fx-slide-from-left'
+        })
+        store.commit('menu/changeStepMenu', { step: 2 })
+      }
     }
     const addLike = async () => {
-      like.value = !like.value
-      if (like.value === true) {
-        likeCounter.value++
-        await store.dispatch('socials/addLike', props.data.id)
-      } else {
-        likeCounter.value--
-        await store.dispatch('socials/removeLike', props.data.id)
+      if (store.state.authentication.authorizated) {
+        like.value = !like.value
+        if (like.value === true) {
+          likeCounter.value++
+          await store.dispatch('socials/addLike', props.data.id)
+        } else {
+          likeCounter.value--
+          await store.dispatch('socials/removeLike', props.data.id)
+        }
+      } else if (!store.state.menu.isShowBottomMenu) {
+        store.commit('menu/changeKeyMenu', {
+          key: 'registration',
+          effect: 'fx-slide-from-left'
+        })
+        store.commit('menu/changeStepMenu', { step: 1 })
+        store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+      } else if (store.state.menu.isShowBottomMenu) {
+        store.commit('menu/changeKeyMenu', {
+          key: 'registration',
+          effect: 'fx-slide-from-left'
+        })
+        store.commit('menu/changeStepMenu', { step: 1 })
       }
     }
     const sendComment = async (val) => {
@@ -304,6 +335,7 @@ export default {
     })
     const videoUrl = ref()
     const commentHeightSet = () => {
+      // console.log(commentBox)
       if (props.detailPage === true) {
         setTimeout(() => {
           commentHeight.value = commentBox.value.scrollHeight + 'px'
@@ -496,6 +528,9 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+        .icon {
+          height: 2.7rem;
+        }
       }
       &:after {
         display: block;
@@ -517,12 +552,6 @@ export default {
         }
       }
     }
-    //video {
-    //  width: calc(100% + 2px);
-    //  margin-left: -1px;
-    //  height: 100%;
-    //  max-height: 24rem;
-    //}
   }
   .parser {
     word-break: break-word;
@@ -530,7 +559,16 @@ export default {
     text-overflow: ellipsis;
     display: -webkit-box;
     // line-height: 17px;
-    max-height: 3.4rem;
+    max-height: 3.2rem;
+    opacity: 0.8;
+    @include regular-text;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+  .parserDetail{
+    word-break: break-word;
+    text-overflow: ellipsis;
+    display: -webkit-box;
     opacity: 0.8;
     @include regular-text;
     -webkit-line-clamp: 3;
@@ -625,6 +663,7 @@ export default {
       }
       cursor: pointer;
       .cardText {
+        line-height: 1.7rem;
         p {
           line-height: 1.7rem;
         }
@@ -670,7 +709,7 @@ export default {
       margin-left: auto;
     }
     .comments {
-      transition: all .5s;
+      transition: max-height .5s, opacity .5s, margin-top .5s;
       overflow: hidden;
       opacity: 0;
       &__title {

@@ -1,7 +1,7 @@
 <template>
   <li :class="$style.product">
     <div :class="$style.product__img">
-      <!-- <N-Lazy-Img :src="`${$axios.defaults.baseURL}${item.files[0].src}`" alt="изоображение товара" /> -->
+      <N-Lazy-Img :src="`${$axios.defaults.baseURL}${item.files[0].src}`" alt="изоображение товара" />
     </div>
     <div :class="$style.product__description">
       <h3 :class="$style.product__title">
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { ref, computed, useContext, onMounted } from '@nuxtjs/composition-api'
+import { ref, computed, useContext, onMounted, watch } from '@nuxtjs/composition-api'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
@@ -59,35 +59,48 @@ export default {
       return (array)
     })
     const changeCount = async (value) => {
-      if (Number(value.slice(0, -4)) - oldquantity.value > 0) {
+      if (Number(value.slice(0, -4)) - Number(oldquantity.value.slice(0, -4)) > 0) {
         const goodsData = {
           card_id: props.item.pivot.card_id,
-          quantity: Math.abs(Number(value.slice(0, -4)) - oldquantity.value),
+          quantity: Math.abs(Number(value.slice(0, -4)) - Number(oldquantity.value.slice(0, -4))),
           details: null
         }
-        oldquantity.value = Number(value.slice(0, -4))
+        oldquantity.value = value
         const result = await store.dispatch('basket/addToBasket', goodsData)
-        console.log(result)
-      } else if (Number(value.slice(0, -4)) - oldquantity.value < 0) {
+        if (!result.error) {
+          const changeItemData = {
+            card_id: props.item.pivot.card_id,
+            quantity: goodsData.quantity,
+            price: props.item.price * goodsData.quantity
+          }
+          store.commit('basket/setBasketSum', result.data[1])
+          store.commit('basket/increaseCountItem', changeItemData)
+        }
+      } else if (Number(value.slice(0, -4)) - Number(oldquantity.value.slice(0, -4)) < 0) {
         const goodsData = {
           card_id: props.item.pivot.card_id,
-          quantity: Math.abs(Number(value.slice(0, -4)) - oldquantity.value),
+          quantity: Math.abs(Number(value.slice(0, -4)) - Number(oldquantity.value.slice(0, -4))),
           details: null
         }
-        oldquantity.value = Number(value.slice(0, -4))
+        oldquantity.value = value
         const result = await store.dispatch('basket/deleteFromBasket', goodsData)
         if (!result.error) {
-        const changeItemData = {
-          card_id: props.item.pivot.card_id,
-          quantity: goodsData.quantity,
-          price: props.item.price * goodsData.quantity
-        }
-          store.commit('basket/changeCountItem', changeItemData)
+          const changeItemData = {
+            card_id: props.item.pivot.card_id,
+            quantity: goodsData.quantity,
+            price: props.item.price * goodsData.quantity
+          }
+          store.commit('basket/degreaseCountItem', changeItemData)
         }
       }
     }
-    const quantity = ref(props.item.pivot.quantity)
+    const quantity = ref(props.item.pivot.quantity + ' шт.')
     const oldquantity = ref(0)
+
+    watch(() => props.item.pivot.quantity, () => {
+      oldquantity.value = props.item.pivot.quantity + ' шт.'
+      quantity.value = props.item.pivot.quantity + ' шт.'
+    })
     onMounted(() => {
       oldquantity.value = quantity.value
     })

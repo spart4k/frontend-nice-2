@@ -26,7 +26,7 @@
         :class="$style.recovery"
         type-button="left"
         color="#5289C5"
-        @click.prevent="$emit('changeStep', 'increment')"
+        @click.prevent="toRecovery"
       >
         Восстановить пароль
       </n-button>
@@ -45,7 +45,7 @@
         :class="$style.button"
         color="#5289C5"
         background-color="transparent"
-        @click.prevent="$emit('changeStep', '')"
+        @click.prevent="$emit('changeStep', 'increment')"
       >
         Еще не зарегистрированы?
       </n-button>
@@ -70,7 +70,7 @@ export default {
           password: { default: '', validations: { required } }
         }
       })
-    const submit = async () => {
+    const submit = async ({ commit }) => {
       try {
         if (!validate()) { return }
         loading.value = true
@@ -78,11 +78,32 @@ export default {
         const result = await store.dispatch('authentication/login', loginData)
         if (!result.data.error) {
           emit('closeState')
+          setTimeout(() => {
+            store.dispatch('authentication/verifyToken')
+            store.dispatch('basket/getBasket')
+          }, 300)
         }
       } catch (e) {
         console.log(e)
       } finally {
         loading.value = false
+      }
+    }
+
+    const toRecovery = () => {
+      if (!store.state.menu.isShowBottomMenu) {
+        store.commit('menu/changeKeyMenu', {
+          key: 'registration',
+          effect: 'fx-slide-from-left'
+        })
+        store.commit('menu/changeStepMenu', { step: 3 })
+        store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+      } else if (store.state.menu.isShowBottomMenu) {
+        store.commit('menu/changeKeyMenu', {
+          key: 'registration',
+          effect: 'fx-slide-from-left'
+        })
+        store.commit('menu/changeStepMenu', { step: 3 })
       }
     }
 
@@ -92,7 +113,8 @@ export default {
       $touched,
       $v,
       loading,
-      submit
+      submit,
+      toRecovery
     }
   }
 }

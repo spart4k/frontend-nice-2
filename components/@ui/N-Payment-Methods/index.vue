@@ -37,7 +37,7 @@ export default {
   height: 8rem;
   color: $fontColorDefault;
   padding: 1rem;
-  border: 2px solid $gray3;
+  border: .2rem solid $gray3;
   cursor: pointer;
   .text {
     color: inherit;

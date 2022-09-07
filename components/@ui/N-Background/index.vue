@@ -62,5 +62,6 @@ export default {
   opacity: 0.35;
   z-index: 2;
   mix-blend-mode: hard-light;
+  transition: background-color .5s;
 }
 </style>

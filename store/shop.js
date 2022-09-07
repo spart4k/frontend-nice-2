@@ -41,19 +41,9 @@ export const actions = {
       console.log(e)
     }
   },
-  async tinkoff ({ commit }, params) {
+  async createNewOrder ({ commit }, params) {
     try {
-      delete this.$axios.defaults.headers.common.Authorization
-      const data = await this.$axios.post('https://securepay.tinkoff.ru/v2/Init', params, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json;charset=utf-8'
-        }
-      })
-      const token = localStorage.getItem('token')
-      this.$axios.defaults.headers.common.Authorization = `Bearer ${token}`
-      console.log(data)
-      commit('setPaymentURL', data.data.PaymentURL)
+      const data = await this.$axios.post('api/v1/createNewOrder', params)
       return data.data
     } catch (e) {
       console.log(e)

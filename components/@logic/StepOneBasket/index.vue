@@ -3,24 +3,33 @@
     <h2 :class="$style.title">
       Ваша корзина
     </h2>
-    <ul :class="$style.list">
-      <n-basket-row v-for="(item, index) in basketData" :key="index" :item="item" @deleteFromBasket="deleteFromBasket(item, index)" />
-    </ul>
-    <div :class="$style.totalPrice">
-      <div :class="$style.totalPrice__text">
-        Итого
+    <template v-if="basketPrice">
+      <ul :class="$style.list">
+        <n-basket-row v-for="(item, index) in basketData" :key="index" :item="item" @deleteFromBasket="deleteFromBasket(item, index)" />
+      </ul>
+      <div :class="$style.totalPrice">
+        <div :class="$style.totalPrice__text">
+          Итого
+        </div>
+        <div :class="$style.totalPrice__sum">
+          {{ basketPrice }} р.
+        </div>
       </div>
-      <div :class="$style.totalPrice__sum">
-        {{ basketPrice }} р.
+      <n-button
+        :class="$style.btn"
+        :type-button="'pink'"
+        @click="$emit('changeStep', 'increment')"
+      >
+        Оформить заказ
+      </n-button>
+    </template>
+    <template v-else>
+      <div :class="$style.nothing">
+        <p :class="$style.nothingToShow">
+          Нет информации для отображения
+        </p>
       </div>
-    </div>
-    <n-button
-      :class="$style.btn"
-      :type-button="'pink'"
-      @click="$emit('changeStep', 'increment')"
-    >
-      Оформить заказ
-    </n-button>
+    </template>
   </div>
 </template>
 
@@ -100,5 +109,15 @@ ul {
 .title {
   text-align: center;
   @include text-style-h2;
+}
+.nothing{
+  width: 100%;
+  text-align: center;
+  margin-top: 40vh;
+  .nothingToShow {
+    @include regular-text;
+    color: $fontColorDefault;
+    opacity: 0.5;
+  }
 }
 </style>

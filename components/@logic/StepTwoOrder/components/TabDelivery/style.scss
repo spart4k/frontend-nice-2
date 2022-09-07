@@ -28,6 +28,14 @@
   width: 100%;
   margin-bottom: 1.5rem;
 }
+.hiddenButton {
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+  border: 0;
+}
 
 .paymentList {
   display: flex;

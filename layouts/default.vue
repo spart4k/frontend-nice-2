@@ -1,6 +1,6 @@
 <template>
   <div ref="body" class="body">
-    <div :class="$style.headerContainer" :style="{ marginLeft: sheetWidth && !sheetRight ? sheetWidth+'px' : '0', marginRight: sheetWidth && sheetRight ? -sheetWidth+'px' : '0' }">
+    <div :class="$style.headerContainer" :style="{ marginLeft: sheetWidth && !sheetRight ? '39rem' : '0', marginRight: sheetWidth && sheetRight ? '39rem' : '0' }">
       <the-header
         :header-items="headerItems"
         :class="$style.header"
@@ -13,7 +13,7 @@
     <n-intro-wrapper
       :class="$style.main"
       :is-home-page="isHomePage"
-      :style="{ marginLeft: sheetWidth && !sheetRight ? sheetWidth+'px' : '0', marginRight: sheetWidth && sheetRight ? -sheetWidth+'px' : '0' }"
+      :style="{ marginLeft: sheetWidth && !sheetRight ? '39rem' : '0', marginRight: sheetWidth && sheetRight ? '39rem' : '0' }"
       :color="color"
       @backgroundLoaded="backgroundLoaded"
     >
@@ -26,7 +26,7 @@
       max-width="39rem"
       :max-height="'100%'"
       :fullscreen="true"
-      :is-show-button-back="step > 0"
+      :is-show-button-back="step > 0 && step !== 3"
       @closeMenu="closeState"
       @closed="changeState"
       @back="changeStep"
@@ -37,13 +37,16 @@
         :key-animation="keyAnimation"
         :step="step"
         :curr-comp="currentShowComponents.key"
+        :messages="messages"
         @clearStep="step = 0"
         @changeComp="changeComp"
         @changeStep="changeStep"
         @closeState="closeState"
+        @sendMessage="sendMessage"
       />
     </N-BootomSheet>
     <portal-target name="sliderPopup" />
+    <N-Websocket v-if="websocketDelay" />
   </div>
 </template>
 
@@ -55,7 +58,7 @@ import { BLAND_COLOR } from '~/const/blandColor'
 
 export default {
   name: 'DefaultLayout',
-  setup () {
+  setup (_, props) {
     const headerItems = ref([])
     const body = ref(null)
     const menu = ref(null)
@@ -64,6 +67,7 @@ export default {
     const sheetWidth = ref(0)
     const sheetRight = ref(false)
     const keyAnimation = ref('next')
+    const websocketDelay = ref(false)
     const currentShowComponents = ref({
       key: '',
       effect: 'fx-slide-from-left'
@@ -159,6 +163,16 @@ export default {
       store.commit('menu/changeStepMenu', { step: 0 })
       step.value = 0
     }
+    watch(() => store.state.menu.stepCurrentComponent, () => {
+      step.value = store.state.menu.stepCurrentComponent
+      if (store.state.menu.stepCurrentComponent === 0) {
+        store.commit('menu/changeKeyMenu', { key: '', effect: 'fx-slide-from-left' })
+      }
+    })
+    watch(() => store.state.menu.component.key, () => {
+      currentShowComponents.value.key = store.state.menu.component.key
+      currentShowComponents.value.effect = store.state.menu.component.effect
+    })
     watch(() => store.state.menu.isShowBottomMenu, () => {
       if (store.state.menu.isShowBottomMenu) {
         if (store.state.menu.component) {
@@ -168,9 +182,9 @@ export default {
             sheetRight.value = true
           }
         }
-        if (store.state.menu.stepCurrentComponent) {
-          step.value = store.state.menu.stepCurrentComponent
-        }
+        // if (store.state.menu.stepCurrentComponent) {
+        //   step.value = store.state.menu.stepCurrentComponent
+        // }
         setTimeout(() => {
           openMenu()
         }, 100)
@@ -205,6 +219,9 @@ export default {
       store.commit('authentication/setToken')
       store.dispatch('basket/getBasket')
       animateBackground()
+      setTimeout(() => {
+        websocketDelay.value = true
+      }, 500)
     })
     provide('backgroundLoaded', isLoaded)
     provide('sheetWidth', sheetWidth)
@@ -233,7 +250,8 @@ export default {
       changeState,
       closeState,
       backgroundLoaded,
-      isLoaded
+      isLoaded,
+      websocketDelay
     }
   }
 }
@@ -252,13 +270,14 @@ export default {
   transition-duration: .3s;
 }
 .headerContainer {
-  top: 2rem;
+  top: 3.9rem;
   left: 4rem;
   right: 4rem;
   position: fixed;
   z-index: 11;
   transition-duration: .3s;
   @media (max-width: $mobileWidth) {
+    top: 2rem;
     left: 1.5rem;
     right: 1.5rem;
   }

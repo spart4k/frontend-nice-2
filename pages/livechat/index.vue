@@ -47,8 +47,8 @@ export default {
     position: relative;
     color: #222;
     background: #fff;
-    width: 100px;
-    height: 40px;
+    width: 10rem;
+    height: 4rem;
     display: flex;
     align-items: center;
     justify-content: center;

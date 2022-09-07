@@ -6,6 +6,8 @@ export const state = () => ({
     phone: ''
   },
   adress: [],
+  selectedAddress: '',
+  selectedAddressIndex: 0,
   token: '',
   authorizated: false,
   showLogin: false
@@ -36,7 +38,10 @@ export const mutations = {
   setUserInfo (state, value) {
     state.user.email = value.email
     state.user.nickname = value.nickname
-    state.user.id = value.id
+    state.user.phone = value.phone
+    if (value.id) {
+      state.user.id = value.id
+    }
   },
   loadUserAdress (state, value) {
     state.adress.push(value)
@@ -45,7 +50,19 @@ export const mutations = {
     state.adress[0].push(value)
   },
   removeUserAdress (state, value) {
-    state.adress[0].splice(value, 1)
+    if (state.adress[0][value] === state.selectedAddress) {
+      state.adress[0].splice(value, 1)
+      state.selectedAddress = state.adress[0][0]
+      state.selectedAddressIndex = 0
+    } else {
+      state.adress[0].splice(value, 1)
+    }
+  },
+  setSelectedAddress (state, value) {
+    state.selectedAddress = value
+  },
+  setSelectedAddressIndex (state, value) {
+    state.selectedAddressIndex = value
   }
 }
 
@@ -116,12 +133,13 @@ export const actions = {
       return e.response.data
     }
   },
-  async getUserInfo ({ commit }, params) {
+  async editUserData ({ commit }, params) {
     try {
-      const res = await this.$axios.get('api/v1/user', params)
-      localStorage.setItem('user', JSON.stringify(res.data))
-      commit('setUserData', res.data)
-      return res
+      const data = await this.$axios.post('api/v1/editUserData', params)
+      if (!data.data.error) {
+        this.$toast.success(data.data.data, { position: 'bottom-right', icon: true })
+        return data.data
+      }
     } catch (e) {
       return e.response.data.message
     }
