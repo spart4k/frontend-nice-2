@@ -245,7 +245,7 @@ export default {
     .icon {
       width: 2.4rem;
       height: 2.4rem;
-      transition: all .2s;
+      transition: color .2s;
       cursor: pointer;
     }
     .send {

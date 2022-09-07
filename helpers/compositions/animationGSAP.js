@@ -74,7 +74,7 @@ const animation = ($gsap, Elastic) => {
     })
 
     tl.to(logo, 0.5, {
-      top: display === 'sm' ? '9rem' : '2.9rem',
+      top: display === 'sm' ? '9rem' : '3.9rem',
       ease: 'cubic-bezier(.71,.01,.15,1)'
     }, '-=0.5')
 
@@ -147,7 +147,7 @@ const animation = ($gsap, Elastic) => {
               // start: 'top 7rem',
               end: '+=300',
               scrub: true,
-              markers: true
+              markers: false
             },
             top: '1rem',
             scale: 0.6,

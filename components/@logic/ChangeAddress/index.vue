@@ -8,17 +8,16 @@
         v-for="(item, index) in addressItem"
         :key="index"
         :class="[$style.item, currentItem === index && $style.active]"
-        @click="currentItem = index"
+        @click="setAddress(item, index)"
       >
         <div :class="$style.itemText">
           {{ item.city.name }}, {{ item.address }}
         </div>
         <n-button type-button="transparent" @click="removeAddress(item.id, index)">
-          <n-icon name="delete" />
+          <n-icon name="delete" :class="$style.deleteButton" />
         </n-button>
       </li>
     </ul>
-    <!-- <N-Adress :class="$style.city" /> -->
     <div :class="$style.city">
       <p :class="$style.subtitle">
         Адрес
@@ -64,15 +63,15 @@ export default {
   components: { NButton, vSelect },
   setup () {
     const { store } = useContext()
-    const currentItem = ref(0)
+    const currentItem = computed(() => { return store.state.authentication.selectedAddressIndex })
     const addressItem = computed(() => { return store.state.authentication.adress[0] })
 
-    const removeAddress = (value) => {
+    const removeAddress = (value, index) => {
       useAsync(async () => {
         try {
           const removeResponce = await store.dispatch('authentication/removeAdress', value)
           if (!removeResponce.error) {
-            store.commit('basket/removeFromBasket')
+            store.commit('authentication/removeUserAdress', index)
           }
         } catch (e) {
           console.log(e)
@@ -135,6 +134,11 @@ export default {
         console.log(e)
       }
     }
+
+    const setAddress = (value, index) => {
+      store.commit('authentication/setSelectedAddress', value)
+      store.commit('authentication/setSelectedAddressIndex', index)
+    }
     onMounted(() => {
       fetchCities()
     })
@@ -149,7 +153,8 @@ export default {
       defaulArray,
       adress,
       city,
-      changeAdress
+      changeAdress,
+      setAddress
     }
   }
 }
@@ -201,6 +206,10 @@ li {
   .itemText {
     display: flex;
     align-items: center;
+  }
+  .deleteButton {
+    height: 2.1rem;
+    width: 2.1rem;
   }
 }
 .city {

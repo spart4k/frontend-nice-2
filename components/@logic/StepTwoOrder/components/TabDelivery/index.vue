@@ -34,8 +34,11 @@
       <h4 :class="$style.title">
         Адрес
       </h4>
-      <n-row v-if="addressItem[0][0]" :class="$style.addressText">
-        {{ addressItem[0][0].city.name }}, {{ addressItem[0][0].address }}
+      <n-row v-if="selectedAddress" :class="$style.addressText">
+        {{ selectedAddress.city.name }}, {{ selectedAddress.address }}
+      </n-row>
+      <n-row v-else-if="addressItem" :class="$style.addressText">
+        {{ addressItem.city.name }}, {{ addressItem.address }}
       </n-row>
       <n-button
         type-button="transparent"
@@ -84,9 +87,16 @@
             <div :class="$style.col__left">
               Стоимость доставки
             </div>
-            <div :class="$style.col__right">
-              {{ addressItem[0][0].city.name === 'Нижний Новгород' ? '300 р.' : '1000 р.' }}
-            </div>
+            <template v-if="addressItem">
+              <div :class="$style.col__right">
+                {{ addressItem.city.name === 'Нижний Новгород' ? '300 р.' : '1000 р.' }}
+              </div>
+            </template>
+            <template v-else>
+              <div :class="$style.col__right">
+                Выберите город
+              </div>
+            </template>
           </div>
           <div :class="$style.col">
             <div :class="$style.col__left">
@@ -106,26 +116,37 @@
           </div>
         </div>
       </div>
+      <n-button
+        :class="$style.btn"
+        :type-button="'pink'"
+        :disabled="$v.$invalid && $touched"
+        @click="$emit('toAddress', false); submit($event)"
+      >
+        <template v-if="!loading">
+          Оплатить онлайн
+        </template>
+        <template v-else>
+          <n-loading />
+        </template>
+      </n-button>
       <!-- @click="submit;$emit('toAddress', false)" -->
       <form name="TinkoffPayForm" onsubmit="pay(this); return false;">
-        <n-button
-          :class="$style.btn"
-          :type-button="'pink'"
-          :disabled="$v.$invalid && $touched"
-          @click="$emit('toAddress', false);$emit('changeStep', 'increment')"
-        >
-          Оплатить онлайн
-        </n-button>
         <input class="tinkoffPayRow" type="hidden" name="terminalkey" value="1658916651586DEMO">
         <input class="tinkoffPayRow" type="hidden" name="frame" value="true">
         <input class="tinkoffPayRow" type="hidden" name="language" value="ru">
-        <input v-model="totalPrice" type="hidden" class="tinkoffPayRow" name="amount">
-        <input v-model="formData.name" class="tinkoffPayRow" type="hidden" placeholder="Номер заказа" name="order">
-        <input v-model="formData.name" class="tinkoffPayRow" type="hidden" placeholder="Описание заказа" name="description">
+        <input v-model="tinkoffPrice" type="hidden" class="tinkoffPayRow" name="amount">
+        <input v-model="orderId" class="tinkoffPayRow" type="hidden" placeholder="Номер заказа" name="order">
+        <!-- <input v-model="formData.name" class="tinkoffPayRow" type="hidden" placeholder="Описание заказа" name="description"> -->
         <input v-model="formData.name" class="tinkoffPayRow" type="hidden" placeholder="ФИО плательщика" name="name">
         <input v-model="formData.email" class="tinkoffPayRow" type="hidden" placeholder="E-mail" name="email">
         <input v-model="formData.phone" class="tinkoffPayRow" type="hidden" placeholder="Контактный телефон" name="phone">
-        <!-- <input class="tinkoffPayRow" type="submit" value="Оплатить"> -->
+        <input
+          ref="tinkoffPay"
+          :class="$style.hiddenButton"
+          class="tinkoffPayRow"
+          type="submit"
+          value="Оплатить"
+        >
       </form>
       <script src="https://securepay.tinkoff.ru/html/payForm/js/tinkoff_v2.js" />
       <NPersonalConsent />

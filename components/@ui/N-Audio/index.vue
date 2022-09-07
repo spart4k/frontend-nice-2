@@ -11,7 +11,7 @@
       <N-Icon v-if="!audioPlaying" :class="$style.controlButton" name="play" @click="playAudio" />
       <N-Icon v-else-if="audioPlaying" :class="$style.controlButton" name="pause" @click="pauseAudio" />
     </div>
-    <audio ref="audioSource" :src="src" />
+    <audio ref="audioSource" :src="src" preload loop />
   </div>
 </template>
 <script lang="js">

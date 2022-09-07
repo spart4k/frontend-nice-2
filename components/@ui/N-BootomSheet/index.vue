@@ -22,7 +22,7 @@
           :class="$style.close"
           @click="$emit('closeMenu')"
         >
-          <N-Icon name="close" />
+          <N-Icon name="close" :class="$style.closeButton" />
         </N-Button>
         <N-Button
           v-if="isShowButtonBack"
@@ -32,7 +32,7 @@
           background-color="rgba(34, 34, 34, 0.1)"
           @click="$emit('back')"
         >
-          <N-Icon name="arrow-back" />
+          <N-Icon name="arrow-back" :class="$style.backButton" />
         </N-Button>
         <slot />
       </client-only>
@@ -85,17 +85,24 @@ export default {
   }
   .back {
     left: 1.5rem;
+    .backButton {
+      width: 1.8rem;
+    }
   }
   .close {
     right: 1.5rem;
     z-index: 5;
+    .closeButton {
+      width: 1.4rem;
+      height: 1.4rem;
+    }
   }
   :global(.bottom-sheet) {
     z-index: 9999 !important;
   }
   :global(.bottom-sheet__pan) {
-      padding-bottom: 20px;
-      padding-top: 15px;
+      padding-bottom: 4rem !important;
+      padding-top: 2rem !important;
       height: 5rem !important;
   }
   :global(.bottom-sheet__card) {
@@ -126,8 +133,9 @@ export default {
   }
 }
 :global(.bottom-sheet__bar) {
-  height: 6px !important;
-  background: rgba(#222222, 0.2);
+  height: .4rem !important;
+  background: rgba(0,0,0,.15) !important;
+  // background: rgba(#222222, 0.2);
   @media (min-width: $mobileWidth) {
     display: none !important;
   }

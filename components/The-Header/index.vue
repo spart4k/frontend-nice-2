@@ -5,7 +5,7 @@
       v-show="$route.name === 'index'"
       class="logo"
       :class="$style.logo"
-      :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}px)` : '50%'}"
+      :style="{left: sheetWidth ? `calc(50% + ${39/2}rem)` : '50%'}"
       @click="$router.push('/')"
     >
       <n-logo />
@@ -13,7 +13,7 @@
     <div
       v-show="$route.name !== 'index'"
       :class="$style.logoSlug"
-      :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}px)` : '50%'}"
+      :style="{left: sheetWidth ? `calc(50% + ${39/2}rem)` : '50%'}"
       @click="$router.push('/')"
     >
       <n-logo />
