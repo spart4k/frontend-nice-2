@@ -9,8 +9,8 @@
     "generate": "nuxt generate",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint": "npm run lint:js",
-    "lintfix": "npm run lint:js -- --fix",
-    "deploy_test": "ssh nice@178.20.44.99 'cd /opt/test.nice/; ./dep_frontend.sh'"
+    "lintfix": "npm run lint:js -- -ix",
+    "deploy_test": "sudo ssh nice@178.20.44.99 'cd /opt/test.nice/; ./dep_frontend.sh'"
   },
   "dependencies": {
     "@egstad/marquee": "^3.0.2",
@@ -33,7 +33,6 @@
     "v-mask": "^2.3.0",
     "v-tooltip": "^2.1.3",
     "vue": "^2.6.14",
-    "vue-debounce": "^4.0.0",
     "vue-infinite-loading": "^2.4.5",
     "vue-lazyload": "^1.3.3",
     "vue-select": "^3.20.0",
