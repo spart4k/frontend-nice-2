@@ -15,21 +15,22 @@ export default {
     const loading = ref(true)
     const ws = new WebSocket('wss://test.itisthenice.com/websocket', null, { headers: { Authorization: '92' } })
     ws.onmessage = async (event) => {
-      if (JSON.parse(event.data).messageType === 'bank' && JSON.parse(event.data).status === 'CONFIRMED') {
+    const data = JSON.parse(event.data)
+      if (data.messageType === 'bank' && data.status === 'CONFIRMED' && data.status === 'CONFIRMED' && data.user_id === store.state.authentication.user.id) {
         store.commit('menu/changeKeyMenu', {
           key: 'basket',
           effect: 'fx-slide-from-left'
         })
         store.commit('menu/changeStepMenu', { step: 3 })
-      } else if (JSON.parse(event.data).messageType === 'ping') {
+      } else if (data.messageType === 'ping') {
         ws.send(JSON.stringify({ messageType: 'pong', id: store.state.authentication.user.id }))
-      } else if (JSON.parse(event.data).messageType === 'auth') {
+      } else if (data.messageType === 'auth') {
         ws.send(JSON.stringify({ messageType: 'auth', token: store.state.authentication.token }))
       } else if (loading.value) {
-        messages.value = JSON.parse(event.data)
+        messages.value = data
         loading.value = false
       } else {
-        await messages.value.push(JSON.parse(event.data))
+        await messages.value.push(data)
         if (messages.value.length > 99) {
           messages.value.shift()
         }
