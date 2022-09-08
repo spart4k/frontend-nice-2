@@ -3,13 +3,15 @@
 </template>
 
 <script>
-import { onMounted, ref, useContext } from '@nuxtjs/composition-api'
+import { onMounted, ref, useContext, watch } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NWebsocket',
   props: {
+  message: String
   },
   setup (_, props) {
+    const inpMes = ref(props.message)
     const messages = ref([])
     const { store } = useContext()
     const loading = ref(true)
@@ -22,15 +24,11 @@ export default {
           effect: 'fx-slide-from-left'
         })
         store.commit('menu/changeStepMenu', { step: 3 })
-      } else if (data.messageType === 'ping') {
-        ws.send(JSON.stringify({ messageType: 'pong', id: store.state.authentication.user.id }))
-      } else if (data.messageType === 'auth') {
-        ws.send(JSON.stringify({ messageType: 'auth', token: store.state.authentication.token }))
-      } else if (loading.value) {
-        messages.value = data
-        loading.value = false
-      } else {
-        await messages.value.push(data)
+      } else if (loading.value && data.messageType === 'chat') {
+          messages.value = data
+          loading.value = false
+        } else if (!loading.value && data.messageType === 'chat' && props.message) {
+          await messages.value.push(data)
         if (messages.value.length > 99) {
           messages.value.shift()
         }
@@ -45,13 +43,19 @@ export default {
       ws.send(JSON.stringify({ user_id: store?.state?.authentication?.user?.id, message_text: null, sticker_id: val }))
     }
 
+    watch(() => inpMes.value, () => {
+      console.log(inpMes.value)
+    })
+
     onMounted(() => {
+      console.log(inpMes.value)
     })
     return {
       messages,
       sendSticker,
       loading,
-      sendMessage
+      sendMessage,
+      inpMes
     }
   }
 }

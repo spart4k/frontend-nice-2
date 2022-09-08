@@ -37,16 +37,14 @@
         :key-animation="keyAnimation"
         :step="step"
         :curr-comp="currentShowComponents.key"
-        :messages="messages"
         @clearStep="step = 0"
         @changeComp="changeComp"
         @changeStep="changeStep"
         @closeState="closeState"
-        @sendMessage="sendMessage"
       />
     </N-BootomSheet>
     <portal-target name="sliderPopup" />
-    <N-Websocket v-if="websocketDelay" />
+    <!-- <N-Websocket v-if="websocketDelay" :message="mes" /> -->
   </div>
 </template>
 
@@ -67,7 +65,6 @@ export default {
     const sheetWidth = ref(0)
     const sheetRight = ref(false)
     const keyAnimation = ref('next')
-    const websocketDelay = ref(false)
     const currentShowComponents = ref({
       key: '',
       effect: 'fx-slide-from-left'
@@ -219,9 +216,6 @@ export default {
       store.commit('authentication/setToken')
       store.dispatch('basket/getBasket')
       animateBackground()
-      setTimeout(() => {
-        websocketDelay.value = true
-      }, 500)
     })
     provide('backgroundLoaded', isLoaded)
     provide('sheetWidth', sheetWidth)
@@ -250,8 +244,7 @@ export default {
       changeState,
       closeState,
       backgroundLoaded,
-      isLoaded,
-      websocketDelay
+      isLoaded
     }
   }
 }
