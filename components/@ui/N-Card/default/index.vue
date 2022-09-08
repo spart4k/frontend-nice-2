@@ -658,6 +658,7 @@ export default {
     &__top {
     word-break: break-word;
       &.detailPage {
+        cursor: default;
         @media (min-width: $tabletWidth) {
         }
       }
