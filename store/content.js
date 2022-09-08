@@ -36,8 +36,8 @@ export const mutations = {
   setAnimate (state, value) {
     state.isShowAnimationHomePage = value
   },
-  cancelAnimate (state, value) {
-    state.singleAnimation = false
+  setSingleAnimation (state, value) {
+    state.singleAnimation = value
   }
 }
 

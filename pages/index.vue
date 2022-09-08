@@ -90,7 +90,7 @@ export default defineComponent({
       nextTick(() => {
         if (store.state.content.singleAnimation) {
           localStorage.setItem('showAnimateHomePage', 'true')
-          store.commit('content/cancelAnimate')
+          store.commit('content/setSingleAnimation', false)
         }
         const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
         if (!isPlayAnimation) {
@@ -105,6 +105,7 @@ export default defineComponent({
         animateSubtitle()
         animateNavbar('.navbarSlug')
         localStorage.setItem('showAnimateHomePage', 'false')
+        // localStorage.setItem('showAnimateHomePage', 'false')
         // localStorage.setItem('showAnimateHomePage', 'true')
       })
       // }
