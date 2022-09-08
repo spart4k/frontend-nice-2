@@ -13,7 +13,7 @@ export default {
     const messages = ref([])
     const { store } = useContext()
     const loading = ref(true)
-    const ws = new WebSocket('wss://test.itisthenice.com/websocket', null, { headers: { Authorization: '92' } })
+    const ws = new WebSocket('wss://test.itisthenice.com/websocket')
     ws.onmessage = async (event) => {
     const data = JSON.parse(event.data)
       if (data.messageType === 'bank' && data.status === 'CONFIRMED' && data.status === 'CONFIRMED' && data.user_id === store.state.authentication.user.id) {
