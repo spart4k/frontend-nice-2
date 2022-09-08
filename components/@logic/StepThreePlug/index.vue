@@ -4,7 +4,7 @@
       Спасибо за заказ!
     </h3>
     <div :class="$style.subtitle">
-      Номер вашего заказа №{{orderId}}
+      Номер вашего заказа №{{ orderId }}
     </div>
     <div :class="$style.text">
       Менеджер свяжется с вами
@@ -20,7 +20,7 @@
     >
       Продолжить
     </n-button>
-    <n-button type-button="transparent" color="#C83F8E" :class="[$style.btn, $style.btnHistory]">
+    <n-button type-button="transparent" color="#C83F8E" :class="[$style.btn, $style.btnHistory]" @click="toOrderHistory">
       История заказов
     </n-button>
   </div>
@@ -33,8 +33,16 @@ export default {
   setup () {
     const { store } = useContext()
     const orderId = computed(() => { return store.state.basket.lastOrder })
+    const toOrderHistory = () => {
+        store.commit('menu/changeKeyMenu', {
+          key: 'registration',
+          effect: 'fx-slide-from-left'
+        })
+        store.commit('menu/changeStepMenu', { step: 2 })
+    }
     return {
-      orderId
+      orderId,
+      toOrderHistory
     }
   }
 }
