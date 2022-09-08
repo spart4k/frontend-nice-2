@@ -88,6 +88,10 @@ export default defineComponent({
     onMounted(() => {
       // if (backgroundLoaded.value) {
       nextTick(() => {
+        if (store.state.content.singleAnimation) {
+          localStorage.setItem('showAnimateHomePage', 'true')
+          store.commit('content/cancelAnimate')
+        }
         const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
         if (!isPlayAnimation) {
           store.commit('content/setAnimate', false)
@@ -100,10 +104,6 @@ export default defineComponent({
         animationlogo()
         animateSubtitle()
         animateNavbar('.navbarSlug')
-        if (store.state.content.singleAnimation) {
-          localStorage.setItem('showAnimateHomePage', 'true')
-          store.commit('content/cancelAnimate')
-        }
         localStorage.setItem('showAnimateHomePage', 'false')
         // localStorage.setItem('showAnimateHomePage', 'true')
       })
