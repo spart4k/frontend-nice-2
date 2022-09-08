@@ -8,7 +8,7 @@
       @changeComponent="changeComponent"
       @toAddress="toAddress"
       @closeState="$emit('closeState')"
-      @sendMessage="($event) => $emit('sendMessage', $event)"
+      @sendMessage="sendMessage"
     />
   </transition>
 </template>
@@ -23,8 +23,8 @@ export default {
     step: Number,
     currComp: String,
     keyAnimation: String,
-    basketData: Object,
-    messages: Array
+    basketData: Object
+    // messages: Array
   },
   setup (props, { emit }) {
   const { store } = useContext()
@@ -83,11 +83,45 @@ export default {
       return 'live-default'
     }
     })
+
+    const messages = ref([])
+    const loading = ref(true)
+    const ws = new WebSocket('wss://test.itisthenice.com/websocket')
+    ws.onmessage = async (event) => {
+    const data = JSON.parse(event.data)
+      if (data.messageType === 'bank' && data.status === 'CONFIRMED' && data.status === 'CONFIRMED' && data.user_id === store.state.authentication.user.id) {
+        store.commit('menu/changeKeyMenu', {
+          key: 'basket',
+          effect: 'fx-slide-from-left'
+        })
+        store.commit('menu/changeStepMenu', { step: 3 })
+      } else if (loading.value && data.messageType === 'lastMessages') {
+          messages.value = data.messageArray
+          loading.value = false
+        } else if (!loading.value) {
+          await messages.value.push(data)
+        if (messages.value.length > 99) {
+          messages.value.shift()
+        }
+      }
+    }
+
+    const sendMessage = (message) => {
+      ws.send(JSON.stringify({ user_id: store.state.authentication.user.id, message_text: message, messageType: 'chat' }))
+    }
+
+    const sendSticker = (val) => {
+      ws.send(JSON.stringify({ user_id: store.state.authentication.user.id, message_text: null, sticker_id: val, messageType: 'chat' }))
+    }
     return {
       isCurrentPage,
       changeStep,
       changeComponent,
-      toAddress
+      toAddress,
+      messages,
+      sendSticker,
+      loading,
+      sendMessage
     }
   }
 }

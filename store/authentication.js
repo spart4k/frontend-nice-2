@@ -147,8 +147,9 @@ export const actions = {
   async verifyToken ({ commit }, params) {
     try {
       const response = await this.$axios('api/v1/verifyToken')
-      commit('setUserInfo', response.data.data[0])
-      commit('loadUserAdress', response.data.data[1])
+      // console.log(response.data.data.user)
+      commit('setUserInfo', response.data.data.user)
+      commit('loadUserAdress', response.data.data.addresses)
     } catch (e) {
       return e.response.data.message
     }
