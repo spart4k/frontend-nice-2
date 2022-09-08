@@ -11,7 +11,6 @@ export default {
       if (store.state.authentication.selectedAddress) {
         return store.state.authentication.selectedAddress
       } else {
-        console.log(store.state.authentication.adress[0][0])
         return store.state.authentication.adress[0][0]
       }
     })
@@ -48,7 +47,6 @@ export default {
       { text: 'Картой', icon: 'card-stepper', value: 'card' }
     ]
     const submit = async (event) => {
-        // ctx.refs.tinkoffPay.click()
       try {
         if (!validate()) { return }
         loading.value = true
@@ -74,7 +72,6 @@ export default {
       } finally {
         loading.value = false
       }
-      // emit('changeStep', 'increment')
     }
     return {
       paymentsMethodSelect,

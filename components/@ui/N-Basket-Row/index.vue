@@ -1,7 +1,7 @@
 <template>
   <li :class="$style.product">
     <div :class="$style.product__img">
-      <N-Lazy-Img :src="`${$axios.defaults.baseURL}${item.files[0].src}`" alt="изоображение товара" />
+      <N-Lazy-Img :src="`${$axios.defaults.baseURL}/${item.files[0].src}`" alt="изоображение товара" />
     </div>
     <div :class="$style.product__description">
       <h3 :class="$style.product__title">

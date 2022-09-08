@@ -5,7 +5,7 @@
       v-show="$route.name === 'index'"
       class="logo"
       :class="$style.logo"
-      :style="{left: sheetWidth ? `calc(50% + ${39/2}rem)` : '50%'}"
+      :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}rem)` : '50%'}"
       @click="$router.push('/')"
     >
       <n-logo />
@@ -13,7 +13,7 @@
     <div
       v-show="$route.name !== 'index'"
       :class="$style.logoSlug"
-      :style="{left: sheetWidth ? `calc(50% + ${39/2}rem)` : '50%'}"
+      :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}rem)` : '50%'}"
       @click="$router.push('/')"
     >
       <n-logo />
@@ -101,19 +101,24 @@ export default {
     }
 
     const openMenu = () => {
-      if (store.state.menu.isShowBottomMenu) {
+      console.log(store.state.menu.isShowBottomMenu, store.state.menu.isShowBottomLive)
+      if (store.state.menu.isShowBottomMenu && !store.state.menu.isShowBottomLive) {
         emit('closeState')
+        store.commit('menu/changeShowStateBottomSheetLive', { value: true })
         setTimeout(() => {
           store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
         }, 100)
-      } else {
+      } else if (!store.state.menu.isShowBottomMenu) {
         store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+        store.commit('menu/changeShowStateBottomSheetLive', { value: true })
       }
     }
 
     const openLive = () => {
-      if (store.state.menu.isShowBottomMenu) {
+    console.log(store.state.menu.isShowBottomMenu, store.state.menu.isShowBottomLive)
+      if (store.state.menu.isShowBottomMenu && store.state.menu.isShowBottomLive) {
         emit('closeState')
+        store.commit('menu/changeShowStateBottomSheetLive', { value: false })
         setTimeout(() => {
           store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
           store.commit('menu/changeKeyMenu', {
@@ -121,12 +126,13 @@ export default {
             effect: 'fx-slide-from-right'
           })
         }, 100)
-      } else {
+      } else if (!store.state.menu.isShowBottomMenu) {
         store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
         store.commit('menu/changeKeyMenu', {
           key: 'live-default',
           effect: 'fx-slide-from-right'
         })
+        store.commit('menu/changeShowStateBottomSheetLive', { value: false })
       }
     }
 

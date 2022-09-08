@@ -9,7 +9,7 @@
       </p>
       <img
         :class="$style.sticker"
-        :src="`http://192.168.1.19:80/${sticker.file.src}`"
+        :src="`https://test.itisthenice.com/${sticker.file.src}`"
         alt=""
       >
     </template>

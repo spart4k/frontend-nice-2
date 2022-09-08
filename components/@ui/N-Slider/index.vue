@@ -12,7 +12,7 @@
         :adaptive-height="true"
       >
         <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
-          <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="">
+          <img :src="`${$axios.defaults.baseURL}/${item.src}`" alt="">
         </div>
       </VueSlickCarousel>
       <portal v-if="popup" to="sliderPopup">
@@ -29,7 +29,7 @@
               @beforeChange="syncSlidersBottom"
             >
               <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
-                <img :src="`${$axios.defaults.baseURL}${item.src}`" alt="">
+                <img :src="`${$axios.defaults.baseURL}/${item.src}`" alt="">
               </div>
             </VueSlickCarousel>
           </div>

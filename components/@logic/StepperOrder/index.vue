@@ -9,6 +9,7 @@
       @toAddress="toAddress"
       @closeState="$emit('closeState')"
       @sendMessage="sendMessage"
+      @sendSticker="sendSticker"
     />
   </transition>
 </template>
@@ -86,33 +87,44 @@ export default {
 
     const messages = ref([])
     const loading = ref(true)
-    const ws = new WebSocket('wss://test.itisthenice.com/websocket')
-    ws.onmessage = async (event) => {
-    const data = JSON.parse(event.data)
-      if (data.messageType === 'bank' && data.status === 'CONFIRMED' && data.status === 'CONFIRMED' && data.user_id === store.state.authentication.user.id) {
-        store.commit('menu/changeKeyMenu', {
-          key: 'basket',
-          effect: 'fx-slide-from-left'
-        })
-        store.commit('menu/changeStepMenu', { step: 3 })
-      } else if (loading.value && data.messageType === 'lastMessages') {
-          messages.value = data.messageArray
-          loading.value = false
-        } else if (!loading.value) {
-          await messages.value.push(data)
-        if (messages.value.length > 99) {
-          messages.value.shift()
+    // const ws = new WebSocket('wss://test.itisthenice.com/websocket')
+    // const ws = new WebSocket('ws://192.168.1.19:8999/websocket')
+    const socket = new WebSocket('wss://test.itisthenice.com/websocket')
+    const socketCloseListener = (event) => {
+      socket.onmessage = async (event) => {
+        const data = JSON.parse(event.data)
+          if (data.messageType === 'bank' && data.status === 'CONFIRMED' && data.status === 'CONFIRMED' && data.user_id === store.state.authentication.user.id) {
+            store.commit('menu/changeKeyMenu', {
+              key: 'basket',
+              effect: 'fx-slide-from-left'
+            })
+            store.commit('menu/changeStepMenu', { step: 3 })
+          } else if (loading.value && data.messageType === 'lastMessages') {
+            messages.value = data.messageArray
+            loading.value = false
+          } else if (!loading.value) {
+            await messages.value.push(data)
+            if (messages.value.length > 99) {
+              messages.value.shift()
+            }
+          }
+        }
+      socket.onclose = (event) => {
+        if (event.code !== 1) {
+          socketCloseListener()
         }
       }
     }
+    socketCloseListener()
 
     const sendMessage = (message) => {
-      ws.send(JSON.stringify({ user_id: store.state.authentication.user.id, message_text: message, messageType: 'chat' }))
+      socket.send(JSON.stringify({ user_id: store.state.authentication.user.id, message_text: unescape(encodeURIComponent(message)), messageType: 'chat' }))
     }
 
     const sendSticker = (val) => {
-      ws.send(JSON.stringify({ user_id: store.state.authentication.user.id, message_text: null, sticker_id: val, messageType: 'chat' }))
+      socket.send(JSON.stringify({ user_id: store.state.authentication.user.id, message_text: null, sticker_id: val, messageType: 'chat' }))
     }
+
     return {
       isCurrentPage,
       changeStep,
