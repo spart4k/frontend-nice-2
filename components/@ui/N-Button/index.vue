@@ -74,7 +74,9 @@ export default {
     height: 3.2rem;
   }
   .play {
-    padding: 2.6rem 2.9rem 2.7rem 3.3rem;
+    padding: 0;
+    width: 8rem;
+    height: 8rem;
     border-radius: 50%;
   }
 </style>

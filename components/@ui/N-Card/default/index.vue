@@ -533,6 +533,11 @@ export default {
         align-items: center;
         .icon {
           height: 2.7rem;
+          width: 2.7rem;
+          svg {
+            width: 100%;
+            height: 100%;
+          }
         }
       }
       &:after {

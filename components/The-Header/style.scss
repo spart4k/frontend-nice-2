@@ -47,8 +47,8 @@
   font-family: Bankir-Retro, sans-serif;
   color: $white;
   width: 16.3rem;
-  visibility: hidden;
-  top: 3.9rem;
+  // visibility: hidden;
+  top: 2.9rem;
   transition: left .3s;
   @media (max-width: $mobileWidth ) {
     top: 9rem;
@@ -61,8 +61,11 @@
     height: 3.2rem;
   }
 }
+.logoVisible {
+  visibility: hidden;
+}
 .logoSlug {
-  top: 3.9rem;
+  top: 2.9rem;
   left: 50%;
   transform:translateX(-50%) ;
   position: fixed;

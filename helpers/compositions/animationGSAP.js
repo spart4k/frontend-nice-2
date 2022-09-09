@@ -24,7 +24,7 @@ const animation = ($gsap, Elastic) => {
     const SUBTITLE = '.subtitleLogo'
     const backgroundElement = document.querySelector('.background')
     const logo = document.querySelector('.logo')
-    const nav = document.querySelectorAll(`${NAVBAR} > ul > li`)
+    // const nav = document.querySelectorAll(`${NAVBAR} > ul > li`)
     const content = document.querySelector('.content')
     tl.set(SUBTITLE, {
       opacity: 0
@@ -74,7 +74,7 @@ const animation = ($gsap, Elastic) => {
     })
 
     tl.to(logo, 0.5, {
-      top: display === 'sm' ? '9rem' : '3.9rem',
+      top: display === 'sm' ? '9rem' : '2.9rem',
       ease: 'cubic-bezier(.71,.01,.15,1)'
     }, '-=0.5')
 
@@ -84,10 +84,10 @@ const animation = ($gsap, Elastic) => {
     })
 
     let timing = 0.3 - 0.015
-
     tl.fromTo(
       `${NAVBAR} > ul > li`,
-      nav.length * 0.12,
+      1,
+
       {
         visibility: 'visible',
         opacity: 0,
@@ -95,6 +95,7 @@ const animation = ($gsap, Elastic) => {
           return ((index + 1) * 500)
         }
       },
+
       {
         opacity: 1,
         x: 0,
@@ -102,6 +103,7 @@ const animation = ($gsap, Elastic) => {
           timing += 0.015
           return timing
         },
+
         duration: 0.3,
         ease: Elastic.easeOut.config(1, 0.75)
       })

@@ -89,7 +89,7 @@ export default {
 <style scoped lang="scss" module>
 .preview {
     height: 60rem !important;
-  @media (max-width: $mobileWidth) {
+  @media (max-width: $tabletWidth) {
     height: calc(100vh - 10.3rem);
   }
 }
@@ -98,9 +98,9 @@ export default {
   margin: 0 auto;
   justify-content: center;
   @media (min-width: $desktopWidth) {
-    width: calc(100% - 17.3rem - 17.3rem);
+    width: calc(100%);
   }
-  @media (max-width: $mobileWidth) {
+  @media (max-width: $tabletWidth) {
     flex-direction: column;
     justify-content: center;
     width: 100%;
@@ -122,7 +122,7 @@ export default {
       width: 39.7rem;
       max-width: 100%;
     }
-    @media(max-width: $mobileWidth) {
+    @media(max-width: $tabletWidth) {
       display: none;
     }
   }
@@ -133,7 +133,7 @@ export default {
   @media (min-width: $tabletWidth) {
     min-width: 30rem;
   }
-  @media (max-width: $mobileWidth) {
+  @media (max-width: $tabletWidth) {
     width: auto;
     max-width: none;
     min-width: none;
@@ -141,7 +141,7 @@ export default {
 }
 .col + .col {
   margin-left: 3rem;
-  @media (max-width: $mobileWidth) {
+  @media (max-width: $tabletWidth) {
     margin-left: 0;
   }
 }

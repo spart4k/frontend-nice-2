@@ -98,6 +98,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      store.commit('content/setAnimate', false)
       store.commit('content/setSingleAnimation', false)
     })
 

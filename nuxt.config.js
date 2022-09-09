@@ -18,7 +18,8 @@ export default {
     ]
   },
   server: {
-    port: process.env.PORT || 3030 // default: 3000
+    port: process.env.PORT || 3030
+    // port: process.env.PORT || 3030
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -30,12 +31,12 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '@plugins/infiniteloading.js', ssr: false },
     { src: '@plugins/vualidate.js' },
     '@plugins/v-mask.js',
     '@plugins/v-tooltip.js',
     '@plugins/v-lazyload.js',
     '@plugins/v-debounce.js',
+    { src: '@plugins/v-infinity-scroll.js', ssr: false },
     { src: '@plugins/vue-bottom-sheet.js', ssr: false }
   ],
 
@@ -88,6 +89,7 @@ export default {
     prefetch: true,
     preconnect: true
   }
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
 
 }

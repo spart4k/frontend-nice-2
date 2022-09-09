@@ -17,8 +17,10 @@
       <NGridCard
         v-if="cards && cards.data"
         ref="content"
+        v-infinite-scroll="getMoreCards"
         :items="cards.data"
         home-page
+        infinite-scroll-distance="10"
         @clickTag="clickTag"
       />
     </div>
@@ -32,7 +34,7 @@ import {
   defineComponent,
   useContext,
   useFetch,
-  useMeta, onMounted, nextTick, onUnmounted
+  useMeta, onMounted, onUnmounted
 } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import { BLAND_COLOR } from '~/const/blandColor'
@@ -68,11 +70,23 @@ export default defineComponent({
     const fetchData = async (currentPage) => {
       const params = {
         page: currentPage,
-        count: 10,
+        count: 6,
         show_in_main: 1
       }
 
       const response = await store.dispatch('main/getData', params)
+      return response
+    }
+
+    const getMoreCards = async (currentPage) => {
+      const params = {
+        page: 2,
+        count: 6,
+        show_in_main: 1
+      }
+
+      const response = await store.dispatch('main/getData', params)
+      cards.value = response.data.data
       return response
     }
     store.commit('content/clearBgIntro')
@@ -86,12 +100,12 @@ export default defineComponent({
 
     onMounted(() => {
       // if (backgroundLoaded.value) {
-        // if (!store.state.content.singleAnimation) {
-        //   localStorage.setItem('showAnimateHomePage', 'true')
-        //   store.commit('content/setSingleAnimation', true)
-        // }
-      nextTick(() => {
-      if (store.state.content.singleAnimation) {
+
+      animationlogo()
+      animateSubtitle()
+      animateNavbar('.navbarSlug')
+      window.addEventListener('resize', resize)
+      window.addEventListener('load', () => {
         const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
         if (!isPlayAnimation) {
           store.commit('content/setAnimate', false)
@@ -99,15 +113,10 @@ export default defineComponent({
         } else {
           animationTimeline('.navbarSlug', elementAnimate.value, root.$mq)
         }
-        window.addEventListener('resize', resize)
-
-        animationlogo()
-        animateSubtitle()
-        animateNavbar('.navbarSlug')
-        // localStorage.setItem('showAnimateHomePage', 'false')
-        // localStorage.setItem('showAnimateHomePage', 'true')
+        if (store.state.content.singleAnimation) {
           localStorage.setItem('showAnimateHomePage', 'true')
           store.commit('content/setSingleAnimation', false)
+          // store.commit('content/setAnimate', false)
         }
       })
       // }
@@ -145,7 +154,7 @@ export default defineComponent({
       clickTag,
       BLAND_COLOR,
       elementAnimate,
-
+      getMoreCards,
       introTitle,
       background,
       cards,
