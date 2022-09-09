@@ -4,7 +4,9 @@
       <img :class="$style.wrapper" :src="require(`~/assets/img/live/def-radio-wrap.png`)" alt="">
       <div ref="marquee" class="marquee" :class="[ $style.marquee, $style.name ]">
         <div class="inner" :class="[$style.inner, isMarquee ? $style.active : $style.noActive ]">
-          <p ref="marqueeContent" :class="$style.marqueeContent" class="marqueeContent">Eli & Fur live from Courmayeur Eli & Fur live from Courmayeur Eli & Fur live from Courmayeur</p>
+          <p ref="marqueeContent" :class="$style.marqueeContent" class="marqueeContent">
+            Eli & Fur live from Courmayeur Eli & Fur live from Courmayeur Eli & Fur live from Courmayeur
+          </p>
         </div>
       </div>
 
@@ -32,9 +34,9 @@
         </div>
       </div>
     </div>
-    <audio ref="audioSource" src="http://192.168.1.19:3001/stream" />
+    <audio ref="audioSource" src="https://test.itisthenice.com/stream" />
   </div>
 </template>
 
-<style lang="scss" module src="./style.scss"></style>
 <script lang="javascript" src="./setup.js"></script>
+<style lang="scss" module src="./style.scss"></style>
