@@ -4,7 +4,7 @@
     <div
       v-show="$route.name === 'index'"
       class="logo"
-      :class="$style.logo"
+      :class="[$style.logo, showAnimate && $style.logoVisible]"
       :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}rem)` : '50%'}"
       @click="$router.push('/')"
     >

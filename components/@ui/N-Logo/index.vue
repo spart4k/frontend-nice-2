@@ -66,7 +66,7 @@ export default {
   }
   .logoImage {
     display: block;
-    padding-bottom: 1.7rem;
+    padding-bottom: 1.2rem;
     line-height: 0;
     @media (max-width: $mobileWidth) {
       //width: 16.3rem;

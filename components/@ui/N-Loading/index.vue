@@ -20,8 +20,8 @@
 
 <style scoped lang="scss" module>
 .loader {
-  width: 2rem;
-  height: 2rem;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   position: relative;
   animation: rotate 1s linear infinite
@@ -32,7 +32,7 @@
   position: absolute;
   inset: 0px;
   border-radius: 50%;
-  border: .2rem solid #ffffff;
+  border: 2px solid #ffffff;
   animation: prixClipFix 2s linear infinite ;
 }
 .purple.loader::before {

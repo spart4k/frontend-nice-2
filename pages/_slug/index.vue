@@ -75,9 +75,8 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      // localStorage.setItem('showAnimateHomePage', 'false')
-      store.commit('content/setSingleAnimation', false)
       store.commit('content/setAnimate', false)
+      store.commit('content/setSingleAnimation', false)
         nextTick(() => {
           $gsap.to('.subtitleLogo', {
             scrollTrigger: {

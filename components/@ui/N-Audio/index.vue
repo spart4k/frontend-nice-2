@@ -14,7 +14,7 @@
     </div>
     <audio ref="audioSource" :src="src" preload="none" @canplay="isLoaded" />
   </div>
-    <!-- <div>
+  <!-- <div>
     <div v-for="(item, index) in files" :key="index">
       <div v-if="item.file_type_id === 3" :class="$style.container">
         <div ref="marquee" :class="[ $style.marquee, $style.name ]">
@@ -154,14 +154,18 @@ export default {
     align-items: center;
     .controlButton {
       margin-left: 3rem;
-      width: 1.8rem;
       cursor: pointer;
-      height: 2rem;
+      width: 1.8rem;
+      height: 1.8rem;
+      svg {
+        width: 100%;
+        height: 100%;
+      }
     }
     .controlButtonLoading{
       margin-left: 3rem;
-      width: 2.5rem;
-      height: 2.5rem;
+      // width: 1.8rem;
+      // height: 1.8rem;
     }
   }
 }

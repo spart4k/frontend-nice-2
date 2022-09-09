@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.wrapper">
     <div :class="$style.fullscreen">
-      <N-Icon name="fullscreen" @click="popupChange" />
+      <N-Icon name="fullscreen" @click="popupChange" :class="$style.fullscreenButton" />
     </div>
     <div :class="$style.slider_top">
       <VueSlickCarousel
@@ -96,6 +96,14 @@ export default {
     background-color: rgba(255, 255, 255, 0.2);
     cursor: pointer;
     z-index: 10;
+    .fullscreenButton {
+      width: 2.1rem;
+      height: 2rem;
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
   div {
     @media (min-width: $tabletWidth) {
@@ -112,6 +120,7 @@ export default {
       background: url('@/static/icon/icon-arrow-slider.svg') center;
       background-color: rgba(255,255,255,0.2);
       background-repeat: no-repeat;
+      background-size: 1rem;
       border-radius: 50%;
       width: 4rem;
       height: 4rem;
