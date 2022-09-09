@@ -101,13 +101,15 @@ export default {
     }
 
     const openMenu = () => {
-      console.log(store.state.menu.isShowBottomMenu, store.state.menu.isShowBottomLive)
       if (store.state.menu.isShowBottomMenu && !store.state.menu.isShowBottomLive) {
+        setTimeout(() => {
+          store.commit('menu/changeShowStateBottomSheetLive', { value: true })
+        }, 100)
         emit('closeState')
-        store.commit('menu/changeShowStateBottomSheetLive', { value: true })
         setTimeout(() => {
           store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
         }, 100)
+        store.commit('menu/changeShowStateBottomSheetLive', { value: true })
       } else if (!store.state.menu.isShowBottomMenu) {
         store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
         store.commit('menu/changeShowStateBottomSheetLive', { value: true })
@@ -115,10 +117,8 @@ export default {
     }
 
     const openLive = () => {
-    console.log(store.state.menu.isShowBottomMenu, store.state.menu.isShowBottomLive)
       if (store.state.menu.isShowBottomMenu && store.state.menu.isShowBottomLive) {
         emit('closeState')
-        store.commit('menu/changeShowStateBottomSheetLive', { value: false })
         setTimeout(() => {
           store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
           store.commit('menu/changeKeyMenu', {
@@ -126,6 +126,7 @@ export default {
             effect: 'fx-slide-from-right'
           })
         }, 100)
+        store.commit('menu/changeShowStateBottomSheetLive', { value: false })
       } else if (!store.state.menu.isShowBottomMenu) {
         store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
         store.commit('menu/changeKeyMenu', {

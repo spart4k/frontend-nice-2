@@ -121,7 +121,7 @@ export default {
       setTimeout(() => {
         sheetRight.value = false
         store.commit('menu/changeShowStateBottomSheetMenu', { value: false })
-        store.commit('menu/changeShowStateBottomSheetLive', { value: false })
+        // store.commit('menu/changeShowStateBottomSheetLive', { value: false })
         store.commit('menu/changeStepMenu', { step: 0 })
       }, 100)
     }
