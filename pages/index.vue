@@ -87,10 +87,6 @@ export default defineComponent({
     onMounted(() => {
       // if (backgroundLoaded.value) {
       nextTick(() => {
-        // if (store.state.content.singleAnimation) {
-        //   localStorage.setItem('showAnimateHomePage', 'true')
-        //   store.commit('content/setSingleAnimation', false)
-        // }
         const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
         if (!isPlayAnimation) {
           store.commit('content/setAnimate', false)
@@ -104,7 +100,11 @@ export default defineComponent({
         animateSubtitle()
         animateNavbar('.navbarSlug')
         // localStorage.setItem('showAnimateHomePage', 'false')
-        localStorage.setItem('showAnimateHomePage', 'true')
+        // localStorage.setItem('showAnimateHomePage', 'true')
+        if (store.state.content.singleAnimation) {
+          localStorage.setItem('showAnimateHomePage', 'true')
+          store.commit('content/setSingleAnimation', false)
+        }
       })
       // }
     })
