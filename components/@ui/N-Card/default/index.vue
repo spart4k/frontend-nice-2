@@ -8,12 +8,12 @@
         <template v-else>
           <div v-if="$props.detailPage" :class="[$style.hatContainer, detailPage && $style.detailPage]">
             <div :class="[$style.hat, detailPage && $style.detailPage]">
-              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.files[0].src}`" :alt="data.title" />
+              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}/${data.files[0].src}`" :alt="data.title" />
             </div>
           </div>
           <nuxt-link v-else :to="`cards/${data.id}?section=${data.slug}`" tag="div">
             <div :class="[$style.hat]">
-              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}${data.files[0].src}`" :alt="data.title" />
+              <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}/${data.files[0].src}`" :alt="data.title" />
             </div>
           </nuxt-link>
         </template>
@@ -105,8 +105,11 @@
             <div :class="$style.parserDetail" v-html="data.text" />
           </div>
           <template>
+            <!-- <div :class="$style.cardAudio">
+              <N-Audio :files="data.files" />
+            </div> -->
             <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
-              <N-Audio v-if="item.file_type_id === 3" :title="item.title" :src="`${$axios.defaults.baseURL}${item.src}`" />
+              <N-Audio v-if="item.file_type_id === 3" :title="item.title" :src="`${$axios.defaults.baseURL}/${item.src}`" @pauseAll="pauseAll" />
             </div>
           </template>
         </div>

@@ -4,6 +4,7 @@
   justify-content: flex-end;
   overflow: hidden;
   margin-bottom: 2rem;
+  // margin-top: 2rem;
   .wrap {
     display: flex;
     flex-direction: column-reverse;
@@ -11,6 +12,9 @@
     overflow-y: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    .message:last-child {
+      background-color: aqua;
+    }
   }
   .wrap::-webkit-scrollbar {
     display: none;

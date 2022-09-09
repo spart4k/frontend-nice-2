@@ -147,7 +147,7 @@ export default {
       setTimeout(() => {
         menu.value.$children[0].open()
         if (window.innerWidth > 450) {
-          sheetWidth.value = stepper.value.$el.offsetWidth
+          sheetWidth.value = 39
           if (sheetRight.value) {
             sheetWidth.value = -sheetWidth.value
           }

@@ -8,11 +8,31 @@
       </div>
     </div>
     <div :class="$style.control">
-      <N-Icon v-if="!audioPlaying" :class="$style.controlButton" name="play" @click="playAudio" />
+      <N-Loading v-if="loading" :class="$style.controlButtonLoading" black />
+      <N-Icon v-else-if="!audioPlaying" :class="$style.controlButton" name="play" @click="playAudio" />
       <N-Icon v-else-if="audioPlaying" :class="$style.controlButton" name="pause" @click="pauseAudio" />
     </div>
-    <audio ref="audioSource" :src="src" preload loop />
+    <audio ref="audioSource" :src="src" preload="none" @canplay="isLoaded" />
   </div>
+    <!-- <div>
+    <div v-for="(item, index) in files" :key="index">
+      <div v-if="item.file_type_id === 3" :class="$style.container">
+        <div ref="marquee" :class="[ $style.marquee, $style.name ]">
+          <div class="inner" :class="[$style.inner, isMarquee ? $style.active : $style.noActive ]">
+            <p ref="marqueeContent" :class="$style.marqueeContent" class="marqueeContent">
+              {{ item.title }}
+            </p>
+          </div>
+        </div>
+        <div :class="$style.control">
+          <N-Loading v-if="loading" :class="$style.controlButtonLoading" black />
+          <N-Icon v-else-if="!audioPlaying" :class="$style.controlButton" name="play" @click="playAudio(index)" />
+          <N-Icon v-else-if="audioPlaying" :class="$style.controlButton" name="pause" @click="pauseAudio(index)" />
+        </div>
+        <audio ref="audioSource" :src="item.src" preload="none" @canplay="isLoaded" />
+      </div>
+    </div>
+  </div> -->
 </template>
 <script lang="js">
 import { ref, onMounted, nextTick, computed } from '@vue/composition-api'
@@ -27,9 +47,12 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    files: {
+      type: Object
     }
   },
-  setup (props) {
+  setup (props, ctx) {
     const audioPlaying = ref(false)
     const audioSource = ref(null)
     const marquee = ref(null)
@@ -37,7 +60,14 @@ export default {
     const marqueeContent = ref(null)
     const marqueeContainerLength = ref(null)
     const isMarquee = ref(true)
+    const loading = ref(false)
+    const isLoaded = () => {
+      loading.value = false
+    }
     const playAudio = () => {
+      if (!audioSource.value.readyState) {
+        loading.value = true
+      }
       audioPlaying.value = true
       audioSource.value.play()
     }
@@ -89,6 +119,8 @@ export default {
       playAudio,
       pauseAudio,
       audioSource,
+      loading,
+      isLoaded,
 
       marquee,
       innerHeight,
@@ -123,7 +155,13 @@ export default {
     .controlButton {
       margin-left: 3rem;
       width: 1.8rem;
+      cursor: pointer;
       height: 2rem;
+    }
+    .controlButtonLoading{
+      margin-left: 3rem;
+      width: 2.5rem;
+      height: 2.5rem;
     }
   }
 }

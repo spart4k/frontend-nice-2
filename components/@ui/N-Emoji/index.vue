@@ -19,8 +19,8 @@
             <div :class="$style.emoji" @click="$emit('emojiWrite', '😇')">
               😇
             </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😎️')">
-              😎️
+            <div :class="$style.emoji" @click="$emit('emojiWrite', '💖')">
+              💖
             </div>
             <div :class="$style.emoji" @click="$emit('emojiWrite', '🤝')">
               🤝
@@ -59,7 +59,7 @@
             v-for="(item, index) in stickers"
             :key="index"
             :class="$style.sticker"
-            :src="`http://192.168.1.19:80/${item.file.src}`"
+            :src="`https://test.itisthenice.com/${item.file.src}`"
             alt=""
             @click="$emit('stickerWrite', item.id)"
           >
@@ -161,9 +161,13 @@ export default {
         user-select: none;
         cursor: pointer;
         background-color: transparent;
+        transition-duration: .1s;
         @media (min-width: $tabletWidth) {
           height: auto;
         }
+      }
+      .sticker:hover {
+        scale: 1.1;
       }
     }
     :global(.slick-dots li){

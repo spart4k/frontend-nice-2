@@ -1,5 +1,5 @@
 <template>
-  <span :class="[$style.loader,purple && $style.purple]" />
+  <span :class="[$style.loader, purple && $style.purple, black && $style.black]" />
 </template>
 
 <script>
@@ -7,6 +7,10 @@
     name: 'NLoading',
     props: {
       purple: {
+        type: Boolean,
+        default: false
+      },
+      black: {
         type: Boolean,
         default: false
       }
@@ -33,6 +37,10 @@
 }
 .purple.loader::before {
   border-color:#6448B5;
+}
+
+.black.loader::before {
+  border-color:#222222;
 }
 
 @keyframes rotate {
