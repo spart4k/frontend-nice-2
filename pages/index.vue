@@ -91,7 +91,6 @@ export default defineComponent({
         //   localStorage.setItem('showAnimateHomePage', 'true')
         //   store.commit('content/setSingleAnimation', false)
         // }
-        localStorage.setItem('showAnimateHomePage', 'false')
         const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
         if (!isPlayAnimation) {
           store.commit('content/setAnimate', false)
