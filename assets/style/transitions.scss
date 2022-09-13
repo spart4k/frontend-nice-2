@@ -256,3 +256,22 @@ right: calc(-100% - 1.5rem);
   left: calc(-100% - 1.5rem);
 }
 
+.card-appear-enter-active,
+.card-appear-leave-active {
+  transition: opacity 5s ease;
+}
+
+.card-appear-enter-from,
+.card-appear-leave-to {
+  opacity: 0;
+}
+
+.testtest-enter-active,
+.testtest-leave-active {
+  transition: all ease;
+}
+.testtest-enter-from,
+.testtest-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}

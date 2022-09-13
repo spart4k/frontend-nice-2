@@ -1,30 +1,34 @@
 <template>
-  <n-intro
-    :description="introTitle"
-    :is-show-animation="true"
-  >
-    <div :class="$style.wrapperAnimateElement">
-      <div
-        v-for="[key,value] in Object.entries(BLAND_COLOR)"
-        :key="key"
-        ref="elementAnimate"
-        class="elementAnimate"
-        :class="[$style[key], $style.animate]"
-        :style="{backgroundColor: value}"
-      />
+  <div>
+    <n-intro
+      :description="introTitle"
+      :is-show-animation="true"
+    >
+      <div :class="$style.wrapperAnimateElement">
+        <div
+          v-for="[key,value] in Object.entries(BLAND_COLOR)"
+          :key="key"
+          ref="elementAnimate"
+          class="elementAnimate"
+          :class="[$style[key], $style.animate]"
+          :style="{backgroundColor: value}"
+        />
+      </div>
+      <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
+        <NGridCard
+          v-if="cards && cards.data"
+          ref="content"
+          :items="cards.data"
+          home-page
+          @clickTag="clickTag"
+        />
+      </div>
+    </n-intro>
+    <div :class="$style.loadingContainer">
+      <n-observer :class="$style.observer" @intersect="lazyPagination" />
+      <N-Loading v-if="cardsLoading" :class="$style.loading" />
     </div>
-    <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
-      <NGridCard
-        v-if="cards && cards.data"
-        ref="content"
-        v-infinite-scroll="getMoreCards"
-        :items="cards.data"
-        home-page
-        infinite-scroll-distance="10"
-        @clickTag="clickTag"
-      />
-    </div>
-  </n-intro>
+  </div>
 </template>
 <script>
 
@@ -55,6 +59,10 @@ export default defineComponent({
     const content = ref(null)
     const background = ref(null)
     const elementAnimate = ref(null)
+    const pageNumber = ref(2)
+    const startCards = ref([])
+    const cardsLoading = ref(false)
+    const cardsDispatch = ref(true)
     const resize = () => {
       if (window.innerWidth > 450) {
         document.querySelector('.logo').style.top = null
@@ -78,17 +86,6 @@ export default defineComponent({
       return response
     }
 
-    const getMoreCards = async (currentPage) => {
-      const params = {
-        page: 2,
-        count: 6,
-        show_in_main: 1
-      }
-
-      const response = await store.dispatch('main/getData', params)
-      cards.value = response.data.data
-      return response
-    }
     store.commit('content/clearBgIntro')
 
     const {
@@ -100,7 +97,6 @@ export default defineComponent({
 
     onMounted(() => {
       // if (backgroundLoaded.value) {
-
       animationlogo()
       animateSubtitle()
       animateNavbar('.navbarSlug')
@@ -127,6 +123,7 @@ export default defineComponent({
         const response = await fetchData()
         totalPage.value = response?.data.last_page
         cards.value = response.data.data
+        startCards.value = cards.value.data
       } catch (e) {
         console.log(e)
       }
@@ -139,12 +136,29 @@ export default defineComponent({
     const metaInfo = cards.value
     head(useMeta, metaInfo.value)
 
-    const { page, getData, dataPagination } = pagination(fetchData)
+    const { page } = pagination(fetchData)
 
-    const lazyPagination = ($state) => {
-      getData($state, cards.value.value.last_page)
-      cards.value.value.data = [...cards.value.value.data, ...dataPagination.value]
+    const lazyPagination = async () => {
+      if (cardsDispatch.value) {
+        cardsLoading.value = true
+        const params = {
+          page: pageNumber.value,
+          count: 6,
+          section_id: ''
+        }
+        pageNumber.value++
+
+        const response = await store.dispatch('pages/getData', params)
+        if (!response.data.length) {
+          cardsDispatch.value = false
+          cardsLoading.value = false
+        }
+        cardsLoading.value = false
+        cards.value.data = [...startCards.value, ...response.data]
+        startCards.value = [...cards.value.data]
+      }
     }
+
     const clickTag = (tag) => {
       router.push({ path: 'tags', query: { tag } })
     }
@@ -154,14 +168,17 @@ export default defineComponent({
       clickTag,
       BLAND_COLOR,
       elementAnimate,
-      getMoreCards,
       introTitle,
       background,
       cards,
       page,
       pageInfo,
       content,
-      showAnimate
+      showAnimate,
+      pageNumber,
+      startCards,
+      cardsLoading,
+      cardsDispatch
     }
   },
   head: {}
@@ -260,5 +277,21 @@ $heightBig: 4.6rem;
   &.setHeight {
     min-height: 100%;
   }
+}
+.loadingContainer{
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  height: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .loading {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+.observer {
+  height: 100%;
 }
 </style>
