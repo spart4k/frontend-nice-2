@@ -7,8 +7,8 @@
       <div v-if="loading" :class="$style.nothing">
         <n-loading purple :class="$style.loading" />
       </div>
-      <div v-else-if="order">
-        <History-Orders-Item v-for="(item,index) in orders" :key="index" :order="item" />
+      <div v-else-if="orders">
+        <History-Orders-Item v-for="(item,index) in orders.data" :key="index" :order="item" :class="$style.item" />
       </div>
       <div v-else :class="$style.empty">
         Заказы отсутствуют
@@ -26,6 +26,8 @@ export default {
     const loading = ref(false)
     const orders = useAsync(async () => {
       const params = {
+        page: 1,
+        count: 100
       }
       try {
         loading.value = true
@@ -59,6 +61,9 @@ export default {
     color: $fontColorDefault;
     opacity: 0.5;
     text-align: center;
+  }
+  .item+.item {
+    margin-top: 2.5rem;
   }
 }
 </style>

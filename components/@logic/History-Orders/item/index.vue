@@ -1,21 +1,22 @@
 <template>
   <div :class="$style.item">
     <div :class="$style.order">
-      Заказ №223
+      Заказ №{{ $props.order.id }}
     </div>
     <div :class="$style.title">
-      Кабель переходник, 1 шт.
+      <!-- Кабель переходник, 1 шт. -->
     </div>
     <div :class="$style.price">
-      3 500 р.
+      {{ $props.order.delivery_price + $props.order.cards_sum }}
     </div>
     <div :class="$style.status">
-      Доставка
+      {{ $props.order.status.status_name }}
     </div>
   </div>
 </template>
 
 <script>
+import { ref } from '@nuxtjs/composition-api'
 export default {
   name: 'HistoryOrdersItem',
   props: {
@@ -25,7 +26,11 @@ export default {
     }
   },
   setup (props) {
+    const id = ref(props.order.id)
 
+    return {
+      id
+    }
   }
 }
 </script>
