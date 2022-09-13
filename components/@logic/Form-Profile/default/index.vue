@@ -38,7 +38,7 @@
           <span v-if="addressItem[0]" :class="$style.adress">
             {{ addressItem[0].city.name }}, {{ addressItem[0].address }}
           </span>
-          <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E">
+          <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E" @click.prevent="changeAddress">
             Изменить адрес
           </N-Button>
         </div>
@@ -92,8 +92,9 @@ export default {
   components: {
     vSelect
   },
-  setup () {
+  setup (props, ctx) {
     const { store } = useContext()
+    const { emit } = ctx
     const addressItem = ref(store.state.authentication.adress[0])
     const loading = ref(false)
     const { formData, validate, $errors, $v, $touched } = useForm(
@@ -129,6 +130,15 @@ export default {
 
     const logout = () => {
       store.dispatch('authentication/logout')
+    }
+
+    const changeAddress = () => {
+      emit('toAddress', true)
+      store.commit('menu/changeKeyMenu', {
+        key: 'basket',
+        effect: 'fx-slide-from-left'
+      })
+      store.commit('menu/changeStepMenu', { step: 3 })
     }
 
     const removeAddress = (value, index) => {
@@ -213,6 +223,7 @@ export default {
       $touched,
       $v,
       removeAddress,
+      changeAddress,
       searchCity,
       fetchCities,
       citiesArray,

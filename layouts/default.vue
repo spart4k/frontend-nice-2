@@ -270,7 +270,7 @@ export default {
   z-index: 11;
   transition-duration: .3s;
   @media (max-width: $mobileWidth) {
-    top: 2rem;
+    top: 2.3rem;
     left: 1.5rem;
     right: 1.5rem;
   }

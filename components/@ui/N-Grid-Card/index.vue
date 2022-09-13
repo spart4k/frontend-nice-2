@@ -1,44 +1,62 @@
 <template>
   <div :class="$style.cards">
-    <!-- <template v-if="spliceArray.colLeft && spliceArray.colRight"> -->
-    <div :class="$style.col">
-      <template v-for="(card) in spliceArray.colLeft">
-        <n-section-intro
-          v-if="card.hasOwnProperty('preview')"
-          :key="card.id"
-          :description="card"
-          :image="card.image"
-          :class="$style.preview"
-        />
-        <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
-          <img :src="card.image" alt="DOG ">
+    <template v-if="spliceArray.colLeft && spliceArray.colRight">
+      <div :class="$style.col">
+        <!-- <client-only>
+      <div
+        v-masonry
+        transition-duration="0s"
+        item-selector=".item"
+        :class="$style.masonry"
+        class="masonry-container"
+        fit-width="true"
+        destroy-delay="0"
+      > -->
+        <div
+          v-for="(card, index) in spliceArray.colLeft"
+          :key="index"
+          v-masonry-tile
+          class="item"
+          :class="$style.masonryItem"
+        >
+          <n-section-intro
+            v-if="card.hasOwnProperty('preview')"
+            :key="card.id"
+            :description="card"
+            :image="card.image"
+            :class="$style.preview"
+          />
+          <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
+            <img :src="card.image" alt="DOG ">
+          </div>
+          <template v-else>
+            <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
+          </template>
         </div>
-        <template v-else>
-          <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
+        <!-- </div>
+    </client-only> -->
+        <template v-for="(card) in spliceArray.colRight">
+          <section-cards
+            :key="card.id"
+            :section="card.section"
+            :card="card"
+            :class="$style.cards__item"
+            @clickTag="($event) => $emit('clickTag', card.section.id)"
+          />
         </template>
-      </template>
-      <!-- <template v-for="(card) in spliceArray.colRight">
-        <section-cards
-          :key="card.id"
-          :section="card.section"
-          :card="card"
-          :class="$style.cards__item"
-          @clickTag="($event) => $emit('clickTag', card.section.id)"
-        />
-      </template> -->
-    </div>
-    <!-- <div v-if="spliceArray.colRight.length" :class="$style.col">
-      <template v-for="(card) in spliceArray.colRight">
-        <section-cards
-          :key="card.id"
-          :section="card.section"
-          :card="card"
-          :class="$style.cards__item"
-          @clickTag="($event) => $emit('clickTag', card.section.id)"
-        />
-      </template>
-    </div> -->
-    <!-- </template> -->
+      </div>
+      <div v-if="spliceArray.colRight.length" :class="$style.col">
+        <template v-for="(card) in spliceArray.colRight">
+          <section-cards
+            :key="card.id"
+            :section="card.section"
+            :card="card"
+            :class="$style.cards__item"
+            @clickTag="($event) => $emit('clickTag', card.section.id)"
+          />
+        </template>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -119,9 +137,12 @@ export default {
 
 <style scoped lang="scss" module>
 .preview {
-    height: 60rem !important;
+    height: 55rem !important;
   @media (max-width: $tabletWidth) {
     height: calc(100vh - 10.3rem);
+  }
+  @media (max-width: $mobileWidth) {
+    height: 85vh !important;
   }
 }
 .cards {
@@ -136,11 +157,21 @@ export default {
     justify-content: center;
     width: 100%;
   }
+  .masonry {
+    width: 100%;
+    .masonryItem {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+    }
+  }
   &__item {
     margin-bottom: 2rem;
     display: flex;
     justify-content: center;
     width: 100%;
+    // max-width: calc(100% - 1.5rem);
+    // min-width: 30rem;
   }
 
   .image {
@@ -176,5 +207,4 @@ export default {
     margin-left: 0;
   }
 }
-
 </style>

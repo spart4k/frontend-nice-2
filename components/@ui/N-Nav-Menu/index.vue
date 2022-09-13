@@ -22,6 +22,7 @@
         ref="itemRefs"
         :data-index="index"
         :item="item"
+        @closeState="$emit('closeState')"
       />
     </div>
     <!--    </transition-group>-->

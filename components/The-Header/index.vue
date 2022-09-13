@@ -30,8 +30,8 @@
         <span />
         <span />
       </div>
-      <div v-if="!active && isAuth && basketCount.calcBasketCard > 0" :class="$style.basketCount">
-        {{ basketCount.calcBasketCard }}
+      <div v-if="basketData" :class="$style.basketCount">
+        {{ basketData }}
       </div>
     </n-button>
     <div
@@ -42,8 +42,9 @@
       class="elementHeader"
     >
       <div :class="$style.link" @click="openLive">
-        <span :class="$style.link__text">эфир</span>
-        <n-icon name="domofon" :class="$style.link__icon" />
+        <span v-if="windowWidth > 465" :class="$style.link__text">эфир</span>
+        <img src="~/assets/img/domofon.png" alt="" :class="$style.link__icon">
+        <!-- <n-icon name="domofon" :class="$style.link__icon" /> -->
       </div>
     </div>
     <FormAuthSteps v-model="activeAuthSteps" />
@@ -51,7 +52,7 @@
 </template>
 
 <script lang="js">
-import { computed, ref, useRouter, useRoute, watch, useContext } from '@nuxtjs/composition-api'
+import { computed, ref, useRouter, useRoute, watch, useContext, onMounted } from '@nuxtjs/composition-api'
 import { numWord } from '~/helpers/compositions/declination'
 export default {
   name: 'TheHeader',
@@ -77,9 +78,13 @@ export default {
     const header = ref(null)
     const liveChat = ref(null)
     const isHomePage = computed(() => route.value.name === 'index')
-    const basketData = computed(() => store.state.basket.basket?.data)
+    const basketData = computed(() => store.state.basket.basket.length)
+    setTimeout(() => {
+      console.log(store.state.basket.basket.length)
+    }, 1000)
     const isAuth = computed(() => store.state.authentication.authorizated)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
+    const windowWidth = ref(0)
     const basketCount = computed(() => {
       const calcBasketCard = basketData.value?.cards?.reduce((acc, value) => {
           acc += value.pivot.quantity
@@ -150,6 +155,16 @@ export default {
       return store.state.authentication.showLogin
     })
 
+    const windowWidthCount = () => {
+      windowWidth.value = window.innerWidth
+      console.log(windowWidth.value)
+    }
+
+    onMounted(() => {
+      windowWidthCount()
+      window.addEventListener('resize', windowWidthCount)
+    })
+
     watch(() => stateShowLogin.value, (newValue) => {
       if (newValue === true) {
         openProfile()
@@ -173,8 +188,10 @@ export default {
       activeAuthSteps,
       isAuth,
       stateShowLogin,
+      windowWidth,
       menu,
-      liveChat
+      liveChat,
+      windowWidthCount
 
     }
   }

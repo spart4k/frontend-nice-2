@@ -56,11 +56,34 @@ export default {
           loading.value = false
         }
       } else {
-        // dohyarit'
         store.commit('menu/changeKeyMenu', {
           key: 'basket',
           effect: 'fx-slide-from-left'
         })
+        try {
+          if (!validate()) { return }
+          loading.value = true
+          const params = {
+            delivery_place_id: 5,
+            pay_type: 1,
+            address_id: null,
+            email: formData.email,
+            phone: Number(formData.phone.replace('+7', '8').replace('(', '').replace(')', '')),
+            FIO: formData.name
+          }
+          const result = await store.dispatch('shop/createNewOrder', params)
+          if (!result.data.error) {
+            store.commit('menu/changeKeyMenu', {
+              key: 'basket',
+              effect: 'fx-slide-from-left'
+            })
+            store.commit('menu/changeStepMenu', { step: 3 })
+          }
+        } catch (e) {
+          console.log(e)
+        } finally {
+          loading.value = false
+        }
         store.commit('menu/changeStepMenu', { step: 3 })
       }
     }

@@ -74,7 +74,8 @@
   width: 16.3rem;
   cursor: pointer;
   @media (max-width: $mobileWidth ) {
-    width: 8.3rem;
+    width: 9.7rem;
+    top: 2.3rem;
   }
   z-index: var(--logo-z-index);
 }
@@ -188,6 +189,10 @@
   &__icon {
     width: 5.3rem;
     height: 5.3rem;
+    svg {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 
