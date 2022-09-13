@@ -2,22 +2,9 @@
   <div :class="$style.cards">
     <template v-if="spliceArray.colLeft && spliceArray.colRight">
       <div :class="$style.col">
-        <!-- <client-only>
-      <div
-        v-masonry
-        transition-duration="0s"
-        item-selector=".item"
-        :class="$style.masonry"
-        class="masonry-container"
-        fit-width="true"
-        destroy-delay="0"
-      > -->
         <div
           v-for="(card, index) in spliceArray.colLeft"
           :key="index"
-          v-masonry-tile
-          class="item"
-          :class="$style.masonryItem"
         >
           <n-section-intro
             v-if="card.hasOwnProperty('preview')"
@@ -33,17 +20,6 @@
             <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
           </template>
         </div>
-        <!-- </div>
-    </client-only> -->
-        <template v-for="(card) in spliceArray.colRight">
-          <section-cards
-            :key="card.id"
-            :section="card.section"
-            :card="card"
-            :class="$style.cards__item"
-            @clickTag="($event) => $emit('clickTag', card.section.id)"
-          />
-        </template>
       </div>
       <div v-if="spliceArray.colRight.length" :class="$style.col">
         <template v-for="(card) in spliceArray.colRight">
@@ -156,14 +132,6 @@ export default {
     flex-direction: column;
     justify-content: center;
     width: 100%;
-  }
-  .masonry {
-    width: 100%;
-    .masonryItem {
-      width: 50%;
-      display: flex;
-      justify-content: center;
-    }
   }
   &__item {
     margin-bottom: 2rem;
