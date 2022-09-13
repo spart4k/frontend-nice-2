@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.wrapper">
-    Нажимая на кнопку, вы соглашаетесь с <a :class="$style.link" href="#">Условиями обработки перс. данных</a>, а также с <a :class="$style.link" href="#">Условиями продажи</a>
+    Нажимая на кнопку, вы соглашаетесь с <a :class="$style.link" href="" target="_blank">Условиями обработки перс. данных</a>, а также с <a :class="$style.link" href="#" target="_blank">Условиями продажи</a>
   </div>
 </template>
 

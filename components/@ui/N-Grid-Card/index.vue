@@ -2,7 +2,23 @@
   <div :class="$style.cards">
     <template v-if="spliceArray.colLeft && spliceArray.colRight">
       <div :class="$style.col">
-        <template v-for="(card) in spliceArray.colLeft">
+        <!-- <client-only>
+      <div
+        v-masonry
+        transition-duration="0s"
+        item-selector=".item"
+        :class="$style.masonry"
+        class="masonry-container"
+        fit-width="true"
+        destroy-delay="0"
+      > -->
+        <div
+          v-for="(card, index) in spliceArray.colLeft"
+          :key="index"
+          v-masonry-tile
+          class="item"
+          :class="$style.masonryItem"
+        >
           <n-section-intro
             v-if="card.hasOwnProperty('preview')"
             :key="card.id"
@@ -13,7 +29,20 @@
           <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
             <img :src="card.image" alt="DOG ">
           </div>
-          <section-cards v-else :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
+          <template v-else>
+            <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
+          </template>
+        </div>
+        <!-- </div>
+    </client-only> -->
+        <template v-for="(card) in spliceArray.colRight">
+          <section-cards
+            :key="card.id"
+            :section="card.section"
+            :card="card"
+            :class="$style.cards__item"
+            @clickTag="($event) => $emit('clickTag', card.section.id)"
+          />
         </template>
       </div>
       <div v-if="spliceArray.colRight.length" :class="$style.col">
@@ -32,7 +61,7 @@
 </template>
 
 <script>
-import { computed, unref, ref, useContext } from '@nuxtjs/composition-api'
+import { computed, ref, useContext, watch } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NGridCard',
@@ -50,10 +79,10 @@ export default {
 
   setup (props) {
     const { route } = useContext()
-    const { items } = unref(props)
-    const proxyArray = ref(items)
-    // console.log(items, proxyArray.value)
+    // const { items } = unref(props)
+    const proxyArray = ref(props.items)
     const spliceArray = computed(() => {
+    // console.log(proxyArray.value)
       if (!props.homePage) {
         proxyArray.value.unshift({
           image: route.value.params.slug,
@@ -69,6 +98,18 @@ export default {
         })
       }
       const middleIndex = Math.ceil(proxyArray.value?.length / 2)
+      // const firstHal = ref([])
+      // const secondHal = ref([])
+      // proxyArray.value.forEach((item, index) => {
+      //   if (index % 2 === 0) {
+      //     firstHal.value.push(item)
+      //   }
+      // })
+      // proxyArray.value.forEach((item, index) => {
+      //   if (index % 2 !== 0) {
+      //     secondHal.value.push(item)
+      //   }
+      // })
       const firstHalf = proxyArray.value?.splice(0, middleIndex)
       const secondHalf = proxyArray.value?.splice(-middleIndex)
 
@@ -76,6 +117,14 @@ export default {
         colLeft: firstHalf,
         colRight: secondHalf
       }
+    })
+
+    watch(() => props.items, () => {
+      // proxyArray.value.push(props.items)
+      proxyArray.value = props.items
+      // console.log('watch', props.items)
+      // firstHalf.value = proxyArray.value?.splice(0, middleIndex)
+      // secondHalf.value = proxyArray.value?.splice(-middleIndex)
     })
 
     return {
@@ -88,9 +137,12 @@ export default {
 
 <style scoped lang="scss" module>
 .preview {
-    height: 60rem !important;
+    height: 55rem !important;
   @media (max-width: $tabletWidth) {
     height: calc(100vh - 10.3rem);
+  }
+  @media (max-width: $mobileWidth) {
+    height: 85vh !important;
   }
 }
 .cards {
@@ -105,11 +157,21 @@ export default {
     justify-content: center;
     width: 100%;
   }
+  .masonry {
+    width: 100%;
+    .masonryItem {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+    }
+  }
   &__item {
     margin-bottom: 2rem;
     display: flex;
     justify-content: center;
     width: 100%;
+    // max-width: calc(100% - 1.5rem);
+    // min-width: 30rem;
   }
 
   .image {
@@ -131,7 +193,7 @@ export default {
   max-width: 53.2rem;
   width: calc(50% - 1.5rem);
   @media (min-width: $tabletWidth) {
-    min-width: 30rem;
+    min-width: 40rem;
   }
   @media (max-width: $tabletWidth) {
     width: auto;
@@ -145,5 +207,4 @@ export default {
     margin-left: 0;
   }
 }
-
 </style>

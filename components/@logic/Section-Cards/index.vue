@@ -48,6 +48,5 @@ export default {
 <style scoped lang="scss" module>
 .wrapper {
   width: 100%;
-
 }
 </style>

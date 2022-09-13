@@ -108,7 +108,7 @@ export default {
 .main {
     padding-top: 17.5rem;
   @media (max-width: $mobileWidth) {
-    padding-top: 23.6rem;
+    padding-top: 13.5rem;
   }
 }
 .container {

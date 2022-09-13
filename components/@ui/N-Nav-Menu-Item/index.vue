@@ -5,6 +5,7 @@
       backgroundImage: `url(${backgroundURL})`,
     }"
     :class="$style.item"
+    @click.prevent="closeBottom"
   >
     <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
       {{ item.title }}
@@ -24,12 +25,19 @@ export default {
       required: true
     }
   },
-  setup (props) {
+  setup (props, ctx) {
+    const { emit } = ctx
     const backgroundURL = computed(() => require(`~/assets/img/menu/${props.item.slug}.png`))
+    const closeBottom = () => {
+      if (window.innerWidth < 450) {
+        emit('closeState')
+      }
+    }
 
     return {
       BLAND_COLOR,
-      backgroundURL
+      backgroundURL,
+      closeBottom
     }
   }
 }
@@ -38,7 +46,7 @@ export default {
 <style scoped lang="scss" module>
 .item {
   width: 100%;
-  height: 10.5rem;
+  height: 10rem;
   color: rgb(255, 255, 255);
   border-radius: 20px;
   @include montserratSemiBold;

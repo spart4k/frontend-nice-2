@@ -36,8 +36,10 @@ export default {
     '@plugins/v-tooltip.js',
     '@plugins/v-lazyload.js',
     '@plugins/v-debounce.js',
+    '@plugins/vue2-masonry-wall.js',
     { src: '@plugins/v-infinity-scroll.js', ssr: false },
-    { src: '@plugins/vue-bottom-sheet.js', ssr: false }
+    { src: '@plugins/vue-bottom-sheet.js', ssr: false },
+    { src: '@plugins/vue-masonry.js', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

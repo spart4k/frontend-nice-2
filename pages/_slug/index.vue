@@ -1,19 +1,25 @@
 <template>
-  <n-intro-slug>
-    <div v-if="$fetchState.pending">
-      Загрузка ...
+  <div>
+    <n-intro-slug>
+      <div v-if="$fetchState.pending">
+        Загрузка ...
+      </div>
+      <template v-else>
+        <NGridCard
+          ref="content"
+          class="content"
+          :class="[$style.content, showAnimate && $style.animateContent]"
+          :items="cards"
+          :description="introTitle"
+          @clickTag="clickTag"
+        />
+      </template>
+    </n-intro-slug>
+    <div :ref="loadingContainer" :class="$style.loadingContainer">
+      <n-observer :class="$style.observer" @intersect="lazyPagination" />
+      <N-Loading v-if="cardsLoading" :class="$style.loading" />
     </div>
-    <template v-else>
-      <NGridCard
-        ref="content"
-        class="content"
-        :class="[$style.content, showAnimate && $style.animateContent]"
-        :items="cards"
-        :description="introTitle"
-        @clickTag="clickTag"
-      />
-    </template>
-  </n-intro-slug>
+  </div>
 </template>
 
 <script>
@@ -39,11 +45,16 @@ export default defineComponent({
     const router = useRouter()
     const { store, route, $gsap } = useContext()
     const cards = ref([])
+    const startCards = ref([])
     const background = ref(null)
     const totalPage = ref([])
+    const pageNumber = ref(2)
     const id = computed(() => Number(route.value.query.id))
     const tagId = computed(() => Number(route.value.query.tag))
+    const cardsLoading = ref(false)
     const loading = ref(false)
+    const loadingContainer = ref(null)
+    const cardsDispatch = ref(true)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
 
     const introTitle = computed(() => {
@@ -87,20 +98,17 @@ export default defineComponent({
             },
             opacity: 0
           })
-          // const content = document.querySelector('.content')
         })
     })
-
-    const isPageMagazin = computed(() => route.value.path.indexOf('magazin'))
 
     const fetchData = (currentPage) => {
       const params = {
         page: 1,
-        count: 10,
+        count: 6,
         section_id: id.value ? id.value : ''
         // tag_id: tagId.value ? tagId.value : ''
       }
-      const path = isPageMagazin > 0 ? 'shop/getData' : 'pages/getData'
+      const path = 'pages/getData'
       const response = store.dispatch(path, params)
       return response
     }
@@ -115,11 +123,27 @@ export default defineComponent({
 
     // const { getData, dataPagination } = pagination(fetchData)
 
-    const lazyPagination = ($state) => {
-      // getData($state, cards.value.value.last_page)
-      // cards.value.value.data = [...cards.value.value.data, ...dataPagination.value]
-      console.log('test', route.value)
+    const lazyPagination = async () => {
+    if (cardsDispatch.value) {
+      cardsLoading.value = true
+      const params = {
+        page: pageNumber.value,
+        count: 6,
+        section_id: id.value ? id.value : ''
+      }
+      pageNumber.value++
+
+      const response = await store.dispatch('pages/getData', params)
+      if (!response.data.length) {
+        cardsDispatch.value = false
+        cardsLoading.value = false
+      }
+      cardsLoading.value = false
+      cards.value = [...startCards.value, ...response.data]
+      startCards.value = [...cards.value]
+      }
     }
+
     const clickTag = async (value) => {
       loading.value = true
       router.push({ path: 'tags', query: { tag: value } })
@@ -137,6 +161,7 @@ export default defineComponent({
       try {
         const response = await fetchData()
         cards.value = [...response.data]
+        startCards.value = cards.value
       } catch (e) {
         console.log(e)
       }
@@ -153,7 +178,12 @@ export default defineComponent({
       id,
       loading,
       background,
-      showAnimate
+      showAnimate,
+      startCards,
+      pageNumber,
+      loadingContainer,
+      cardsLoading,
+      cardsDispatch
     }
   },
   head: {}
@@ -165,4 +195,21 @@ export default defineComponent({
   @include container;
 }
 .content {}
+
+.loadingContainer{
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  height: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .loading {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+.observer {
+  height: 100%;
+}
 </style>
