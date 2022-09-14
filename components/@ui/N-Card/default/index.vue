@@ -80,7 +80,7 @@
           </h2>
           <template v-if="$props.detailPage">
             <p :class="$style.authorName">
-              автор {{ data.author.user.nickname }}
+              автор {{ data.author.name }}
             </p>
           </template>
           <div v-if="data.date_event" :class="$style.time">

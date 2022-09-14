@@ -50,6 +50,9 @@ export default {
     },
     description: {
       type: Object
+    },
+    introData: {
+      type: Object
     }
   },
 
@@ -63,6 +66,8 @@ export default {
         proxyArray.value.unshift({
           image: route.value.params.slug,
           title: props.description.title,
+          text: props.introData.quote_text,
+          author: props.introData.author,
           preview: true,
           id: Math.random()
         })

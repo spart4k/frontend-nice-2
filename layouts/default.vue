@@ -46,13 +46,13 @@
       />
     </N-BootomSheet>
     <portal-target name="sliderPopup" />
-    <audio v-if="audioDelay" ref="audioSource" src="https://test.itisthenice.com/stream" />
+    <audio v-if="audioDelay && audioDestroy" ref="audioSource" src="https://test.itisthenice.com/stream" />
     <!-- <N-Websocket v-if="websocketDelay" :message="mes" /> -->
   </div>
 </template>
 
 <script>
-import { ref, useContext, useFetch, onMounted, computed, watch, provide } from '@nuxtjs/composition-api'
+import { ref, useContext, useFetch, onMounted, computed, watch, provide, nextTick } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import animationGSAP from '~/helpers/compositions/animationGSAP'
 import { BLAND_COLOR } from '~/const/blandColor'
@@ -77,21 +77,25 @@ export default {
     const menuBasket = ref(null)
     const menuLive = ref(null)
     const { store, route, $gsap } = useContext()
-    const tinkoffURL = computed(() => { return store.state.shop.TinkoffPaymentURL })
     const isHomePage = computed(() => route.value.name === 'index')
     const audioSource = ref(null)
     const audioDelay = ref(false)
+    const audioDestroy = ref(false)
 
     const backgroundLoaded = () => {
       isLoaded.value = true
     }
 
     const playAudio = () => {
-      audioSource.value.play()
+      audioDestroy.value = true
+      nextTick(() => {
+        audioSource.value.play()
+      })
     }
 
     const pauseAudio = () => {
       audioSource.value.pause()
+      audioDestroy.value = false
     }
 
     const changeComp = (value) => {
@@ -241,7 +245,6 @@ export default {
       color,
       introTitle,
       isHomePage,
-      tinkoffURL,
       menuBasket,
       menu,
       stepper,
@@ -264,7 +267,8 @@ export default {
       playAudio,
       pauseAudio,
       audioSource,
-      audioDelay
+      audioDelay,
+      audioDestroy
     }
   }
 }
