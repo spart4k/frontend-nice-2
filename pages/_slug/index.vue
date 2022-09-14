@@ -162,6 +162,7 @@ export default defineComponent({
     }
 
     useFetch(async () => {
+      console.log(route.value.params.slug, route.value.query.tag)
       try {
         const response = await fetchData()
         introData.value = response.quote

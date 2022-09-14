@@ -96,8 +96,12 @@ export default {
   width: 100%;
   padding: 0;
   gap: .85rem;
+  height: 54rem;
   @media (min-width: $tabletWidth) {
     justify-content: center;
+  }
+  @media (max-width: $mobileWidth) {
+    height: 68vh;
   }
 }
 .headerNav {

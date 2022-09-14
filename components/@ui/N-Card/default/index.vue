@@ -718,6 +718,7 @@ export default {
       margin-left: auto;
     }
     .comments {
+      will-change: max-height;
       transition: max-height .5s, opacity .5s, margin-top .5s;
       overflow: hidden;
       opacity: 0;
@@ -730,6 +731,7 @@ export default {
       }
       .commentsContainer {
         margin-top: 3.5rem;
+        will-change: max-height;
       }
     }
     .show {
