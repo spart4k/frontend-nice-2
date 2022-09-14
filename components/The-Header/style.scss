@@ -72,6 +72,7 @@
   font-family: Bankir-Retro, sans-serif;
   color: $white;
   width: 16.3rem;
+  transition: left .3s;
   cursor: pointer;
   @media (max-width: $mobileWidth ) {
     width: 9.7rem;

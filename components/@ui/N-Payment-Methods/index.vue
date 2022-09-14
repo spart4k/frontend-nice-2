@@ -1,6 +1,9 @@
 <template>
   <li :class="[$style.item, active && $style.active]" v-on="$listeners">
-    <div :class="$style.icon">
+    <div v-if="item.icon === 'phone-stepper'">
+      <n-icon :name="item.icon" :class="[$style.iconLogo, !active && $style.iconLogoActive]" />
+    </div>
+    <div v-else :class="$style.icon">
       <n-icon :name="item.icon" />
     </div>
     <div :class="$style.text">
@@ -42,9 +45,24 @@ export default {
   .text {
     color: inherit;
     text-align: center;
-    .icon {
-      width: 3.5rem;
-      height: 2.2rem;
+  }
+  .icon {
+    width: 3.5rem;
+    height: 2.2rem;
+  }
+  .iconLogo {
+    width: 1.98rem;
+    height: 2.2rem;
+    svg {
+      height: 100%;
+      width: 100%;
+    }
+    &.iconLogoActive {
+      svg {
+        path {
+          fill: #222222;
+        }
+      }
     }
   }
   &.active {
@@ -61,6 +79,5 @@ export default {
       }
     }
   }
-
 }
 </style>

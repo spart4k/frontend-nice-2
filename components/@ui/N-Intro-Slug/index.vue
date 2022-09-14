@@ -80,10 +80,10 @@ export default {
           trigger: '.content',
           // start: `top ${top}`,
           start: 10,
-          end: 100,
+          end: 20,
           scrub: true
         },
-        y: -60,
+        y: -5,
         opacity: 0
       })
     })

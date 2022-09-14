@@ -63,6 +63,7 @@ export default defineComponent({
     const startCards = ref([])
     const cardsLoading = ref(false)
     const cardsDispatch = ref(true)
+    const fetchLoading = ref(false)
     const resize = () => {
       if (window.innerWidth > 450) {
         document.querySelector('.logo').style.top = null
@@ -121,6 +122,7 @@ export default defineComponent({
     useFetch(async () => {
       try {
         const response = await fetchData()
+        fetchLoading.value = true
         totalPage.value = response?.data.last_page
         cards.value = response.data.data
         startCards.value = cards.value.data
@@ -139,7 +141,7 @@ export default defineComponent({
     const { page } = pagination(fetchData)
 
     const lazyPagination = async () => {
-      if (cardsDispatch.value) {
+      if (cardsDispatch.value && fetchLoading.value) {
         cardsLoading.value = true
         const params = {
           page: pageNumber.value,
@@ -152,10 +154,11 @@ export default defineComponent({
         if (!response.data.length) {
           cardsDispatch.value = false
           cardsLoading.value = false
+        } else {
+          cardsLoading.value = false
+          cards.value.data = [...startCards.value, ...response.data]
+          startCards.value = [...cards.value.data]
         }
-        cardsLoading.value = false
-        cards.value.data = [...startCards.value, ...response.data]
-        startCards.value = [...cards.value.data]
       }
     }
 
@@ -178,7 +181,8 @@ export default defineComponent({
       pageNumber,
       startCards,
       cardsLoading,
-      cardsDispatch
+      cardsDispatch,
+      fetchLoading
     }
   },
   head: {}

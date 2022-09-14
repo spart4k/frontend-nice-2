@@ -11,7 +11,7 @@
               <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}/${data.files[0].src}`" :alt="data.title" />
             </div>
           </div>
-          <nuxt-link v-else :to="`cards/${data.id}?section=${data.slug}`" tag="div">
+          <nuxt-link v-else :to="`cards/${data.id}?section=${data.section.slug}`" tag="div">
             <div :class="[$style.hat]">
               <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}/${data.files[0].src}`" :alt="data.title" />
             </div>

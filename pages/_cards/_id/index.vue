@@ -11,7 +11,7 @@
           @clickTag="clickTag"
         />
         <N-Button color="#222222" :background-color="'white'" :class="$style.back" @click="goToPrev()">
-          <N-Icon name="back" />
+          <N-Icon name="back" :class="$style.backButton" />
           <p :class="$style.text">
             Назад
           </p>
@@ -146,6 +146,14 @@ export default defineComponent({
     @media (min-width: $tabletWidth) {
       margin: 2rem auto 0;
       width: 36.2rem;
+    }
+    .backButton {
+      width: 1.3rem;
+      height: 2.2rem;
+      svg {
+        width: 100%;
+        height: 100%;
+      }
     }
     .text {
       color: $fontColorDefault;

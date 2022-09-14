@@ -79,15 +79,12 @@ export default {
     const liveChat = ref(null)
     const isHomePage = computed(() => route.value.name === 'index')
     const basketData = computed(() => store.state.basket.basket.length)
-    setTimeout(() => {
-      console.log(store.state.basket.basket.length)
-    }, 1000)
     const isAuth = computed(() => store.state.authentication.authorizated)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
     const windowWidth = ref(0)
     const basketCount = computed(() => {
       const calcBasketCard = basketData.value?.cards?.reduce((acc, value) => {
-          acc += value.pivot.quantity
+        acc += value.pivot.quantity
         return acc
       }, 0)
       return {
@@ -157,7 +154,6 @@ export default {
 
     const windowWidthCount = () => {
       windowWidth.value = window.innerWidth
-      console.log(windowWidth.value)
     }
 
     onMounted(() => {

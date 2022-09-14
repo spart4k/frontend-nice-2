@@ -4,12 +4,15 @@
       :is="isCurrentPage"
       :header-items="headerItems"
       :messages="messages"
+      :song="song"
       @changeStep="changeStep"
       @changeComponent="changeComponent"
       @toAddress="toAddress"
       @closeState="$emit('closeState')"
       @sendMessage="sendMessage"
       @sendSticker="sendSticker"
+      @playAudio="$emit('playAudio')"
+      @pauseAudio="$emit('pauseAudio')"
     />
   </transition>
 </template>
@@ -86,6 +89,7 @@ export default {
     })
 
     const messages = ref([])
+    const song = ref([])
     const loading = ref(true)
     // const ws = new WebSocket('wss://test.itisthenice.com/websocket')
     // const ws = new WebSocket('ws://192.168.1.19:8999/websocket')
@@ -93,6 +97,7 @@ export default {
     const socketCloseListener = (event) => {
       socket.onmessage = async (event) => {
         const data = JSON.parse(event.data)
+        console.log(data)
           if (data.messageType === 'bank' && data.status === 'CONFIRMED' && data.status === 'CONFIRMED' && data.user_id === store.state.authentication.user.id) {
             store.commit('menu/changeKeyMenu', {
               key: 'basket',
@@ -101,6 +106,7 @@ export default {
             store.commit('menu/changeStepMenu', { step: 3 })
           } else if (loading.value && data.messageType === 'lastMessages') {
             messages.value = data.messageArray
+            song.value = data.currentSong
             loading.value = false
           } else if (!loading.value) {
             await messages.value.push(data)
@@ -133,7 +139,8 @@ export default {
       messages,
       sendSticker,
       loading,
-      sendMessage
+      sendMessage,
+      song
     }
   }
 }

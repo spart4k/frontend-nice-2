@@ -1,4 +1,4 @@
-import { ref, onMounted, nextTick, computed } from '@vue/composition-api'
+import { ref, onMounted, nextTick, computed, useContext } from '@nuxtjs/composition-api'
 
 export default {
   name: 'live-radio',
@@ -6,25 +6,30 @@ export default {
     messages: {
       type: Array,
       default: () => []
+    },
+    song: {
+      type: [Array, Object],
+      default: () => []
     }
   },
-  setup (props, ctx) {
+  setup (props, { emit }) {
+    const { store } = useContext()
     const audioSource = ref(null)
     const audioPause = ref(null)
     const audioPlay = ref(null)
-    const audioPlaying = ref(false)
+    const audioPlaying = computed(() => store.state.menu.audioPlaying)
     const marquee = ref(null)
     const marqueeLength = ref(null)
     const marqueeContent = ref(null)
     const marqueeContainerLength = ref(null)
     const isMarquee = ref(true)
     const playAudio = () => {
-      audioPlaying.value = true
-      audioSource.value.play()
+      emit('playAudio')
+      store.commit('menu/changeAudioPlaying', true)
     }
     const pauseAudio = () => {
-      audioPlaying.value = false
-      audioSource.value.pause()
+      emit('pauseAudio')
+      store.commit('menu/changeAudioPlaying', false)
     }
     const innerHeight = ref(null)
     const marqueeLengthComputed = computed(() => {

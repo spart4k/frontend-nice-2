@@ -65,7 +65,7 @@ export default {
           loading.value = true
           const params = {
             delivery_place_id: 5,
-            pay_type: 1,
+            pay_type: 2,
             address_id: null,
             email: formData.email,
             phone: Number(formData.phone.replace('+7', '8').replace('(', '').replace(')', '')),

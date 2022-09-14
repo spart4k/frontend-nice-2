@@ -24,7 +24,6 @@ const animation = ($gsap, Elastic) => {
     const SUBTITLE = '.subtitleLogo'
     const backgroundElement = document.querySelector('.background')
     const logo = document.querySelector('.logo')
-    // const nav = document.querySelectorAll(`${NAVBAR} > ul > li`)
     const content = document.querySelector('.content')
     tl.set(SUBTITLE, {
       opacity: 0
@@ -82,12 +81,10 @@ const animation = ($gsap, Elastic) => {
       opacity: 1,
       delay: 2
     })
-
     let timing = 0.3 - 0.015
     tl.fromTo(
       `${NAVBAR} > ul > li`,
       1,
-
       {
         visibility: 'visible',
         opacity: 0,
@@ -95,7 +92,6 @@ const animation = ($gsap, Elastic) => {
           return ((index + 1) * 500)
         }
       },
-
       {
         opacity: 1,
         x: 0,

@@ -12,9 +12,24 @@
   .iconContainer{
     height: 2.2rem;
     margin-bottom: .5rem;
+    position: relative;
     .icon {
       width: 2.2rem;
       height: 2.2rem;
+    }
+    .basketCount {
+      position: absolute;
+      width: 1.9rem;
+      height: 1.9rem;
+      border-radius: 100%;
+      top: -1.5rem;
+      right: -1rem;
+      background-color: $orange2;
+      @include regular-text-small;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
     }
   }
 }
