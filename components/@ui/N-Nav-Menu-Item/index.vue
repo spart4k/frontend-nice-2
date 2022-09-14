@@ -49,8 +49,8 @@ export default {
   height: 10rem;
   color: rgb(255, 255, 255);
   border-radius: 20px;
-  @include montserratSemiBold;
-  @include subtitle-sm;
+  @include regular-text-bold;
+  font-size: 1.8rem;
   background-repeat: no-repeat;
   background-position: center right;
   background-size: contain;

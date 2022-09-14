@@ -11,6 +11,9 @@
     <li :class="$style.item" @click="openBasket">
       <div :class="$style.iconContainer">
         <n-icon name="basket" :class="$style.icon" />
+        <div v-if="basketData" :class="$style.basketCount">
+          {{ basketData }}
+        </div>
       </div>
       <div :class="$style.item__text">
         Корзина
@@ -36,11 +39,12 @@
 </template>
 
 <script>
-import { useContext } from '@nuxtjs/composition-api'
+import { useContext, computed } from '@nuxtjs/composition-api'
 export default {
   name: 'MenuUserTop',
   setup (props, { emit }) {
   const { store } = useContext()
+  const basketData = computed(() => store.state.basket.basket.length)
   const toSupport = () => {
     window.open('https://t.me/itisthenicesupport')
   }
@@ -64,7 +68,8 @@ export default {
   }
     return {
       toSupport,
-      openBasket
+      openBasket,
+      basketData
     }
   }
 }

@@ -4,7 +4,8 @@ export const state = () => ({
   isShowBottomMenu: false,
   isShowBottomLive: false,
   stepCurrentComponent: 0,
-  basketLength: 0
+  basketLength: 0,
+  audioPlaying: false
 })
 
 export const mutations = {
@@ -25,5 +26,8 @@ export const mutations = {
   },
   changeStepMenu (store, { step }) {
     store.stepCurrentComponent = step
+  },
+  changeAudioPlaying (store, value) {
+    store.audioPlaying = value
   }
 }

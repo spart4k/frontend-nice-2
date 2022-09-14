@@ -53,6 +53,7 @@ export default defineComponent({
     const tagId = computed(() => Number(route.value.query.tag))
     const cardsLoading = ref(false)
     const loading = ref(false)
+    const fetchLoading = ref(false)
     const loadingContainer = ref(null)
     const cardsDispatch = ref(true)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
@@ -88,17 +89,17 @@ export default defineComponent({
     onMounted(() => {
       store.commit('content/setAnimate', false)
       store.commit('content/setSingleAnimation', false)
-        nextTick(() => {
-          $gsap.to('.subtitleLogo', {
-            scrollTrigger: {
-              trigger: '.content',
-              start: 10,
-              end: () => 100,
-              scrub: true
-            },
-            opacity: 0
-          })
+      nextTick(() => {
+        $gsap.to('.subtitleLogo', {
+          scrollTrigger: {
+            trigger: '.content',
+            start: 10,
+            end: () => 20,
+            scrub: true
+          },
+          opacity: 0
         })
+      })
     })
 
     const fetchData = (currentPage) => {
@@ -124,7 +125,7 @@ export default defineComponent({
     // const { getData, dataPagination } = pagination(fetchData)
 
     const lazyPagination = async () => {
-    if (cardsDispatch.value) {
+    if (cardsDispatch.value && fetchLoading.value) {
       cardsLoading.value = true
       const params = {
         page: pageNumber.value,
@@ -137,10 +138,11 @@ export default defineComponent({
       if (!response.data.length) {
         cardsDispatch.value = false
         cardsLoading.value = false
-      }
-      cardsLoading.value = false
-      cards.value = [...startCards.value, ...response.data]
-      startCards.value = [...cards.value]
+      } else {
+        cardsLoading.value = false
+        cards.value = [...startCards.value, ...response.data]
+        startCards.value = [...cards.value]
+        }
       }
     }
 
@@ -160,6 +162,7 @@ export default defineComponent({
     useFetch(async () => {
       try {
         const response = await fetchData()
+        fetchLoading.value = true
         cards.value = [...response.data]
         startCards.value = cards.value
       } catch (e) {
@@ -183,7 +186,8 @@ export default defineComponent({
       pageNumber,
       loadingContainer,
       cardsLoading,
-      cardsDispatch
+      cardsDispatch,
+      fetchLoading
     }
   },
   head: {}

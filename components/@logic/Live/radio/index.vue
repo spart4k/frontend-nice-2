@@ -1,11 +1,11 @@
 <template>
   <div :class="$style.radio">
     <div :class="$style.wrap">
-      <img :class="$style.wrapper" :src="require(`~/assets/img/live/def-radio-wrap.png`)" alt="">
+      <img :class="$style.wrapper" :src="(`${$axios.defaults.baseURL}/${$props.song.wrap}`)" alt="">
       <div ref="marquee" class="marquee" :class="[ $style.marquee, $style.name ]">
         <div class="inner" :class="[$style.inner, isMarquee ? $style.active : $style.noActive ]">
           <p ref="marqueeContent" :class="$style.marqueeContent" class="marqueeContent">
-            Eli & Fur live from Courmayeur Eli & Fur live from Courmayeur Eli & Fur live from Courmayeur
+            {{$props.song.title}}
           </p>
         </div>
       </div>
@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-    <audio ref="audioSource" src="https://test.itisthenice.com/stream" />
+    <!-- <audio ref="audioSource" src="https://test.itisthenice.com/stream" /> -->
   </div>
 </template>
 

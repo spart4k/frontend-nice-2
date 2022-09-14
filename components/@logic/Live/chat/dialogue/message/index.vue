@@ -1,7 +1,7 @@
 <template>
-  <div v-if="$props.message.user.nickname" :class="$style.message">
+  <div v-if="nickName" :class="$style.message">
     <div :class="$style.author">
-      {{ $props.message.user.nickname }}
+      {{ nickName }}
     </div>
     <template v-if="$props.message.sticker && ($props.message.sticker.id !== 20)">
       <img

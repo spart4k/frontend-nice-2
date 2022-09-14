@@ -3,8 +3,8 @@
     <!-- <div :class="$style.title">
        Эфир
     </div>-->
-    <live-radio/>
-    <live-chat :messages="messages" @sendMessage="($event) => $emit('sendMessage', $event)" @sendSticker="($event) => $emit('sendSticker', $event)" />
+    <live-radio :song="song" @playAudio="$emit('playAudio')" @pauseAudio="$emit('pauseAudio')" />
+    <live-chat :messages="messages" @closeState="$emit('closeState')" @sendMessage="($event) => $emit('sendMessage', $event)" @sendSticker="($event) => $emit('sendSticker', $event)" />
   </div>
 </template>
 

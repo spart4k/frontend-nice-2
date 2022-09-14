@@ -41,9 +41,12 @@
         @changeComp="changeComp"
         @changeStep="changeStep"
         @closeState="closeState"
+        @playAudio="playAudio"
+        @pauseAudio="pauseAudio"
       />
     </N-BootomSheet>
     <portal-target name="sliderPopup" />
+    <audio v-if="audioDelay" ref="audioSource" src="https://test.itisthenice.com/stream" />
     <!-- <N-Websocket v-if="websocketDelay" :message="mes" /> -->
   </div>
 </template>
@@ -76,9 +79,19 @@ export default {
     const { store, route, $gsap } = useContext()
     const tinkoffURL = computed(() => { return store.state.shop.TinkoffPaymentURL })
     const isHomePage = computed(() => route.value.name === 'index')
+    const audioSource = ref(null)
+    const audioDelay = ref(false)
 
     const backgroundLoaded = () => {
       isLoaded.value = true
+    }
+
+    const playAudio = () => {
+      audioSource.value.play()
+    }
+
+    const pauseAudio = () => {
+      audioSource.value.pause()
     }
 
     const changeComp = (value) => {
@@ -209,6 +222,9 @@ export default {
     }
 
     onMounted(() => {
+      setTimeout(() => {
+        audioDelay.value = true
+      }, 500)
       if (localStorage.getItem('token') !== null) {
         store.dispatch('authentication/verifyToken')
       }
@@ -244,7 +260,11 @@ export default {
       changeState,
       closeState,
       backgroundLoaded,
-      isLoaded
+      isLoaded,
+      playAudio,
+      pauseAudio,
+      audioSource,
+      audioDelay
     }
   }
 }

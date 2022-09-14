@@ -88,7 +88,7 @@ export default {
       // })
       const firstHalf = proxyArray.value?.splice(0, middleIndex)
       const secondHalf = proxyArray.value?.splice(-middleIndex)
-
+      // console.log(firstHalf.length, secondHalf.length)
       return {
         colLeft: firstHalf,
         colRight: secondHalf
