@@ -5,11 +5,11 @@
     </h1>
     <div>
       <N-Icon :class="$style.quote" name="quote" />
-      <h2 :class="$style.subtitle">
-        Читая, вы проживаете несколько жизней.
+      <h2 v-if="description.text" :class="$style.subtitle">
+        {{ description.text }}
       </h2>
-      <h3 :class="$style.author">
-        – Уильям Стайрон
+      <h3 v-if="description.author" :class="$style.author">
+        – {{ description.author }}
       </h3>
       <div :class="$style.image">
         <img :src="imageModule" alt="">

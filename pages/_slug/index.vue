@@ -11,6 +11,7 @@
           :class="[$style.content, showAnimate && $style.animateContent]"
           :items="cards"
           :description="introTitle"
+          :intro-data="introData ? introData : {}"
           @clickTag="clickTag"
         />
       </template>
@@ -49,6 +50,7 @@ export default defineComponent({
     const background = ref(null)
     const totalPage = ref([])
     const pageNumber = ref(2)
+    const introData = ref()
     const id = computed(() => Number(route.value.query.id))
     const tagId = computed(() => Number(route.value.query.tag))
     const cardsLoading = ref(false)
@@ -162,6 +164,7 @@ export default defineComponent({
     useFetch(async () => {
       try {
         const response = await fetchData()
+        introData.value = response.quote
         fetchLoading.value = true
         cards.value = [...response.data]
         startCards.value = cards.value
@@ -187,7 +190,8 @@ export default defineComponent({
       loadingContainer,
       cardsLoading,
       cardsDispatch,
-      fetchLoading
+      fetchLoading,
+      introData
     }
   },
   head: {}

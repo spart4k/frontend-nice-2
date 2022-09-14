@@ -108,6 +108,8 @@ export default {
             messages.value = data.messageArray
             song.value = data.currentSong
             loading.value = false
+          } else if (data.messageType === 'nextSong') {
+            song.value = data.data
           } else if (!loading.value) {
             await messages.value.push(data)
             if (messages.value.length > 99) {

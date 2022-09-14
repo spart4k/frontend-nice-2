@@ -5,8 +5,8 @@
   opacity: 0;
 }
 
-.home-enter-active, .home-leave-active { transition: opacity .5s; }
-.home-enter, .home-leave-active { opacity: 0; }
+// .home-enter-active, .home-leave-active { transition: opacity .5s; }
+// .home-enter, .home-leave-active { opacity: 0; }
 .list-enter-active,
 .list-leave-active {
   transition: opacity 1s ease, transform 1s ease;
