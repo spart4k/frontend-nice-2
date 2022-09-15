@@ -65,6 +65,9 @@ export default defineComponent({
     const cardsDispatch = ref(true)
     const fetchLoading = ref(false)
     const resize = () => {
+      if (window.innerWidth < 450) {
+        animationlogo()
+      }
       if (window.innerWidth > 450) {
         document.querySelector('.logo').style.top = null
       }
@@ -98,7 +101,9 @@ export default defineComponent({
 
     onMounted(() => {
       // if (backgroundLoaded.value) {
-      animationlogo()
+      if (window.innerWidth < 450) {
+        animationlogo()
+      }
       animateSubtitle()
       animateNavbar('.navbarSlug')
       window.addEventListener('resize', resize)

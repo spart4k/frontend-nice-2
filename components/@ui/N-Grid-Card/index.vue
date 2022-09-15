@@ -1,39 +1,41 @@
 <template>
-  <div :class="$style.cards">
-    <template v-if="spliceArray.colLeft && spliceArray.colRight">
-      <div :class="$style.col">
-        <div
-          v-for="(card, index) in spliceArray.colLeft"
-          :key="index"
-        >
-          <n-section-intro
-            v-if="card.hasOwnProperty('preview')"
-            :key="card.id"
-            :description="card"
-            :image="card.image"
-            :class="$style.preview"
-          />
-          <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
-            <img :src="card.image" alt="DOG ">
+  <div>
+    <div :class="$style.cards">
+      <template v-if="spliceArray.colLeft && spliceArray.colRight">
+        <div :class="$style.col">
+          <div
+            v-for="(card, index) in spliceArray.colLeft"
+            :key="index"
+          >
+            <n-section-intro
+              v-if="card.hasOwnProperty('preview')"
+              :key="card.id"
+              :description="card"
+              :image="card.image"
+              :class="$style.preview"
+            />
+            <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
+              <img :src="card.image" alt="DOG ">
+            </div>
+            <N-Card-Author v-else-if="card.hasOwnProperty('author_data')" :author="card" :class="$style.authorCard" />
+            <template v-else>
+              <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
+            </template>
           </div>
-          <N-Card-Author v-else-if="card.hasOwnProperty('author_data')" :author="card" :class="$style.authorCard" />
-          <template v-else>
-            <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
+        </div>
+        <div v-if="spliceArray.colRight.length" :class="$style.col">
+          <template v-for="(card) in spliceArray.colRight">
+            <section-cards
+              :key="card.id"
+              :section="card.section"
+              :card="card"
+              :class="$style.cards__item"
+              @clickTag="($event) => $emit('clickTag', card.section.id)"
+            />
           </template>
         </div>
-      </div>
-      <div v-if="spliceArray.colRight.length" :class="$style.col">
-        <template v-for="(card) in spliceArray.colRight">
-          <section-cards
-            :key="card.id"
-            :section="card.section"
-            :card="card"
-            :class="$style.cards__item"
-            @clickTag="($event) => $emit('clickTag', card.section.id)"
-          />
-        </template>
-      </div>
-    </template>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -70,14 +72,14 @@ export default {
       })
     } else if (!route.value.query.tag && !route.value.query.author) {
       if (!props.homePage) {
-        proxyArray.value.unshift({
-          image: route.value.params.slug,
-          title: props.description.title,
-          // text: props.introData.quote_text,
-          // author: props.introData.author,
-          preview: true,
-          id: Math.random()
-        })
+          proxyArray.value.unshift({
+            image: route.value.params.slug,
+            title: props.description.title,
+            text: props.introData?.quote_text,
+            author: props.introData?.author,
+            preview: true,
+            id: Math.random()
+          })
       } else {
         proxyArray.value?.unshift({
           home: true,
