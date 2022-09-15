@@ -73,6 +73,10 @@ export default {
           }
           const result = await store.dispatch('shop/createNewOrder', params)
           if (!result.data.error) {
+            store.commit('basket/setBasket', [])
+            store.commit('basket/setBasketSum', 0)
+            orderId.value = String(result.data.id)
+            store.commit('basket/lastOrderChange', result.data.id)
             store.commit('menu/changeKeyMenu', {
               key: 'basket',
               effect: 'fx-slide-from-left'

@@ -92,18 +92,27 @@ export default defineComponent({
       } else if (selectSecond.value === null) {
         selectSecond.value = novelty.value[0]
       } else {
-        console.log(selectFirst.value, selectSecond.value)
+        const nov = ref()
+        const sect = ref()
+        if (selectSecond.value === 'Новые') {
+          nov.value = 'asc'
+        } else {
+          nov.value = 'desc'
+        }
+        if (selectFirst.value === '') {
+          sect.value = ''
+        }
+        const params = {
+          page: 1,
+          count: 6,
+          section_id: id.value ? id.value : '',
+          order_by_colomn: 'created_at',
+          order_by_mode: nov.value
+        }
+        const path = 'pages/getData'
+        const response = store.dispatch(path, params)
+        return response
       }
-      // const params = {
-      //   page: 1,
-      //   count: 6,
-      //   section_id: id.value ? id.value : '',
-      //   tag_id: tagId.value ? tagId.value : '',
-      //   author_id: authorId.value ? authorId.value : ''
-      // }
-      // const path = 'pages/getData'
-      // const response = store.dispatch(path, params)
-      // return response
     }
 
     const introTitle = computed(() => {
@@ -296,8 +305,9 @@ export default defineComponent({
   gap: 2rem;
   justify-content: center;
   .select {
-    width: 20rem;
-    @include regular-text;
+    width: 23.5rem;
+    border-radius: 25px;
+    @include regular-text-bold;
     color: $fontColorDefault;
     border: none;
     // border-bottom: .2rem solid #C83F8E;
@@ -306,20 +316,23 @@ export default defineComponent({
     :global(.vs__dropdown-toggle) {
       border: none;
       padding: 0;
+      border-radius: 25px;
+      height: 4.4rem;
       :global(.vs__selected-options) {
         padding: 0;
         :global(.vs__search) {
-          padding: 0;
+          padding: 0 0 0 2rem;
           font-size: 1.4rem !important;
         }
         :global(.vs__selected) {
+          cursor: pointer;
           margin: 0;
-          padding: 0;
+          padding: 0 0 0 2rem;
         }
       }
       :global(.vs__actions) {
         margin: 1.3rem 0;
-        padding: 0;
+        padding: 0 2rem 0 0;
         :global(.vs__open-indicator) {
           fill: #C83F8E
         }
