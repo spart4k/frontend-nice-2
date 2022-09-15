@@ -5,13 +5,27 @@
         Загрузка ...
       </div>
       <template v-else>
+        <div v-if="selectors.id === '8'" :class="$style.row">
+          <v-select
+            v-model="selectFirst"
+            :options="sections"
+            :class="$style.select"
+            @input="searchCards"
+          />
+          <v-select
+            v-model="selectSecond"
+            :options="novelty"
+            :class="$style.select"
+            @input="searchCards"
+          />
+        </div>
         <NGridCard
           ref="content"
           class="content"
           :class="[$style.content, showAnimate && $style.animateContent]"
           :items="cards"
           :description="introTitle"
-          :intro-data="introData ? introData : {}"
+          :intro-data="introData && introData"
           :author="author"
           @clickTag="clickTag"
         />
@@ -34,6 +48,8 @@ import {
   computed, onMounted, nextTick
   // useMeta,
 } from '@nuxtjs/composition-api'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
 
 // import { pagination } from '~/plugins/pagination'
 // import { head } from '@/components/scripts/head.js'
@@ -43,6 +59,7 @@ export default defineComponent({
   key: ({ path }) => {
     return path
   },
+  components: { vSelect },
   setup () {
     const router = useRouter()
     const { store, route, $gsap } = useContext()
@@ -62,6 +79,32 @@ export default defineComponent({
     const loadingContainer = ref(null)
     const cardsDispatch = ref(true)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
+    const selectors = computed(() => {
+      return route.value.query
+    })
+    const novelty = ref(['Новые', 'Старые'])
+    const sections = ref(['Все', 'Музыка', 'Видео', 'Искусство', 'Кухня', 'Чтиво', 'Фото', 'Одежда', 'Анонсы'])
+    const selectFirst = ref(sections.value[0])
+    const selectSecond = ref(novelty.value[0])
+    const searchCards = () => {
+      if (selectFirst.value === null) {
+        selectFirst.value = sections.value[0]
+      } else if (selectSecond.value === null) {
+        selectSecond.value = novelty.value[0]
+      } else {
+        console.log(selectFirst.value, selectSecond.value)
+      }
+      // const params = {
+      //   page: 1,
+      //   count: 6,
+      //   section_id: id.value ? id.value : '',
+      //   tag_id: tagId.value ? tagId.value : '',
+      //   author_id: authorId.value ? authorId.value : ''
+      // }
+      // const path = 'pages/getData'
+      // const response = store.dispatch(path, params)
+      // return response
+    }
 
     const introTitle = computed(() => {
       if (id.value) {
@@ -212,7 +255,13 @@ export default defineComponent({
       cardsLoading,
       cardsDispatch,
       fetchLoading,
-      introData
+      introData,
+      novelty,
+      sections,
+      selectFirst,
+      selectSecond,
+      searchCards,
+      selectors
     }
   },
   head: {}
@@ -240,5 +289,54 @@ export default defineComponent({
 }
 .observer {
   height: 100%;
+}
+.row{
+  position: relative;
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  .select {
+    width: 20rem;
+    @include regular-text;
+    color: $fontColorDefault;
+    border: none;
+    // border-bottom: .2rem solid #C83F8E;
+    outline: none;
+    margin-bottom: 1.5rem;
+    :global(.vs__dropdown-toggle) {
+      border: none;
+      padding: 0;
+      :global(.vs__selected-options) {
+        padding: 0;
+        :global(.vs__search) {
+          padding: 0;
+          font-size: 1.4rem !important;
+        }
+        :global(.vs__selected) {
+          margin: 0;
+          padding: 0;
+        }
+      }
+      :global(.vs__actions) {
+        margin: 1.3rem 0;
+        padding: 0;
+        :global(.vs__open-indicator) {
+          fill: #C83F8E
+        }
+        :global(.vs__clear) {
+          display: none
+        }
+      }
+    }
+    :global(.vs__dropdown-option) {
+      height: 4.5rem;
+      display: flex;
+      font-size: 1.6rem;
+      align-items: center;
+    }
+    :global(.vs__dropdown-option--highlight) {
+      background: #C83F8E;
+    }
+  }
 }
 </style>

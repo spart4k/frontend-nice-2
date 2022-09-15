@@ -12,6 +12,9 @@ const animation = ($gsap, Elastic) => {
       const content = document.querySelector('.content')
       window.addEventListener('resize', () => {
         if (window.innerWidth > 450 && content.getBoundingClientRect().top > 0) {
+          logo.style.top = '2.9rem'
+        }
+        if (window.innerWidth < 450 && content.getBoundingClientRect().top > 0) {
           logo.style.top = '9rem'
         }
       })
@@ -139,6 +142,7 @@ const animation = ($gsap, Elastic) => {
     ScrollTrigger.matchMedia({
       '(max-width: 450px)' () {
         setTimeout(() => {
+          console.log('mobile')
           $gsap.to('.logo', {
             scrollTrigger: {
               // trigger: TRIGGER,
@@ -149,6 +153,23 @@ const animation = ($gsap, Elastic) => {
             },
             top: '1rem',
             scale: 0.6,
+            force3D: true
+          })
+        }, 300)
+      },
+      '(min-width: 451px)' () {
+        setTimeout(() => {
+          console.log('desktope')
+          $gsap.to('.logo', {
+            scrollTrigger: {
+              // trigger: TRIGGER,
+              // start: '+=300',
+              end: '+=300',
+              scrub: true,
+              markers: false
+            },
+            top: '1rem',
+            scale: 1,
             force3D: true
           })
         }, 300)

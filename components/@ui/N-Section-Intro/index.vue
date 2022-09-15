@@ -6,10 +6,10 @@
     <div>
       <N-Icon :class="$style.quote" name="quote" />
       <h2 v-if="description.text" :class="$style.subtitle">
-        {{ description.text }}
+        {{ description.text ? description.text : 'Comming soon' }}
       </h2>
       <h3 v-if="description.author" :class="$style.author">
-        – {{ description.author }}
+        – {{ description.author ? description.author : 'Comming soon' }}
       </h3>
       <div :class="$style.image">
         <img :src="imageModule" alt="">

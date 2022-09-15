@@ -173,8 +173,7 @@
         >
           <N-Input v-if="$store.state.authentication.authorizated" type="textarea" @smilies="commentHeightSet" @sendSticker="sendSticker" @sendMessage="sendComment" />
           <N-Plug v-else @login="login" @registration="registration" />
-          <div v-if="true" :class="$style.commentsContainer">
-            <!-- {{ proxyComments.data !== [] }} -->
+          <div v-if="false" :class="$style.commentsContainer">
             <N-Comment
               v-for="(item, index) in proxyComments.data"
               :key="index"
