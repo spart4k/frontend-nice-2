@@ -3,7 +3,7 @@
     <div ref="marquee" :class="[ $style.marquee, $style.name ]">
       <div class="inner" :class="[$style.inner, isMarquee ? $style.active : $style.noActive ]">
         <p ref="marqueeContent" :class="$style.marqueeContent" class="marqueeContent">
-          {{ title }}
+          {{ audioTitle }}
         </p>
       </div>
     </div>
@@ -55,6 +55,7 @@ export default {
   setup (props, ctx) {
     const audioPlaying = ref(false)
     const audioSource = ref(null)
+    const audioTitle = computed(() => { return props.title.slice(0, -4) })
     const marquee = ref(null)
     const marqueeLength = ref(null)
     const marqueeContent = ref(null)
@@ -121,6 +122,7 @@ export default {
       audioSource,
       loading,
       isLoaded,
+      audioTitle,
 
       marquee,
       innerHeight,

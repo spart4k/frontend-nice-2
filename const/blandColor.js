@@ -9,5 +9,7 @@ export const BLAND_COLOR = {
   odezda: '#6CCAC8',
   meropriiatiia: '#D13C33',
   efir: '#006350',
-  moneta: '#73CA55'
+  moneta: '#73CA55',
+  '/tags': '#292BC2',
+  '/authors': '#292BC2'
 }

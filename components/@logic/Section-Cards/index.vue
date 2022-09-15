@@ -1,7 +1,14 @@
 <template>
   <div :class="$style.wrapper">
     <template v-if="section.id === 2">
-      <N-Card-Default :detail-page="detailPage" :comments="comments" with-video :data="detailPage ? card.data : card" @clickTag="($event) => $emit('clickTag', $event)" />
+      <N-Card-Default
+        :detail-page="detailPage"
+        :comments="comments"
+        with-video
+        :data="detailPage ? card.data : card"
+        @clickTag="($event) => $emit('clickTag', $event)"
+        @clickAuthor="($event) => $emit('clickAuthor', $event)"
+      />
     </template>
     <template v-else-if="section.id === 10">
       <N-Card-Coin />
@@ -13,9 +20,9 @@
         :comments="comments"
         :data="detailPage ? card.data : card"
         @clickTag="($event) => $emit('clickTag', $event)"
+        @clickAuthor="($event) => $emit('clickAuthor', $event)"
       />
     </template>
-    <!-- <N-Card-Author /> -->
   </div>
 </template>
 

@@ -3,11 +3,11 @@
     <div :class="$style.title">
       История заказов
     </div>
-    <div class="">
+    <div :class="$style.container">
       <div v-if="loading" :class="$style.nothing">
         <n-loading purple :class="$style.loading" />
       </div>
-      <div v-else-if="orders">
+      <div v-else-if="orders" :class="$style.orderList">
         <History-Orders-Item v-for="(item,index) in orders.data" :key="index" :order="item" :class="$style.item" />
       </div>
       <div v-else :class="$style.empty">
@@ -64,6 +64,28 @@ export default {
   }
   .item+.item {
     margin-top: 2.5rem;
+  }
+  .orderList {
+    margin-bottom: 2.5rem;
+  }
+  .container {
+    width: 100%;
+    height: 100%;
+  }
+  .nothing{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    margin: auto 0;
+    .loading {
+      display: block;
+      margin: 0 auto
+    }
+    .nothingToShow {
+      @include regular-text;
+      color: $fontColorDefault;
+      opacity: 0.5;
+    }
   }
 }
 </style>

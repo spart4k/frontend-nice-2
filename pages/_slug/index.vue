@@ -12,6 +12,7 @@
           :items="cards"
           :description="introTitle"
           :intro-data="introData ? introData : {}"
+          :author="author"
           @clickTag="clickTag"
         />
       </template>
@@ -46,6 +47,7 @@ export default defineComponent({
     const router = useRouter()
     const { store, route, $gsap } = useContext()
     const cards = ref([])
+    const author = ref()
     const startCards = ref([])
     const background = ref(null)
     const totalPage = ref([])
@@ -53,6 +55,7 @@ export default defineComponent({
     const introData = ref()
     const id = computed(() => Number(route.value.query.id))
     const tagId = computed(() => Number(route.value.query.tag))
+    const authorId = computed(() => Number(route.value.query.author))
     const cardsLoading = ref(false)
     const loading = ref(false)
     const fetchLoading = ref(false)
@@ -108,12 +111,23 @@ export default defineComponent({
       const params = {
         page: 1,
         count: 6,
-        section_id: id.value ? id.value : ''
-        // tag_id: tagId.value ? tagId.value : ''
+        section_id: id.value ? id.value : '',
+        tag_id: tagId.value ? tagId.value : '',
+        author_id: authorId.value ? authorId.value : ''
       }
       const path = 'pages/getData'
       const response = store.dispatch(path, params)
       return response
+    }
+
+    const fetchAuthor = () => {
+      if (authorId.value) {
+        const params = {
+          id: authorId.value
+        }
+        const response = store.dispatch('pages/getAuthorById', params)
+        return response
+      }
     }
 
     // const getPageInfo = computed(() => {
@@ -132,7 +146,9 @@ export default defineComponent({
       const params = {
         page: pageNumber.value,
         count: 6,
-        section_id: id.value ? id.value : ''
+        section_id: id.value ? id.value : '',
+        tag_id: tagId.value ? tagId.value : '',
+        author_id: authorId.value ? authorId.value : ''
       }
       pageNumber.value++
 
@@ -162,8 +178,11 @@ export default defineComponent({
     }
 
     useFetch(async () => {
-      console.log(route.value.params.slug, route.value.query.tag)
       try {
+        if (authorId.value) {
+          const authorResponse = await fetchAuthor()
+          author.value = authorResponse
+        }
         const response = await fetchData()
         introData.value = response.quote
         fetchLoading.value = true
@@ -181,6 +200,7 @@ export default defineComponent({
       lazyPagination,
       introTitle,
       cards,
+      author,
       totalPage,
       id,
       loading,
