@@ -104,6 +104,8 @@ export default {
               effect: 'fx-slide-from-left'
             })
             store.commit('menu/changeStepMenu', { step: 3 })
+            store.commit('basket/setBasket', [])
+            store.commit('basket/setBasketSum', 0)
           } else if (loading.value && data.messageType === 'lastMessages') {
             messages.value = data.messageArray
             song.value = data.currentSong
