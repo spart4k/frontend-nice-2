@@ -16,6 +16,7 @@
           <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
             <img :src="card.image" alt="DOG ">
           </div>
+          <N-Card-Author v-else-if="card.hasOwnProperty('author_data')" :author="card" :class="$style.authorCard" />
           <template v-else>
             <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
           </template>
@@ -53,21 +54,27 @@ export default {
     },
     introData: {
       type: Object
+    },
+    author: {
+      type: Object
     }
   },
 
   setup (props) {
     const { route } = useContext()
-    // const { items } = unref(props)
     const proxyArray = ref(props.items)
     const spliceArray = computed(() => {
-    // console.log(proxyArray.value)
+    if (route.value.query.author) {
+      proxyArray.value.unshift({
+        author_data: props.author
+      })
+    } else if (!route.value.query.tag && !route.value.query.author) {
       if (!props.homePage) {
         proxyArray.value.unshift({
           image: route.value.params.slug,
           title: props.description.title,
-          text: props.introData.quote_text,
-          author: props.introData.author,
+          // text: props.introData.quote_text,
+          // author: props.introData.author,
           preview: true,
           id: Math.random()
         })
@@ -78,39 +85,23 @@ export default {
           id: Math.random()
         })
       }
-      const middleIndex = Math.ceil(proxyArray.value?.length / 2)
-      // const firstHal = ref([])
-      // const secondHal = ref([])
-      // proxyArray.value.forEach((item, index) => {
-      //   if (index % 2 === 0) {
-      //     firstHal.value.push(item)
-      //   }
-      // })
-      // proxyArray.value.forEach((item, index) => {
-      //   if (index % 2 !== 0) {
-      //     secondHal.value.push(item)
-      //   }
-      // })
-      const firstHalf = proxyArray.value?.splice(0, middleIndex)
-      const secondHalf = proxyArray.value?.splice(-middleIndex)
-      // console.log(firstHalf.length, secondHalf.length)
-      return {
-        colLeft: firstHalf,
-        colRight: secondHalf
-      }
-    })
-
-    watch(() => props.items, () => {
-      // proxyArray.value.push(props.items)
-      proxyArray.value = props.items
-      // console.log('watch', props.items)
-      // firstHalf.value = proxyArray.value?.splice(0, middleIndex)
-      // secondHalf.value = proxyArray.value?.splice(-middleIndex)
-    })
-
+    }
+    const middleIndex = Math.ceil(proxyArray.value?.length / 2)
+    const firstHalf = proxyArray.value?.splice(0, middleIndex)
+    const secondHalf = proxyArray.value?.splice(-middleIndex)
     return {
-      spliceArray,
-      proxyArray
+      colLeft: firstHalf,
+      colRight: secondHalf
+    }
+  })
+
+  watch(() => props.items, () => {
+    proxyArray.value = props.items
+  })
+
+  return {
+    spliceArray,
+    proxyArray
     }
   }
 }
@@ -172,6 +163,9 @@ export default {
     width: auto;
     max-width: none;
     min-width: none;
+  }
+  .authorCard {
+    margin-bottom: 3rem;
   }
 }
 .col + .col {

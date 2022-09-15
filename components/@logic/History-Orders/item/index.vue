@@ -9,14 +9,14 @@
     <div :class="$style.price">
       {{ $props.order.delivery_price + $props.order.cards_sum }}
     </div>
-    <div :class="$style.status">
+    <div :class="$style.status" :style="{ color: color }">
       {{ $props.order.status.status_name }}
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from '@nuxtjs/composition-api'
+import { ref, computed } from '@nuxtjs/composition-api'
 export default {
   name: 'HistoryOrdersItem',
   props: {
@@ -27,9 +27,18 @@ export default {
   },
   setup (props) {
     const id = ref(props.order.id)
-
+    const color = computed(() => {
+      if (props.order.status.id === 1) { return '#222222' }
+      if (props.order.status.id === 2) { return '#222222' }
+      if (props.order.status.id === 3) { return '#DCB247' }
+      if (props.order.status.id === 4) { return '#b2d266' }
+      if (props.order.status.id === 5) { return '#73CA55' }
+      if (props.order.status.id === 6) { return '#73CA55' }
+      if (props.order.status.id === 7) { return '#D13C33' }
+    })
     return {
-      id
+      id,
+      color
     }
   }
 }

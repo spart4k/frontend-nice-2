@@ -46,7 +46,7 @@ export default {
 <style scoped lang="scss" module>
 .item {
   width: 100%;
-  height: 10rem;
+  // height: 10rem;
   color: rgb(255, 255, 255);
   border-radius: 20px;
   @include regular-text-bold;

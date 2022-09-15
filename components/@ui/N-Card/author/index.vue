@@ -2,7 +2,8 @@
   <div :class="$style.card">
     <div :class="$style.body">
       <div :class="$style.stats">
-        <div :class="$style.authorImage" />
+        <!-- <div :class="$style.authorImage" /> -->
+        <img :class="$style.authorImage" :src="`${$axios.defaults.baseURL}/${$props.author.author_data.avatar.src}`" alt="avatar">
         <div :class="$style.amount">
           <h2 :class="$style.amountNumber">
             {{ likeCounter }}
@@ -29,13 +30,13 @@
         </div>
       </div>
       <h2 :class="$style.authorName">
-        Артем Nice
+        {{$props.author.author_data.name}}
       </h2>
-      <h3 :class="$style.authorId">
+      <!-- <h3 :class="$style.authorId">
         @artemnice
-      </h3>
+      </h3> -->
       <p :class="$style.authorQuote">
-        Наши души чистейшими были когда-то Но со временем их испоганило злато.
+        {{$props.author.author_data.description}}
       </p>
     </div>
   </div>
@@ -49,10 +50,15 @@ export default {
   name: 'NCardAuthor',
   components: {
   },
+  props: {
+    author: {
+      type: Object
+    }
+  },
 //   props: { ...dataProps.props },
   setup (props) {
-    const likeCounter = ref(1)
-    const articleCounter = ref(102)
+    const likeCounter = ref(props.author.author_data.like_number)
+    const articleCounter = ref(props.author.author_data.items_number)
     const itemCounter = ref(10)
     const likeEnding = ref(numWord(likeCounter.value, ['лайк', 'лайка', 'лайков']))
     const articleEnding = ref(numWord(articleCounter.value, ['статья', 'статьи', 'статей']))
@@ -123,6 +129,7 @@ export default {
         }
         .authorName {
             @include text-style-h2;
+            margin: 0 0 1.5rem
         }
         .authorId {
             @include regular-text-bold;

@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.wrapper">
     <div :class="$style.fullscreen">
-      <N-Icon name="fullscreen" @click="popupChange" :class="$style.fullscreenButton" />
+      <N-Icon name="fullscreen" :class="$style.fullscreenButton" @click="popupChange" />
     </div>
     <div :class="$style.slider_top">
       <VueSlickCarousel
@@ -12,7 +12,7 @@
         :adaptive-height="true"
       >
         <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
-          <img :src="`${$axios.defaults.baseURL}/${item.src}`" alt="">
+          <img v-if="item.file_type_id === 1" :src="`${$axios.defaults.baseURL}/${item.src}`" alt="">
         </div>
       </VueSlickCarousel>
       <portal v-if="popup" to="sliderPopup">
@@ -56,7 +56,7 @@ export default {
       required: true
     }
   },
-  setup () {
+  setup (props) {
     const c1 = ref(null)
     const c2 = ref(null)
     const popup = ref(false)

@@ -1,9 +1,9 @@
 <template>
   <div :class="[$style.card, detailPage && $style.detailPage]">
     <div ref="gallery" :class="[$style.gallery, detailPage && $style.detailPage]">
-      <template v-if="data.files.length && !$props.withVideo">
-        <template v-if="$props.detailPage && data.files.length > 1">
-          <N-Slider :slider-item="data.files" />
+      <template v-if="sliderImages.length && !$props.withVideo">
+        <template v-if="$props.detailPage && sliderImages.length > 1">
+          <N-Slider :slider-item="sliderImages" />
         </template>
         <template v-else>
           <div v-if="$props.detailPage" :class="[$style.hatContainer, detailPage && $style.detailPage]">
@@ -67,7 +67,7 @@
               </div>
             </div>
             <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
-              <N-Icon name="comments" :class="$style.commentsContainer" />
+              <N-Icon name="comments" :class="$style.commentsButtonContainer" />
               <div :class="$style.parser">
                 {{ !$props.detailPage ? data.comments_count : 'Комментировать' }}
               </div>
@@ -79,7 +79,7 @@
             {{ data.title }}
           </h2>
           <template v-if="$props.detailPage">
-            <p :class="$style.authorName">
+            <p :class="$style.authorName" @click="$emit('clickAuthor', data.author.id)">
               автор {{ data.author.name }}
             </p>
           </template>
@@ -109,7 +109,7 @@
               <N-Audio :files="data.files" />
             </div> -->
             <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
-              <N-Audio v-if="item.file_type_id === 3" :title="item.title" :src="`${$axios.defaults.baseURL}/${item.src}`" @pauseAll="pauseAll" />
+              <N-Audio v-if="item.file_type_id === 3" :title="item.title" :src="`${$axios.defaults.baseURL}/${item.src}`" />
             </div>
           </template>
         </div>
@@ -173,7 +173,8 @@
         >
           <N-Input v-if="$store.state.authentication.authorizated" type="textarea" @smilies="commentHeightSet" @sendSticker="sendSticker" @sendMessage="sendComment" />
           <N-Plug v-else @login="login" @registration="registration" />
-          <div v-if="comments" :class="$style.commentsContainer">
+          <div v-if="true" :class="$style.commentsContainer">
+            <!-- {{ proxyComments.data !== [] }} -->
             <N-Comment
               v-for="(item, index) in proxyComments.data"
               :key="index"
@@ -223,6 +224,15 @@ export default {
     const wirePrice = ref(0)
     const priceLoading = ref(false)
     const itemCounter = ref(1)
+    const sliderImages = computed(() => {
+      const array = ref([])
+      props.data.files.forEach((item) => {
+        if (item.file_type_id === 1) {
+          array.value.push(item)
+        }
+      })
+      return array.value
+    })
     const login = () => {
       if (!store.state.menu.isShowBottomMenu) {
         store.commit('menu/changeKeyMenu', {
@@ -448,7 +458,8 @@ export default {
       changeTotalPrice,
       priceLoading,
       itemCounter,
-      page
+      page,
+      sliderImages
     }
   }
 }
@@ -631,7 +642,7 @@ export default {
     .likeContainer {
       cursor: pointer;
     }
-    .commentsContainer {
+    .commentsButtonContainer {
       width: 2.4rem;
       height: 2.4rem;
       cursor: pointer;
@@ -685,7 +696,8 @@ export default {
       }
       .authorName{
         margin-bottom: 1.5rem;
-        @include regular-text-bold
+        @include regular-text-bold;
+        cursor: pointer;
       }
       .goodsCounter {
         margin-bottom: 3rem;
@@ -718,6 +730,7 @@ export default {
       margin-left: auto;
     }
     .comments {
+      will-change: max-height;
       transition: max-height .5s, opacity .5s, margin-top .5s;
       overflow: hidden;
       opacity: 0;
@@ -730,6 +743,7 @@ export default {
       }
       .commentsContainer {
         margin-top: 3.5rem;
+        will-change: max-height;
       }
     }
     .show {

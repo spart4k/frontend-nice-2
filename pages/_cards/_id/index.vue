@@ -9,6 +9,7 @@
           :card="card.card"
           :comments="card.comments"
           @clickTag="clickTag"
+          @clickAuthor="clickAuthor"
         />
         <N-Button color="#222222" :background-color="'white'" :class="$style.back" @click="goToPrev()">
           <N-Icon name="back" :class="$style.backButton" />
@@ -55,6 +56,10 @@ export default defineComponent({
       router.push({ path: '/tags', query: { tag: value } })
     }
 
+    const clickAuthor = (value) => {
+      router.push({ path: '/authors', query: { author: value } })
+    }
+
     const card = useAsync(async () => {
       const params = {
         card_id: route.value.params.id,
@@ -71,7 +76,6 @@ export default defineComponent({
           console.log(e)
         }
       }, route.value.params.id)
-    console.log(card.card)
 
     head(useMeta, card.value)
 
@@ -106,6 +110,7 @@ export default defineComponent({
       card,
       addBasket,
       clickTag,
+      clickAuthor,
       description,
       isAddedBasket,
       bgName,
