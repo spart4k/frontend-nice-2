@@ -69,7 +69,7 @@ export default defineComponent({
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
     const selectFirst = ref(0)
     const selectSecond = ref('asc')
-    const priceFetch = ref(0)
+    const priceFetch = ref(1)
 
     const sendSection = (value) => {
       if (value === 0) {
@@ -86,10 +86,11 @@ export default defineComponent({
         selectSecond.value = 'desc'
       }
       searchCards()
-      priceFetch.value = 1
     }
 
     const searchCards = async () => {
+      pageNumber.value = 2
+      cardsDispatch.value = true
       const params = {
         page: 1,
         count: 6,
@@ -100,8 +101,8 @@ export default defineComponent({
       }
       const path = 'pages/getData'
       const response = await store.dispatch(path, params)
-      console.log(response.data)
-      return response
+      cards.value = [...response.data]
+      startCards.value = [...cards.value]
     }
 
     const introTitle = computed(() => {
@@ -152,9 +153,12 @@ export default defineComponent({
       const params = {
         page: 1,
         count: 6,
-        section_id: id.value ? id.value : '',
+        section_id: id.value === 8 ? '' : id.value,
         tag_id: tagId.value ? tagId.value : '',
-        author_id: authorId.value ? authorId.value : ''
+        author_id: authorId.value ? authorId.value : '',
+        order_by_colomn: 'created_at',
+        order_by_mode: selectSecond.value,
+        minPrice: id.value === 8 ? priceFetch.value : ''
       }
       const path = 'pages/getData'
       const response = store.dispatch(path, params)
@@ -182,16 +186,20 @@ export default defineComponent({
     // const { getData, dataPagination } = pagination(fetchData)
 
     const lazyPagination = async () => {
+    if (id.value !== 8) {
+      selectFirst.value = id.value
+    }
     if (cardsDispatch.value && fetchLoading.value) {
       cardsLoading.value = true
       const params = {
         page: pageNumber.value,
         count: 6,
-        section_id: id.value ? id.value : '',
+        section_id: selectFirst.value ? selectFirst.value : '',
         tag_id: tagId.value ? tagId.value : '',
         author_id: authorId.value ? authorId.value : '',
         order_by_colomn: 'created_at',
-        order_by_mode: selectSecond.value
+        order_by_mode: selectSecond.value,
+        minPrice: id.value === 8 ? priceFetch.value : ''
       }
       pageNumber.value++
 
@@ -230,7 +238,7 @@ export default defineComponent({
         introData.value = response.quote
         fetchLoading.value = true
         cards.value = [...response.data]
-        startCards.value = cards.value
+        startCards.value = [...cards.value]
       } catch (e) {
         console.log(e)
       }
