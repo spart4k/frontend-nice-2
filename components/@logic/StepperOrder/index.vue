@@ -128,7 +128,7 @@ export default {
     socketCloseListener()
 
     const sendMessage = (message) => {
-      socket.send(JSON.stringify({ user_id: store.state.authentication.user.id, message_text: unescape(encodeURIComponent(message)), messageType: 'chat' }))
+      socket.send(JSON.stringify({ user_id: store.state.authentication.user.id, message_text: unescape(encodeURIComponent(message)), sticker_id: 1, messageType: 'chat' }))
     }
 
     const sendSticker = (val) => {

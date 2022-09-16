@@ -17,6 +17,10 @@
             <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
               <img :src="card.image" alt="DOG ">
             </div>
+            <div v-else-if="(selectors.id === '8') && (card.hasOwnProperty('selector'))" :class="$style.row">
+              <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
+              <N-Select :class="$style.select" :select-items="novelty" @setProperty="($event) => $emit('sendNovelty', $event)" />
+            </div>
             <N-Card-Author v-else-if="card.hasOwnProperty('author_data')" :author="card" :class="$style.authorCard" />
             <template v-else>
               <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
@@ -24,6 +28,10 @@
           </div>
         </div>
         <div v-if="spliceArray.colRight.length" :class="$style.col">
+          <div v-if="selectors.id === '8'" :class="$style.row">
+            <!-- <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
+            <N-Select :class="$style.select" :select-items="novelty" @setProperty="($event) => $emit('sendNovelty', $event)" /> -->
+          </div>
           <template v-for="(card) in spliceArray.colRight">
             <section-cards
               :key="card.id"
@@ -65,6 +73,9 @@ export default {
   setup (props) {
     const { route } = useContext()
     const proxyArray = ref(props.items)
+    const selectors = computed(() => {
+      return route.value.query
+    })
     const spliceArray = computed(() => {
     if (route.value.query.author) {
       proxyArray.value.unshift({
@@ -80,6 +91,12 @@ export default {
             preview: true,
             id: Math.random()
           })
+          if (selectors.id === '8') {
+            proxyArray.value.unshift({
+              selectors: '',
+              id: Math.random()
+            })
+          }
       } else {
         proxyArray.value?.unshift({
           home: true,
@@ -96,6 +113,8 @@ export default {
       colRight: secondHalf
     }
   })
+  const novelty = ref(['Новые', 'Старые'])
+  const sections = ref(['Все товары', 'Музыка', 'Видео', 'Искусство', 'Кухня', 'Чтиво', 'Фото', 'Одежда', 'Анонсы'])
 
   watch(() => props.items, () => {
     proxyArray.value = props.items
@@ -103,7 +122,10 @@ export default {
 
   return {
     spliceArray,
-    proxyArray
+    proxyArray,
+    selectors,
+    novelty,
+    sections
     }
   }
 }
@@ -168,6 +190,16 @@ export default {
   }
   .authorCard {
     margin-bottom: 3rem;
+  }
+  .row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+    .select {
+      width: 20.3rem;
+      height: 4.4rem;
+    }
   }
 }
 .col + .col {

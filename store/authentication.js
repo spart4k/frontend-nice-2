@@ -147,11 +147,12 @@ export const actions = {
   async verifyToken ({ commit }, params) {
     try {
       const response = await this.$axios('api/v1/verifyToken')
-      // console.log(response.data.data.user)
-      commit('setUserInfo', response.data.data.user)
-      commit('loadUserAdress', response.data.data.addresses)
+        commit('setUserInfo', response.data.data.user)
+        commit('loadUserAdress', response.data.data.addresses)
+      return response.data
     } catch (e) {
-      return e.response.data.message
+      await this.$toast.success('Произошла ошибка регистрации, обновите страницу', { position: 'bottom-right', icon: false })
+      return e.response.data
     }
   },
   async addAdress ({ commit }, params) {

@@ -95,7 +95,7 @@ export default {
       const params = {
         entity: 'stickers',
         page: 1,
-        count: 5
+        count: 6
       }
       try {
         const getStickers = await store.dispatch('socials/getStickers', params)
