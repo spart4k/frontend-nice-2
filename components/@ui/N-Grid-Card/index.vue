@@ -17,20 +17,20 @@
             <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
               <img :src="card.image" alt="DOG ">
             </div>
-            <div v-else-if="(selectors.id === '8') && (card.hasOwnProperty('selector'))" :class="$style.row">
+            <!-- <div v-else-if="(selectors.id === '8') && (card.hasOwnProperty('selector'))" :class="$style.row">
               <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
               <N-Select :class="$style.select" :select-items="novelty" @setProperty="($event) => $emit('sendNovelty', $event)" />
-            </div>
+            </div> -->
             <N-Card-Author v-else-if="card.hasOwnProperty('author_data')" :author="card" :class="$style.authorCard" />
             <template v-else>
               <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
             </template>
           </div>
         </div>
-        <div v-if="spliceArray.colRight.length" :class="$style.col">
+        <div v-if="spliceArray.colRight.length || (selectors.id === '8')" :class="$style.col">
           <div v-if="selectors.id === '8'" :class="$style.row">
-            <!-- <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
-            <N-Select :class="$style.select" :select-items="novelty" @setProperty="($event) => $emit('sendNovelty', $event)" /> -->
+            <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
+            <N-Select :class="$style.select" :select-items="novelty" @setProperty="($event) => $emit('sendNovelty', $event)" />
           </div>
           <template v-for="(card) in spliceArray.colRight">
             <section-cards
@@ -91,12 +91,12 @@ export default {
             preview: true,
             id: Math.random()
           })
-          if (selectors.id === '8') {
-            proxyArray.value.unshift({
-              selectors: '',
-              id: Math.random()
-            })
-          }
+          // if (selectors.value.id === '8') {
+          //   proxyArray.value.unshift({
+          //     selectors: '',
+          //     id: Math.random()
+          //   })
+          // }
       } else {
         proxyArray.value?.unshift({
           home: true,

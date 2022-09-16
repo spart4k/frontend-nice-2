@@ -151,7 +151,7 @@ export const actions = {
         commit('loadUserAdress', response.data.data.addresses)
       return response.data
     } catch (e) {
-      await this.$toast.success('Произошла ошибка регистрации, обновите страницу', { position: 'bottom-right', icon: false })
+      await this.$toast.error('Произошла ошибка регистрации, обновите страницу', { position: 'bottom-right', icon: false })
       return e.response.data
     }
   },
