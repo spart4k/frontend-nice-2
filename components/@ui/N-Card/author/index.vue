@@ -98,6 +98,7 @@ export default {
                 border-radius: 50%;
                 background-color: rgb(195, 195, 195);
                 margin-right: 2rem;
+                object-fit: cover;
                 @media (min-width: $tabletWidth) {
                   width: 14rem;
                   height: 14rem;

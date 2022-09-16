@@ -184,6 +184,13 @@ export default {
       top: 1rem;
       right: 1rem;
       z-index: 50;
+      .icon{
+        width: 1.3rem;
+        svg {
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
     .popupSlider {
       z-index: 102;
@@ -221,6 +228,7 @@ export default {
       background-color: rgba(255,255,255,0.2);
       background-repeat: no-repeat;
       border-radius: 50%;
+      background-size: 1rem;
       width: 4rem;
       height: 4rem;
       z-index: 105;

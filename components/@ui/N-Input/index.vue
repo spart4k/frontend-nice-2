@@ -126,6 +126,7 @@ export default {
     }
   }
   const sendSticker = (val) => {
+    showSmilies()
     emit('sendSticker', val)
   }
   const handleKeyboard = () => {
