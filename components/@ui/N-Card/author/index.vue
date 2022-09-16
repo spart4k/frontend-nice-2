@@ -4,7 +4,7 @@
       <div :class="$style.stats">
         <!-- <div :class="$style.authorImage" /> -->
         <img :class="$style.authorImage" :src="`${$axios.defaults.baseURL}/${$props.author.author_data.avatar.src}`" alt="avatar">
-        <div :class="$style.amount">
+        <div v-if="likeCounter !== undefined" :class="$style.amount">
           <h2 :class="$style.amountNumber">
             {{ likeCounter }}
           </h2>
@@ -12,7 +12,7 @@
             {{ likeEnding }}
           </p>
         </div>
-        <div :class="$style.amount">
+        <div v-if="articleCounter !== undefined" :class="$style.amount">
           <h2 :class="$style.amountNumber">
             {{ articleCounter }}
           </h2>
@@ -20,7 +20,7 @@
             {{ articleEnding }}
           </p>
         </div>
-        <div :class="$style.amount">
+        <div v-if="itemCounter !== undefined" :class="$style.amount">
           <h2 :class="$style.amountNumber">
             {{ itemCounter }}
           </h2>
@@ -30,13 +30,13 @@
         </div>
       </div>
       <h2 :class="$style.authorName">
-        {{$props.author.author_data.name}}
+        {{ $props.author.author_data.name }}
       </h2>
       <!-- <h3 :class="$style.authorId">
         @artemnice
       </h3> -->
       <p :class="$style.authorQuote">
-        {{$props.author.author_data.description}}
+        {{ $props.author.author_data.description }}
       </p>
     </div>
   </div>
@@ -58,8 +58,8 @@ export default {
 //   props: { ...dataProps.props },
   setup (props) {
     const likeCounter = ref(props.author.author_data.like_number)
-    const articleCounter = ref(props.author.author_data.items_number)
-    const itemCounter = ref(10)
+    const articleCounter = ref(props.author.author_data.articles_number_count)
+    const itemCounter = ref(props.author.author_data.items_number_count)
     const likeEnding = ref(numWord(likeCounter.value, ['лайк', 'лайка', 'лайков']))
     const articleEnding = ref(numWord(articleCounter.value, ['статья', 'статьи', 'статей']))
     const itemEnding = ref(numWord(itemCounter.value, ['товар', 'товара', 'товаров']))

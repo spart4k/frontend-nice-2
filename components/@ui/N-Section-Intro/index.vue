@@ -39,7 +39,10 @@ export default {
     description: {
       type: Object
     },
-    image: String
+    image: String,
+    select: {
+      type: Object
+    }
   },
   setup (props) {
     const imageModule = computed(() => {

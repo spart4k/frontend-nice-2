@@ -7,20 +7,35 @@
             v-for="(card, index) in spliceArray.colLeft"
             :key="index"
           >
+            <template v-if="(selectors.id === '8') && card.hasOwnProperty('preview')">
+              <n-section-intro
+                v-if="card.hasOwnProperty('preview')"
+                :key="card.id"
+                :description="card"
+                :image="card.image"
+                :class="$style.preview"
+                :select="{sections, novelty}"
+                @sendPropertySection="($event) => $emit('sendSection', $event)"
+                @sendPropertyNovelty="($event) => $emit('sendNovelty', $event)"
+              />
+              <div v-if="selectors.id === '8'" :class="$style.rowMobile">
+                <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
+                <N-Select :class="$style.select" :select-items="novelty" @setProperty="($event) => $emit('sendNovelty', $event)" />
+              </div>
+            </template>
             <n-section-intro
-              v-if="card.hasOwnProperty('preview')"
+              v-else-if="card.hasOwnProperty('preview')"
               :key="card.id"
               :description="card"
               :image="card.image"
               :class="$style.preview"
+              :select="{sections, novelty}"
+              @sendPropertySection="($event) => $emit('sendSection', $event)"
+              @sendPropertyNovelty="($event) => $emit('sendNovelty', $event)"
             />
             <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
               <img :src="card.image" alt="DOG ">
             </div>
-            <!-- <div v-else-if="(selectors.id === '8') && (card.hasOwnProperty('selector'))" :class="$style.row">
-              <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
-              <N-Select :class="$style.select" :select-items="novelty" @setProperty="($event) => $emit('sendNovelty', $event)" />
-            </div> -->
             <N-Card-Author v-else-if="card.hasOwnProperty('author_data')" :author="card" :class="$style.authorCard" />
             <template v-else>
               <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
@@ -91,12 +106,6 @@ export default {
             preview: true,
             id: Math.random()
           })
-          // if (selectors.value.id === '8') {
-          //   proxyArray.value.unshift({
-          //     selectors: '',
-          //     id: Math.random()
-          //   })
-          // }
       } else {
         proxyArray.value?.unshift({
           home: true,
@@ -196,6 +205,22 @@ export default {
     justify-content: flex-end;
     gap: 1.5rem;
     margin-bottom: 4rem;
+    @media (max-width: $tabletWidth) {
+      display: none;
+    }
+    .select {
+      width: 20.3rem;
+      height: 4.4rem;
+    }
+  }
+  .rowMobile{
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+    @media (min-width: $tabletWidth) {
+      display: none;
+    }
     .select {
       width: 20.3rem;
       height: 4.4rem;
