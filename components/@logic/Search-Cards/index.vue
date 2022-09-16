@@ -29,10 +29,12 @@
           :to="`/cards/${item.id}?section=${item.section.slug}`"
           :class="$style.searchItem"
         >
-          <N-Search-Result
-            :title="item.title"
-            :text="item.text"
-          />
+          <div @click="closeBottom">
+            <N-Search-Result
+              :title="item.title"
+              :text="item.text"
+            />
+          </div>
         </NuxtLink>
       </div>
       <div v-else :class="$style.nothing">
@@ -51,12 +53,18 @@ export default {
   name: 'SearchCards',
   props: {
   },
-  setup () {
+  setup (props, ctx) {
     const { store } = useContext()
     const text = ref()
+    const { emit } = ctx
     const result = ref([])
     const loading = ref(false)
     const wait = ref(false)
+    const closeBottom = () => {
+      if (window.innerWidth < 450) {
+        emit('closeState')
+      }
+    }
     const sendCount = async (val) => {
       text.value = val
       const searchData = { searchField: val }
@@ -74,7 +82,8 @@ export default {
       sendCount,
       loading,
       wait,
-      result
+      result,
+      closeBottom
     }
   }
 }

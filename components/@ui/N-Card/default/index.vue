@@ -57,7 +57,7 @@
           </div> -->
           <!-- {{ data.text }} -->
           <div :class="$style.cardText">
-            <div :class="$style.parser" v-html="data.text" />
+            <div :class="$style.parser" v-html="data.subtitle" />
           </div>
           <div v-if="!$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
             <div :class="$style.socialsItem">
