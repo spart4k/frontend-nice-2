@@ -5,20 +5,6 @@
         Загрузка ...
       </div>
       <template v-else>
-        <div v-if="selectors.id === '8'" :class="$style.row">
-          <v-select
-            v-model="selectFirst"
-            :options="sections"
-            :class="$style.select"
-            @input="searchCards"
-          />
-          <v-select
-            v-model="selectSecond"
-            :options="novelty"
-            :class="$style.select"
-            @input="searchCards"
-          />
-        </div>
         <NGridCard
           ref="content"
           class="content"
@@ -28,6 +14,8 @@
           :intro-data="introData && introData"
           :author="author"
           @clickTag="clickTag"
+          @sendSection="sendSection"
+          @sendNovelty="sendNovelty"
         />
       </template>
     </n-intro-slug>
@@ -48,8 +36,8 @@ import {
   computed, onMounted, nextTick
   // useMeta,
 } from '@nuxtjs/composition-api'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
+// import vSelect from 'vue-select'
+// import 'vue-select/dist/vue-select.css'
 
 // import { pagination } from '~/plugins/pagination'
 // import { head } from '@/components/scripts/head.js'
@@ -59,7 +47,7 @@ export default defineComponent({
   key: ({ path }) => {
     return path
   },
-  components: { vSelect },
+  // components: { vSelect },
   setup () {
     const router = useRouter()
     const { store, route, $gsap } = useContext()
@@ -79,40 +67,41 @@ export default defineComponent({
     const loadingContainer = ref(null)
     const cardsDispatch = ref(true)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
-    const selectors = computed(() => {
-      return route.value.query
-    })
-    const novelty = ref(['Новые', 'Старые'])
-    const sections = ref(['Все', 'Музыка', 'Видео', 'Искусство', 'Кухня', 'Чтиво', 'Фото', 'Одежда', 'Анонсы'])
-    const selectFirst = ref(sections.value[0])
-    const selectSecond = ref(novelty.value[0])
-    const searchCards = () => {
-      if (selectFirst.value === null) {
-        selectFirst.value = sections.value[0]
-      } else if (selectSecond.value === null) {
-        selectSecond.value = novelty.value[0]
+    const selectFirst = ref(0)
+    const selectSecond = ref('asc')
+    const priceFetch = ref(0)
+
+    const sendSection = (value) => {
+      if (value === 0) {
+        selectFirst.value = ''
       } else {
-        const nov = ref()
-        const sect = ref()
-        if (selectSecond.value === 'Новые') {
-          nov.value = 'asc'
-        } else {
-          nov.value = 'desc'
-        }
-        if (selectFirst.value === '') {
-          sect.value = ''
-        }
-        const params = {
-          page: 1,
-          count: 6,
-          section_id: id.value ? id.value : '',
-          order_by_colomn: 'created_at',
-          order_by_mode: nov.value
-        }
-        const path = 'pages/getData'
-        const response = store.dispatch(path, params)
-        return response
+        selectFirst.value = value
       }
+      searchCards()
+    }
+    const sendNovelty = (value) => {
+      if (value === 0) {
+        selectSecond.value = 'asc'
+      } else {
+        selectSecond.value = 'desc'
+      }
+      searchCards()
+      priceFetch.value = 1
+    }
+
+    const searchCards = async () => {
+      const params = {
+        page: 1,
+        count: 6,
+        section_id: selectFirst.value ? selectFirst.value : '',
+        order_by_colomn: 'created_at',
+        order_by_mode: selectSecond.value,
+        minPrice: priceFetch.value
+      }
+      const path = 'pages/getData'
+      const response = await store.dispatch(path, params)
+      console.log(response.data)
+      return response
     }
 
     const introTitle = computed(() => {
@@ -200,7 +189,9 @@ export default defineComponent({
         count: 6,
         section_id: id.value ? id.value : '',
         tag_id: tagId.value ? tagId.value : '',
-        author_id: authorId.value ? authorId.value : ''
+        author_id: authorId.value ? authorId.value : '',
+        order_by_colomn: 'created_at',
+        order_by_mode: selectSecond.value
       }
       pageNumber.value++
 
@@ -255,6 +246,7 @@ export default defineComponent({
       author,
       totalPage,
       id,
+      priceFetch,
       loading,
       background,
       showAnimate,
@@ -265,12 +257,11 @@ export default defineComponent({
       cardsDispatch,
       fetchLoading,
       introData,
-      novelty,
-      sections,
       selectFirst,
       selectSecond,
       searchCards,
-      selectors
+      sendSection,
+      sendNovelty
     }
   },
   head: {}
@@ -305,7 +296,7 @@ export default defineComponent({
   gap: 2rem;
   justify-content: center;
   .select {
-    width: 23.5rem;
+    width: 20.3rem;
     border-radius: 25px;
     @include regular-text-bold;
     color: $fontColorDefault;

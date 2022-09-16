@@ -225,16 +225,24 @@ export default {
       }
     }
 
+    const getVerify = async () => {
+      await store.commit('authentication/setToken')
+      const response = await store.dispatch('authentication/verifyToken')
+      if (response.error) {
+        localStorage.removeItem('token')
+      } else {
+        store.dispatch('basket/getBasket')
+        store.commit('authentication/setUserData')
+      }
+    }
+
     onMounted(() => {
       setTimeout(() => {
         audioDelay.value = true
       }, 500)
       if (localStorage.getItem('token') !== null) {
-        store.dispatch('authentication/verifyToken')
+        getVerify()
       }
-      store.commit('authentication/setUserData')
-      store.commit('authentication/setToken')
-      store.dispatch('basket/getBasket')
       animateBackground()
     })
     provide('backgroundLoaded', isLoaded)

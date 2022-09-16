@@ -12,24 +12,26 @@
     >
       <select
         :class="[$style.select]"
+        @input="setProperty"
       >
-        <option v-for="item in selectItems" :key="item.value" :class="$style.optionItem" :value="item.value">
-          {{ item.text }}
+        <option v-for="item in selectItems" :key="item.value" :class="$style.optionItem" :value="item.value" @input="setProperty">
+          {{ item }}
         </option>
       </select>
-      <n-icon name="arrow-select" :class="$style.icon" :style="positionArrow" />
+      <n-icon name="arrow-select" :class="$style.icon" />
     </div>
   </div>
 </template>
 
 <script>
+// import setup from '~/components/@logic/Live/chat/setup'
 export default {
   name: 'NSelect',
   props: {
     selectItems: {
-      type: Array,
-      default: () => [{ text: 'empty', value: 'empty' }],
-      required: true
+      type: Array
+      // default: () => [{ text: 'empty', value: 'empty' }],
+      // required: true
     },
     colorBorder: String,
     hasBorderBottom: Boolean,
@@ -40,6 +42,15 @@ export default {
     title: {
       type: String,
       default: ''
+    }
+  },
+  setup (props, ctx) {
+    const { emit } = ctx
+    const setProperty = (value) => {
+      emit('setProperty', value.target.selectedIndex)
+    }
+    return {
+      setProperty
     }
   }
 }
@@ -82,21 +93,28 @@ export default {
 
 .icon {
   position: absolute;
-  right: 0;
+  right: 20px;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 5;
+  path  {
+    stroke:$pink2;
+  }
 }
 .select {
   position: relative;
   z-index: 5;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-color: transparent;
-  border-width: .2rem;
-  border-radius: .6rem;
+  // background-color: transparent;
+  // border-width: .2rem;
+  border-radius: 25px;
+  padding-left: 2rem;
   width: 100%;
   height: 100%;
   color: $fontColorDefault;
-  @include regular-text;
+  @include regular-text-bold;
+  border: none;
+  outline: none;
 }
 </style>
