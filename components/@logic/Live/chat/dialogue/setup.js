@@ -1,4 +1,4 @@
-import { onMounted, computed } from '@vue/composition-api'
+import { onMounted, computed, ref } from '@nuxtjs/composition-api'
 
 export default {
   name: 'live-chat-dialogue',
@@ -18,13 +18,20 @@ export default {
       ]
       return newMessages.reverse()
     })
+    const dialog = ref(null)
+    const scroll = () => {
+      console.log('scroll')
+      // dialog.value.$el.scrollTop()
+    }
 
     onMounted(() => {
       initMesassage()
     })
     return {
       initMesassage,
-      messageToView
+      messageToView,
+      scroll,
+      dialog
     }
   }
 }
