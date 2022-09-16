@@ -1,4 +1,9 @@
 <template>
+  <!-- <NuxtLink
+    tag="div"
+    :to="`/cards/${item.id}?section=${item.section.slug}`"
+  > -->
+  <!-- @click="$router.push(`/cards/${item.id}?section=${item.section.slug}`)" -->
   <li :class="$style.product">
     <div :class="$style.product__img">
       <N-Lazy-Img :src="`${$axios.defaults.baseURL}/${item.files[0].src}`" alt="изоображение товара" />
@@ -12,6 +17,7 @@
           v-model="quantity"
           :options="totalCount"
           :class="$style.wireSelect"
+          @click="pushTo"
           @input="changeCount(quantity)"
         />
       </div>
@@ -26,6 +32,7 @@
       </div>
     </div>
   </li>
+  <!-- </NuxtLink> -->
 </template>
 
 <script>
@@ -50,6 +57,10 @@ export default {
   setup (props, { emit }) {
   const { store } = useContext()
     const countProducts = ref(0)
+    const pushTo = (val) => {
+      // console.log(val)
+      // router.push({ / })
+    }
     const totalCount = computed(() => {
       const count = props.item.pivot.quantity + props.item.count
       const array = []
@@ -109,7 +120,8 @@ export default {
       quantity,
       totalCount,
       oldquantity,
-      changeCount
+      changeCount,
+      pushTo
     }
   }
 }

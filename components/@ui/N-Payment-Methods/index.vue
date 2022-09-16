@@ -60,7 +60,7 @@ export default {
     &.iconLogoActive {
       svg {
         path {
-          fill: #222222;
+          // fill: #222222;
         }
       }
     }
