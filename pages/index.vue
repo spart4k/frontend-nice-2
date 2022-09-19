@@ -132,7 +132,6 @@ export default defineComponent({
         totalPage.value = response?.data.last_page
         cards.value = response.data.data
         startCards.value = cards.value.data
-        console.log(startCards.value)
       } catch (e) {
         console.log(e)
       }
