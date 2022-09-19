@@ -15,6 +15,7 @@
         />
       </div>
       <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
+        <N-Preloader v-if="!cards.data"/>
         <NGridCard
           v-if="cards && cards.data"
           ref="content"

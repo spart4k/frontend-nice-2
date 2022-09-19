@@ -1,9 +1,7 @@
 <template>
   <div>
     <n-intro-slug>
-      <div v-if="$fetchState.pending">
-        Загрузка ...
-      </div>
+      <N-Preloader v-if="$fetchState.pending"/>
       <template v-else>
         <NGridCard
           ref="content"
