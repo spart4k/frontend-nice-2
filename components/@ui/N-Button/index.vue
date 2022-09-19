@@ -43,7 +43,7 @@ export default {
     }
   }
   .btn:hover {
-    scale: 1.02;
+    // scale: 1.02;
   }
   .sub {
     background: transparent;

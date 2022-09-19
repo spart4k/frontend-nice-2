@@ -71,8 +71,12 @@ export const actions = {
     try {
       if (rootState.authentication.authorizated) {
         const response = await this.$axios('api/v1/getBasket')
-        commit('setBasket', response.data.data.cards)
-        commit('changeBasketSum', response.data.data.cards_sum)
+        if (!response.data.error) {
+          if (response.data.data.cards) {
+            commit('setBasket', response.data.data.cards)
+          }
+          commit('changeBasketSum', response.data.data.cards_sum)
+        }
         return response
       }
     } catch (e) {

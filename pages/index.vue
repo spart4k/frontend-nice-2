@@ -127,11 +127,13 @@ export default defineComponent({
     useFetch(async () => {
       try {
         const response = await fetchData()
+        if (response.data.length < 6) {
+          cardsDispatch.value = false
+        }
         fetchLoading.value = true
         totalPage.value = response?.data.last_page
         cards.value = response.data.data
         startCards.value = cards.value.data
-        console.log(startCards.value)
       } catch (e) {
         console.log(e)
       }
@@ -157,9 +159,9 @@ export default defineComponent({
         pageNumber.value++
 
         const response = await store.dispatch('pages/getData', params)
-        if (!response.data.length) {
-          cardsDispatch.value = false
+        if (response.data.length < 6) {
           cardsLoading.value = false
+          cardsDispatch.value = false
         } else {
           cardsLoading.value = false
           cards.value.data = [...startCards.value, ...response.data]

@@ -63,6 +63,7 @@
 </template>
 
 <script>
+
 import { computed, ref, useContext, watch } from '@nuxtjs/composition-api'
 
 export default {
@@ -91,6 +92,8 @@ export default {
     const selectors = computed(() => {
       return route.value.query
     })
+    const leftArray = ref()
+    const rightArray = ref()
     const spliceArray = computed(() => {
     if (route.value.query.author) {
       proxyArray.value.unshift({
@@ -116,10 +119,15 @@ export default {
     }
     const middleIndex = Math.ceil(proxyArray.value?.length / 2)
     const firstHalf = proxyArray.value?.splice(0, middleIndex)
-    const secondHalf = proxyArray.value?.splice(-middleIndex)
+    const secondHalf = ref()
+    if (proxyArray.value.length === 1) {
+      secondHalf.value = proxyArray.value
+    } else {
+      secondHalf.value = proxyArray.value.splice(-middleIndex)
+    }
     return {
       colLeft: firstHalf,
-      colRight: secondHalf
+      colRight: secondHalf.value
     }
   })
   const novelty = ref(['Новые', 'Старые'])
@@ -134,7 +142,9 @@ export default {
     proxyArray,
     selectors,
     novelty,
-    sections
+    sections,
+    leftArray,
+    rightArray
     }
   }
 }

@@ -153,7 +153,7 @@ export default defineComponent({
       const params = {
         page: 1,
         count: 6,
-        section_id: id.value === 8 ? '' : id.value,
+        section_id: id.value,
         tag_id: tagId.value ? tagId.value : '',
         author_id: authorId.value ? authorId.value : '',
         order_by_colomn: 'created_at',
@@ -235,6 +235,9 @@ export default defineComponent({
           author.value = authorResponse
         }
         const response = await fetchData()
+        if (response.data.length < 6) {
+          cardsDispatch.value = false
+        }
         introData.value = response.quote
         fetchLoading.value = true
         cards.value = [...response.data]

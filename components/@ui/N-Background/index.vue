@@ -59,7 +59,7 @@ export default {
   left: 0;
   top: 0;
   height: 100%;
-  opacity: 0.35;
+  opacity: 0.5;
   z-index: 2;
   mix-blend-mode: hard-light;
   transition: background-color .5s;

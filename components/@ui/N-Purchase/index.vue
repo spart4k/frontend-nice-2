@@ -9,10 +9,14 @@
     <N-Button
       :class="$style.buyButton"
       background-color="#C83F8E"
-      :disabled="$v.$invalid && $touched "
+      :style="{ cursor: count === 0 ? 'unset' : 'pointer' }"
+      :disabled="$v.$invalid && $touched || count === 0"
       @click="submit"
     >
       <n-loading v-if="loading" />
+      <template v-else-if="count === 0">
+        Нет в наличии
+      </template>
       <template v-else>
         В корзину
       </template>
@@ -21,7 +25,7 @@
 </template>
 
 <script>
-import { ref, useContext } from '@nuxtjs/composition-api'
+import { ref, useContext, computed } from '@nuxtjs/composition-api'
 import useForm from '~/compositions/useForm'
 import { required } from '~/utills/validations'
 
@@ -39,7 +43,13 @@ export default {
   },
   setup (props, ctx) {
   const { store } = useContext()
-  const startCounter = ref('1 шт.')
+  const startCounter = computed(() => {
+    if (props.count) {
+      return '1 шт.'
+    } else {
+      return ''
+    }
+  })
   const loading = ref(false)
   const { emit } = ctx
   const quantity = ref(1)
@@ -218,6 +228,9 @@ export default {
     }
     .buyButton {
       // margin-top: 2rem;
+      // width: 14rem;
+      padding: 0 3.6rem;
+      height: 5rem;
     }
     .inputError {
       margin-top: 1rem;
