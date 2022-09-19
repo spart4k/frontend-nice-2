@@ -1,60 +1,18 @@
 <template>
   <div class="accordion" :class="$style.emojiWrap">
     <div :class="$style.container">
-      <VueSlickCarousel
+      <!-- <VueSlickCarousel
         ref="c1"
         :arrows="false"
-        :dots="true"
+        :dots="false"
         :infinite="true"
         :focus-on-select="true"
-      >
-        <div :class="$style.sliderContainer">
-          <div :class="$style.emojiContainer">
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😊')">
-              😊
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😂')">
-              😂
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😇')">
-              😇
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '💖')">
-              💖
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '🤝')">
-              🤝
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😉')">
-              😉
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😛')">
-              😛
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '🥳')">
-              🥳
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😍')">
-              😍
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😡')">
-              😡
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😌')">
-              😌
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😱')">
-              😱
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '😴')">
-              😴
-            </div>
-            <div :class="$style.emoji" @click="$emit('emojiWrite', '🤯')">
-              🤯
-            </div>
-          </div>
-        </div>
-        <div :class="$style.stikerContainer">
+      > -->
+      <div :class="$style.stikerContainer">
+        <template v-if="loading">
+          <n-loading :class="$style.loading" black />
+        </template>
+        <template v-else>
           <img
             v-for="(item, index) in stickers"
             :key="index"
@@ -63,35 +21,83 @@
             alt=""
             @click="$emit('stickerWrite', item.id)"
           >
-        </div>
-        <template #customPaging="">
-          <div class="custom-dot">
-            <N-Icon :class="$style.smileSvg" name="smile" />
-            <N-Icon :class="$style.stikerSvg" name="sticker" />
-          </div>
         </template>
-      </VueSlickCarousel>
+      </div>
+      <div :class="$style.sliderContainer">
+        <div :class="$style.emojiContainer">
+          <!-- <div :class="$style.emoji" @click="$emit('emojiWrite', '😊')">
+            😊
+          </div>
+          <div :class="$style.emoji" @click="$emit('emojiWrite', '😂')">
+            😂
+          </div>
+          <div :class="$style.emoji" @click="$emit('emojiWrite', '😇')">
+            😇
+          </div>
+          <div :class="$style.emoji" @click="$emit('emojiWrite', '💖')">
+            💖
+          </div>
+          <div :class="$style.emoji" @click="$emit('emojiWrite', '🤝')">
+            🤝
+          </div>
+          <div :class="$style.emoji" @click="$emit('emojiWrite', '😉')">
+            😉
+          </div>
+          <div :class="$style.emoji" @click="$emit('emojiWrite', '😛')">
+            😛
+          </div>
+          <div :class="$style.emoji" @click="$emit('emojiWrite', '🥳')">
+            🥳
+          </div>
+          <div :class="$style.emoji" @click="$emit('emojiWrite', '😍')">
+            😍
+          </div>
+          <div :class="$style.emoji" @click="$emit('emojiWrite', '😡')">
+            😡
+          </div>
+          <div :class="$style.emoji" @click="$emit('emojiWrite', '😌')">
+            😌
+          </div>
+          <div :class="$style.emoji" @click="$emit('emojiWrite', '😱')">
+            😱
+          </div>
+          <div :class="$style.emoji" @click="$emit('emojiWrite', '😴')">
+            😴
+          </div>
+          <div :class="$style.emoji" @click="$emit('emojiWrite', '🤯')">
+            🤯
+          </div> -->
+        </div>
+      </div>
+      <!-- <template #customPaging="">
+          <div class="custom-dot">
+            <N-Icon :class="$style.stikerSvg" name="sticker" />
+            <N-Icon :class="$style.smileSvg" name="smile" />
+          </div>
+        </template> -->
+      <!-- </VueSlickCarousel> -->
     </div>
   </div>
 </template>
 
 <script>
-// import { ref } from '@nuxtjs/composition-api'
-import { useAsync, useContext } from '@nuxtjs/composition-api'
-import VueSlickCarousel from 'vue-slick-carousel'
-import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
-import 'vue-slick-carousel/dist/vue-slick-carousel.css'
+import { ref, useAsync, useContext } from '@nuxtjs/composition-api'
+// import VueSlickCarousel from 'vue-slick-carousel'
+// import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
+// import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 
 export default {
   name: 'NEmoji',
     components: {
-    VueSlickCarousel
+    // VueSlickCarousel
   },
   props: {
   },
   setup () {
     const { store } = useContext()
+    const loading = ref(false)
     const stickers = useAsync(async () => {
+      loading.value = true
       const params = {
         entity: 'stickers',
         page: 1,
@@ -99,13 +105,15 @@ export default {
       }
       try {
         const getStickers = await store.dispatch('socials/getStickers', params)
+        loading.value = false
         return getStickers.data.data
       } catch (e) {
         console.log(e)
       }
     })
     return {
-      stickers
+      stickers,
+      loading
     }
   }
 }
@@ -114,11 +122,14 @@ export default {
 <style scoped lang="scss" module>
 .emojiWrap {
   margin: 2.5rem 0 0 0;
+  height: 12rem;
+  overflow: hidden;
 }
 .container {
     background: #F5F5F5;
     border-radius: 20px;
     padding: 1.8rem 0;
+    height: 12rem;
     // width: 33rem;
     .sliderContainer{
         display: flex !important;
@@ -154,6 +165,8 @@ export default {
       display: flex !important;
       justify-content: space-around;
       outline: none;
+      height: 100%;
+      align-items: center;
       .sticker {
         display: inline-block;
         width: 6.2rem;

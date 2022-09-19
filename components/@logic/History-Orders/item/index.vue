@@ -5,9 +5,11 @@
     </div>
     <div :class="$style.title">
       <!-- Кабель переходник, 1 шт. -->
+      <!-- {{ $props.order }} -->
+      {{ description }}
     </div>
     <div :class="$style.price">
-      {{ $props.order.delivery_price + $props.order.cards_sum }}
+      {{ $props.order.delivery_price + $props.order.cards_sum }} р.
     </div>
     <div :class="$style.status" :style="{ color: color }">
       {{ $props.order.status.status_name }}
@@ -27,6 +29,13 @@ export default {
   },
   setup (props) {
     const id = ref(props.order.id)
+    const description = computed(() => {
+      const string = ref('')
+      props.order.basket.cards.forEach((item) => {
+        string.value += item.title + ', ' + item.pivot.quantity + 'шт. '
+      })
+      return string.value
+    })
     const color = computed(() => {
       if (props.order.status.id === 1) { return '#222222' }
       if (props.order.status.id === 2) { return '#222222' }
@@ -38,7 +47,8 @@ export default {
     })
     return {
       id,
-      color
+      color,
+      description
     }
   }
 }

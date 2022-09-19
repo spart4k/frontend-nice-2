@@ -45,12 +45,12 @@
         {{ $errors.length[0] }}
       </p>
     </div>
-    <div>
+    <!-- <div>
       <N-Goods-Counter v-model="formData.count" :counter="''" @sendCount="responceCountPrice" />
       <p v-if="$errors.count[0]" :class="$style.inputError">
         {{ $errors.count[0] }}
       </p>
-    </div>
+    </div> -->
     <div :class="$style.wireColorSection">
       <p :class="$style.wireText">
         Цвет
@@ -408,7 +408,7 @@ export default {
       background: #C83F8E;
     }
     .buyButton {
-      margin-top: 2rem;
+      // margin-top: 2rem;
     }
     .inputError {
       margin-top: 1rem;

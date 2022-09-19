@@ -1,11 +1,11 @@
 <template>
   <div :class="$style.wire">
-    <div>
+    <!-- <div>
       <N-Goods-Counter v-model="formData.count" :count="count" :counter="'1 шт.'" @sendCount="responceCountPrice" />
       <p v-if="$errors.count[0]" :class="$style.inputError">
         {{ $errors.count[0] }}
       </p>
-    </div>
+    </div> -->
     <N-Button
       :class="$style.buyButton"
       background-color="#C83F8E"
@@ -217,7 +217,7 @@ export default {
       background: #C83F8E;
     }
     .buyButton {
-      margin-top: 2rem;
+      // margin-top: 2rem;
     }
     .inputError {
       margin-top: 1rem;
