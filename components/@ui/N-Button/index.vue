@@ -36,10 +36,14 @@ export default {
     align-items: center;
     @include button;
     transition: background-color .2s;
+    transition: scale .1s;
     padding: 1.4rem 3.7rem;
     &:disabled {
       opacity: 0.5;
     }
+  }
+  .btn:hover {
+    scale: 1.02;
   }
   .sub {
     background: transparent;
