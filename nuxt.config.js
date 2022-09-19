@@ -84,7 +84,7 @@ export default {
     ]
   },
   fontLoader: {
-    url: '/fonts/_fonts.css',
+    // url: '/fonts/_fonts.css',
 
     prefetch: true,
     preconnect: true
