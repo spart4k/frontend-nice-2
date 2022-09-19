@@ -95,9 +95,11 @@ export default {
   })
   const enter = (el) => {
     el.style.height = el.scrollHeight + 'px'
+    // el.style.height = '12rem'
   }
   const beforeLeave = (el) => {
     el.style.height = el.scrollHeight + 'px'
+    // el.style.height = '12rem'
   }
   const leave = (el) => {
     el.style.margin = '0'
@@ -126,6 +128,7 @@ export default {
     }
   }
   const sendSticker = (val) => {
+    showSmilies()
     emit('sendSticker', val)
   }
   const handleKeyboard = () => {

@@ -13,8 +13,10 @@
     height: 9.9rem;
     margin-right: 1.3rem;
     align-self: center;
+    cursor: pointer;
     img {
       max-width: 100%;
+      object-fit: cover;
     }
   }
   &__select {

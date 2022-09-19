@@ -11,10 +11,19 @@
       ]"
     >
       <select
+        v-model="selected"
         :class="[$style.select]"
+        :required="true"
         @input="setProperty"
       >
-        <option v-for="item in selectItems" :key="item.value" :class="$style.optionItem" :value="item.value" @input="setProperty">
+        <option
+          v-for="(item, index) in selectItems"
+          :key="index"
+          :class="$style.optionItem"
+          :value="item.value"
+          :selected="item == 'Видео'"
+          @input="setProperty"
+        >
           {{ item }}
         </option>
       </select>
@@ -25,6 +34,7 @@
 
 <script>
 // import setup from '~/components/@logic/Live/chat/setup'
+// import { ref } from '@nuxtjs/composition-api'
 export default {
   name: 'NSelect',
   props: {

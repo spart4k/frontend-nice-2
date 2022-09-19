@@ -6,7 +6,7 @@
       :max-width="maxWidth"
       :max-height="maxHeight"
       :swipe-able="$mq === 'sm'"
-      :background-scrollable="true"
+      :background-scrollable="$mq === 'sm' ? false : true"
       :background-clickable="true"
       :click-to-close="false"
       :is-full-screen="fullscreen"

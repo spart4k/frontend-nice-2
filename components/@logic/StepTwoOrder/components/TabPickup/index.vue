@@ -98,7 +98,7 @@
       :disabled="$v.$invalid && $touched"
       @click="$emit('toAddress', false); submit()"
     >
-      Оплатить онлайн
+      {{ activePayment === 'card' ? 'Оплатить онлайн' : 'Оформить заказ' }}
     </n-button>
     <form name="TinkoffPayForm" onsubmit="pay(this); return false;">
       <input class="tinkoffPayRow" type="hidden" name="terminalkey" value="1658916651586DEMO">
@@ -119,7 +119,7 @@
       >
     </form>
     <script src="https://securepay.tinkoff.ru/html/payForm/js/tinkoff_v2.js" />
-    <NPersonalConsent />
+    <NPersonalConsent :class="$style.personalConsent" />
   </div>
 </template>
 
