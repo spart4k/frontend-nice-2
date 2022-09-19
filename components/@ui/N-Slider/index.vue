@@ -1,22 +1,25 @@
 <template>
   <div :class="$style.wrapper">
-    <div :class="$style.fullscreen">
-      <N-Icon name="fullscreen" :class="$style.fullscreenButton" @click="popupChange" />
+    <div :class="$style.fullscreen" @click="popupChange">
+      <N-Icon name="fullscreen" :class="$style.fullscreenButton" />
     </div>
     <div :class="$style.slider_top">
-      <VueSlickCarousel
-        ref="c1"
-        :dots="true"
-        :infinite="true"
-        :focus-on-select="true"
-        :adaptive-height="true"
-      >
-        <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
-          <img v-if="item.file_type_id === 1" :src="`${$axios.defaults.baseURL}/${item.src}`" alt="">
-        </div>
-      </VueSlickCarousel>
-      <portal v-if="popup" to="sliderPopup">
-        <div :class="$style.overlay" @click="popupChange">
+      <div :class="$style.originalSlider">
+        <VueSlickCarousel
+          ref="c1"
+          :dots="true"
+          :infinite="true"
+          :focus-on-select="true"
+          :adaptive-height="true"
+          @beforeChange="syncSlidersTop"
+        >
+          <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
+            <img v-if="item.file_type_id === 1" :src="`${$axios.defaults.baseURL}/${item.src}`" alt="">
+          </div>
+        </VueSlickCarousel>
+      </div>
+      <portal to="sliderPopup">
+        <div :style="{zIndex: popup ? 100 : -10}" :class="$style.overlay" @click="popupChange">
           <N-Button :background-color="'rgba(255, 255, 255, 0.4)'" type-button="small" :class="$style.closeButton">
             <N-Icon :class="$style.icon" name="close" />
           </N-Button>
@@ -66,12 +69,16 @@ export default {
     const syncSlidersBottom = (value, sliderTwo) => {
       c1.value.goTo(sliderTwo)
     }
+    const syncSlidersTop = (value, sliderOne) => {
+      c2.value.goTo(sliderOne)
+    }
     return {
       c1,
       c2,
       popup,
       popupChange,
-      syncSlidersBottom
+      syncSlidersBottom,
+      syncSlidersTop
     }
   }
 }
@@ -85,6 +92,13 @@ export default {
   @media (min-width: $tabletWidth) {
     height: 100%;
     margin-bottom: 0rem;
+  }
+  .originalSlider {
+    :global(.slick-list) {
+      height: 100% !important;
+      margin: auto 0;
+      width: 100%;
+    }
   }
   .fullscreen {
     position: absolute;
@@ -177,8 +191,9 @@ export default {
     top: 0;
     width: 100%;
     height: 100%;
-    z-index: 100;
-    background-color: rgba(51, 51, 51, 0.9);
+    // z-index: 100;
+    // background-color: rgba(51, 51, 51, 1);
+    background-color: rgb(0, 0, 0);
     .closeButton {
       position: absolute;
       top: 1rem;
@@ -203,6 +218,7 @@ export default {
         :global(.slick-list) {
           height: 100% !important;
           margin: auto 0;
+          width: 100%;
             :global(.slick-track) {
               height: 100%;
               :global(.slick-slide) {
