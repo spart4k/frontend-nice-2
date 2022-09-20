@@ -2,13 +2,6 @@
   <!--  :style="{ paddingTop: !isHomePage ? '15.5rem' : '27.7rem' }-->
   <div ref="main" :class="[$style.main, !isHomePage && $style.paddingSlug]">
     <div :class="$style.intro">
-      <n-tabs
-        class="navbarSlug"
-        :class="[
-          $style.tabs,
-          showAnimate && $style.animateContent,
-        ]"
-      />
       <div
         v-if="!isHomePage"
         ref="anchor"
@@ -117,24 +110,12 @@ export default {
   height: 100px;
 }
 .main {
-  padding-top: 17.5rem;
+  // padding-top: 17.5rem;
   @media (max-width: $mobileWidth) {
-    padding-top: 23.6rem;
+    // padding-top: 23.6rem;
   }
   &.paddingSlug {
     padding-top: 15.5rem;
-  }
-}
-.tabs {
-  position: relative;
-  margin: 0;
-  z-index: 10;
-  width: 100%;
-  margin-bottom: 5.815rem;
-  transition: opacity 0.3s;
-  will-change: transform;
-  @media (max-width: $tabletWidth) {
-    margin-bottom: 4rem;
   }
 }
 

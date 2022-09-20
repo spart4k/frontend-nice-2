@@ -1,10 +1,6 @@
 <template>
   <div ref="main" :class="$style.main">
     <div :class="$style.intro">
-      <n-tabs
-        :class="$style.tabs"
-        class="navbarq"
-      />
     </div>
     <section :class="$style.container">
       <slot />
@@ -106,26 +102,12 @@ export default {
 
 <style scoped lang="scss" module>
 .main {
-    padding-top: 17.5rem;
   @media (max-width: $mobileWidth) {
     padding-top: 13.5rem;
   }
 }
 .container {
   @include container;
-}
-.tabs {
-  margin: 0;
-  z-index: 3;
-  width: 100%;
-  margin-bottom: 5.815rem;
-  will-change: transform;
-  @media (max-width: $tabletWidth) {
-    margin-bottom: 4rem;
-  }
-  @media (max-width: $mobileWidth) {
-    display: none;
-  }
 }
 
 .logo {

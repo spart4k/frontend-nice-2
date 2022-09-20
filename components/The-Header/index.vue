@@ -1,54 +1,58 @@
 <template>
   <!--  , showAnimate && $style.animateContent-->
-  <header :class="[$style.header, (showAnimate && $route.name === 'index') && $style.animateContent]">
-    <div
-      v-show="$route.name === 'index'"
-      class="logo"
-      :class="[$style.logo, showAnimate && $style.logoVisible]"
-      :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}rem)` : '50%'}"
-      @click="$router.push('/')"
-    >
-      <n-logo />
-    </div>
-    <div
-      v-show="$route.name !== 'index'"
-      :class="$style.logoSlug"
-      :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}rem)` : '50%'}"
-      @click="$router.push('/')"
-    >
-      <n-logo />
-    </div>
-    <!--    v-if="$route.name !== 'index'"-->
-    <n-button
-      type-button="transparent"
-      class="elementHeader"
-      :class="[active && $style.open, $style.deviceMenu, (showAnimate && $route.name === 'index') && $style.showAnimate]"
-      @click="openMenu"
-    >
-      <div :class="$style.deviceMenu__inner">
-        <span />
-        <span />
-        <span />
+  <div class="">
+    <header >
+      <div :class="[$style.header, (showAnimate && $route.name === 'index') && $style.animateContent]">
+        <div
+          v-show="$route.name === 'index'"
+          class="logo"
+          :class="[$style.logo, showAnimate && $style.logoVisible]"
+          :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}rem)` : '50%'}"
+          @click="$router.push('/')"
+        >
+          <n-logo />
+        </div>
+        <div
+          v-show="$route.name !== 'index'"
+          :class="$style.logoSlug"
+          :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}rem)` : '50%'}"
+          @click="$router.push('/')"
+        >
+          <n-logo />
+        </div>
+        <!--    v-if="$route.name !== 'index'"-->
+        <n-button
+          type-button="transparent"
+          class="elementHeader"
+          :class="[active && $style.open, $style.deviceMenu, (showAnimate && $route.name === 'index') && $style.showAnimate]"
+          @click="openMenu"
+        >
+          <div :class="$style.deviceMenu__inner">
+            <span />
+            <span />
+            <span />
+          </div>
+          <div v-if="basketData" :class="$style.basketCount">
+            {{ basketData }}
+          </div>
+        </n-button>
+        <div
+          :class="[
+            $style.headerUser__list,
+            active && $style.hideElement,
+            (showAnimate && $route.name === 'index') && $style.showAnimate]"
+          class="elementHeader"
+        >
+          <div :class="$style.link" @click="openLive">
+            <span v-if="windowWidth > 465" :class="$style.link__text">эфир</span>
+            <img src="~/assets/img/domofon.png" alt="" :class="$style.link__icon">
+            <!-- <n-icon name="domofon" :class="$style.link__icon" /> -->
+          </div>
+        </div>
       </div>
-      <div v-if="basketData" :class="$style.basketCount">
-        {{ basketData }}
-      </div>
-    </n-button>
-    <div
-      :class="[
-        $style.headerUser__list,
-        active && $style.hideElement,
-        (showAnimate && $route.name === 'index') && $style.showAnimate]"
-      class="elementHeader"
-    >
-      <div :class="$style.link" @click="openLive">
-        <span v-if="windowWidth > 465" :class="$style.link__text">эфир</span>
-        <img src="~/assets/img/domofon.png" alt="" :class="$style.link__icon">
-        <!-- <n-icon name="domofon" :class="$style.link__icon" /> -->
-      </div>
-    </div>
-    <FormAuthSteps v-model="activeAuthSteps" />
-  </header>
+      <FormAuthSteps v-model="activeAuthSteps" />
+    </header>
+  </div>
 </template>
 
 <script lang="js">
@@ -74,6 +78,7 @@ export default {
     const active = ref(false)
     const activeAuthSteps = ref(false)
     const route = useRoute()
+    console.log(route.value.name)
     const router = useRouter()
     const header = ref(null)
     const liveChat = ref(null)
