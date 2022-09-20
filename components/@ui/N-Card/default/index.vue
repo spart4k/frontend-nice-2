@@ -242,6 +242,7 @@ export default {
         })
         store.commit('menu/changeStepMenu', { step: 1 })
         store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+        store.commit('menu/changeShowStateBottomSheetLive', { value: true })
       } else if (store.state.menu.isShowBottomMenu) {
         store.commit('menu/changeKeyMenu', {
           key: 'registration',
@@ -258,6 +259,7 @@ export default {
         })
         store.commit('menu/changeStepMenu', { step: 2 })
         store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+        store.commit('menu/changeShowStateBottomSheetLive', { value: true })
       } else if (store.state.menu.isShowBottomMenu) {
         store.commit('menu/changeKeyMenu', {
           key: 'registration',
