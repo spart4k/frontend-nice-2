@@ -33,8 +33,9 @@
             preload="none"
             muted
             type="video/mp4"
+            :src="videoUrl"
           >
-            <source :src="videoUrl" type="video/ogg; codecs=&quot;theora, vorbis&quot;">
+            <!-- <source :src="videoUrl" type="video/ogg; codecs=&quot;theora, vorbis&quot;"> -->
           </video>
         </div>
       </template>
@@ -576,7 +577,7 @@ export default {
     word-break: break-word;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -webkit-box;
+    // display: -webkit-box;
     // line-height: 17px;
     max-height: 3.2rem;
     opacity: 0.8;
@@ -587,7 +588,7 @@ export default {
   .parserDetail{
     word-break: break-word;
     text-overflow: ellipsis;
-    display: -webkit-box;
+    // display: -webkit-box;
     opacity: 0.8;
     @include regular-text;
     -webkit-line-clamp: 3;
@@ -671,7 +672,8 @@ export default {
       @include text-style-h2;
     }
     .time {
-      @include regular-text-small;
+      color: $fontColorDefault;
+      @include regular-text-bold;
       margin-bottom: .8rem;
     }
     &__top {

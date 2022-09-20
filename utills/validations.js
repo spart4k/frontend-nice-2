@@ -13,11 +13,11 @@ const requiredIf = needValidation => ({
 
 const phone = {
   $validator: val => val.length > 10,
-  $message: () => 'Не менее 10 символов'
+  $message: () => 'Не менее 11 символов'
 }
 const nameLength = {
   $validator: val => val.length > 4,
-  $message: () => 'Не менее 4 символов'
+  $message: () => 'Не менее 5 символов'
 }
 
 const sameAs = value => ({
@@ -33,7 +33,7 @@ const sameAs = value => ({
 
 const password = {
   $validator: val => val.length > 7,
-  $message: () => 'Не менее 7 символов'
+  $message: () => 'Не менее 8 символов'
 }
 
 const onlyNumeric = {
@@ -80,6 +80,18 @@ const strongPassword = () => {
       cb: val => /\d/.test(val),
       touched: false,
       message: () => 'Должен содержать цифру',
+      success: false
+    },
+    oneLetter: {
+      cb: val => /[A-Za-z]/.test(val),
+      touched: false,
+      message: () => 'Должен содержать английскую букву',
+      success: false
+    },
+    noSpacing: {
+      cb: val => /^\S*$/.test(val),
+      touched: false,
+      message: () => 'Должны отсутствовать пробелы',
       success: false
     }
   }
