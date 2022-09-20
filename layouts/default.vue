@@ -17,6 +17,15 @@
       :color="color"
       @backgroundLoaded="backgroundLoaded"
     >
+      <n-tabs
+        v-if="$route.name !== 'cards-id'"
+        class="navbarSlug"
+        :class="[
+          $style.tabs,
+          showAnimate && $style.animateContent,
+          !isHomePage ? $style.noHome : ''
+        ]"
+      />
       <Nuxt />
     </n-intro-wrapper>
     <N-BootomSheet
@@ -235,6 +244,7 @@ export default {
         store.commit('authentication/setUserData')
       }
     }
+    const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
 
     onMounted(() => {
       setTimeout(() => {
@@ -276,7 +286,8 @@ export default {
       pauseAudio,
       audioSource,
       audioDelay,
-      audioDestroy
+      audioDestroy,
+      showAnimate
     }
   }
 }
@@ -310,5 +321,23 @@ export default {
 .header {
   margin: auto;
   transition-duration: .3s;
+}
+.tabs {
+  position: relative;
+  margin: 17rem 0 5.815rem 0;
+  z-index: 10;
+  width: 100%;
+  transition: opacity 0.3s;
+  will-change: transform;
+  @media (max-width: $tabletWidth) {
+    margin: 23.6rem 0 5.815rem 0;
+    // margin: 22rem 0 5.815rem 0;
+    // display: none;
+  }
+  @media (max-width: $mobileWidth) {
+    &.noHome {
+      display: none;
+    }
+  }
 }
 </style>
