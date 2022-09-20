@@ -1,5 +1,7 @@
 <template>
-  <span :class="[$style.loader, purple && $style.purple, black && $style.black]" />
+  <div :class="$style.wrap">
+    <span :class="[$style.loader, purple && $style.purple, black && $style.black]" />
+  </div>
 </template>
 
 <script>
@@ -19,14 +21,19 @@
 </script>
 
 <style scoped lang="scss" module>
-.loader {
-  width: 8rem;
-  height: 8rem;
+.wrap {
+  width: 4.2rem;
+  height: 4.2rem;
   left: 50%;
   top: 50%;
-  //transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
   border-radius: 50%;
   position: absolute;
+}
+.loader {
+  display: block;
+  width: 4.2rem;
+  height: 4.2rem;
   animation: rotate 1s linear infinite
 }
 .loader::before {
@@ -36,7 +43,7 @@
   inset: 0px;
   border-radius: 50%;
   border: 2px solid #ffffff;
-  animation: prixClipFix 2s linear infinite ;
+  animation: prixClipFix 1s linear infinite ;
 }
 .purple.loader::before {
   border-color:#6448B5;
