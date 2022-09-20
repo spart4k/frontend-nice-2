@@ -11,7 +11,6 @@
       ]"
     >
       <select
-        v-model="selected"
         :class="[$style.select]"
         :required="true"
         @input="setProperty"
@@ -21,7 +20,6 @@
           :key="index"
           :class="$style.optionItem"
           :value="item.value"
-          :selected="item == 'Видео'"
           @input="setProperty"
         >
           {{ item }}

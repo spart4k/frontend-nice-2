@@ -29,9 +29,7 @@ export default {
     const { emit } = ctx
     const backgroundURL = computed(() => require(`~/assets/img/menu/${props.item.slug}.png`))
     const closeBottom = () => {
-      if (window.innerWidth < 450) {
-        emit('closeState')
-      }
+      emit('closeState')
     }
 
     return {

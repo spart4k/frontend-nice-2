@@ -157,10 +157,10 @@ export default {
     color: $fontColorDefault;
     padding: 1rem 0;
   }
-  input[type=password] {
-    padding-top: 0;
-    font-size: 2.4rem;
-  }
+  // input[type=password] {
+    // padding-top: 0;
+    // font-size: 2.4rem;
+  // }
   input::placeholder {
     color: $fontColorDefault;
     opacity: 0.5;

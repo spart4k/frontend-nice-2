@@ -2,7 +2,7 @@
   <div :class="[$style.card, detailPage && $style.detailPage]">
     <div ref="gallery" :class="[$style.gallery, detailPage && $style.detailPage]">
       <template v-if="sliderImages.length && !$props.withVideo">
-        <template v-if="$props.detailPage && sliderImages.length > 1">
+        <template v-if="$props.detailPage && sliderImages.length > 0">
           <N-Slider :slider-item="sliderImages" />
         </template>
         <template v-else>
