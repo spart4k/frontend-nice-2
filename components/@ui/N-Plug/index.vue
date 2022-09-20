@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.plug">
-    <a @click="$emit('login')">Войдите</a> или <a @click="$emit('registration')">зарегистрируйтесь</a> чтобы написать комментарий и оценить пост
+    <span><a @click="$emit('login')">Войдите</a> или <a @click="$emit('registration')">зарегистрируйтесь</a> чтобы написать комментарий и оценить пост</span>
   </div>
 </template>
 
