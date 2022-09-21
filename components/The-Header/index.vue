@@ -31,7 +31,7 @@
             <span />
             <span />
             <span />
-            <div class="animationPlug" :class="$style.plug" />
+            <div v-if="!pageLoading" class="animationPlug" :class="$style.plug" />
           </div>
           <div v-if="basketData" :class="$style.basketCount">
             {{ basketData }}

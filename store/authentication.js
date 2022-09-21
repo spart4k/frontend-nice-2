@@ -107,6 +107,8 @@ export const actions = {
       const res = await this.$axios('api/v1/logout/current')
       if (res.status === 200) {
         await localStorage.removeItem('token')
+        commit('setBasket', [])
+        commit('changeBasketSum', 0)
         // await localStorage.removeItem('user')
         // this.$toast.success('Вы вышли из аккаунта', { position: 'bottom-right', icon: true })
         commit('setLogout')

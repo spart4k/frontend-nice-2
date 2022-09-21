@@ -155,7 +155,12 @@ export default {
         const goodsData = {
           card_id: props.card_id,
           quantity: Number(formData.count.slice(0, -4)),
-          details: JSON.stringify([wireInputId.value, wireOutputId.value, Number(formData.length), formData.color])
+          details: JSON.stringify({
+            start: wireInputId.value,
+            end: wireOutputId.value,
+            length: Number(formData.length),
+            color: formData.color
+          })
         }
         const result = await store.dispatch('basket/addToBasket', goodsData)
         if (!result.data.error) {
