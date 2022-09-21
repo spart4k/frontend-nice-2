@@ -233,3 +233,11 @@
     transform: translate(0, 0) !important;
   }
 }
+
+.plug {
+  width: 100%;
+  height: calc(100% + 5px);
+  position: absolute;
+  cursor: initial;
+  z-index: 100;
+}
