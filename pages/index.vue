@@ -104,9 +104,9 @@ export default defineComponent({
 
     onMounted(() => {
       // if (backgroundLoaded.value) {
-      if (window.innerWidth < 450) {
-        animationlogo()
-      }
+      // if (window.innerWidth < 450) {
+      // }
+      animationlogo()
       animateSubtitle()
       animateNavbar('.navbarSlug')
       window.addEventListener('resize', resize)

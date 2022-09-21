@@ -11,8 +11,8 @@
       />
     </template>
     <template v-else-if="section.id === 10">
-      <!-- <N-Card-Coin /> -->
-      <N-Card-Default :detail-page="detailPage" :comments="comments" :data="detailPage ? card.data : card" @clickTag="($event) => $emit('clickTag', $event)" />
+      <N-Card-Coin />
+      <!-- <N-Card-Default :detail-page="detailPage" :comments="comments" :data="detailPage ? card.data : card" @clickTag="($event) => $emit('clickTag', $event)" /> -->
     </template>
     <template v-else>
       <N-Card-Default
