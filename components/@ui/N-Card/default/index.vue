@@ -232,7 +232,7 @@ export default {
     const videoPlay = ref(false)
     const videoPlug = ref(true)
     const totalPrice = ref(props.data.price)
-    const wirePrice = ref(0)
+    const wirePrice = ref(1000)
     const priceLoading = ref(false)
     const itemCounter = ref(1)
     const sliderImages = computed(() => {
@@ -406,7 +406,7 @@ export default {
             }
           })
         } else {
-          wirePrice.value = 0
+          wirePrice.value = 1000
         }
       } else {
         itemCounter.value = val
@@ -746,6 +746,7 @@ export default {
         width: 2rem;
         height: 2rem;
         margin-bottom: 1.5rem;
+        margin-top: 1.5rem;
       }
     }
     .cardAudio {
