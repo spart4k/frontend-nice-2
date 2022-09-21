@@ -191,6 +191,10 @@
   &__icon {
     width: 5.3rem;
     height: 5.3rem;
+    @media (min-width: $tabletWidth ) {
+      width: 6.3rem;
+      height: 6.3rem;
+    }
     svg {
       width: 100%;
       height: 100%;
