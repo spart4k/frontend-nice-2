@@ -111,6 +111,9 @@ export default defineComponent({
       animateNavbar('.navbarSlug')
       window.addEventListener('resize', resize)
       window.addEventListener('load', () => {
+        if (store.state.content.singleAnimation) {
+          localStorage.setItem('showAnimateHomePage', 'true')
+        }
         const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
         if (!isPlayAnimation) {
           store.commit('content/setAnimate', false)
@@ -121,7 +124,6 @@ export default defineComponent({
         if (store.state.content.singleAnimation) {
           localStorage.setItem('showAnimateHomePage', 'true')
           store.commit('content/setSingleAnimation', false)
-          // store.commit('content/setAnimate', false)
         }
         setTimeout(() => {
           animationLoad.value = true
