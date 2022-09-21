@@ -54,7 +54,7 @@ export default {
     } else if (!store.state.menu.isShowBottomMenu) {
       store.commit('menu/changeKeyMenu', {
         key: 'registration',
-        effect: 'fx-slide-from-left'
+        effect: 'fx-default'
       })
       store.commit('menu/changeStepMenu', { step: 1 })
       store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
