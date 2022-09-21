@@ -25,7 +25,7 @@
               <N-Icon :class="$style.icon" name="button-play" />
             </N-Button>
           </div>
-          <!-- <n-lazy-img v-if="videoPlug" :src="data.files[0].file_type_id === 1 ? `${$axios.defaults.baseURL}/${data.files[0].src}` : require('@/assets/img/videoNoBg.png')" :alt="data.title" :class="$style.plugVideo" /> -->
+          <n-lazy-img v-if="videoPlug" :src="data.files[0].file_type_id === 1 ? `${$axios.defaults.baseURL}/${data.files[0].src}` : require('@/assets/img/videoNoBg.png')" :alt="data.title" :class="$style.plugVideo" />
           <!-- <img v-if="videoPlug" :src="data.files[0].file_type_id === 1 ? `${$axios.defaults.baseURL}/${data.files[0].src}` : require('@/assets/img/videoNoBg.png')" loading="lazy" :class="$style.plugVideo"> -->
           <video
             ref="videoRef"
