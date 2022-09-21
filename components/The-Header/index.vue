@@ -136,7 +136,7 @@ export default {
             store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
             store.commit('menu/changeKeyMenu', {
               key: 'live-default',
-              effect: 'fx-default'
+              effect: 'fx-slide-from-right'
             })
           }, 100)
           store.commit('menu/changeShowStateBottomSheetLive', { value: false })
@@ -144,7 +144,7 @@ export default {
           store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
           store.commit('menu/changeKeyMenu', {
             key: 'live-default',
-            effect: 'fx-default'
+            effect: 'fx-slide-from-right'
           })
           store.commit('menu/changeShowStateBottomSheetLive', { value: false })
         }
