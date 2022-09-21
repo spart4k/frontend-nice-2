@@ -72,6 +72,7 @@ export const actions = {
       const data = await this.$axios.post('api/v1/user/auth', { phone: params })
       return data
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       return e.response.data.message
     }
   },
@@ -81,6 +82,7 @@ export const actions = {
       this.$toast.success('Вы успешно зарегистрировались, проверьте свою почту', { position: 'bottom-right', icon: true })
       return data
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       return e.response.data.message
     }
   },
@@ -96,6 +98,7 @@ export const actions = {
       }
       return res
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       return e.response
     }
   },
@@ -109,6 +112,7 @@ export const actions = {
         commit('setLogout')
       }
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       return e.response.data.message
     }
   },
@@ -117,6 +121,7 @@ export const actions = {
       const data = await this.$axios.post('api/v1/resetPassword', params)
       return data
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       return e.response.data.message
     }
   },
@@ -130,6 +135,7 @@ export const actions = {
       this.$toast.success('Вы успешно вошли', { position: 'bottom-right', icon: true })
       return res
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       return e.response.data
     }
   },
@@ -141,6 +147,7 @@ export const actions = {
         return data.data
       }
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       return e.response.data.message
     }
   },
@@ -151,7 +158,7 @@ export const actions = {
         commit('loadUserAdress', response.data.data.addresses)
       return response.data
     } catch (e) {
-      await this.$toast.error('Произошла ошибка регистрации, обновите страницу', { position: 'bottom-right', icon: false })
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       return e.response.data
     }
   },
@@ -161,6 +168,7 @@ export const actions = {
       commit('addUserAdress', res.data.data)
       return res.data
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       return e.response.data.message
     }
   },
@@ -169,6 +177,7 @@ export const actions = {
       const res = await this.$axios(`api/v1/deleteAddress/${params}`)
       return res.data
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       return e.response.data.message
     }
   }
