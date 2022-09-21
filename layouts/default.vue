@@ -313,7 +313,7 @@ export default {
   z-index: 11;
   transition-duration: .3s;
   @media (max-width: $mobileWidth) {
-    top: 2.3rem;
+    top: 2.6rem;
     left: 1.5rem;
     right: 1.5rem;
   }
@@ -329,7 +329,7 @@ export default {
   width: 100%;
   transition: opacity 0.3s;
   will-change: transform;
-  @media (max-width: $tabletWidth) {
+  @media (max-width: $mobileWidth) {
     margin: 23.6rem 0 5.815rem 0;
     // margin: 22rem 0 5.815rem 0;
     // display: none;

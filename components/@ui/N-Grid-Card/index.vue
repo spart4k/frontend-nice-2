@@ -153,11 +153,11 @@ export default {
 <style scoped lang="scss" module>
 .preview {
     height: 55rem !important;
+  // @media (max-width: $tabletWidth) {
+  //   height: calc(100vh - 10.3rem);
+  // }
   @media (max-width: $tabletWidth) {
-    height: calc(100vh - 10.3rem);
-  }
-  @media (max-width: $mobileWidth) {
-    height: 85vh !important;
+    height: calc(100vh - 17.5rem) !important;
   }
 }
 .cards {

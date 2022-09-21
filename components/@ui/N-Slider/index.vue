@@ -19,16 +19,16 @@
         </VueSlickCarousel>
       </div>
       <portal to="sliderPopup">
-        <div :style="{zIndex: popup ? 100 : -10}" :class="$style.overlay" @click="popupChange">
+        <div :style="{zIndex: popup ? 10000 : -10}" :class="$style.overlay" @click="popupChange">
           <N-Button :background-color="'rgba(255, 255, 255, 0.4)'" type-button="small" :class="$style.closeButton">
             <N-Icon :class="$style.icon" name="close" />
           </N-Button>
           <div :class="$style.popupSlider" @click.stop>
             <VueSlickCarousel
               ref="c2"
+              :dots="true"
               :infinite="true"
               :focus-on-select="true"
-              :adaptive-height="true"
               @beforeChange="syncSlidersBottom"
             >
               <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
@@ -95,7 +95,7 @@ export default {
   }
   .originalSlider {
     :global(.slick-list) {
-      height: 100% !important;
+      // height: 100% !important;
       margin: auto 0;
       width: 100%;
     }
@@ -104,15 +104,19 @@ export default {
     position: absolute;
     top: 1.5rem;
     right: 1.5rem;
-    height: auto;
-    padding: 1rem;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;
     z-index: 10;
+    height: 3.2rem;
+    width: 3.2rem;
+    display: flex;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
     .fullscreenButton {
-      width: 2.1rem;
-      height: 2rem;
+      width: 1.6rem;
+      height: 1.6rem;
       svg {
         width: 100%;
         height: 100%;
@@ -132,12 +136,12 @@ export default {
   :global(.slick-initialized) {
     & > :global(.slick-prev), & > :global(.slick-next) {
       background: url('@/static/icon/icon-arrow-slider.svg') center;
-      background-color: rgba(255,255,255,0.2);
+      background-color: rgba(255,255,255,0.1);
       background-repeat: no-repeat;
-      background-size: 1rem;
+      background-size: .9rem;
       border-radius: 50%;
-      width: 4rem;
-      height: 4rem;
+      width: 3.2rem;
+      height: 3.2rem;
       z-index: 5;
       &::before {
         content: "";
@@ -159,14 +163,14 @@ export default {
   }
 
   :global(.slick-dots li button:before) {
-      content: '';
-      border: .15rem solid #222222;
-      border-radius: 3px;
-      line-height: 0px;
-      position: absolute;
-      width: 1rem;
-      height: 0px;
-      transition: width .6s ease, opacity .6s ease;
+    content: '';
+    border: .15rem solid #222222;
+    border-radius: 3px;
+    line-height: 0px;
+    position: absolute;
+    width: 1rem;
+    height: 0px;
+    transition: width .6s ease, opacity .6s ease;
   }
 
   :global(.slick-dots) {
@@ -199,6 +203,8 @@ export default {
       top: 1rem;
       right: 1rem;
       z-index: 50;
+      width: 3.2rem;
+      height: 3.2rem;
       .icon{
         width: 1.3rem;
         svg {
@@ -211,6 +217,31 @@ export default {
       z-index: 102;
       width: 100%;
       height: 100%;
+      :global(.slick-dots li button:before) {
+        content: '';
+        border: .15rem solid #ffffff;
+        border-radius: 3px;
+        line-height: 0px;
+        position: absolute;
+        width: 1rem;
+        height: 0px;
+        transition: width .6s ease, opacity .6s ease;
+      }
+      :global(.slick-dots) {
+        bottom: 20px !important;
+        :global(li) {
+          width: 1rem;
+          height: .3rem;
+          transition: width .6s ease;
+        }
+        :global(.slick-active) {
+          width: 3.5rem;
+        }
+        :global(.slick-active button:before) {
+          width: 3.5rem;
+          height: 0;
+        }
+      }
       :global(.slick-slider) {
         height: inherit !important;
         display: flex;
@@ -241,10 +272,10 @@ export default {
     :global(.slick-initialized) {
     & > :global(.slick-prev), & > :global(.slick-next) {
       background: url('@/static/icon/icon-arrow-slider.svg') center;
-      background-color: rgba(255,255,255,0.2);
+      background-color: rgba(255,255,255,0.1);
       background-repeat: no-repeat;
       border-radius: 50%;
-      background-size: 1rem;
+      background-size: .9rem;
       width: 4rem;
       height: 4rem;
       z-index: 105;
@@ -255,10 +286,18 @@ export default {
     }
     & > :global(.slick-prev) {
       left: 2.5rem;
+      @media (max-width: $tabletWidth) {
+        display: none !important;
+      }
+      // top: 95%;
     }
     & > :global(.slick-next) {
       transform: rotate(180deg) translateY(50%);
       right: 2.5rem;
+      @media (max-width: $tabletWidth) {
+        display: none !important;
+      }
+      // top: 95%;
     }
   }
 }

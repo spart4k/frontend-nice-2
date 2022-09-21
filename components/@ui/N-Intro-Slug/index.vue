@@ -1,7 +1,6 @@
 <template>
   <div ref="main" :class="$style.main">
-    <div :class="$style.intro">
-    </div>
+    <div :class="$style.intro" />
     <section :class="$style.container">
       <slot />
     </section>
@@ -71,7 +70,7 @@ export default {
       // animationlogo()
       animateSubtitle()
       // animateNavbar('.navbarq')
-      $gsap.to('.navbarq', {
+      $gsap.to('.navbarSlug', {
         scrollTrigger: {
           trigger: '.content',
           // start: `top ${top}`,

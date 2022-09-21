@@ -2,7 +2,7 @@
   <div :class="[$style.card, detailPage && $style.detailPage]">
     <div ref="gallery" :class="[$style.gallery, detailPage && $style.detailPage]">
       <template v-if="sliderImages.length && !$props.withVideo">
-        <template v-if="$props.detailPage && sliderImages.length > 0">
+        <template v-if="$props.detailPage && sliderImages.length > 1">
           <N-Slider :slider-item="sliderImages" />
         </template>
         <template v-else>
@@ -25,6 +25,8 @@
               <N-Icon :class="$style.icon" name="button-play" />
             </N-Button>
           </div>
+          <!-- <n-lazy-img v-if="videoPlug" :src="data.files[0].file_type_id === 1 ? `${$axios.defaults.baseURL}/${data.files[0].src}` : require('@/assets/img/videoNoBg.png')" :alt="data.title" :class="$style.plugVideo" /> -->
+          <!-- <img v-if="videoPlug" :src="data.files[0].file_type_id === 1 ? `${$axios.defaults.baseURL}/${data.files[0].src}` : require('@/assets/img/videoNoBg.png')" loading="lazy" :class="$style.plugVideo"> -->
           <video
             ref="videoRef"
             :class="detailPage && $style.detailPage"
@@ -35,6 +37,8 @@
             type="video/mp4"
             :src="videoUrl"
           >
+            <!-- :poster="data.files[0].src ? `${$axios.defaults.baseURL}/${data.files[0].src}` : '/assets/img/videoNoBg.png'" -->
+          <!-- :poster="require('@/assets/img/videoNoBg.png')" -->
             <!-- <source :src="videoUrl" type="video/ogg; codecs=&quot;theora, vorbis&quot;"> -->
           </video>
         </div>
@@ -48,7 +52,7 @@
     >
       <template>
         <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`cards/${data.id}?section=${data.section.slug}`">
-          <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
+          <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '1.5rem' }">
             {{ data.title }}
           </h2>
           <div v-if="data.date_event" :class="$style.time">
@@ -58,6 +62,11 @@
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div> -->
           <!-- {{ data.text }} -->
+          <template v-if="data.price && !$props.detailPage">
+            <div :class="$style.price">
+              {{ data.price }} р.
+            </div>
+          </template>
           <div :class="$style.cardText">
             <div :class="$style.parser" v-html="data.subtitle" />
           </div>
@@ -88,6 +97,9 @@
           <div v-if="data.date_event" :class="$style.time">
             {{ dateFormat }}
           </div>
+          <div :class="$style.cardText">
+            <div :class="$style.parserDetail" v-html="data.text" />
+          </div>
           <template v-if="data.price && $props.detailPage">
             <n-loading v-if="priceLoading" :class="$style.loading" purple />
             <div v-else :class="$style.price">
@@ -103,9 +115,6 @@
           <!-- <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div> -->
-          <div :class="$style.cardText">
-            <div :class="$style.parserDetail" v-html="data.text" />
-          </div>
           <template>
             <!-- <div :class="$style.cardAudio">
               <N-Audio :files="data.files" />
@@ -221,6 +230,7 @@ export default {
     const { $axios } = useContext()
     const { store } = useContext()
     const videoPlay = ref(false)
+    const videoPlug = ref(true)
     const totalPrice = ref(props.data.price)
     const wirePrice = ref(0)
     const priceLoading = ref(false)
@@ -335,6 +345,7 @@ export default {
       if (videoRef.value.paused === true) {
         videoRef.value.play()
         videoPlay.value = true
+        videoPlug.value = false
       } else {
         videoRef.value.pause()
         videoPlay.value = false
@@ -426,7 +437,9 @@ export default {
       window.removeEventListener('resize', commentHeightSet)
     })
     const dateFormat = computed(() => {
-      return props.data.date_event?.replace(/:(\w+)/, '')?.replace(/\s/, ' / ') ?? ''
+      const t = props.data.date_event.split(/[- :]/)
+      const preventedTime = (new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getTime())
+      return new Date(preventedTime).toLocaleString()
     })
     return {
       like,
@@ -451,6 +464,7 @@ export default {
       videoUrl,
       videoPlay,
       videoPlayingChange,
+      videoPlug,
       login,
       registration,
       loginMenu,
@@ -530,11 +544,20 @@ export default {
     }
     .wrapperVideo {
       position: relative;
-      width: 100%;
+      width: calc(100% + 10px);
+      margin-left: -5px;
       &.detailPage {
+        width: 100%;
+        margin-left: 0;
         @media (min-width: $tabletWidth) {
           height: 100%;
         }
+      }
+      .plugVideo {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
       }
       .blackout{
         position: absolute;
@@ -565,7 +588,7 @@ export default {
         left: 0;
         top: 0;
         width: 100%;
-        object-fit: cover;
+        // object-fit: cover;
         height: 100%;
         &.detailPage {
           @media (min-width: $tabletWidth) {
@@ -581,11 +604,11 @@ export default {
     text-overflow: ellipsis;
     // display: -webkit-box;
     // line-height: 17px;
-    max-height: 3.2rem;
-    opacity: 0.8;
+    // max-height: 3.2rem;
+    // opacity: 0.8;
     @include regular-text;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
+    // -webkit-line-clamp: 3;
+    // -webkit-box-orient: vertical;
   }
   .parserDetail{
     word-break: break-word;
@@ -616,6 +639,7 @@ export default {
     color: $fontColorDefault;
     @include regular-text-bold;
     margin-bottom:2rem;
+    margin-top: 2rem;
   }
   .buyButton {
     margin-bottom: 2rem;
@@ -676,7 +700,7 @@ export default {
     .time {
       color: $fontColorDefault;
       @include regular-text-bold;
-      margin-bottom: .8rem;
+      margin-bottom: 1.5rem;
     }
     &__top {
     word-break: break-word;
@@ -689,7 +713,7 @@ export default {
       .cardText {
         line-height: 1.7rem;
         p {
-          line-height: 1.7rem;
+          line-height: 2.4rem;
         }
         *+* {
           margin-top: 1.5rem;

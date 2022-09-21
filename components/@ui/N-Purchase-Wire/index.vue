@@ -148,13 +148,14 @@ export default {
     })
 
   const submit = async () => {
-    try {
+    if (store.state.authentication.authorizated) {
+      try {
         if (!validate()) { return }
         loading.value = true
         const goodsData = {
-            card_id: props.card_id,
-            quantity: Number(formData.count.slice(0, -4)),
-            details: JSON.stringify([wireInputId.value, wireOutputId.value, Number(formData.length), formData.color])
+          card_id: props.card_id,
+          quantity: Number(formData.count.slice(0, -4)),
+          details: JSON.stringify([wireInputId.value, wireOutputId.value, Number(formData.length), formData.color])
         }
         const result = await store.dispatch('basket/addToBasket', goodsData)
         if (!result.data.error) {
@@ -172,6 +173,20 @@ export default {
       } finally {
         loading.value = false
       }
+    } else if (!store.state.menu.isShowBottomMenu) {
+      store.commit('menu/changeKeyMenu', {
+        key: 'registration',
+        effect: 'fx-slide-from-left'
+      })
+      store.commit('menu/changeStepMenu', { step: 1 })
+      store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+    } else if (store.state.menu.isShowBottomMenu) {
+      store.commit('menu/changeKeyMenu', {
+        key: 'registration',
+        effect: 'fx-slide-from-left'
+      })
+      store.commit('menu/changeStepMenu', { step: 1 })
+    }
   }
 
   const setSelectedInput = () => {
@@ -211,7 +226,6 @@ export default {
         }
       })
       useAsync(async () => {
-        if (store.state.authentication.authorizated) {
           const wireData = {
             id: wireOutputId.value,
             page: 1,
@@ -229,20 +243,6 @@ export default {
           } catch (e) {
             console.log(e)
           }
-        } else if (!store.state.menu.isShowBottomMenu) {
-          store.commit('menu/changeKeyMenu', {
-            key: 'registration',
-            effect: 'fx-slide-from-left'
-          })
-          store.commit('menu/changeStepMenu', { step: 1 })
-          store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
-        } else if (store.state.menu.isShowBottomMenu) {
-          store.commit('menu/changeKeyMenu', {
-            key: 'registration',
-            effect: 'fx-slide-from-left'
-          })
-          store.commit('menu/changeStepMenu', { step: 1 })
-        }
       })
     }
   }
@@ -408,7 +408,7 @@ export default {
       background: #C83F8E;
     }
     .buyButton {
-      // margin-top: 2rem;
+      margin-top: 2rem;
     }
     .inputError {
       margin-top: 1rem;

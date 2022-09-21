@@ -59,7 +59,7 @@ export default {
     const backgroundLoaded = inject('backgroundLoaded')
     const backgroundImage = computed(() => {
       if (!isHomePage.value) {
-        return require('@/assets/img/background/default-background.png')
+        return require('@/assets/img/background/default-background.jpeg')
       }
         return require('@/assets/img/background/index-background.jpg')
     })

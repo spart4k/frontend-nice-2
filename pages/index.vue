@@ -27,7 +27,7 @@
     </n-intro>
     <div :class="$style.loadingContainer">
       <n-observer :class="$style.observer" @intersect="lazyPagination" />
-      <N-Loading v-if="cardsLoading" :class="$style.loading" />
+      <N-Loading v-if="cardsLoading && animationLoad" :class="$style.loading" />
     </div>
   </div>
 </template>
@@ -65,6 +65,7 @@ export default defineComponent({
     const cardsLoading = ref(false)
     const cardsDispatch = ref(true)
     const fetchLoading = ref(false)
+    const animationLoad = ref(false)
     const resize = () => {
       if (window.innerWidth < 450) {
         animationlogo()
@@ -84,7 +85,8 @@ export default defineComponent({
       const params = {
         page: currentPage,
         count: 6,
-        show_in_main: 1
+        show_in_main: 1,
+        section_id: ''
       }
 
       const response = await store.dispatch('main/getData', params)
@@ -121,6 +123,9 @@ export default defineComponent({
           store.commit('content/setSingleAnimation', false)
           // store.commit('content/setAnimate', false)
         }
+        setTimeout(() => {
+          animationLoad.value = true
+        }, 1000)
       })
       // }
     })
@@ -161,13 +166,11 @@ export default defineComponent({
 
         const response = await store.dispatch('pages/getData', params)
         if (response.data.length < 6) {
-          cardsLoading.value = false
           cardsDispatch.value = false
-        } else {
-          cardsLoading.value = false
-          cards.value.data = [...startCards.value, ...response.data]
-          startCards.value = [...cards.value.data]
         }
+        cardsLoading.value = false
+        cards.value.data = [...startCards.value, ...response.data]
+        startCards.value = [...cards.value.data]
       }
     }
 
@@ -191,7 +194,8 @@ export default defineComponent({
       startCards,
       cardsLoading,
       cardsDispatch,
-      fetchLoading
+      fetchLoading,
+      animationLoad
     }
   },
   head: {}

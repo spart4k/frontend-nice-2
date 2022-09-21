@@ -1,7 +1,7 @@
 <template>
   <!--  , showAnimate && $style.animateContent-->
   <div class="">
-    <header >
+    <header>
       <div :class="[$style.header, (showAnimate && $route.name === 'index') && $style.animateContent]">
         <div
           v-show="$route.name === 'index'"
@@ -78,7 +78,6 @@ export default {
     const active = ref(false)
     const activeAuthSteps = ref(false)
     const route = useRoute()
-    console.log(route.value.name)
     const router = useRouter()
     const header = ref(null)
     const liveChat = ref(null)
