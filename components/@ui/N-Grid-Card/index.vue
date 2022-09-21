@@ -208,7 +208,7 @@ export default {
     min-width: none;
   }
   .authorCard {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
   }
   .row {
     display: flex;
