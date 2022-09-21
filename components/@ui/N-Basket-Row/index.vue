@@ -16,7 +16,6 @@
           v-model="quantity"
           :options="totalCount"
           :class="$style.wireSelect"
-          @click="pushTo"
           @input="changeCount(quantity)"
         />
       </div>
@@ -56,10 +55,6 @@ export default {
   setup (props, { emit }) {
   const { store } = useContext()
     const countProducts = ref(0)
-    const pushTo = (val) => {
-      // console.log(val)
-      // router.push({ / })
-    }
     const totalCount = computed(() => {
       const count = props.item.pivot.quantity + props.item.count
       const array = []
@@ -73,34 +68,53 @@ export default {
         const goodsData = {
           card_id: props.item.pivot.card_id,
           quantity: Math.abs(Number(value.slice(0, -4)) - Number(oldquantity.value.slice(0, -4))),
-          details: null
+          details: props.item.pivot.details
         }
         oldquantity.value = value
         const result = await store.dispatch('basket/addToBasket', goodsData)
         if (!result.error) {
-          const changeItemData = {
-            card_id: props.item.pivot.card_id,
-            quantity: goodsData.quantity,
-            price: props.item.price * goodsData.quantity
+          if (props.item.pivot.details) {
+            const changeItemData = {
+              card_id: props.item.pivot.card_id,
+              quantity: goodsData.quantity,
+              price: (props.item.pivot.price / props.item.pivot.quantity) * goodsData.quantity
+            }
+            store.commit('basket/setBasketSum', result.data[1])
+            store.commit('basket/increaseCountItem', changeItemData)
+          } else {
+            const changeItemData = {
+              card_id: props.item.pivot.card_id,
+              quantity: goodsData.quantity,
+              price: props.item.price * goodsData.quantity
+            }
+            store.commit('basket/setBasketSum', result.data[1])
+            store.commit('basket/increaseCountItem', changeItemData)
           }
-          store.commit('basket/setBasketSum', result.data[1])
-          store.commit('basket/increaseCountItem', changeItemData)
         }
       } else if (Number(value.slice(0, -4)) - Number(oldquantity.value.slice(0, -4)) < 0) {
         const goodsData = {
           card_id: props.item.pivot.card_id,
           quantity: Math.abs(Number(value.slice(0, -4)) - Number(oldquantity.value.slice(0, -4))),
-          details: null
+          details: props.item.pivot.details
         }
         oldquantity.value = value
         const result = await store.dispatch('basket/deleteFromBasket', goodsData)
         if (!result.error) {
-          const changeItemData = {
-            card_id: props.item.pivot.card_id,
-            quantity: goodsData.quantity,
-            price: props.item.price * goodsData.quantity
+          if (props.item.pivot.details) {
+            const changeItemData = {
+              card_id: props.item.pivot.card_id,
+              quantity: goodsData.quantity,
+              price: (props.item.pivot.price / props.item.pivot.quantity) * goodsData.quantity
+            }
+            store.commit('basket/degreaseCountItem', changeItemData)
+          } else {
+            const changeItemData = {
+              card_id: props.item.pivot.card_id,
+              quantity: goodsData.quantity,
+              price: props.item.price * goodsData.quantity
+            }
+            store.commit('basket/degreaseCountItem', changeItemData)
           }
-          store.commit('basket/degreaseCountItem', changeItemData)
         }
       }
     }
@@ -119,8 +133,7 @@ export default {
       quantity,
       totalCount,
       oldquantity,
-      changeCount,
-      pushTo
+      changeCount
     }
   }
 }

@@ -45,7 +45,8 @@ export default {
       useAsync(async () => {
         const cardData = {
           card_id: item.pivot.card_id,
-          quantity: item.pivot.quantity
+          quantity: item.pivot.quantity,
+          details: item.pivot.details
         }
         try {
           const responseDelete = await store.dispatch('basket/deleteFromBasket', cardData)
