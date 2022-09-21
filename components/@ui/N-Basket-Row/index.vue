@@ -4,7 +4,7 @@
     :to="`/cards/${item.id}?section=${item.section.slug}`"
   > -->
   <li :class="$style.product">
-    <div :class="$style.product__img" @click="$router.push(`/cards/${item.id}?section=${item.section.slug}`)">
+    <div v-if="item.files[0]" :class="$style.product__img" @click="$router.push(`/cards/${item.id}?section=${item.section.slug}`)">
       <N-Lazy-Img :src="`${$axios.defaults.baseURL}/${item.files[0].src}`" alt="изоображение товара" />
     </div>
     <div :class="$style.product__description">
