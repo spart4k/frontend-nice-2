@@ -1,7 +1,7 @@
 .item {
   @include regular-text-bold;
   box-sizing: border-box;
-  width: 11.7rem;
+  width: calc((144rem - 8rem - (0.5rem * 9))/10);
   line-height: 4rem;
   color: $white;
   background: #D46D33;

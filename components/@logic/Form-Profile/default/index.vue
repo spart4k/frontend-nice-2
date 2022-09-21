@@ -81,7 +81,7 @@
   </form>
 </template>
 <script>
-import { ref, useContext, onMounted, useAsync } from '@nuxtjs/composition-api'
+import { ref, useContext, onMounted, useAsync, computed } from '@nuxtjs/composition-api'
 import vSelect from 'vue-select'
 import useForm from '~/compositions/useForm'
 import { phone, required, onlyNumeric, email } from '~/utills/validations'
@@ -95,7 +95,11 @@ export default {
   setup (props, ctx) {
     const { store } = useContext()
     const { emit } = ctx
-    const addressItem = ref(store.state.authentication.adress[0])
+    const addressItem = computed(() => {
+      if (store.state.authentication.adress[0]) {
+        return store.state.authentication.adress[0]
+      }
+    })
     const loading = ref(false)
     const { formData, validate, $errors, $v, $touched } = useForm(
     {
