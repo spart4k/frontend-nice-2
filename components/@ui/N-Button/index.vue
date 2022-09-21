@@ -1,5 +1,5 @@
 <template>
-  <button :class="[$style[typeButton], $style.btn]" :style="{ color: color, backgroundColor: backgroundColor }" v-on="$listeners">
+  <button :class="[$style[typeButton], $style.btn, $props.disable && $style.disable]" :style="{ color: color, backgroundColor: backgroundColor }" v-on="$listeners">
     <slot />
   </button>
 </template>
@@ -20,6 +20,10 @@ export default {
     backgroundColor: {
       type: String,
       default: ''
+    },
+    disable: {
+      type: Boolean,
+      default: false
     }
   }
 }
@@ -51,7 +55,6 @@ export default {
     color: $blueBlack2;
   }
   .disable {
-    opacity: 0.5;
     pointer-events: none;
   }
   .pink {

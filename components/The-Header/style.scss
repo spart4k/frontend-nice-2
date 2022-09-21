@@ -7,9 +7,6 @@
   align-items: center;
   z-index: var(--header-z-index);
   max-width: 144rem;
-  //&.animateContent {
-  //  opacity: 0;
-  //}
 }
 
 .showAnimate {
@@ -171,6 +168,7 @@
 .hideElement {
   opacity: 0;
 }
+
 .basketCount {
   position: absolute;
   width: 1.9rem;
@@ -234,4 +232,12 @@
     left: unset !important;
     transform: translate(0, 0) !important;
   }
+}
+
+.plug {
+  width: 100%;
+  height: calc(100% + 5px);
+  position: absolute;
+  cursor: initial;
+  z-index: 100;
 }
