@@ -81,6 +81,7 @@ export default {
     const router = useRouter()
     const header = ref(null)
     const liveChat = ref(null)
+    const pageLoad = ref(false)
     const isHomePage = computed(() => route.value.name === 'index')
     const basketData = computed(() => store.state.basket.basket.length)
     const isAuth = computed(() => store.state.authentication.authorizated)
@@ -107,7 +108,7 @@ export default {
     }
 
     const openMenu = () => {
-      if (store.state.menu.isShowBottomMenu && !store.state.menu.isShowBottomLive) {
+      if (store.state.menu.isShowBottomMenu && !store.state.menu.isShowBottomLive && pageLoad.value) {
         setTimeout(() => {
           store.commit('menu/changeShowStateBottomSheetLive', { value: true })
         }, 100)
@@ -123,7 +124,7 @@ export default {
     }
 
     const openLive = () => {
-      if (store.state.menu.isShowBottomMenu && store.state.menu.isShowBottomLive) {
+      if (store.state.menu.isShowBottomMenu && store.state.menu.isShowBottomLive && pageLoad.value) {
         emit('closeState')
         setTimeout(() => {
           store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
@@ -163,6 +164,9 @@ export default {
     onMounted(() => {
       windowWidthCount()
       window.addEventListener('resize', windowWidthCount)
+      window.addEventListener('load', () => {
+        pageLoad.value = true
+      })
     })
 
     watch(() => stateShowLogin.value, (newValue) => {
@@ -191,8 +195,8 @@ export default {
       windowWidth,
       menu,
       liveChat,
-      windowWidthCount
-
+      windowWidthCount,
+      pageLoad
     }
   }
 }

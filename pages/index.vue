@@ -81,9 +81,9 @@ export default defineComponent({
     })
     const pageInfo = ref({})
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
-    const fetchData = async (currentPage) => {
+    const fetchData = async () => {
       const params = {
-        page: currentPage,
+        page: 1,
         count: 6,
         show_in_main: 1,
         section_id: ''
