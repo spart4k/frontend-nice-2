@@ -31,6 +31,7 @@
             <span />
             <span />
             <span />
+            <div class="animationPlug" :class="$style.plug" />
           </div>
           <div v-if="basketData" :class="$style.basketCount">
             {{ basketData }}
@@ -48,6 +49,7 @@
             <img src="~/assets/img/domofon.png" alt="" :class="$style.link__icon">
             <!-- <n-icon name="domofon" :class="$style.link__icon" /> -->
           </div>
+          <!-- <div class="animationPlug" :class="$style.plug" /> -->
         </div>
       </div>
       <FormAuthSteps v-model="activeAuthSteps" />
@@ -83,6 +85,7 @@ export default {
     const pageLoad = ref(false)
     const isHomePage = computed(() => route.value.name === 'index')
     const basketData = computed(() => store.state.basket.basket.length)
+    const pageLoading = computed(() => store.state.content.animationEnd)
     const isAuth = computed(() => store.state.authentication.authorizated)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
     const windowWidth = ref(0)
@@ -108,7 +111,7 @@ export default {
     // const headerAnimation = document.querySelector('.headerAnimation')
 
     const openMenu = () => {
-      if (document.querySelector('.headerAnimation').classList.contains('pageLoaded')) {
+      if (document.querySelector('.headerAnimation').classList.contains('pageLoaded') || pageLoading.value) {
         if (store.state.menu.isShowBottomMenu && !store.state.menu.isShowBottomLive && pageLoad.value) {
           setTimeout(() => {
             store.commit('menu/changeShowStateBottomSheetLive', { value: true })
@@ -126,7 +129,7 @@ export default {
     }
 
     const openLive = () => {
-      if (document.querySelector('.headerAnimation').classList.contains('pageLoaded')) {
+      if (document.querySelector('.headerAnimation').classList.contains('pageLoaded') || pageLoading.value) {
         if (store.state.menu.isShowBottomMenu && store.state.menu.isShowBottomLive && pageLoad.value) {
           emit('closeState')
           setTimeout(() => {
@@ -199,7 +202,8 @@ export default {
       menu,
       liveChat,
       windowWidthCount,
-      pageLoad
+      pageLoad,
+      pageLoading
     }
   }
 }

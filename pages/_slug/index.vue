@@ -1,21 +1,21 @@
 <template>
   <div>
     <n-intro-slug>
-    <N-Preloader v-if="$fetchState.pending" />
-    <template v-else>
-      <NGridCard
-        ref="content"
-        class="content"
-        :class="[$style.content, showAnimate && $style.animateContent]"
-        :items="cards"
-        :description="introTitle"
-        :intro-data="introData && introData"
-        :author="author"
-        @clickTag="clickTag"
-        @sendSection="sendSection"
-        @sendNovelty="sendNovelty"
-      />
-    </template>
+      <N-Preloader v-if="$fetchState.pending" />
+      <template v-else>
+        <NGridCard
+          ref="content"
+          class="content"
+          :class="[$style.content, showAnimate && $style.animateContent]"
+          :items="cards"
+          :description="introTitle"
+          :intro-data="introData && introData"
+          :author="author"
+          @clickTag="clickTag"
+          @sendSection="sendSection"
+          @sendNovelty="sendNovelty"
+        />
+      </template>
     </n-intro-slug>
     <div :ref="loadingContainer" :class="$style.loadingContainer">
       <n-observer :class="$style.observer" @intersect="lazyPagination" />
@@ -132,6 +132,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      store.commit('content/changeAnimationEnd', true)
       store.commit('content/setAnimate', false)
       store.commit('content/setSingleAnimation', false)
       nextTick(() => {
