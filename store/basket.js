@@ -64,6 +64,7 @@ export const actions = {
       }
       return data
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       console.log(e)
     }
   },
@@ -80,6 +81,7 @@ export const actions = {
         return response
       }
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       console.log(e)
     }
   },
@@ -90,6 +92,7 @@ export const actions = {
       commit('setBasket', data)
       return data
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       console.log(e)
     }
   },
@@ -100,6 +103,7 @@ export const actions = {
       // commit('setBasketSum', response.data.data[1])
       return response.data
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       console.log(e)
     }
   },
@@ -111,6 +115,7 @@ export const actions = {
       }
       return data.data
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       console.log(e)
     }
   }

@@ -12,6 +12,7 @@ export const actions = {
       const data = await this.$axios.post('api/v1/ordersSearch')
       return data.data
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       return e.response.data.message
     }
   }

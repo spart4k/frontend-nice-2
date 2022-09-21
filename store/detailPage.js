@@ -8,6 +8,7 @@ export const actions = {
       const data = await this.$axios(`api/v1/card/${id}`)
       return data
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       console.log(e)
     }
   },
@@ -16,6 +17,7 @@ export const actions = {
       const data = await this.$axios.post('api/v1/commentSearch', params)
       return data.data
     } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
       console.log(e)
     }
   }
