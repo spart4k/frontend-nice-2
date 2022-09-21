@@ -2,7 +2,7 @@
   <!--  , showAnimate && $style.animateContent-->
   <div class="">
     <header>
-      <div :class="[$style.header, (showAnimate && $route.name === 'index') && $style.animateContent]">
+      <div class="headerAnimation" :class="[$style.header, (showAnimate && $route.name === 'index') && $style.animateContent]">
         <div
           v-show="$route.name === 'index'"
           class="logo"
@@ -79,7 +79,6 @@ export default {
     const activeAuthSteps = ref(false)
     const route = useRoute()
     const router = useRouter()
-    const header = ref(null)
     const liveChat = ref(null)
     const pageLoad = ref(false)
     const isHomePage = computed(() => route.value.name === 'index')
@@ -106,41 +105,46 @@ export default {
     const openMenuBasket = () => {
       store.commit('menu/changeShowStateBottomSheetStepper', true)
     }
+    // const headerAnimation = document.querySelector('.headerAnimation')
 
     const openMenu = () => {
-      if (store.state.menu.isShowBottomMenu && !store.state.menu.isShowBottomLive && pageLoad.value) {
-        setTimeout(() => {
+      if (document.querySelector('.headerAnimation').classList.contains('pageLoaded')) {
+        if (store.state.menu.isShowBottomMenu && !store.state.menu.isShowBottomLive && pageLoad.value) {
+          setTimeout(() => {
+            store.commit('menu/changeShowStateBottomSheetLive', { value: true })
+          }, 100)
+          emit('closeState')
+          setTimeout(() => {
+            store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+          }, 100)
           store.commit('menu/changeShowStateBottomSheetLive', { value: true })
-        }, 100)
-        emit('closeState')
-        setTimeout(() => {
+        } else if (!store.state.menu.isShowBottomMenu) {
           store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
-        }, 100)
-        store.commit('menu/changeShowStateBottomSheetLive', { value: true })
-      } else if (!store.state.menu.isShowBottomMenu) {
-        store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
-        store.commit('menu/changeShowStateBottomSheetLive', { value: true })
+          store.commit('menu/changeShowStateBottomSheetLive', { value: true })
+        }
       }
     }
 
     const openLive = () => {
-      if (store.state.menu.isShowBottomMenu && store.state.menu.isShowBottomLive && pageLoad.value) {
-        emit('closeState')
-        setTimeout(() => {
+      if (document.querySelector('.headerAnimation').classList.contains('pageLoaded')) {
+        if (store.state.menu.isShowBottomMenu && store.state.menu.isShowBottomLive && pageLoad.value) {
+          emit('closeState')
+          setTimeout(() => {
+            store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
+            store.commit('menu/changeKeyMenu', {
+              key: 'live-default',
+              effect: 'fx-slide-from-right'
+            })
+          }, 100)
+          store.commit('menu/changeShowStateBottomSheetLive', { value: false })
+        } else if (!store.state.menu.isShowBottomMenu) {
           store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
           store.commit('menu/changeKeyMenu', {
             key: 'live-default',
             effect: 'fx-slide-from-right'
           })
-        }, 100)
-        store.commit('menu/changeShowStateBottomSheetLive', { value: false })
-      } else if (!store.state.menu.isShowBottomMenu) {
-        store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
-        store.commit('menu/changeKeyMenu', {
-          key: 'live-default',
-          effect: 'fx-slide-from-right'
-        })
-        store.commit('menu/changeShowStateBottomSheetLive', { value: false })
+          store.commit('menu/changeShowStateBottomSheetLive', { value: false })
+        }
       }
     }
 
@@ -187,7 +191,6 @@ export default {
       showLogo,
       isHomePage,
       active,
-      header,
       basketCount,
       activeAuthSteps,
       isAuth,

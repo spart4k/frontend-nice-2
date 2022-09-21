@@ -9,6 +9,7 @@ const animation = ($gsap, Elastic) => {
   const animationTimeline = (NAVBAR = '.navbar', elementAnimate, display) => {
     const onComplete = () => {
       const logo = document.querySelector('.logo')
+      const header = document.querySelector('.headerAnimation')
       const content = document.querySelector('.content')
       window.addEventListener('resize', () => {
         if (window.innerWidth > 450 && content.getBoundingClientRect().top > 0) {
@@ -19,6 +20,7 @@ const animation = ($gsap, Elastic) => {
         }
       })
       logo.classList.add('animationEnd')
+      header.classList.add('pageLoaded')
     }
     const tl = $gsap.timeline({
       delay: 1,

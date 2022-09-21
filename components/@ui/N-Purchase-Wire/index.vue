@@ -103,7 +103,7 @@ export default {
   const optionsOutput = ref([])
   const optionsDefault = ref([])
   const optionsDefaultName = ref([])
-  const startCounter = ref('')
+  const startCounter = ref('1 шт.')
   const loadingInput = ref(true)
   const loadingOutput = ref(true)
   const loading = ref(false)
