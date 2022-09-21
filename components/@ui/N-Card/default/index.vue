@@ -438,8 +438,19 @@ export default {
     })
     const dateFormat = computed(() => {
       const t = props.data.date_event.split(/[- :]/)
-      const preventedTime = (new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getTime())
-      return new Date(preventedTime).toLocaleString()
+      let min = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMinutes()
+      const hour = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getHours()
+      const day = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getDate()
+      let month = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMonth() + 1
+      const year = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getFullYear()
+      if (String(min).length === 1) {
+        min = '0' + min
+      }
+      if (String(month).length === 1) {
+        month = '0' + month
+      }
+      const totalTime = day + '.' + month + '.' + year + ' / ' + hour + ':' + min
+      return totalTime
     })
     return {
       like,
