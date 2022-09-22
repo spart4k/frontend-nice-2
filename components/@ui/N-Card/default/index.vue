@@ -25,7 +25,7 @@
               <N-Icon :class="$style.icon" name="button-play" />
             </N-Button>
           </div>
-          <!-- <n-lazy-img v-if="videoPlug" :src="data.files[0].file_type_id === 1 ? `${$axios.defaults.baseURL}/${data.files[0].src}` : require('@/assets/img/videoNoBg.png')" :alt="data.title" :class="$style.plugVideo" /> -->
+          <n-lazy-img v-if="videoPlug" :src="data.files[0].file_type_id === 1 ? `${$axios.defaults.baseURL}/${data.files[0].src}` : require('@/assets/img/videoNoBg.png')" :alt="data.title" :class="$style.plugVideo" />
           <!-- <img v-if="videoPlug" :src="data.files[0].file_type_id === 1 ? `${$axios.defaults.baseURL}/${data.files[0].src}` : require('@/assets/img/videoNoBg.png')" loading="lazy" :class="$style.plugVideo"> -->
           <video
             ref="videoRef"
@@ -100,6 +100,14 @@
           <div :class="$style.cardText">
             <div :class="$style.parserDetail" v-html="data.text" />
           </div>
+          <template>
+            <!-- <div :class="$style.cardAudio">
+              <N-Audio :files="data.files" />
+            </div> -->
+            <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
+              <N-Audio v-if="item.file_type_id === 3" :title="item.title" :src="`${$axios.defaults.baseURL}/${item.src}`" />
+            </div>
+          </template>
           <template v-if="data.price && $props.detailPage">
             <n-loading v-if="priceLoading" :class="$style.loading" purple />
             <div v-else :class="$style.price">
@@ -115,14 +123,6 @@
           <!-- <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div> -->
-          <template>
-            <!-- <div :class="$style.cardAudio">
-              <N-Audio :files="data.files" />
-            </div> -->
-            <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
-              <N-Audio v-if="item.file_type_id === 3" :title="item.title" :src="`${$axios.defaults.baseURL}/${item.src}`" />
-            </div>
-          </template>
         </div>
       </template>
       <div :class="[$style.body__bottom, detailPage && $style.detailPage]">
@@ -232,7 +232,7 @@ export default {
     const videoPlay = ref(false)
     const videoPlug = ref(true)
     const totalPrice = ref(props.data.price)
-    const wirePrice = ref(0)
+    const wirePrice = ref(1000)
     const priceLoading = ref(false)
     const itemCounter = ref(1)
     const sliderImages = computed(() => {
@@ -406,7 +406,7 @@ export default {
             }
           })
         } else {
-          wirePrice.value = 0
+          wirePrice.value = 1000
         }
       } else {
         itemCounter.value = val
@@ -746,6 +746,7 @@ export default {
         width: 2rem;
         height: 2rem;
         margin-bottom: 1.5rem;
+        margin-top: 1.5rem;
       }
     }
     .cardAudio {

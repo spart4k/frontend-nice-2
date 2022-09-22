@@ -27,10 +27,11 @@
 </template>
 
 <script>
-import { computed, useContext } from '@nuxtjs/composition-api'
+import { computed, useContext, onMounted, onUnmounted } from '@nuxtjs/composition-api'
 export default {
   name: 'StepOne',
-  setup () {
+  setup (_, ctx) {
+    const { emit } = ctx
     const { store } = useContext()
     const orderId = computed(() => { return store.state.basket.lastOrder })
     const toOrderHistory = () => {
@@ -40,9 +41,23 @@ export default {
         })
         store.commit('menu/changeStepMenu', { step: 2 })
     }
+    const subminOnEnter = (e) => {
+      if (e.key === 'Enter') {
+        emit('closeState')
+      }
+    }
+
+    onMounted(() => {
+      window.addEventListener('keydown', subminOnEnter)
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('keydown', subminOnEnter)
+    })
     return {
       orderId,
-      toOrderHistory
+      toOrderHistory,
+      subminOnEnter
     }
   }
 }
