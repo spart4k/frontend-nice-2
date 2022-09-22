@@ -1,9 +1,9 @@
 <template>
-  <form>
-    <div :class="$style.wrapper">
-      <h2 :class="$style.title">
-        Вход и регистрация
-      </h2>
+  <div :class="$style.wrapper">
+    <h2 :class="$style.title">
+      Вход и регистрация
+    </h2>
+    <form>
       <n-text-field
         v-model="formData.name"
         :error="$errors.name[0]"
@@ -40,28 +40,28 @@
         :color-border="'blueBorder'"
         type="password"
       />
-      <n-button
-        :class="$style.button"
-        :disabled="$v.$invalid && $touched "
-        background-color="#5289C5"
-        @click.prevent="submit"
-      >
-        <n-loading v-if="loading" />
-        <template v-else>
-          Регистрация
-        </template>
-      </n-button>
-      <n-button
-        type-button="wide"
-        color="#5289C5"
-        background-color="transparent"
-        :class="$style.buttonTologin"
-        @click.prevent="$emit('changeStep', '')"
-      >
-        Уже зарегистрированы?
-      </n-button>
-    </div>
-  </form>
+    </form>
+    <n-button
+      :class="$style.button"
+      :disabled="$v.$invalid && $touched "
+      background-color="#5289C5"
+      @click.prevent="submit"
+    >
+      <n-loading v-if="loading" />
+      <template v-else>
+        Регистрация
+      </template>
+    </n-button>
+    <n-button
+      type-button="wide"
+      color="#5289C5"
+      background-color="transparent"
+      :class="$style.buttonTologin"
+      @click.prevent="$emit('changeStep', '')"
+    >
+      Уже зарегистрированы?
+    </n-button>
+  </div>
 </template>
 <script lang="js">
 import { useContext, ref, onMounted, onUnmounted } from '@nuxtjs/composition-api'
@@ -124,7 +124,6 @@ export default {
 }
 </script>
 <style lang="scss" module>
-form {
   .wrapper {
     padding: 0 1.5rem;
     .title {
@@ -133,7 +132,7 @@ form {
       text-align: center;
       margin: 1.5rem 0 2rem;
     }
-    & > .input + .input {
+    .input + .input {
       margin-top: 2.5rem;
     }
     .button {
@@ -145,5 +144,4 @@ form {
       margin-top: 1rem;
     }
   }
-}
 </style>
