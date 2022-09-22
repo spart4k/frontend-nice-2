@@ -146,7 +146,6 @@ const animation = ($gsap, Elastic) => {
     ScrollTrigger.matchMedia({
       '(max-width: 450px)' () {
         setTimeout(() => {
-          console.log('mobile')
           $gsap.to('.logo', {
             scrollTrigger: {
               // trigger: TRIGGER,
@@ -159,11 +158,10 @@ const animation = ($gsap, Elastic) => {
             scale: 0.6,
             force3D: true
           })
-        }, 300)
+        }, 1300)
       },
       '(min-width: 451px)' () {
         setTimeout(() => {
-          console.log('desktope')
           $gsap.to('.logo', {
             scrollTrigger: {
               // trigger: TRIGGER,
@@ -176,7 +174,7 @@ const animation = ($gsap, Elastic) => {
             scale: 1,
             force3D: true
           })
-        }, 300)
+        }, 1300)
       }
     })
   }
