@@ -35,9 +35,7 @@
       <!-- <h3 :class="$style.authorId">
         @artemnice
       </h3> -->
-      <p :class="$style.authorQuote">
-        {{ $props.author.author_data.description }}
-      </p>
+      <p :class="$style.authorQuote" v-html="$props.author.author_data.description" />
     </div>
   </div>
 </template>

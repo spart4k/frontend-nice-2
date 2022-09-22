@@ -97,6 +97,7 @@ export default {
     const socketCloseListener = (event) => {
       socket.onmessage = async (event) => {
         const data = JSON.parse(event.data)
+        console.log(data)
           if (data.messageType === 'bank' && data.status === 'CONFIRMED' && data.status === 'CONFIRMED' && data.user_id === store.state.authentication.user.id) {
             store.commit('menu/changeKeyMenu', {
               key: 'basket',
