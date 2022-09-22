@@ -1,4 +1,4 @@
-import { ref, useContext, computed, nextTick } from '@nuxtjs/composition-api'
+import { ref, useContext, computed, nextTick, onMounted, onUnmounted } from '@nuxtjs/composition-api'
 import useForm from '~/compositions/useForm'
 import { email, required, phone, onlyNumeric } from '~/utills/validations'
 
@@ -28,7 +28,7 @@ export default {
       { text: 'Наличными', icon: 'money-stepper', value: 'money' },
       { text: 'Оплата менеджеру', icon: 'phone-stepper', value: 'phone' }
     ]
-    const submit = async (event) => {
+    const submit = async () => {
       if (activePayment.value === 'card') {
         try {
           if (!validate()) { return }
@@ -91,6 +91,19 @@ export default {
         store.commit('menu/changeStepMenu', { step: 3 })
       }
     }
+    const subminOnEnter = (e) => {
+      if (e.key === 'Enter') {
+        submit()
+      }
+    }
+
+    onMounted(() => {
+      window.addEventListener('keydown', subminOnEnter)
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('keydown', subminOnEnter)
+    })
     return {
       submit,
       paymentsMethodSelect,
@@ -105,7 +118,8 @@ export default {
       orderId,
       tinkoffPay,
       totalPrice,
-      loading
+      loading,
+      subminOnEnter
     }
   }
 }

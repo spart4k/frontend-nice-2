@@ -100,6 +100,14 @@
           <div :class="$style.cardText">
             <div :class="$style.parserDetail" v-html="data.text" />
           </div>
+          <template>
+            <!-- <div :class="$style.cardAudio">
+              <N-Audio :files="data.files" />
+            </div> -->
+            <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
+              <N-Audio v-if="item.file_type_id === 3" :title="item.title" :src="`${$axios.defaults.baseURL}/${item.src}`" />
+            </div>
+          </template>
           <template v-if="data.price && $props.detailPage">
             <n-loading v-if="priceLoading" :class="$style.loading" purple />
             <div v-else :class="$style.price">
@@ -115,14 +123,6 @@
           <!-- <div v-if="isJsonString" :class="$style.cardText">
             <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
           </div> -->
-          <template>
-            <!-- <div :class="$style.cardAudio">
-              <N-Audio :files="data.files" />
-            </div> -->
-            <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
-              <N-Audio v-if="item.file_type_id === 3" :title="item.title" :src="`${$axios.defaults.baseURL}/${item.src}`" />
-            </div>
-          </template>
         </div>
       </template>
       <div :class="[$style.body__bottom, detailPage && $style.detailPage]">

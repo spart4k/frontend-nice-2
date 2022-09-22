@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { useContext, ref } from '@nuxtjs/composition-api'
+import { useContext, ref, onMounted, onUnmounted } from '@nuxtjs/composition-api'
 import useForm from '~/compositions/useForm'
 import { email, required } from '~/utills/validations'
 
@@ -65,13 +65,28 @@ export default {
       }
     }
 
+    const subminOnEnter = (e) => {
+      if (e.key === 'Enter') {
+        submit()
+      }
+    }
+
+    onMounted(() => {
+      window.addEventListener('keydown', subminOnEnter)
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('keydown', subminOnEnter)
+    })
+
     return {
       formData,
       $errors,
       $touched,
       $v,
       submit,
-      loading
+      loading,
+      subminOnEnter
     }
   }
 }
