@@ -127,6 +127,7 @@ export default defineComponent({
           // store.commit('content/setAnimate', false)
         }
         setTimeout(() => {
+          fetchLoading.value = true
           animationLoad.value = true
         }, 1000)
       })
@@ -155,10 +156,9 @@ export default defineComponent({
       try {
         const response = await fetchData()
         // await getSeoInfo()
-        if (response.data.length < 6) {
+        if (response.data.data.data.length < 6) {
           cardsDispatch.value = false
         }
-        fetchLoading.value = true
         totalPage.value = response?.data.last_page
         cards.value = response.data.data
         startCards.value = cards.value.data
@@ -234,7 +234,8 @@ export default defineComponent({
         const params = {
           page: pageNumber.value,
           count: 6,
-          section_id: ''
+          section_id: '',
+          show_in_main: 1
         }
         pageNumber.value++
 

@@ -26,7 +26,6 @@
             </N-Button>
           </div>
           <n-lazy-img v-if="videoPlug" :src="data.files[0].file_type_id === 1 ? `${$axios.defaults.baseURL}/${data.files[0].src}` : require('@/assets/img/videoNoBg.png')" :alt="data.title" :class="$style.plugVideo" />
-          <!-- <img v-if="videoPlug" :src="data.files[0].file_type_id === 1 ? `${$axios.defaults.baseURL}/${data.files[0].src}` : require('@/assets/img/videoNoBg.png')" loading="lazy" :class="$style.plugVideo"> -->
           <video
             ref="videoRef"
             :class="detailPage && $style.detailPage"
@@ -36,11 +35,7 @@
             muted
             type="video/mp4"
             :src="videoUrl"
-          >
-            <!-- :poster="data.files[0].src ? `${$axios.defaults.baseURL}/${data.files[0].src}` : '/assets/img/videoNoBg.png'" -->
-          <!-- :poster="require('@/assets/img/videoNoBg.png')" -->
-            <!-- <source :src="videoUrl" type="video/ogg; codecs=&quot;theora, vorbis&quot;"> -->
-          </video>
+          />
         </div>
       </template>
     </div>
@@ -58,10 +53,6 @@
           <div v-if="data.date_event" :class="$style.time">
             {{ dateFormat }}
           </div>
-          <!-- <div v-if="isJsonString" :class="$style.cardText">
-            <EditorJsParser v-if="isJsonString" :value="JSON.parse(data.text)" :class="!$props.detailPage && $style.parser" />
-          </div> -->
-          <!-- {{ data.text }} -->
           <template v-if="data.price && !$props.detailPage">
             <div :class="$style.price">
               {{ data.price }} р.
