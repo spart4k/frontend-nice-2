@@ -39,7 +39,12 @@ import {
   defineComponent,
   useContext,
   useFetch,
+<<<<<<< HEAD
   useMeta, onMounted, onUnmounted, useAsync
+=======
+  useRouter,
+  useMeta, onMounted, onUnmounted
+>>>>>>> 5baaa294a242264e57e411eaae8121310bf7c4c1
 } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import { BLAND_COLOR } from '~/const/blandColor'
@@ -54,7 +59,8 @@ export default defineComponent({
   props: {
   },
   setup (_, { root }) {
-    const { store, $gsap, router } = useContext()
+    const { store, $gsap } = useContext()
+    const router = useRouter()
     const cards = ref([])
     const totalPage = ref(0)
     const content = ref(null)
@@ -129,6 +135,10 @@ export default defineComponent({
           animationLoad.value = true
         }, 1000)
       })
+      if (!store.state.content.singleAnimation) {
+        const logo = document.querySelector('.logo')
+        logo.classList.add('animationEnd')
+      }
       // }
     })
     const getSeoInfo = async () => {
@@ -239,8 +249,9 @@ export default defineComponent({
         startCards.value = [...cards.value.data]
       }
     }
-    const clickTag = (tag) => {
-      router.push({ path: 'tags', query: { tag } })
+
+    const clickTag = (value) => {
+      router.push({ path: '/tags', query: { tag: value } })
     }
 
     return {

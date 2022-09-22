@@ -132,6 +132,7 @@ a {
 .animationEnd {
   @media (min-width: $mobileWidth) {
     top: 2.9rem !important;
+    transform: translate(-50%, 0%) translate3d(-0.25px, 0px, 0px) scale(1, 1) !important;
   }
 }
 .animationPlugDisplay {

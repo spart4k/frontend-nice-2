@@ -90,10 +90,6 @@ export default {
       }
     }
 
-    const focusLogin = () => {
-      console.log('asd')
-    }
-
     const toRecovery = () => {
       if (!store.state.menu.isShowBottomMenu) {
         store.commit('menu/changeKeyMenu', {
@@ -133,7 +129,6 @@ export default {
       loading,
       submit,
       toRecovery,
-      focusLogin,
       subminOnEnter
     }
   }
