@@ -46,7 +46,7 @@ import { Elastic } from 'gsap'
 import { BLAND_COLOR } from '~/const/blandColor'
 
 import { pagination } from '~/plugins/pagination'
-import { head } from '@/components/scripts/head.js'
+// import { head } from '@/components/scripts/head.js'
 import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 export default defineComponent({
@@ -63,12 +63,12 @@ export default defineComponent({
     const background = ref(null)
     const elementAnimate = ref(null)
     const pageNumber = ref(2)
-    const tagId = ref()
     const startCards = ref([])
     const cardsLoading = ref(false)
     const cardsDispatch = ref(true)
     const fetchLoading = ref(false)
     const animationLoad = ref(false)
+    const metaInfo = ref({})
     const resize = () => {
       if (window.innerWidth < 450) {
         animationlogo()
@@ -105,6 +105,7 @@ export default defineComponent({
       animationTimeline
     } = animationGSAP($gsap, Elastic)
 
+    console.log(metaInfo.value)
     onMounted(() => {
       // if (backgroundLoaded.value) {
       // if (window.innerWidth < 450) {
@@ -138,10 +139,13 @@ export default defineComponent({
       }
       // }
     })
-
+    const getSeoInfo = async () => {
+      // const response = await store.dispatch('main/getSeo')
+    }
     useFetch(async () => {
       try {
         const response = await fetchData()
+        // await getSeoInfo()
         if (response.data.length < 6) {
           cardsDispatch.value = false
         }
@@ -149,6 +153,13 @@ export default defineComponent({
         totalPage.value = response?.data.last_page
         cards.value = response.data.data
         startCards.value = cards.value.data
+        console.log(response.data.data.seo_file_id)
+        metaInfo.value = {
+          seo_title: response.data.data?.seo_title,
+          seo_description: response.data.data?.seo_description,
+          seo_image: response.data.data?.seo_file_id.src
+        }
+        console.log(metaInfo.value)
       } catch (e) {
         console.log(e)
       }
@@ -156,10 +167,30 @@ export default defineComponent({
     onUnmounted(() => {
       window.removeEventListener('resize', resize)
     })
-
+    // const metaContent = metaInfo.value
+    // const { title, meta } = useMeta()
+    // title.value = metaContent.seo_title
+    // meta.value = [
+    //   {
+    //     hid: 'og:title',
+    //     name: 'og:title',
+    //     property: 'og:title',
+    //     content: metaContent.seo_title
+    //   }
+    // ]
     store.commit('content/clearBgIntro')
-    const metaInfo = cards.value
-    head(useMeta, metaInfo.value)
+    useMeta(() => ({
+        title: metaInfo.value.seo_title,
+        meta: [
+          {
+            hid: 'og:title',
+            name: 'og:title',
+            property: 'og:title',
+            content: metaInfo.value.seo_title
+          }
+        ]
+    }))
+    // head(useMeta, metaInfo.value)
 
     const { page } = pagination(fetchData)
 
@@ -205,10 +236,13 @@ export default defineComponent({
       cardsDispatch,
       fetchLoading,
       animationLoad,
-      tagId
+      getSeoInfo,
+      metaInfo
     }
   },
-  head: {}
+  head: {
+
+  }
 })
 </script>
 <style lang="scss" module>
