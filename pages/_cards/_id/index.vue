@@ -101,7 +101,7 @@ export default defineComponent({
             hid: 'description',
             name: 'description',
             property: 'description',
-            content: card?.value?.[0]?.section?.seo_description
+            content: card?.value?.[0]?.data?.seo_description
           }
         ]
     }))

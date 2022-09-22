@@ -211,7 +211,7 @@ export default defineComponent({
             hid: 'description',
             name: 'description',
             property: 'description',
-            content: metaTags?.value?.[0]?.section?.seo_description
+            content: metaTags.value.seo_description
           }
         ]
     }))
