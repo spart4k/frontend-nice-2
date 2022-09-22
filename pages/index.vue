@@ -39,6 +39,7 @@ import {
   defineComponent,
   useContext,
   useFetch,
+  useRouter,
   useMeta, onMounted, onUnmounted
 } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
@@ -54,13 +55,15 @@ export default defineComponent({
   props: {
   },
   setup (_, { root }) {
-    const { store, $gsap, router } = useContext()
+    const { store, $gsap } = useContext()
+    const router = useRouter()
     const cards = ref([])
     const totalPage = ref(0)
     const content = ref(null)
     const background = ref(null)
     const elementAnimate = ref(null)
     const pageNumber = ref(2)
+    const tagId = ref()
     const startCards = ref([])
     const cardsLoading = ref(false)
     const cardsDispatch = ref(true)
@@ -180,8 +183,8 @@ export default defineComponent({
       }
     }
 
-    const clickTag = (tag) => {
-      router.push({ path: 'tags', query: { tag } })
+    const clickTag = (value) => {
+      router.push({ path: '/tags', query: { tag: value } })
     }
 
     return {
@@ -201,7 +204,8 @@ export default defineComponent({
       cardsLoading,
       cardsDispatch,
       fetchLoading,
-      animationLoad
+      animationLoad,
+      tagId
     }
   },
   head: {}

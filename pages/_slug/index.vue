@@ -193,12 +193,12 @@ export default defineComponent({
       const params = {
         page: pageNumber.value,
         count: 6,
-        section_id: selectFirst.value ? selectFirst.value : '',
-        tags: tagId.value ? [tagId.value] : '',
-        author_id: authorId.value ? authorId.value : '',
+        section_id: selectFirst.value ? selectFirst.value : null,
+        tags: tagId.value ? [tagId.value] : null,
+        author_id: authorId.value ? authorId.value : null,
         order_by_colomn: 'created_at',
         order_by_mode: selectSecond.value,
-        minPrice: id.value === 8 ? priceFetch.value : ''
+        minPrice: id.value === 8 ? priceFetch.value : null
       }
       pageNumber.value++
 
@@ -212,17 +212,8 @@ export default defineComponent({
       }
     }
 
-    const clickTag = async (value) => {
-      loading.value = true
-      router.push({ path: 'tags', query: { tag: value } })
-      const params = {
-        page: 1,
-        count: 10
-        // tag_id: value
-      }
-      const response = await store.dispatch('pages/getData', params)
-      cards.value.value = [...response.data]
-      loading.value = false
+    const clickTag = (value) => {
+      router.push({ path: '/tags', query: { tag: value } })
     }
 
     useFetch(async () => {

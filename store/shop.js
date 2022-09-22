@@ -1,11 +1,7 @@
 export const state = () => ({
-  TinkoffPaymentURL: ''
 })
 
 export const mutations = {
-  setPaymentURL (state, value) {
-    state.TinkoffPaymentURL = value
-  }
 }
 
 export const actions = {

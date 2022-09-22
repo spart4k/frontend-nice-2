@@ -84,6 +84,23 @@
               </div>
             </div>
           </div>
+          <div v-if="!$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '2rem' : '' }">
+            <N-Chip
+              v-for="item in data.tags"
+              :key="item.id"
+              ref="chipsArray"
+              :class="$style.chip"
+              @click="$emit('clickTag', item.id)"
+            >
+              {{ item.name }}
+            </N-Chip>
+            <N-Chip
+              v-if="chipsCounter > 0"
+              :class="$style.chip"
+            >
+              +{{ chipsCounter }}
+            </N-Chip>
+          </div>
         </NuxtLink>
         <div v-if="$props.detailPage" ref="body" :class="[$style.body__top, detailPage && $style.detailPage]" tag="div">
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '0.5rem' }">
@@ -158,23 +175,6 @@
               {{ !$props.detailPage ? '0' : 'Комментировать' }}
             </div>
           </div>
-        </div>
-        <div v-if="!$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '2rem' : '' }">
-          <N-Chip
-            v-for="item in data.tags"
-            :key="item.id"
-            ref="chipsArray"
-            :class="$style.chip"
-            @click="$emit('clickTag', item.id)"
-          >
-            {{ item.name }}
-          </N-Chip>
-          <N-Chip
-            v-if="chipsCounter > 0"
-            :class="$style.chip"
-          >
-            +{{ chipsCounter }}
-          </N-Chip>
         </div>
         <div
           v-if="$props.detailPage"

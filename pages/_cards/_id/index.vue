@@ -1,7 +1,7 @@
 <template>
   <main :class="$style.main">
     <div :class="$style.wrapper">
-      <N-Preloader v-if="!card"/>
+      <N-Preloader v-if="!card" />
       <template v-if="card">
         <SectionCards
           :key="card.id"
