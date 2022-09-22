@@ -39,12 +39,9 @@ import {
   defineComponent,
   useContext,
   useFetch,
-<<<<<<< HEAD
-  useMeta, onMounted, onUnmounted, useAsync
-=======
+  onMounted, onUnmounted, useAsync,
   useRouter,
-  useMeta, onMounted, onUnmounted
->>>>>>> 5baaa294a242264e57e411eaae8121310bf7c4c1
+  useMeta
 } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import { BLAND_COLOR } from '~/const/blandColor'
