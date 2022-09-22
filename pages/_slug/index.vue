@@ -100,6 +100,12 @@ export default defineComponent({
             name: 'og:description',
             property: 'og:description',
             content: cards?.value?.[0]?.section?.seo_description
+          },
+          {
+            hid: 'description',
+            name: 'description',
+            property: 'description',
+            content: cards?.value?.[0]?.section?.seo_description
           }
         ]
     }))

@@ -82,7 +82,6 @@ export default defineComponent({
           console.log(e)
         }
       }, route.value.params.id)
-    console.log(card?.value?.card?.data)
     useMeta(() => ({
         title: card?.value?.card?.data?.seo_title,
         meta: [
@@ -97,6 +96,12 @@ export default defineComponent({
             name: 'og:description',
             property: 'og:description',
             content: card?.value?.card?.data?.seo_description
+          },
+          {
+            hid: 'description',
+            name: 'description',
+            property: 'description',
+            content: card?.value?.[0]?.section?.seo_description
           }
         ]
     }))

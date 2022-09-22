@@ -105,9 +105,7 @@ export default defineComponent({
       animationTimeline
     } = animationGSAP($gsap, Elastic)
 
-    console.log(metaTags.value)
     onMounted(() => {
-      console.log(metaTags.value)
       // if (backgroundLoaded.value) {
       if (window.innerWidth < 450) {
         animationlogo()
@@ -149,7 +147,6 @@ export default defineComponent({
           seo_description: response.data.data?.seo_description,
           seo_image: response.data.data?.seo_file_id?.src
         }
-        console.log(metaTags.value)
       } catch (e) {
         console.log(e)
       }
@@ -165,13 +162,11 @@ export default defineComponent({
         totalPage.value = response?.data.last_page
         cards.value = response.data.data
         startCards.value = cards.value.data
-        console.log(response.data.data.seo_file_id)
         metaTags.value = {
           seo_title: response.data.data?.seo_title,
           seo_description: response.data.data?.seo_description,
           seo_image: response.data.data?.seo_file_id?.src
         }
-        console.log(metaTags.value)
       } catch (e) {
         console.log(e)
       }
@@ -211,6 +206,12 @@ export default defineComponent({
             name: 'og:image',
             property: 'og:image',
             content: `https://test.itisthenice.com/${metaTags.value.seo_image}`
+          },
+          {
+            hid: 'description',
+            name: 'description',
+            property: 'description',
+            content: metaTags?.value?.[0]?.section?.seo_description
           }
         ]
     }))
