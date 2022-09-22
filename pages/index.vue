@@ -129,6 +129,10 @@ export default defineComponent({
           animationLoad.value = true
         }, 1000)
       })
+      if (!store.state.content.singleAnimation) {
+        const logo = document.querySelector('.logo')
+        logo.classList.add('animationEnd')
+      }
       // }
     })
 

@@ -8,7 +8,6 @@ const animation = ($gsap, Elastic) => {
   const background = ref(null)
   const animationTimeline = (NAVBAR = '.navbar', elementAnimate, display) => {
     const onComplete = () => {
-      const logo = document.querySelector('.logo')
       const animationPlug = document.querySelector('.animationPlug')
       const header = document.querySelector('.headerAnimation')
       const content = document.querySelector('.content')
@@ -149,7 +148,7 @@ const animation = ($gsap, Elastic) => {
           $gsap.to('.logo', {
             scrollTrigger: {
               // trigger: TRIGGER,
-              // start: 'top 7rem',
+              // start: 'top 12rem',
               end: '+=300',
               scrub: true,
               markers: false
@@ -159,23 +158,23 @@ const animation = ($gsap, Elastic) => {
             force3D: true
           })
         }, 1300)
-      },
-      '(min-width: 451px)' () {
-        setTimeout(() => {
-          $gsap.to('.logo', {
-            scrollTrigger: {
-              // trigger: TRIGGER,
-              // start: '+=300',
-              end: '+=300',
-              scrub: true,
-              markers: false
-            },
-            top: '1rem',
-            scale: 1,
-            force3D: true
-          })
-        }, 1300)
       }
+      // '(min-width: 451px)' () {
+      //   setTimeout(() => {
+      //     $gsap.to('.logo', {
+      //       scrollTrigger: {
+      //         // trigger: TRIGGER,
+      //         // start: '+=300',
+      //         end: '+=300',
+      //         scrub: true,
+      //         markers: false
+      //       },
+      //       top: '1rem',
+      //       scale: 1,
+      //       force3D: true
+      //     })
+      //   }, 1300)
+      // }
     })
   }
   const animateSubtitle = () => {
