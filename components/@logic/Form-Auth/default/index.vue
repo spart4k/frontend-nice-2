@@ -34,7 +34,6 @@
       <n-text-field
         v-model="formData.secondPass"
         :error="$errors.secondPass[0]"
-
         :class="$style.input"
         placeholder=""
         title="Повторите пароль"
@@ -65,7 +64,7 @@
   </form>
 </template>
 <script lang="js">
-import { useContext, ref } from '@nuxtjs/composition-api'
+import { useContext, ref, onMounted, onUnmounted } from '@nuxtjs/composition-api'
 import useForm from '~/compositions/useForm'
 import { email, required, sameAs, strongPassword, nameLength } from '~/utills/validations'
 
@@ -99,13 +98,27 @@ export default {
         loading.value = false
       }
     }
+    const subminOnEnter = (e) => {
+      if (e.key === 'Enter') {
+        submit()
+      }
+    }
+
+    onMounted(() => {
+      window.addEventListener('keydown', subminOnEnter)
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('keydown', subminOnEnter)
+    })
     return {
       formData,
       $errors,
       $touched,
       $v,
       loading,
-      submit
+      submit,
+      subminOnEnter
     }
   }
 }

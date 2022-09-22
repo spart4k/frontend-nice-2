@@ -1,9 +1,9 @@
 <template>
-  <form>
-    <div :class="$style.wrapper">
-      <h2 :class="$style.title">
-        Вход
-      </h2>
+  <div :class="$style.wrapper">
+    <h2 :class="$style.title">
+      Вход
+    </h2>
+    <form>
       <n-text-field
         v-model="formData.email"
         :class="$style.input"
@@ -22,55 +22,55 @@
         :color-border="'blueBorder'"
         type="password"
       />
-      <n-button
-        :class="$style.recovery"
-        type-button="left"
-        color="#5289C5"
-        @click.prevent="toRecovery"
-      >
-        Восстановить пароль
-      </n-button>
-      <n-button
-        :class="$style.button"
-        :disabled="$v.$invalid && $touched "
-        background-color="#5289C5"
-        @click.prevent="submit"
-      >
-        <n-loading v-if="loading" />
-        <template v-else>
-          Войти
-        </template>
-      </n-button>
-      <n-button
-        :class="$style.button"
-        color="#5289C5"
-        background-color="transparent"
-        @click.prevent="$emit('changeStep', 'increment')"
-      >
-        Еще не зарегистрированы?
-      </n-button>
-    </div>
-  </form>
+    </form>
+    <n-button
+      :class="$style.recovery"
+      type-button="left"
+      color="#5289C5"
+      @click.prevent="toRecovery"
+    >
+      Восстановить пароль
+    </n-button>
+    <n-button
+      :class="$style.button"
+      :disabled="$v.$invalid && $touched "
+      background-color="#5289C5"
+      @click.prevent="submit"
+    >
+      <n-loading v-if="loading" />
+      <template v-else>
+        Войти
+      </template>
+    </n-button>
+    <n-button
+      :class="$style.button"
+      color="#5289C5"
+      background-color="transparent"
+      @click.prevent="$emit('changeStep', 'increment')"
+    >
+      Еще не зарегистрированы?
+    </n-button>
+  </div>
 </template>
 <script lang="js">
-import { useContext, ref } from '@nuxtjs/composition-api'
+import { useContext, ref, onMounted, onUnmounted } from '@nuxtjs/composition-api'
 import useForm from '~/compositions/useForm'
 import { email, required } from '~/utills/validations'
 
 export default {
   name: 'FormAuth',
   setup (props, ctx) {
-  const { emit } = ctx
-  const { store } = useContext()
-  const loading = ref(false)
-  const { formData, validate, $errors, $v, $touched } = useForm(
+    const { emit } = ctx
+    const { store } = useContext()
+    const loading = ref(false)
+    const { formData, validate, $errors, $v, $touched } = useForm(
       {
         fields: {
           email: { default: '', validations: { email, required } },
           password: { default: '', validations: { required } }
         }
       })
-    const submit = async ({ commit }) => {
+    const submit = async () => {
       try {
         if (!validate()) { return }
         loading.value = true
@@ -90,6 +90,10 @@ export default {
       }
     }
 
+    const focusLogin = () => {
+      console.log('asd')
+    }
+
     const toRecovery = () => {
       if (!store.state.menu.isShowBottomMenu) {
         store.commit('menu/changeKeyMenu', {
@@ -107,6 +111,20 @@ export default {
       }
     }
 
+    const subminOnEnter = (e) => {
+      if (e.key === 'Enter') {
+        submit()
+      }
+    }
+
+    onMounted(() => {
+      window.addEventListener('keydown', subminOnEnter)
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('keydown', subminOnEnter)
+    })
+
     return {
       formData,
       $errors,
@@ -114,13 +132,14 @@ export default {
       $v,
       loading,
       submit,
-      toRecovery
+      toRecovery,
+      focusLogin,
+      subminOnEnter
     }
   }
 }
 </script>
 <style lang="scss" module>
-  form {
     .wrapper {
     padding: 0 1.5rem;
       .title {
@@ -129,7 +148,7 @@ export default {
         text-align: center;
         margin: 1.5rem 0 2rem;
       }
-      & > .input + .input {
+      .input + .input {
         margin-top: 2.5rem;
       }
       .button {
@@ -142,5 +161,4 @@ export default {
         font-size: 1.4rem !important;
       }
     }
-  }
 </style>

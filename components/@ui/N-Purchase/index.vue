@@ -128,7 +128,7 @@ export default {
 <style scoped lang="scss" module>
 .wire {
     padding-top: .5rem;
-    margin-bottom: 3rem;
+    // margin-bottom: 3rem;
     div+div {
       margin-top: 2.5rem;
     }

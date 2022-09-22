@@ -1,4 +1,4 @@
-import { ref, computed, useContext, nextTick } from '@nuxtjs/composition-api'
+import { ref, computed, useContext, nextTick, onMounted, onUnmounted } from '@nuxtjs/composition-api'
 import useForm from '~/compositions/useForm'
 import { email, phone, required, onlyNumeric } from '~/utills/validations'
 
@@ -46,7 +46,7 @@ export default {
     const paymentsMethodSelect = [
       { text: 'Картой', icon: 'card-stepper', value: 'card' }
     ]
-    const submit = async (event) => {
+    const submit = async () => {
       try {
         if (!validate()) { return }
         loading.value = true
@@ -73,6 +73,21 @@ export default {
         loading.value = false
       }
     }
+
+    const subminOnEnter = (e) => {
+      if (e.key === 'Enter') {
+        submit()
+      }
+    }
+
+    onMounted(() => {
+      window.addEventListener('keydown', subminOnEnter)
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('keydown', subminOnEnter)
+    })
+
     return {
       paymentsMethodSelect,
       activePayment,
@@ -90,7 +105,8 @@ export default {
       totalPrice,
       loading,
       tinkoffPrice,
-      orderId
+      orderId,
+      subminOnEnter
     }
   }
 }

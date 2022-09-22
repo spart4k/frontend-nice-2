@@ -34,11 +34,12 @@
 </template>
 
 <script>
-import { useContext, useAsync, reactive, computed } from '@nuxtjs/composition-api'
+import { useContext, useAsync, reactive, computed, onMounted, onUnmounted } from '@nuxtjs/composition-api'
 export default {
   name: 'StepOne',
-  setup () {
+  setup (_, ctx) {
     const { store } = useContext()
+    const { emit } = ctx
     const basketData = reactive(store.state.basket.basket)
     const basketPrice = computed(() => { return store.state.basket.basketSum })
     const deleteFromBasket = (item, index) => {
@@ -58,10 +59,25 @@ export default {
         }
       })
     }
+    const subminOnEnter = (e) => {
+      if (e.key === 'Enter') {
+        emit('changeStep', 'increment')
+      }
+    }
+
+    onMounted(() => {
+      window.addEventListener('keydown', subminOnEnter)
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('keydown', subminOnEnter)
+    })
+
     return {
       basketData,
       basketPrice,
-      deleteFromBasket
+      deleteFromBasket,
+      subminOnEnter
     }
   }
 }
