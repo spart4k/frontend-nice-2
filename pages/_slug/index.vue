@@ -31,6 +31,7 @@ import {
   useRouter,
   useContext,
   useFetch,
+  useMeta,
   computed, onMounted, nextTick
   // useMeta,
 } from '@nuxtjs/composition-api'
@@ -85,7 +86,23 @@ export default defineComponent({
       }
       searchCards()
     }
-
+    useMeta(() => ({
+        title: cards?.value?.[0]?.section?.seo_title,
+        meta: [
+          {
+            hid: 'og:title',
+            name: 'og:title',
+            property: 'og:title',
+            content: cards?.value?.[0]?.section?.seo_title
+          },
+          {
+            hid: 'og:description',
+            name: 'og:description',
+            property: 'og:description',
+            content: cards?.value?.[0]?.section?.seo_description
+          }
+        ]
+    }))
     const searchCards = async () => {
       pageNumber.value = 2
       cardsDispatch.value = true
