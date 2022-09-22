@@ -1,11 +1,12 @@
-export const head = (useMeta, pageInfo) => {
-    if (pageInfo) {
+export const head = (useMeta, metaInfo) => {
+    if (metaInfo) {
+      console.log(metaInfo)
       useMeta(() => ({
-        title: pageInfo.seo_title,
+        title: metaInfo.seo_title,
         meta: [{
           hid: 'description',
           name: 'description',
-          content: pageInfo.seo_description
+          content: metaInfo.seo_description
         }]
       }))
     }
