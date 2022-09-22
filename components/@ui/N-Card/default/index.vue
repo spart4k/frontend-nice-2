@@ -426,7 +426,7 @@ export default {
       nextTick(() => {
       extraTagHide()
         if (props.withVideo) {
-          videoUrl.value = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`
+          videoUrl.value = `${$axios.defaults.baseURL}/${props.data?.files[1]?.src}`
           videoRef.value.src = `${$axios.defaults.baseURL}/${props.data?.files[0]?.src}`
           videoRef.value.load()
         }
