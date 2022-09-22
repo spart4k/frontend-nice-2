@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import { ref, useAsync, useContext, defineComponent, useRouter, computed, useMeta, onMounted } from '@nuxtjs/composition-api'
-import { head } from '@/components/scripts/head.js'
+import { ref, useAsync, useContext, defineComponent, useRouter, useMeta, computed, onMounted } from '@nuxtjs/composition-api'
+// import { head } from '@/components/scripts/head.js'
 
 export default defineComponent({
   name: 'DetailCards',
@@ -52,7 +52,7 @@ export default defineComponent({
         background: bgName?.value?.slug
       }
     })
-
+    const metaTags = ref({})
     const clickTag = (value) => {
       router.push({ path: '/tags', query: { tag: value } })
     }
@@ -69,6 +69,11 @@ export default defineComponent({
       try {
         const responseCard = await store.dispatch('detailPage/getData', route.value.params.id)
         const responseComments = await store.dispatch('detailPage/getComments', params)
+        metaTags.value = {
+          seo_title: responseComments.data?.seo_title,
+          seo_description: responseComments.data?.seo_description,
+          seo_image: responseComments.data?.seo_file_id?.src
+        }
         return {
           card: responseCard.data,
           comments: responseComments.data
@@ -77,9 +82,24 @@ export default defineComponent({
           console.log(e)
         }
       }, route.value.params.id)
-
-    head(useMeta, card.value)
-
+    console.log(card?.value?.card?.data)
+    useMeta(() => ({
+        title: card?.value?.card?.data?.seo_title,
+        meta: [
+          {
+            hid: 'og:title',
+            name: 'og:title',
+            property: 'og:title',
+            content: card?.value?.card?.data?.seo_title
+          },
+          {
+            hid: 'og:description',
+            name: 'og:description',
+            property: 'og:description',
+            content: card?.value?.card?.data?.seo_description
+          }
+        ]
+    }))
     const bgName = computed(() => {
       const find = sections.value?.find(item => Number(item.id) === +card.value?.section.id)
       return find
@@ -116,7 +136,8 @@ export default defineComponent({
       description,
       isAddedBasket,
       bgName,
-      isAuth
+      isAuth,
+      metaTags
 
     }
   },

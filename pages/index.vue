@@ -39,8 +39,9 @@ import {
   defineComponent,
   useContext,
   useFetch,
+  onMounted, onUnmounted, useAsync,
   useRouter,
-  useMeta, onMounted, onUnmounted
+  useMeta
 } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import { BLAND_COLOR } from '~/const/blandColor'
@@ -68,7 +69,7 @@ export default defineComponent({
     const cardsDispatch = ref(true)
     const fetchLoading = ref(false)
     const animationLoad = ref(false)
-    const metaInfo = ref({})
+    const metaTags = ref({})
     const resize = () => {
       if (window.innerWidth < 450) {
         animationlogo()
@@ -82,7 +83,6 @@ export default defineComponent({
       subtitle: 'творческое объединение',
       background: ''
     })
-    const pageInfo = ref({})
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
     const fetchData = async () => {
       const params = {
@@ -105,19 +105,17 @@ export default defineComponent({
       animationTimeline
     } = animationGSAP($gsap, Elastic)
 
-    console.log(metaInfo.value)
+    console.log(metaTags.value)
     onMounted(() => {
+      console.log(metaTags.value)
       // if (backgroundLoaded.value) {
-      // if (window.innerWidth < 450) {
-      // }
-      animationlogo()
+      if (window.innerWidth < 450) {
+        animationlogo()
+      }
       animateSubtitle()
       animateNavbar('.navbarSlug')
       window.addEventListener('resize', resize)
       window.addEventListener('load', () => {
-        if (store.state.content.singleAnimation) {
-          localStorage.setItem('showAnimateHomePage', 'true')
-        }
         const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
         if (!isPlayAnimation) {
           store.commit('content/setAnimate', false)
@@ -128,6 +126,7 @@ export default defineComponent({
         if (store.state.content.singleAnimation) {
           localStorage.setItem('showAnimateHomePage', 'true')
           store.commit('content/setSingleAnimation', false)
+          // store.commit('content/setAnimate', false)
         }
         setTimeout(() => {
           fetchLoading.value = true
@@ -143,6 +142,19 @@ export default defineComponent({
     const getSeoInfo = async () => {
       // const response = await store.dispatch('main/getSeo')
     }
+    useAsync(async () => {
+      try {
+        const response = await fetchData()
+        metaTags.value = {
+          seo_title: response.data.data?.seo_title,
+          seo_description: response.data.data?.seo_description,
+          seo_image: response.data.data?.seo_file_id?.src
+        }
+        console.log(metaTags.value)
+      } catch (e) {
+        console.log(e)
+      }
+    })
     useFetch(async () => {
       try {
         const response = await fetchData()
@@ -153,13 +165,13 @@ export default defineComponent({
         totalPage.value = response?.data.last_page
         cards.value = response.data.data
         startCards.value = cards.value.data
-        // console.log(response.data.data.seo_file_id)
-        metaInfo.value = {
+        console.log(response.data.data.seo_file_id)
+        metaTags.value = {
           seo_title: response.data.data?.seo_title,
           seo_description: response.data.data?.seo_description,
-          seo_image: response.data.data?.seo_file_id.src
+          seo_image: response.data.data?.seo_file_id?.src
         }
-        console.log(metaInfo.value)
+        console.log(metaTags.value)
       } catch (e) {
         console.log(e)
       }
@@ -167,7 +179,7 @@ export default defineComponent({
     onUnmounted(() => {
       window.removeEventListener('resize', resize)
     })
-    // const metaContent = metaInfo.value
+    // const metaContent = metaTags.value
     // const { title, meta } = useMeta()
     // title.value = metaContent.seo_title
     // meta.value = [
@@ -180,18 +192,39 @@ export default defineComponent({
     // ]
     store.commit('content/clearBgIntro')
     useMeta(() => ({
-        title: metaInfo.value.seo_title,
+        title: metaTags.value.seo_title,
         meta: [
           {
             hid: 'og:title',
             name: 'og:title',
             property: 'og:title',
-            content: metaInfo.value.seo_title
+            content: metaTags.value.seo_title
+          },
+          {
+            hid: 'og:description',
+            name: 'og:description',
+            property: 'og:description',
+            content: metaTags.value.seo_description
+          },
+          {
+            hid: 'og:image',
+            name: 'og:image',
+            property: 'og:image',
+            content: `https://test.itisthenice.com/${metaTags.value.seo_image}`
           }
         ]
     }))
-    // head(useMeta, metaInfo.value)
-
+    // useMeta({
+    //     title: 'Мой заголовок',
+    //     meta: [
+    //       {
+    //           hid: 'description',
+    //           name: 'description',
+    //           content: 'Моё описание...'
+    //       }
+    //     ]
+    // })
+    // head(useMeta, metaTags.value)
     const { page } = pagination(fetchData)
 
     const lazyPagination = async () => {
@@ -228,7 +261,6 @@ export default defineComponent({
       background,
       cards,
       page,
-      pageInfo,
       content,
       showAnimate,
       pageNumber,
@@ -238,7 +270,7 @@ export default defineComponent({
       fetchLoading,
       animationLoad,
       getSeoInfo,
-      metaInfo
+      metaTags
     }
   },
   head: {
