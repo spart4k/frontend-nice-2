@@ -90,6 +90,7 @@ export const actions = {
     try {
       const res = await this.$axios.post('api/v1/login', params)
       if (res.status === 200) {
+        this.$toast.success('Вы успешно авторизовались', { position: 'bottom-right', icon: true })
         commit('setUserInfo', res.data.data)
         localStorage.setItem('token', res.data.data.access_token)
         setTimeout(() => {

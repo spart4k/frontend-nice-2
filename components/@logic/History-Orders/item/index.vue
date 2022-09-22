@@ -30,11 +30,13 @@ export default {
   setup (props) {
     const id = ref(props.order.id)
     const description = computed(() => {
-      const string = ref('')
-      props.order.basket.cards.forEach((item) => {
-        string.value += item.title + ', ' + item.pivot.quantity + 'шт. '
-      })
-      return string.value
+      if (props.order?.basket?.cards) {
+        const string = ref('')
+        props.order.basket.cards.forEach((item) => {
+          string.value += item.title + ', ' + item.pivot.quantity + 'шт. '
+        })
+        return string.value
+      }
     })
     const color = computed(() => {
       if (props.order.status.id === 1) { return '#222222' }
