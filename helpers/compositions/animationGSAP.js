@@ -8,7 +8,6 @@ const animation = ($gsap, Elastic) => {
   const background = ref(null)
   const animationTimeline = (NAVBAR = '.navbar', elementAnimate, display) => {
     const onComplete = () => {
-      const animationPlug = document.querySelector('.animationPlug')
       const header = document.querySelector('.headerAnimation')
       const content = document.querySelector('.content')
       window.addEventListener('resize', () => {
@@ -28,6 +27,7 @@ const animation = ($gsap, Elastic) => {
       onComplete
     })
     const SUBTITLE = '.subtitleLogo'
+    const animationPlug = document.querySelector('.animationPlug')
     const backgroundElement = document.querySelector('.background')
     const logo = document.querySelector('.logo')
     const content = document.querySelector('.content')
