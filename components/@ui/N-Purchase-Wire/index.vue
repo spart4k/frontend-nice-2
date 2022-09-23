@@ -17,7 +17,7 @@
       </p>
     </div>
     <div :class="$style.wireOutcoming">
-      <p :class="$style.wireText">
+      <p :class="[$style.wireText, firstSelected && $style.selectDisable]">
         Исходящее соединение:
       </p>
       <!-- <v-select
@@ -27,7 +27,7 @@
         :loading="loadingOutput"
         @input="setSelectedOutput"
       /> -->
-      <N-Select v-model="formData.output" :class="$style.select" :select-items="optionsOutput" wire @setProperty="($event) => setSelectedOutput($event)" />
+      <N-Select v-model="formData.output" :class="[$style.select, firstSelected && $style.selectDisable]" :select-items="optionsOutput" wire @setProperty="($event) => setSelectedOutput($event)" />
       <p v-if="$errors.output[0]" :class="$style.inputError">
         {{ $errors.output[0] }}
       </p>
@@ -123,6 +123,7 @@ export default {
   const totalPrice = ref(props.price)
   const inputVal = ref('')
   const outputVal = ref('')
+  const firstSelected = ref(true)
   const changeTotalPrice = (val) => {
     if (val.length && val.count) {
       useAsync(async () => {
@@ -225,6 +226,7 @@ export default {
   }
 
   const setSelectedInput = (val) => {
+    firstSelected.value = false
     wireInputId.value = val[1] + 1
       if (formData.input !== null) {
         // optionsDefault.value.forEach((item) => {
@@ -348,7 +350,8 @@ export default {
       priceLoading,
       wireText,
       inputVal,
-      outputVal
+      outputVal,
+      firstSelected
     }
   }
 }
@@ -484,5 +487,9 @@ export default {
     height: 2rem;
     margin-bottom: 1.5rem;
     margin-top: 1.5rem;
+  }
+  .selectDisable{
+    opacity: 0.3 !important;
+    pointer-events: none;
   }
 </style>

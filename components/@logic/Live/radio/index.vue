@@ -1,11 +1,12 @@
 <template>
   <div :class="$style.radio">
     <div :class="$style.wrap">
-      <img :class="$style.wrapper" :src="(`${$axios.defaults.baseURL}/${$props.song.wrap}`)" alt="">
+      <N-LazyLogo :class="$style.wrapper" :src="(`${$axios.defaults.baseURL}/${$props.song.wrap}`)" alt="" />
+      <!-- <img :class="$style.wrapper" :src="(`${$axios.defaults.baseURL}/${$props.song.wrap}`)" alt=""> -->
       <div ref="marquee" class="marquee" :class="[ $style.marquee, $style.name ]">
         <div class="inner" :class="[$style.inner, isMarquee ? $style.active : $style.noActive ]">
           <p ref="marqueeContent" :class="$style.marqueeContent" class="marqueeContent">
-            {{$props.song.title}}
+            {{ $props.song.title }}
           </p>
         </div>
       </div>
