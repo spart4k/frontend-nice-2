@@ -157,7 +157,7 @@ const animation = ($gsap, Elastic) => {
             scale: 0.6,
             force3D: true
           })
-        }, 1300)
+        }, 300)
       }
       // '(min-width: 451px)' () {
       //   setTimeout(() => {
