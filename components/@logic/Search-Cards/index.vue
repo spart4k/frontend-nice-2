@@ -19,11 +19,24 @@
         <n-loading purple :class="$style.loading" />
       </div>
       <div
-        v-else-if="result.length && text.length"
+        v-else-if="resultCards.length && resultAuthors.length && text.length"
         :class="$style.searchContainer"
       >
         <NuxtLink
-          v-for="(item, index) in result"
+          v-for="(item, index) in resultAuthors"
+          :key="index"
+          tag="div"
+          :to="`/authors?author=${item.id}`"
+          :class="$style.searchItem"
+        >
+          <div @click="closeBottom">
+            <N-Search-Result
+              :item="item"
+            />
+          </div>
+        </NuxtLink>
+        <NuxtLink
+          v-for="(item, index) in resultCards"
           :key="index"
           tag="div"
           :to="`/cards/${item.id}?section=${item.section.slug}`"
@@ -31,8 +44,7 @@
         >
           <div @click="closeBottom">
             <N-Search-Result
-              :title="item.title"
-              :text="item.text"
+              :item="item"
             />
           </div>
         </NuxtLink>
@@ -57,7 +69,8 @@ export default {
     const { store } = useContext()
     const text = ref()
     const { emit } = ctx
-    const result = ref([])
+    const resultCards = ref([])
+    const resultAuthors = ref([])
     const loading = ref(false)
     const wait = ref(false)
     const closeBottom = () => {
@@ -67,14 +80,22 @@ export default {
     }
     const sendCount = async (val) => {
       text.value = val
-      const searchData = { searchField: val }
+      const searchData = {
+        page: 1,
+        count: 99,
+        entity: 'common',
+        searchField: val
+      }
       if (val.length) {
         loading.value = true
         const searchResult = await store.dispatch('search/searchCards', searchData)
-        result.value = searchResult.data.data
+        console.log(searchResult.data)
+        resultCards.value = searchResult.data.cards
+        resultAuthors.value = searchResult.data.authors
         loading.value = false
       } else {
-        result.value = {}
+        resultCards.value = {}
+        resultAuthors.value = {}
       }
     }
     return {
@@ -82,7 +103,8 @@ export default {
       sendCount,
       loading,
       wait,
-      result,
+      resultCards,
+      resultAuthors,
       closeBottom
     }
   }

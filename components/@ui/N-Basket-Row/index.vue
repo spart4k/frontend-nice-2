@@ -9,7 +9,7 @@
     </div>
     <div :class="$style.product__description">
       <h3 :class="$style.product__title">
-        {{ item.title }}
+        {{ item.title }} <span v-if="details">{{ details.начало }}, {{ details.конец }}, {{ details.длина }}см.</span>
       </h3>
       <div v-if="!readonly" :class="$style.product__select">
         <v-select
@@ -54,6 +54,7 @@ export default {
   },
   setup (props, { emit }) {
   const { store } = useContext()
+    const details = computed(() => JSON.parse(props.item.pivot.details))
     const countProducts = ref(0)
     const totalCount = computed(() => {
       const count = props.item.pivot.quantity + props.item.count
@@ -77,7 +78,8 @@ export default {
             const changeItemData = {
               card_id: props.item.pivot.card_id,
               quantity: goodsData.quantity,
-              price: (props.item.pivot.price / props.item.pivot.quantity) * goodsData.quantity
+              price: (props.item.pivot.price / props.item.pivot.quantity) * goodsData.quantity,
+              details: props.item.pivot.details
             }
             store.commit('basket/setBasketSum', result.data[1])
             store.commit('basket/increaseCountItem', changeItemData)
@@ -85,7 +87,8 @@ export default {
             const changeItemData = {
               card_id: props.item.pivot.card_id,
               quantity: goodsData.quantity,
-              price: props.item.price * goodsData.quantity
+              price: props.item.price * goodsData.quantity,
+              details: props.item.pivot.details
             }
             store.commit('basket/setBasketSum', result.data[1])
             store.commit('basket/increaseCountItem', changeItemData)
@@ -104,14 +107,16 @@ export default {
             const changeItemData = {
               card_id: props.item.pivot.card_id,
               quantity: goodsData.quantity,
-              price: (props.item.pivot.price / props.item.pivot.quantity) * goodsData.quantity
+              price: (props.item.pivot.price / props.item.pivot.quantity) * goodsData.quantity,
+              details: props.item.pivot.details
             }
             store.commit('basket/degreaseCountItem', changeItemData)
           } else {
             const changeItemData = {
               card_id: props.item.pivot.card_id,
               quantity: goodsData.quantity,
-              price: props.item.price * goodsData.quantity
+              price: props.item.price * goodsData.quantity,
+              details: props.item.pivot.details
             }
             store.commit('basket/degreaseCountItem', changeItemData)
           }
@@ -133,7 +138,8 @@ export default {
       quantity,
       totalCount,
       oldquantity,
-      changeCount
+      changeCount,
+      details
     }
   }
 }

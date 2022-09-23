@@ -7,7 +7,7 @@ export const mutations = {
 export const actions = {
     async searchCards (store, params) {
         try {
-            const res = await this.$axios.post('api/v1/cardsSearch', params)
+            const res = await this.$axios.post('api/v1/simpleSearch', params)
             return res.data
         } catch (e) {
             this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })

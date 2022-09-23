@@ -46,6 +46,7 @@ export default {
       if (props.order.status.id === 5) { return '#73CA55' }
       if (props.order.status.id === 6) { return '#73CA55' }
       if (props.order.status.id === 7) { return '#D13C33' }
+      if (props.order.status.id === 8) { return '#222222' }
     })
     return {
       id,

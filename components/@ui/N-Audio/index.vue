@@ -53,6 +53,7 @@ export default {
     }
   },
   setup (props, ctx) {
+    const { emit } = ctx
     const audioPlaying = ref(false)
     const audioSource = ref(null)
     const audioTitle = computed(() => { return props.title.slice(0, -4) })
@@ -70,6 +71,7 @@ export default {
         loading.value = true
       }
       audioPlaying.value = true
+      emit('playAudio')
       audioSource.value.play()
     }
     const pauseAudio = () => {
