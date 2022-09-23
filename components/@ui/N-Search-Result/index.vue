@@ -1,9 +1,22 @@
 <template>
   <div :class="$style.container">
-    <h2 :class="$style.title">
-      {{ $props.title }}
-    </h2>
-    <p :class="$style.text" v-html="$props.text" />
+    <template v-if="$props.item.title">
+      <h2 :class="$style.title">
+        {{ $props.item.title }}
+      </h2>
+      <p :class="$style.text" v-html="$props.item.text" />
+    </template>
+    <template v-else>
+      <div :class="$style.authorContainer">
+        <img :class="$style.authorImage" :src="`${$axios.defaults.baseURL}/${$props.item.avatar.src}`" alt="avatar">
+        <div :class="$style.authorInfo">
+          <div :class="$style.authorName">
+            {{ $props.item.name }}
+          </div>
+          <div :class="$style.authorDescription" v-html="$props.item.description" />
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -13,11 +26,8 @@
 export default {
   name: 'NSearchResult',
   props: {
-    title: {
-      type: String
-    },
-    text: {
-      type: String
+    item: {
+      type: Object
     }
   },
   setup (props) {
@@ -49,6 +59,31 @@ export default {
         max-height: 5.1rem;
         line-height: 1.7rem;
         overflow: hidden;
+    }
+    .authorContainer{
+      display: flex;
+      .authorInfo {
+        display: flex;
+        flex-direction: column;
+        .authorName {
+          @include button;
+          color: #6448B5;
+          margin-bottom: 0.5rem
+        }
+        .authorDescription {
+          @include regular-text;
+          color: $fontColorDefault;
+          line-height: 1.7rem;
+        }
+      }
+      .authorImage{
+        width: 6rem;
+        height: 6rem;
+        border-radius: 50%;
+        background-color: rgb(195, 195, 195);
+        margin-right: 2rem;
+        object-fit: cover;
+      }
     }
 }
 </style>

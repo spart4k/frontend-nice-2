@@ -2,7 +2,7 @@
   <div :class="[$style.card, detailPage && $style.detailPage]">
     <div ref="gallery" :class="[$style.gallery, detailPage && $style.detailPage]">
       <template v-if="sliderImages.length && !$props.withVideo">
-        <template v-if="$props.detailPage && sliderImages.length > 1">
+        <template v-if="$props.detailPage && sliderImages.length > 0">
           <N-Slider :slider-item="sliderImages" />
         </template>
         <template v-else>
@@ -113,19 +113,18 @@
               <N-Audio :files="data.files" />
             </div> -->
             <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
-              <N-Audio v-if="item.file_type_id === 3" :title="item.title" :src="`${$axios.defaults.baseURL}/${item.src}`" />
+              <N-Audio v-if="item.file_type_id === 3" :title="item.title" :src="`${$axios.defaults.baseURL}/${item.src}`" @playAudio="playAudio" />
             </div>
           </template>
           <template v-if="data.price && $props.detailPage">
-            <n-loading v-if="priceLoading" :class="$style.loading" purple />
-            <div v-else :class="$style.price">
-              {{ data.type.name === 'Wire' && $props.detailPage ? wirePrice : totalPrice*itemCounter }}р.
+            <div v-if="data.type.name !== 'Wire' && $props.detailPage" :class="$style.price">
+              {{ data.price }}р.
             </div>
             <template v-if="data.type.name === 'Wire'">
-              <N-Purchase-Wire :colors="JSON.parse(data.type.blueprint).color" :card_id="data.id" @changeTotalPrice="changeTotalPrice" />
+              <N-Purchase-Wire :price="totalPrice" :colors="JSON.parse(data.type.blueprint).color" :card_id="data.id" />
             </template>
             <template v-else>
-              <N-Purchase :count="data.count" :card_id="data.id" @changeTotalPrice="changeTotalPrice" />
+              <N-Purchase :count="data.count" :card_id="data.id" />
             </template>
           </template>
           <!-- <div v-if="isJsonString" :class="$style.cardText">
@@ -195,7 +194,7 @@
 </template>
 
 <script lang="js">
-import { computed, nextTick, onMounted, onUnmounted, ref, useContext, useAsync } from '@nuxtjs/composition-api'
+import { computed, nextTick, onMounted, onUnmounted, ref, useContext } from '@nuxtjs/composition-api'
 import dataProps from '../props'
 
 export default {
@@ -224,7 +223,6 @@ export default {
     const videoPlug = ref(true)
     const totalPrice = ref(props.data.price)
     const wirePrice = ref(1000)
-    const priceLoading = ref(false)
     const itemCounter = ref(1)
     const sliderImages = computed(() => {
       const array = ref([])
@@ -235,6 +233,9 @@ export default {
       })
       return array.value
     })
+    const playAudio = () => {
+      console.log('asd')
+    }
     const login = () => {
       if (!store.state.menu.isShowBottomMenu) {
         store.commit('menu/changeKeyMenu', {
@@ -383,26 +384,6 @@ export default {
     const windowWidthCount = () => {
       windowWidth.value = window.innerWidth
     }
-    const changeTotalPrice = (val) => {
-      if (props.data.type.name === 'Wire') {
-        if (val.length && val.count) {
-          useAsync(async () => {
-            try {
-                priceLoading.value = true
-                const responseCount = await store.dispatch('shop/getPrice', val)
-                wirePrice.value = responseCount.data
-                priceLoading.value = false
-            } catch (e) {
-              console.log(e)
-            }
-          })
-        } else {
-          wirePrice.value = 1000
-        }
-      } else {
-        itemCounter.value = val
-      }
-    }
     onMounted(() => {
       if (props.detailPage === true) {
         proxyComments.value.data.reverse()
@@ -474,11 +455,10 @@ export default {
       sendSticker,
       totalPrice,
       wirePrice,
-      changeTotalPrice,
-      priceLoading,
       itemCounter,
       page,
-      sliderImages
+      sliderImages,
+      playAudio
     }
   }
 }
@@ -731,13 +711,6 @@ export default {
       }
       .goodsCounter {
         margin-bottom: 3rem;
-      }
-      .loading {
-        display: block;
-        width: 2rem;
-        height: 2rem;
-        margin-bottom: 1.5rem;
-        margin-top: 1.5rem;
       }
     }
     .cardAudio {

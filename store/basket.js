@@ -22,7 +22,7 @@ export const mutations = {
   },
   addToBasket (state, value) {
     state.basket.forEach((item, index) => {
-      if (item.pivot.card_id === value.pivot.card_id) {
+      if (item.pivot.card_id === value.pivot.card_id && item.pivot.details === value.pivot.details) {
         state.basket.splice(index, 1)
       }
     })
@@ -33,7 +33,7 @@ export const mutations = {
   },
   degreaseCountItem (state, value) {
     state.basket.forEach((item, index) => {
-      if (item.pivot.card_id === value.card_id) {
+      if (item.pivot.card_id === value.card_id && item.pivot.details === value.details) {
         item.pivot.price -= value.price
         item.pivot.quantity -= value.quantity
         item.count += value.quantity
@@ -42,7 +42,7 @@ export const mutations = {
   },
   increaseCountItem (state, value) {
     state.basket.forEach((item, index) => {
-      if (item.pivot.card_id === value.card_id) {
+      if (item.pivot.card_id === value.card_id && item.pivot.details === value.details) {
         item.pivot.price += value.price
         item.pivot.quantity += value.quantity
         item.count -= value.quantity

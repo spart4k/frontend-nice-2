@@ -10,22 +10,44 @@
         $style[colorBorder]
       ]"
     >
-      <select
-        :class="[$style.select]"
-        :required="true"
-        @input="setProperty"
-      >
-        <option
-          v-for="(item, index) in selectItems"
-          :key="index"
-          :class="$style.optionItem"
-          :value="item.value"
+      <template v-if="!$props.wire">
+        <select
+          :class="[$style.select, $props.wire && $style.selectWire]"
+          :required="true"
           @input="setProperty"
         >
-          {{ item }}
-        </option>
-      </select>
-      <n-icon name="arrow-select" :class="$style.icon" />
+          <option
+            v-for="(item, index) in selectItems"
+            :key="index"
+            :class="$style.optionItem"
+            :value="item.value"
+            @input="setProperty"
+          >
+            {{ item }}
+          </option>
+        </select>
+      </template>
+      <template v-else>
+        <select
+          v-model="wireEnd"
+          :class="[$style.select, $props.wire && $style.selectWire]"
+          :required="true"
+          @input="setPropertyWire"
+        >
+          <option
+            v-for="(item, index) in selectItems"
+            :key="index"
+            :class="$style.optionItem"
+          >
+            {{ item }}
+          </option>
+          <!-- <option
+            :class="$style.optionItem"
+            @input="setProperty"
+          /> -->
+        </select>
+      </template>
+      <n-icon name="arrow-select" :class="[$style.icon, $props.wire && $style.iconWire]" />
     </div>
   </div>
 </template>
@@ -50,6 +72,10 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    wire: {
+      type: Boolean,
+      default: false
     }
   },
   setup (props, ctx) {
@@ -57,8 +83,12 @@ export default {
     const setProperty = (value) => {
       emit('setProperty', value.target.selectedIndex)
     }
+    const setPropertyWire = (value) => {
+      emit('setProperty', [props.selectItems[value.target.selectedIndex], value.target.selectedIndex])
+    }
     return {
-      setProperty
+      setProperty,
+      setPropertyWire
     }
   }
 }
@@ -124,5 +154,13 @@ export default {
   @include regular-text-bold;
   border: none;
   outline: none;
+}
+.selectWire{
+  padding-left: 0;
+  border-radius: 0;
+  background-color: white;
+}
+.iconWire {
+  right: 0;
 }
 </style>
