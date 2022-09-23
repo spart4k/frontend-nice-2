@@ -19,7 +19,7 @@
         <n-loading purple :class="$style.loading" />
       </div>
       <div
-        v-else-if="resultCards.length && resultAuthors.length && text.length"
+        v-else-if="(resultCards.length || resultAuthors.length) && text.length"
         :class="$style.searchContainer"
       >
         <NuxtLink

@@ -54,12 +54,12 @@
 
 <script>
 // import setup from '~/components/@logic/Live/chat/setup'
-// import { ref } from '@nuxtjs/composition-api'
+import { ref } from '@nuxtjs/composition-api'
 export default {
   name: 'NSelect',
   props: {
     selectItems: {
-      type: Array
+      type: [Array, String]
       // default: () => [{ text: 'empty', value: 'empty' }],
       // required: true
     },
@@ -80,6 +80,7 @@ export default {
   },
   setup (props, ctx) {
     const { emit } = ctx
+    const wireEnd = ref()
     const setProperty = (value) => {
       emit('setProperty', value.target.selectedIndex)
     }
@@ -88,7 +89,8 @@ export default {
     }
     return {
       setProperty,
-      setPropertyWire
+      setPropertyWire,
+      wireEnd
     }
   }
 }

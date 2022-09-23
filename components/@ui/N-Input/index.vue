@@ -115,9 +115,9 @@ export default {
         return false
     }
   })
-  const keyboardHeight = computed(() => {
-    return mountedHeight.value - innerHeight.value
-  })
+  // const keyboardHeight = computed(() => {
+  //   return mountedHeight.value - innerHeight.value
+  // })
   const emojiWrite = (emoji) => {
     if (letters.value.length < 99) {
       letters.value += emoji
@@ -138,7 +138,7 @@ export default {
         transformBlock.value.style.transform = 'translate(0,0)'
       }, 300)
     } else if (showingKeyboard.value && androidDevice.value) {
-      transformBlock.value.style.transform = `translate(0,-${keyboardHeight.value}px)`
+      // transformBlock.value.style.transform = `translate(0,-${keyboardHeight.value}px)`
     }
   }
 
@@ -146,7 +146,7 @@ export default {
     if (widthFrame.value < 768 && androidDevice.value) {
       if (transformBlock.value) {
         setTimeout(() => {
-          transformBlock.value.style.transform = `translate(0,-${keyboardHeight.value}px)`
+          // transformBlock.value.style.transform = `translate(0,-${keyboardHeight.value}px)`
         }, 300)
       }
     }
