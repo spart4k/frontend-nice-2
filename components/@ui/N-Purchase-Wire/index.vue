@@ -303,7 +303,7 @@ export default {
         wiresName.push(item.name)
       })
       optionsInput.value = wiresName
-      optionsOutput.value = wiresName
+      optionsOutput.value = ''
       optionsDefault.value = responseWire.data.data
       optionsDefaultName.value = wiresName
     } catch (e) {
