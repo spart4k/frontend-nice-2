@@ -38,8 +38,8 @@ import {
   computed,
   defineComponent,
   useContext,
-  useFetch,
-  onMounted, onUnmounted, useAsync,
+  useFetch, useAsync,
+  onMounted, onUnmounted,
   useRouter,
   useMeta
 } from '@nuxtjs/composition-api'
@@ -162,11 +162,6 @@ export default defineComponent({
         totalPage.value = response?.data.last_page
         cards.value = response.data.data
         startCards.value = cards.value.data
-        metaTags.value = {
-          seo_title: response.data.data?.seo_title,
-          seo_description: response.data.data?.seo_description,
-          seo_image: response.data.data?.seo_file_id?.src
-        }
       } catch (e) {
         console.log(e)
       }
