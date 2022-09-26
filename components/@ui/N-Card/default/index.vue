@@ -121,7 +121,7 @@
               {{ data.price }}р.
             </div>
             <template v-if="data.type.name === 'Wire'">
-              <N-Purchase-Wire :price="totalPrice" :colors="JSON.parse(data.type.blueprint).color" :card_id="data.id" />
+              <N-Purchase-Wire :price="totalPrice" :colors="JSON.parse(data.type.blueprint).цвет" :card_id="data.id" />
             </template>
             <template v-else>
               <N-Purchase :count="data.count" :card_id="data.id" />

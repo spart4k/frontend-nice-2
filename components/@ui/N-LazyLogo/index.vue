@@ -2,9 +2,8 @@
   <div :class="$style.container">
     <img
       v-show="ready"
-      loading="lazy"
       :src="src"
-      :class="[$style.img, detailPage && $style.detailPage]"
+      :class="$style.img"
       :alt="alt"
       @load="onImgLoad"
     >
@@ -56,10 +55,6 @@ export default {
   height: 100%;
   display: block;
   border-radius: 10px;
-  /* object-fit: contain; */
-}
-.detailPage {
-  object-fit: contain;
 }
 .loading {
   width: 4rem;
