@@ -227,7 +227,7 @@ export default {
 
   const setSelectedInput = (val) => {
     firstSelected.value = false
-    wireInputId.value = val[1] + 1
+    wireInputId.value = val[0]
       if (formData.input !== null) {
         // optionsDefault.value.forEach((item) => {
         //   if (formData.input === item.name) {
@@ -259,7 +259,7 @@ export default {
   const setSelectedOutput = (val) => {
     optionsDefaultName.value.forEach((item, index) => {
       if (val[0] === item) {
-        wireOutputId.value = index + 1
+        wireOutputId.value = val[0]
       }
     })
     // wireOutputId.value = val + 1
