@@ -107,35 +107,35 @@ export default defineComponent({
 
     onMounted(() => {
       // if (backgroundLoaded.value) {
-      if (window.innerWidth < 450) {
-        animationlogo()
-      }
-      animateSubtitle()
-      animateNavbar('.navbarSlug')
-      window.addEventListener('resize', resize)
-      window.addEventListener('load', () => {
-        const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
-        if (!isPlayAnimation) {
-          store.commit('content/setAnimate', false)
-          document.querySelector('.logo').style.visibility = 'visible'
-        } else {
-          animationTimeline('.navbarSlug', elementAnimate.value, root.$mq)
+        window.addEventListener('resize', resize)
+        window.addEventListener('load', () => {
+          if (store.state.content.singleAnimation) {
+            localStorage.setItem('showAnimateHomePage', 'true')
+            store.commit('content/setSingleAnimation', false)
+            // store.commit('content/setAnimate', false)
+          }
+          if (window.innerWidth < 450) {
+            animationlogo()
+          }
+          animateSubtitle()
+          animateNavbar('.navbarSlug')
+          const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+          if (!isPlayAnimation) {
+            store.commit('content/setAnimate', false)
+            document.querySelector('.logo').style.visibility = 'visible'
+          } else {
+            animationTimeline('.navbarSlug', elementAnimate.value, root.$mq)
+          }
+          setTimeout(() => {
+            fetchLoading.value = true
+            animationLoad.value = true
+          }, 1000)
+        })
+        if (!store.state.content.singleAnimation) {
+          const logo = document.querySelector('.logo')
+          logo.classList.add('animationEnd')
         }
-        if (store.state.content.singleAnimation) {
-          localStorage.setItem('showAnimateHomePage', 'true')
-          store.commit('content/setSingleAnimation', false)
-          // store.commit('content/setAnimate', false)
-        }
-        setTimeout(() => {
-          fetchLoading.value = true
-          animationLoad.value = true
-        }, 1000)
-      })
-      if (!store.state.content.singleAnimation) {
-        const logo = document.querySelector('.logo')
-        logo.classList.add('animationEnd')
-      }
-      // }
+        // }        
     })
     const getSeoInfo = async () => {
       // const response = await store.dispatch('main/getSeo')
