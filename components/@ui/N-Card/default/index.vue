@@ -98,8 +98,8 @@
             {{ data.title }}
           </h2>
           <template v-if="$props.detailPage">
-            <p :class="$style.authorName" @click="$emit('clickAuthor', data.author.id)">
-              автор {{ data.author.name }}
+            <p v-if="data.authors.length" :class="$style.authorName" @click="$emit('clickAuthor', data.authors[0].id)">
+              автор {{ data.authors[0].name }}
             </p>
           </template>
           <div v-if="data.date_event" :class="$style.time">
