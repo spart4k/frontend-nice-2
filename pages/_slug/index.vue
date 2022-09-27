@@ -177,7 +177,7 @@ export default defineComponent({
         count: 6,
         section_id: id.value,
         tags: tagId.value ? [tagId.value] : '',
-        author_id: authorId.value ? authorId.value : '',
+        authors: authorId.value ? [authorId.value] : '',
         order_by_colomn: 'created_at',
         order_by_mode: selectSecond.value,
         minPrice: id.value === 8 ? priceFetch.value : ''
@@ -218,7 +218,7 @@ export default defineComponent({
         count: 6,
         section_id: selectFirst.value ? selectFirst.value : null,
         tags: tagId.value ? [tagId.value] : null,
-        author_id: authorId.value ? authorId.value : null,
+        authors: authorId.value ? [authorId.value] : null,
         order_by_colomn: 'created_at',
         order_by_mode: selectSecond.value,
         minPrice: id.value === 8 ? priceFetch.value : null
