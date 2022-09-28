@@ -98,8 +98,11 @@
             {{ data.title }}
           </h2>
           <template v-if="$props.detailPage">
-            <p v-if="data.authors.length" :class="$style.authorName" @click="$emit('clickAuthor', data.authors[0].id)">
-              автор {{ data.authors[0].name }}
+            <p v-if="data.authors.length" :class="$style.authorName">
+              {{data.authors.length > 1 ? 'авторы' : 'автор'}}
+              <span v-for="(item, index) in data.authors" :key="index" @click="$emit('clickAuthor', item.id)">
+                {{item.name}}{{data.authors.length - 1 === index ? '' : ','}}
+              </span>
             </p>
           </template>
           <div v-if="data.date_event" :class="$style.time">
@@ -113,7 +116,7 @@
               <N-Audio :files="data.files" />
             </div> -->
             <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
-              <N-Audio v-if="item.file_type_id === 3" :title="item.title" :src="`${$axios.defaults.baseURL}/${item.src}`" @playAudio="playAudio" />
+              <N-Audio v-if="item.file_type_id === 3" :title="item.title" :src="`${$axios.defaults.baseURL}/${item.src}`" :stop="audioStop" @playAudio="playAudio" />
             </div>
           </template>
           <template v-if="data.price && $props.detailPage">
@@ -223,6 +226,7 @@ export default {
     const videoPlug = ref(true)
     const totalPrice = ref(props.data.price)
     const wirePrice = ref(1000)
+    const audioStop = ref(0)
     const itemCounter = ref(1)
     const sliderImages = computed(() => {
       const array = ref([])
@@ -234,7 +238,7 @@ export default {
       return array.value
     })
     const playAudio = () => {
-      console.log('asd')
+      audioStop.value++
     }
     const login = () => {
       if (!store.state.menu.isShowBottomMenu) {
@@ -452,6 +456,7 @@ export default {
       registration,
       loginMenu,
       sendComment,
+      audioStop,
       sendSticker,
       totalPrice,
       wirePrice,
