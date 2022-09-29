@@ -11,7 +11,7 @@
     </div> -->
     <div :class="$style.audioContainer">
       <audio ref="audioSource" :src="src" preload="none" @canplay="isLoaded" :class="$style.audio" @timeupdate="onTimeUpdate" />
-      <div :class="$style.time">{{currentTimeShow}} / {{durationShow}}</div>
+      <div :class="$style.time" :style="{width: timeWidth}">{{currentTimeShow}} / {{durationShow}}</div>
       <div :class="$style.progressBar">
         <div :class="$style.container" ref="container" >
           <input
@@ -96,6 +96,7 @@ export default {
     const playbackTime = ref(0)
     const finished = ref(0)
     const lock = ref(true)
+    const timeWidth = ref('8.3rem')
     const changeBackground = (val) => {
       finished.value = (val.target.value/val.target.max) * 100
       audioSource.value.currentTime = (val.target.value/val.target.max) * audioSource.value.duration.toFixed(0)
@@ -149,6 +150,7 @@ export default {
           currentTimeShow.value = new Date(audioSource.value.currentTime.toFixed(0) * 1000).toISOString().substring(14, 19)
           durationShow.value = new Date(audioSource.value.duration.toFixed(0) * 1000).toISOString().substring(14, 19)
         } else {
+          timeWidth.value = '11.3rem'
           currentTimeShow.value = new Date(audioSource.value.currentTime.toFixed(0) * 1000).toISOString().substring(11, 19)
           durationShow.value = new Date(audioSource.value.duration.toFixed(0) * 1000).toISOString().substring(11, 19)
         }
@@ -220,7 +222,8 @@ export default {
       playbackTime,
       lock,
       lockInput,
-      unlockInput
+      unlockInput,
+      timeWidth
     }
   }
 }
