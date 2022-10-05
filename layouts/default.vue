@@ -52,6 +52,7 @@
         @closeState="closeState"
         @playAudio="playAudio"
         @pauseAudio="pauseAudio"
+        @destroyTag="destroyTag"
       />
     </N-BootomSheet>
     <portal-target name="sliderPopup" />
@@ -105,6 +106,13 @@ export default {
     const pauseAudio = () => {
       audioSource.value.pause()
       audioDestroy.value = false
+    }
+
+    const destroyTag = () => {
+      pauseAudio()
+      setTimeout(() => {
+        playAudio()
+      }, 50)
     }
 
     const changeComp = (value) => {
@@ -283,6 +291,7 @@ export default {
       backgroundLoaded,
       isLoaded,
       playAudio,
+      destroyTag,
       pauseAudio,
       audioSource,
       audioDelay,
