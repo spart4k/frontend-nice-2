@@ -112,6 +112,7 @@ export default {
             loading.value = false
           } else if (data.messageType === 'nextSong') {
             song.value = data.data
+            emit('destroyTag')
           } else if (!loading.value) {
             await messages.value.push(data)
             if (messages.value.length > 99) {
