@@ -5,7 +5,7 @@
   > -->
   <li :class="$style.product">
     <div v-if="item.files[0]" :class="$style.product__img" @click="$router.push(`/cards/${item.id}?section=${item.section.slug}`)">
-      <N-Lazy-Img :src="`${$axios.defaults.baseURL}/${item.files[0].src}`" alt="изоображение товара" />
+      <N-Lazy-Img :src="item.item_type_id === 2 ? `${$axios.defaults.baseURL}/${item.pivot.pictureLink}` : `${$axios.defaults.baseURL}/${item.files[0].src}`" alt="изоображение товара" />
     </div>
     <div :class="$style.product__description">
       <h3 :class="$style.product__title">
