@@ -126,16 +126,16 @@ export default defineComponent({
           } else {
             animationTimeline('.navbarSlug', elementAnimate.value, root.$mq)
           }
-          setTimeout(() => {
-            fetchLoading.value = true
-            animationLoad.value = true
-          }, 1000)
         })
         if (!store.state.content.singleAnimation) {
           const logo = document.querySelector('.logo')
           logo.classList.add('animationEnd')
         }
-        // }        
+        setTimeout(() => {
+          fetchLoading.value = true
+          animationLoad.value = true
+        }, 1000)
+        // }
     })
     const getSeoInfo = async () => {
       // const response = await store.dispatch('main/getSeo')
@@ -155,7 +155,6 @@ export default defineComponent({
     useFetch(async () => {
       try {
         const response = await fetchData()
-        // await getSeoInfo()
         if (response.data.data.data.length < 6) {
           cardsDispatch.value = false
         }
@@ -226,21 +225,37 @@ export default defineComponent({
     const lazyPagination = async () => {
       if (cardsDispatch.value && fetchLoading.value) {
         cardsLoading.value = true
-        const params = {
-          page: pageNumber.value,
-          count: 6,
-          section_id: '',
-          show_in_main: 1
+        if (!startCards.value.length) {
+          const params = {
+            page: 1,
+            count: 12,
+            section_id: '',
+            show_in_main: 1
+          }
+          pageNumber.value++
+          const response = await store.dispatch('pages/getData', params)
+          if (response.data.length < 6) {
+            cardsDispatch.value = false
+          }
+          cardsLoading.value = false
+          cards.value.data = [...startCards.value, ...response.data]
+          startCards.value = [...cards.value.data]
+        } else {
+          const params = {
+            page: pageNumber.value,
+            count: 6,
+            section_id: '',
+            show_in_main: 1
+          }
+          pageNumber.value++
+          const response = await store.dispatch('pages/getData', params)
+          if (response.data.length < 6) {
+            cardsDispatch.value = false
+          }
+          cardsLoading.value = false
+          cards.value.data = [...startCards.value, ...response.data]
+          startCards.value = [...cards.value.data]
         }
-        pageNumber.value++
-
-        const response = await store.dispatch('pages/getData', params)
-        if (response.data.length < 6) {
-          cardsDispatch.value = false
-        }
-        cardsLoading.value = false
-        cards.value.data = [...startCards.value, ...response.data]
-        startCards.value = [...cards.value.data]
       }
     }
 
