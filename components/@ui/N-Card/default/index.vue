@@ -305,18 +305,15 @@ export default {
         text: unescape(encodeURIComponent(val)),
         sticker_id: null
       }
-      const result = await store.dispatch('socials/addComment', commentData)
-      if (!result.error) {
-        proxyComments.value.data.unshift({
-          user: {
-            nickname: result.data.user.nickname
-          },
-          text: result.data.text,
-          created_at: result.data.created_at,
-          sticker: result.data.sticker
-        })
-        commentHeightSet()
-      }
+      proxyComments.value.data.unshift({
+        user: {
+          nickname: store.state.authentication.user.nickname
+        },
+        text: val,
+        created_at: Date.now()
+      })
+      commentHeightSet()
+      await store.dispatch('socials/addComment', commentData)
     }
     const sendSticker = async (val) => {
       const stickerData = {

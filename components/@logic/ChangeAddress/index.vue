@@ -61,7 +61,7 @@ import 'vue-select/dist/vue-select.css'
 export default {
   name: 'ChangeAddress',
   components: { NButton, vSelect },
-  setup () {
+  setup (props, { emit }) {
     const { store } = useContext()
     const currentItem = computed(() => { return store.state.authentication.selectedAddressIndex })
     const addressItem = computed(() => { return store.state.authentication.adress[0] })
@@ -129,13 +129,16 @@ export default {
       }
       try {
         const addAdress = await store.dispatch('authentication/addAdress', params)
-        console.log(addAdress.error)
+        await store.commit('authentication/setSelectedAddress', addAdress.data)
+        await store.commit('authentication/setSelectedAddressIndex', addressItem.value.length - 1)
+        await emit('changeStep', '')
       } catch (e) {
         console.log(e)
       }
     }
 
     const setAddress = (value, index) => {
+      console.log(value, index)
       store.commit('authentication/setSelectedAddress', value)
       store.commit('authentication/setSelectedAddressIndex', index)
     }
