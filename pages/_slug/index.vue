@@ -67,7 +67,7 @@ export default defineComponent({
     const cardsDispatch = ref(true)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
     const selectFirst = ref(0)
-    const selectSecond = ref('asc')
+    const selectSecond = ref('desc')
     const priceFetch = ref(1)
 
     const sendSection = (value) => {

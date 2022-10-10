@@ -89,7 +89,9 @@ export default defineComponent({
         page: 1,
         count: 6,
         show_in_main: 1,
-        section_id: ''
+        section_id: '',
+        order_by_colomn: 'created_at',
+        order_by_mode: 'desc'
       }
 
       const response = await store.dispatch('main/getData', params)
@@ -230,7 +232,9 @@ export default defineComponent({
             page: 1,
             count: 12,
             section_id: '',
-            show_in_main: 1
+            show_in_main: 1,
+            order_by_colomn: 'created_at',
+            order_by_mode: 'desc'
           }
           pageNumber.value++
           const response = await store.dispatch('pages/getData', params)
@@ -245,7 +249,9 @@ export default defineComponent({
             page: pageNumber.value,
             count: 6,
             section_id: '',
-            show_in_main: 1
+            show_in_main: 1,
+            order_by_colomn: 'created_at',
+            order_by_mode: 'desc'
           }
           pageNumber.value++
           const response = await store.dispatch('pages/getData', params)

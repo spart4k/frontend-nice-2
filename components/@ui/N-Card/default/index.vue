@@ -53,14 +53,14 @@
           <div v-if="data.date_event" :class="$style.time">
             {{ dateFormat }}
           </div>
+          <div :class="$style.cardText">
+            <div :class="$style.parser" v-html="data.subtitle" />
+          </div>
           <template v-if="data.price && !$props.detailPage">
             <div :class="$style.price">
               {{ data.price }} р.
             </div>
           </template>
-          <div :class="$style.cardText">
-            <div :class="$style.parser" v-html="data.subtitle" />
-          </div>
           <div v-if="!$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
             <div :class="$style.socialsItem">
               <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
@@ -305,18 +305,15 @@ export default {
         text: unescape(encodeURIComponent(val)),
         sticker_id: null
       }
-      const result = await store.dispatch('socials/addComment', commentData)
-      if (!result.error) {
-        proxyComments.value.data.unshift({
-          user: {
-            nickname: result.data.user.nickname
-          },
-          text: result.data.text,
-          created_at: result.data.created_at,
-          sticker: result.data.sticker
-        })
-        commentHeightSet()
-      }
+      proxyComments.value.data.unshift({
+        user: {
+          nickname: store.state.authentication.user.nickname
+        },
+        text: val,
+        created_at: Date.now()
+      })
+      commentHeightSet()
+      await store.dispatch('socials/addComment', commentData)
     }
     const sendSticker = async (val) => {
       const stickerData = {
@@ -626,7 +623,7 @@ export default {
     color: $fontColorDefault;
     @include regular-text-bold;
     margin-bottom:2rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
   }
   .buyButton {
     margin-bottom: 2rem;
