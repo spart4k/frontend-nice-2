@@ -92,6 +92,7 @@ export default {
   height: 100%;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 2rem;
   .title {
     @include text-style-h1;
     margin-bottom: 4rem;
@@ -127,11 +128,12 @@ export default {
   .arrowDownContainer{
     display: flex;
     justify-content: center;
+    margin-top: 2rem;
     @media (min-width: $tabletWidth) {
       display: none;
     }
     .arrowDown {
-      transform: rotate(270deg);
+      transform: rotate(270deg) !important;
       height: 1.9rem;
       width: 1.3rem;
       margin-bottom: 2rem;
