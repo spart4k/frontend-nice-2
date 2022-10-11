@@ -199,7 +199,10 @@ export default {
 .col {
   max-width: 53.2rem;
   width: calc(50% - 1.5rem);
-  @media (min-width: $tabletWidth) {
+  @media (min-width: $desktopWidth) {
+    min-width: 60rem;
+  }
+  @media (min-width: $tabletWidth) and (max-width: $desktopWidth) {
     min-width: 40rem;
   }
   @media (max-width: $tabletWidth) {

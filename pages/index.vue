@@ -65,6 +65,7 @@ export default defineComponent({
     const elementAnimate = ref(null)
     const pageNumber = ref(2)
     const startCards = ref([])
+    const startCardsProxy = ref()
     const cardsLoading = ref(false)
     const cardsDispatch = ref(true)
     const fetchLoading = ref(false)
@@ -145,6 +146,7 @@ export default defineComponent({
     useAsync(async () => {
       try {
         const response = await fetchData()
+        startCardsProxy.value = response.data?.data
         metaTags.value = {
           seo_title: response.data.data?.seo_title,
           seo_description: response.data.data?.seo_description,
@@ -170,17 +172,7 @@ export default defineComponent({
     onUnmounted(() => {
       window.removeEventListener('resize', resize)
     })
-    // const metaContent = metaTags.value
-    // const { title, meta } = useMeta()
-    // title.value = metaContent.seo_title
-    // meta.value = [
-    //   {
-    //     hid: 'og:title',
-    //     name: 'og:title',
-    //     property: 'og:title',
-    //     content: metaContent.seo_title
-    //   }
-    // ]
+
     store.commit('content/clearBgIntro')
     useMeta(() => ({
         title: metaTags.value.seo_title,
@@ -211,17 +203,7 @@ export default defineComponent({
           }
         ]
     }))
-    // useMeta({
-    //     title: 'Мой заголовок',
-    //     meta: [
-    //       {
-    //           hid: 'description',
-    //           name: 'description',
-    //           content: 'Моё описание...'
-    //       }
-    //     ]
-    // })
-    // head(useMeta, metaTags.value)
+
     const { page } = pagination(fetchData)
 
     const lazyPagination = async () => {
@@ -241,9 +223,14 @@ export default defineComponent({
           if (response.data.length < 6) {
             cardsDispatch.value = false
           }
+          // cardsLoading.value = false
+          // cards.value.data = [...startCards.value, ...response.data]
+          // startCards.value = [...cards.value.data]
           cardsLoading.value = false
-          cards.value.data = [...startCards.value, ...response.data]
-          startCards.value = [...cards.value.data]
+          startCards.value = [...startCards.value, ...response.data]
+          startCards.value.forEach((item) => {
+            cards.value.data.push(item)
+          })
         } else {
           const params = {
             page: pageNumber.value,
@@ -259,8 +246,10 @@ export default defineComponent({
             cardsDispatch.value = false
           }
           cardsLoading.value = false
-          cards.value.data = [...startCards.value, ...response.data]
-          startCards.value = [...cards.value.data]
+          startCards.value = [...startCards.value, ...response.data]
+          startCards.value.forEach((item) => {
+            cards.value.data.push(item)
+          })
         }
       }
     }
@@ -287,7 +276,8 @@ export default defineComponent({
       fetchLoading,
       animationLoad,
       getSeoInfo,
-      metaTags
+      metaTags,
+      startCardsProxy
     }
   },
   head: {
