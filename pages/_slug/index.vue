@@ -69,6 +69,7 @@ export default defineComponent({
     const selectFirst = ref(0)
     const selectSecond = ref('desc')
     const priceFetch = ref(1)
+    const metaInfo = ref()
 
     const sendSection = (value) => {
       if (value === 0) {
@@ -87,25 +88,25 @@ export default defineComponent({
       searchCards()
     }
     useMeta(() => ({
-      title: cards?.value?.[0]?.section?.seo_title,
+      title: metaInfo.value?.seo_title,
       meta: [
         {
           hid: 'og:title',
           name: 'og:title',
           property: 'og:title',
-          content: cards?.value?.[0]?.section?.seo_title
+          content: metaInfo.value?.seo_title
         },
         {
           hid: 'og:description',
           name: 'og:description',
           property: 'og:description',
-          content: cards?.value?.[0]?.section?.seo_description
+          content: metaInfo.value?.seo_description
         },
         {
           hid: 'description',
           name: 'description',
           property: 'description',
-          content: cards?.value?.[0]?.section?.seo_description
+          content: metaInfo.value?.seo_description
         }
       ]
     }))
@@ -246,6 +247,7 @@ export default defineComponent({
           author.value = authorResponse
         }
         const response = await fetchData()
+        metaInfo.value = response
         if (response.data.length < 6) {
           cardsDispatch.value = false
         }
@@ -283,7 +285,8 @@ export default defineComponent({
       selectSecond,
       searchCards,
       sendSection,
-      sendNovelty
+      sendNovelty,
+      metaInfo
     }
   },
   head: {}
