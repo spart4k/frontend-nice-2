@@ -2,7 +2,7 @@
   <div>
     <n-intro-slug>
       <N-Preloader v-if="$fetchState.pending" />
-      <template v-else>
+      <template>
         <NGridCard
           ref="content"
           class="content"
@@ -69,7 +69,7 @@ export default defineComponent({
     const selectFirst = ref(0)
     const selectSecond = ref('desc')
     const priceFetch = ref(1)
-    const metaInfo = ref()
+    const metaTitle = computed(() => store?.state?.content?.sections?.data)
 
     const sendSection = (value) => {
       if (value === 0) {
@@ -88,25 +88,25 @@ export default defineComponent({
       searchCards()
     }
     useMeta(() => ({
-      title: metaInfo.value?.seo_title,
+      title: metaTitle.value[id.value - 1]?.seo_title,
       meta: [
         {
           hid: 'og:title',
           name: 'og:title',
           property: 'og:title',
-          content: metaInfo.value?.seo_title
+          content: metaTitle.value[id.value - 1]?.seo_title
         },
         {
           hid: 'og:description',
           name: 'og:description',
           property: 'og:description',
-          content: metaInfo.value?.seo_description
+          content: metaTitle.value[id.value - 1]?.seo_description
         },
         {
           hid: 'description',
           name: 'description',
           property: 'description',
-          content: metaInfo.value?.seo_description
+          content: metaTitle.value[id.value - 1]?.seo_description
         }
       ]
     }))
@@ -172,7 +172,7 @@ export default defineComponent({
       })
     })
 
-    const fetchData = (currentPage) => {
+    const fetchData = async (currentPage) => {
       const params = {
         page: 1,
         count: 6,
@@ -184,9 +184,28 @@ export default defineComponent({
         minPrice: id.value === 8 ? priceFetch.value : ''
       }
       const path = 'pages/getData'
-      const response = store.dispatch(path, params)
+      const response = await store.dispatch(path, params)
       return response
     }
+
+    useFetch(async () => {
+      try {
+        const response = await fetchData()
+        if (authorId.value) {
+          const authorResponse = await fetchAuthor()
+          author.value = authorResponse
+        }
+        if (response.data.length < 6) {
+          cardsDispatch.value = false
+        }
+        introData.value = response.quote
+        fetchLoading.value = true
+        cards.value = [...response.data]
+        startCards.value = [...cards.value]
+      } catch (e) {
+        console.log(e)
+      }
+    })
 
     const fetchAuthor = () => {
       if (authorId.value) {
@@ -240,26 +259,6 @@ export default defineComponent({
       router.push({ path: '/tags', query: { tag: value } })
     }
 
-    useFetch(async () => {
-      try {
-        if (authorId.value) {
-          const authorResponse = await fetchAuthor()
-          author.value = authorResponse
-        }
-        const response = await fetchData()
-        metaInfo.value = response
-        if (response.data.length < 6) {
-          cardsDispatch.value = false
-        }
-        introData.value = response.quote
-        fetchLoading.value = true
-        cards.value = [...response.data]
-        startCards.value = [...cards.value]
-      } catch (e) {
-        console.log(e)
-      }
-    })
-
     store.commit('content/changeBgIntro', route.value.params.slug)
 
     return {
@@ -286,7 +285,7 @@ export default defineComponent({
       searchCards,
       sendSection,
       sendNovelty,
-      metaInfo
+      metaTitle
     }
   },
   head: {}
