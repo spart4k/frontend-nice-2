@@ -156,6 +156,24 @@ export default defineComponent({
         console.log(e)
       }
     })
+    // const getSeoInfo = async () => {
+    //   const response = await store.dispatch('main/getSeo')
+    //   return response
+    // }
+    // useAsync(async () => {
+    //   try {
+    //     const response = await fetchData()
+    //     startCardsProxy.value = response.data?.data
+    //     const responseMeta = await getSeoInfo()
+    //     metaTags.value = {
+    //       seo_title: responseMeta.data?.data[0]?.seo_title,
+    //       seo_description: responseMeta.data?.data[0]?.seo_description,
+    //       seo_image: responseMeta.data?.data[0]?.seo_file_id?.src
+    //     }
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
+    // })
     useFetch(async () => {
       try {
         const response = await fetchData()
@@ -193,6 +211,12 @@ export default defineComponent({
             hid: 'og:image',
             name: 'og:image',
             property: 'og:image',
+            content: `https://test.itisthenice.com/${metaTags.value.seo_image}`
+          },
+          {
+            hid: 'twitter:image',
+            name: 'twitter:image',
+            property: 'twitter:image',
             content: `https://test.itisthenice.com/${metaTags.value.seo_image}`
           },
           {
