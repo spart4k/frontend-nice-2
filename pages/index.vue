@@ -214,6 +214,12 @@ export default defineComponent({
             content: `https://test.itisthenice.com/${metaTags.value.seo_image}`
           },
           {
+            hid: 'twitter:card',
+            name: 'twitter:card',
+            property: 'twitter:card',
+            content: `summary_large_image`
+          },
+          {
             hid: 'twitter:image',
             name: 'twitter:image',
             property: 'twitter:image',
