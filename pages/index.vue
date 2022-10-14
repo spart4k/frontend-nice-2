@@ -220,18 +220,6 @@ export default defineComponent({
             content: `summary_large_image`
           },
           {
-            hid: 'twitter:title',
-            name: 'twitter:title',
-            property: 'twitter:title',
-            content: metaTags.value.seo_title
-          },
-          {
-            hid: 'twitter:description',
-            name: 'twitter:description',
-            property: 'twitter:description',
-            content: metaTags.value.seo_description
-          },
-          {
             hid: 'twitter:image',
             name: 'twitter:image',
             property: 'twitter:image',
