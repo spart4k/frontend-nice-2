@@ -1,7 +1,9 @@
 <template>
   <div :class="$style.radio">
     <div :class="$style.wrap">
-      <N-LazyLogo :class="$style.wrapper" :src="(`${$axios.defaults.baseURL}/${$props.song.wrap}`)" alt="" />
+        <NuxtLink :to="`/cards/51?section=ctivo`">
+          <N-LazyLogo :class="$style.wrapper" :src="(`${$axios.defaults.baseURL}/${$props.song.wrap}`)" alt="" />
+        </NuxtLink>
       <!-- <img :class="$style.wrapper" :src="(`${$axios.defaults.baseURL}/${$props.song.wrap}`)" alt=""> -->
       <div ref="marquee" class="marquee" :class="[ $style.marquee, $style.name ]">
         <div class="inner" :class="[$style.inner, isMarquee ? $style.active : $style.noActive ]">
