@@ -69,6 +69,7 @@ export default defineComponent({
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
     const selectFirst = ref(0)
     const selectSecond = ref('desc')
+    const selectPresent = ref(null)
     const selectMode = ref('created_at')
     const priceFetch = ref(1)
     const metaTitle = computed(() => store?.state?.content?.sections?.data)
@@ -92,12 +93,16 @@ export default defineComponent({
     const sendMode = (value) => {
       if (value === 0) {
         selectMode.value = 'created_at'
+        selectPresent.value = null
       } else if (value === 1) {
         selectMode.value = 'price'
+        selectPresent.value = null
       } else if (value === 2) {
         selectMode.value = 'like_count'
+        selectPresent.value = null
       } else if (value === 3) {
-        selectMode.value = 'present'
+        selectMode.value = 'created_at'
+        selectPresent.value = true
       }
       searchCards()
     }
@@ -131,9 +136,10 @@ export default defineComponent({
         page: 1,
         count: 6,
         section_id: selectFirst.value ? selectFirst.value : '',
-        order_by_colomn: selectMode.value,
+        order_by_column: selectMode.value,
         order_by_mode: selectSecond.value,
-        minPrice: priceFetch.value
+        minPrice: priceFetch.value,
+        present: selectPresent.value
       }
       const path = 'pages/getData'
       const response = await store.dispatch(path, params)
@@ -193,7 +199,7 @@ export default defineComponent({
         section_id: id.value,
         tags: tagId.value ? [tagId.value] : '',
         authors: authorId.value ? [authorId.value] : '',
-        order_by_colomn: selectMode.value,
+        order_by_column: selectMode.value,
         order_by_mode: selectSecond.value,
         minPrice: id.value === 8 ? priceFetch.value : ''
       }
@@ -253,9 +259,10 @@ export default defineComponent({
         section_id: selectFirst.value ? selectFirst.value : null,
         tags: tagId.value ? [tagId.value] : null,
         authors: authorId.value ? [authorId.value] : null,
-        order_by_colomn: selectMode.value,
+        order_by_column: selectMode.value,
         order_by_mode: selectSecond.value,
-        minPrice: id.value === 8 ? priceFetch.value : null
+        minPrice: id.value === 8 ? priceFetch.value : null,
+        present: selectPresent.value
       }
       pageNumber.value++
 
@@ -297,6 +304,7 @@ export default defineComponent({
       selectFirst,
       selectSecond,
       selectMode,
+      selectPresent,
       searchCards,
       sendSection,
       sendNovelty,
