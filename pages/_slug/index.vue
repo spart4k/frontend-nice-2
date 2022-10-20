@@ -1,7 +1,7 @@
 <template>
   <div>
-    <n-intro-slug>
-      <N-Preloader v-if="$fetchState.pending" />
+    <N-Preloader v-if="$fetchState.pending" />
+    <n-intro-slug v-else>
       <template>
         <NGridCard
           ref="content"
@@ -14,6 +14,7 @@
           @clickTag="clickTag"
           @sendSection="sendSection"
           @sendNovelty="sendNovelty"
+          @sendMode="sendMode"
         />
       </template>
     </n-intro-slug>
@@ -68,6 +69,7 @@ export default defineComponent({
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
     const selectFirst = ref(0)
     const selectSecond = ref('desc')
+    const selectMode = ref('created_at')
     const priceFetch = ref(1)
     const metaTitle = computed(() => store?.state?.content?.sections?.data)
 
@@ -80,10 +82,22 @@ export default defineComponent({
       searchCards()
     }
     const sendNovelty = (value) => {
-      if (value === 0) {
-        selectSecond.value = 'asc'
-      } else {
+      if (value) {
         selectSecond.value = 'desc'
+      } else {
+        selectSecond.value = 'asc'
+      }
+      searchCards()
+    }
+    const sendMode = (value) => {
+      if (value === 0) {
+        selectMode.value = 'created_at'
+      } else if (value === 1) {
+        selectMode.value = 'price'
+      } else if (value === 2) {
+        selectMode.value = 'like_count'
+      } else if (value === 3) {
+        selectMode.value = 'present'
       }
       searchCards()
     }
@@ -117,7 +131,7 @@ export default defineComponent({
         page: 1,
         count: 6,
         section_id: selectFirst.value ? selectFirst.value : '',
-        order_by_colomn: 'created_at',
+        order_by_colomn: selectMode.value,
         order_by_mode: selectSecond.value,
         minPrice: priceFetch.value
       }
@@ -179,7 +193,7 @@ export default defineComponent({
         section_id: id.value,
         tags: tagId.value ? [tagId.value] : '',
         authors: authorId.value ? [authorId.value] : '',
-        order_by_colomn: 'created_at',
+        order_by_colomn: selectMode.value,
         order_by_mode: selectSecond.value,
         minPrice: id.value === 8 ? priceFetch.value : ''
       }
@@ -239,7 +253,7 @@ export default defineComponent({
         section_id: selectFirst.value ? selectFirst.value : null,
         tags: tagId.value ? [tagId.value] : null,
         authors: authorId.value ? [authorId.value] : null,
-        order_by_colomn: 'created_at',
+        order_by_colomn: selectMode.value,
         order_by_mode: selectSecond.value,
         minPrice: id.value === 8 ? priceFetch.value : null
       }
@@ -282,9 +296,11 @@ export default defineComponent({
       introData,
       selectFirst,
       selectSecond,
+      selectMode,
       searchCards,
       sendSection,
       sendNovelty,
+      sendMode,
       metaTitle
     }
   },

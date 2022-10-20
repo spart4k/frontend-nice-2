@@ -14,13 +14,10 @@
                 :description="card"
                 :image="card.image"
                 :class="$style.preview"
-                :select="{sections, novelty}"
-                @sendPropertySection="($event) => $emit('sendSection', $event)"
-                @sendPropertyNovelty="($event) => $emit('sendNovelty', $event)"
               />
               <div v-if="selectors.id === '8'" :class="$style.rowMobile">
                 <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
-                <N-Select :class="$style.select" :select-items="novelty" @setProperty="($event) => $emit('sendNovelty', $event)" />
+                <N-Select :class="$style.select" :select-items="searchMode" @setProperty="($event) => $emit('sendMode', $event)" />
               </div>
             </template>
             <n-section-intro
@@ -29,9 +26,6 @@
               :description="card"
               :image="card.image"
               :class="$style.preview"
-              :select="{sections, novelty}"
-              @sendPropertySection="($event) => $emit('sendSection', $event)"
-              @sendPropertyNovelty="($event) => $emit('sendNovelty', $event)"
             />
             <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
               <img :src="card.image" alt="DOG ">
@@ -45,7 +39,10 @@
         <div v-if="spliceArray.colRight.length || (selectors.id === '8')" :class="$style.col">
           <div v-if="selectors.id === '8'" :class="$style.row">
             <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
-            <N-Select :class="$style.select" :select-items="novelty" @setProperty="($event) => $emit('sendNovelty', $event)" />
+            <N-Select :class="$style.select" :select-items="searchMode" @setProperty="($event) => $emit('sendMode', $event)" />
+            <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
+              <n-icon v-if="noveltyCount" name="arrow-select" :class="$style.icon" />
+            </div>
           </div>
           <template v-for="(card) in spliceArray.colRight">
             <section-cards
@@ -94,6 +91,7 @@ export default {
     })
     const leftArray = ref()
     const rightArray = ref()
+    const noveltyCount = ref(false)
     const spliceArray = computed(() => {
     if (route.value.query.author) {
       proxyArray.value.unshift({
@@ -130,7 +128,7 @@ export default {
       colRight: secondHalf.value
     }
   })
-  const novelty = ref(['Новые', 'Старые'])
+  const searchMode = ref(['Новизна', 'Цена', 'Популярность', 'Наличие'])
   const sections = ref(['Все товары', 'Музыка', 'Видео', 'Искусство', 'Кухня', 'Чтиво', 'Фото', 'Одежда', 'Анонсы'])
 
   watch(() => props.items, () => {
@@ -141,10 +139,11 @@ export default {
     spliceArray,
     proxyArray,
     selectors,
-    novelty,
+    searchMode,
     sections,
     leftArray,
-    rightArray
+    rightArray,
+    noveltyCount
     }
   }
 }
@@ -196,6 +195,7 @@ export default {
     }
   }
 }
+
 .col {
   max-width: 53.2rem;
   width: calc(50% - 1.5rem);
@@ -224,6 +224,21 @@ export default {
     .select {
       width: 20.3rem;
       height: 4.4rem;
+    }
+    .selectPriority {
+      width: 4.4rem;
+      height: 4.4rem;
+      background: white;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      border-radius: 50%;
+      justify-content: center;
+      cursor: pointer;
+      .icon {
+        z-index: 5;
+        color: $pink2;
+      }
     }
   }
   .rowMobile{

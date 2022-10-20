@@ -1,6 +1,8 @@
 <template>
   <div>
+    <N-Preloader v-if="!cards.data" />
     <n-intro
+      v-else
       :description="introTitle"
       :is-show-animation="true"
     >
@@ -15,7 +17,6 @@
         />
       </div>
       <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
-        <N-Preloader v-if="!cards.data" />
         <NGridCard
           v-if="cards && cards.data"
           ref="content"
@@ -217,7 +218,7 @@ export default defineComponent({
             hid: 'twitter:card',
             name: 'twitter:card',
             property: 'twitter:card',
-            content: `summary_large_image`
+            content: 'summary_large_image'
           },
           {
             hid: 'twitter:image',
