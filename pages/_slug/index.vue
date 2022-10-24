@@ -192,6 +192,13 @@ export default defineComponent({
           opacity: 0
         })
       })
+      if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
+        const lastSection = {
+          section: id.value
+        }
+        localStorage.setItem('lastSection', JSON.stringify(lastSection))
+        store.commit('content/setScrollHeight', 0)
+      }
     })
 
     onUpdated(() => {
@@ -199,11 +206,15 @@ export default defineComponent({
           store.commit('content/setHeaderHidden', true)
           if (firstRender.value) {
             firstRender.value = false
-          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
+          if (JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
             window.scroll({
               top: scrollHeight.value,
               left: 0
             })
+            const lastSection = {
+              section: id.value
+            }
+            localStorage.setItem('lastSection', JSON.stringify(lastSection))
           }
         }
       })

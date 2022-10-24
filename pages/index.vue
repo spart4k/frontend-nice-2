@@ -141,6 +141,13 @@ export default defineComponent({
           animationLoad.value = true
         }, 1000)
         // }
+        if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+          const lastSection = {
+            section: 'index'
+          }
+          localStorage.setItem('lastSection', JSON.stringify(lastSection))
+          store.commit('content/setScrollHeight', 0)
+        }
     })
 
     onUpdated(() => {
@@ -148,11 +155,15 @@ export default defineComponent({
           store.commit('content/setHeaderHidden', true)
           if (firstRender.value) {
             firstRender.value = false
-          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
+          if (JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
             window.scroll({
               top: scrollHeight.value,
               left: 0
             })
+            const lastSection = {
+              section: 'index'
+            }
+            localStorage.setItem('lastSection', JSON.stringify(lastSection))
           }
         }
       })
