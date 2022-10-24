@@ -8,7 +8,9 @@ export const state = () => ({
   sections: [],
   headerItems: [],
   isShowAnimationHomePage: true,
-  singleAnimation: true
+  singleAnimation: true,
+  scrollHeight: 0,
+  headerHidden: true
 })
 
 export const mutations = {
@@ -38,6 +40,12 @@ export const mutations = {
   },
   setSingleAnimation (state, value) {
     state.singleAnimation = value
+  },
+  setScrollHeight (state, value) {
+    state.scrollHeight = value
+  },
+  setHeaderHidden (state, value) {
+    state.headerHidden = value
   }
 }
 

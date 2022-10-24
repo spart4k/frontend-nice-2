@@ -6,6 +6,7 @@
           <div
             v-for="(card, index) in spliceArray.colLeft"
             :key="index"
+            @click="saveHeight"
           >
             <template v-if="(selectors.id === '8') && card.hasOwnProperty('preview')">
               <n-section-intro
@@ -47,7 +48,7 @@
               <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
             </div>
           </div>
-          <template v-for="(card) in spliceArray.colRight">
+          <div v-for="(card, index) in spliceArray.colRight" :key="index" @click="saveHeight">
             <section-cards
               :key="card.id"
               :section="card.section"
@@ -55,7 +56,7 @@
               :class="$style.cards__item"
               @clickTag="($event) => $emit('clickTag', card.section.id)"
             />
-          </template>
+          </div>
         </div>
       </template>
     </div>
@@ -87,7 +88,7 @@ export default {
   },
 
   setup (props) {
-    const { route } = useContext()
+    const { store, route } = useContext()
     const proxyArray = ref(props.items)
     const selectors = computed(() => {
       return route.value.query
@@ -100,6 +101,9 @@ export default {
         return window.innerWidth
       }
     })
+    const saveHeight = () => {
+      store.commit('content/setScrollHeight', window.pageYOffset)
+    }
     const spliceArray = computed(() => {
       if (route.value.query.author) {
         proxyArray.value.unshift({
@@ -168,7 +172,8 @@ export default {
     leftArray,
     rightArray,
     noveltyCount,
-    widthFrame
+    widthFrame,
+    saveHeight
     }
   }
 }

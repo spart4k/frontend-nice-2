@@ -4,7 +4,7 @@
     <n-intro-slug v-else>
       <template>
         <NGridCard
-          ref="content"
+          ref="contentGrid"
           class="content"
           :class="[$style.content, showAnimate && $style.animateContent]"
           :items="cards"
@@ -33,7 +33,7 @@ import {
   useContext,
   useFetch,
   useMeta,
-  computed, onMounted, nextTick
+  computed, onMounted, nextTick, onUpdated
   // useMeta,
 } from '@nuxtjs/composition-api'
 // import vSelect from 'vue-select'
@@ -72,7 +72,9 @@ export default defineComponent({
     const selectPresent = ref(null)
     const selectMode = ref('created_at')
     const priceFetch = ref(1)
+    const scrollHeight = computed(() => store?.state?.content?.scrollHeight)
     const metaTitle = computed(() => store?.state?.content?.sections?.data)
+    const firstRender = ref(true)
 
     const sendSection = (value) => {
       if (value === 0) {
@@ -192,6 +194,21 @@ export default defineComponent({
       })
     })
 
+    onUpdated(() => {
+      nextTick(() => {
+          store.commit('content/setHeaderHidden', true)
+          if (firstRender.value) {
+            firstRender.value = false
+          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
+            window.scroll({
+              top: scrollHeight.value,
+              left: 0
+            })
+          }
+        }
+      })
+    })
+
     const fetchData = async (currentPage) => {
       const params = {
         page: 1,
@@ -209,22 +226,27 @@ export default defineComponent({
     }
 
     useFetch(async () => {
-      try {
-        const response = await fetchData()
-        if (authorId.value) {
-          const authorResponse = await fetchAuthor()
-          author.value = authorResponse
+        try {
+          const response = await fetchData()
+          if (authorId.value) {
+            const authorResponse = await fetchAuthor()
+            author.value = authorResponse
+          }
+          if (response.data.length < 6) {
+            cardsDispatch.value = false
+          }
+          introData.value = response.quote
+          fetchLoading.value = true
+          cards.value = [...response.data]
+          startCards.value = [...cards.value]
+          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
+            cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
+            startCards.value = [...cards.value]
+            pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+          }
+        } catch (e) {
+          console.log(e)
         }
-        if (response.data.length < 6) {
-          cardsDispatch.value = false
-        }
-        introData.value = response.quote
-        fetchLoading.value = true
-        cards.value = [...response.data]
-        startCards.value = [...cards.value]
-      } catch (e) {
-        console.log(e)
-      }
     })
 
     const fetchAuthor = () => {
@@ -273,6 +295,12 @@ export default defineComponent({
         cardsLoading.value = false
         cards.value = [...startCards.value, ...response.data]
         startCards.value = [...cards.value]
+        const lastCards = {
+          cards: startCards.value,
+          section: id.value,
+          page: pageNumber.value
+        }
+        localStorage.setItem('lastCards', JSON.stringify(lastCards))
       }
     }
 
@@ -309,7 +337,9 @@ export default defineComponent({
       sendSection,
       sendNovelty,
       sendMode,
-      metaTitle
+      metaTitle,
+      scrollHeight,
+      firstRender
     }
   },
   head: {}
