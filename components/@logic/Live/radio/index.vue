@@ -5,7 +5,6 @@
           <N-LazyLogo :class="$style.wrapper" :src="(`${$axios.defaults.baseURL}/${$props.song.wrap}`)" alt="" />
         </NuxtLink>
         <N-LazyLogo v-else :class="$style.wrapper" :src="(`${$axios.defaults.baseURL}/${$props.song.wrap}`)" alt="" />
-        {{cardLink}}
       <!-- <img :class="$style.wrapper" :src="(`${$axios.defaults.baseURL}/${$props.song.wrap}`)" alt=""> -->
       <div ref="marquee" class="marquee" :class="[ $style.marquee, $style.name ]">
         <div class="inner" :class="[$style.inner, isMarquee ? $style.active : $style.noActive ]">

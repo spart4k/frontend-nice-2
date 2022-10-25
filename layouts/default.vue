@@ -170,7 +170,6 @@ export default {
     } = animationGSAP($gsap, Elastic)
 
     const color = computed(() => {
-      console.log(route.value)
       const paramsColor = BLAND_COLOR[route.value.params?.slug] || BLAND_COLOR[route.value.name] || BLAND_COLOR[route.value.query.section] || BLAND_COLOR[route.value.path]
       if (paramsColor) {
         return paramsColor

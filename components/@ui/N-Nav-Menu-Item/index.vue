@@ -7,7 +7,7 @@
     :class="$style.item"
     @click.prevent="closeBottom"
   >
-    <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
+    <nuxt-link :to="{ path: `/${item.slug}` }">
       {{ item.title }}
     </nuxt-link>
   </li>

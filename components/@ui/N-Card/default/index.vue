@@ -32,7 +32,6 @@
             playsinline
             :controls="videoPlay"
             preload="none"
-            muted
             type="video/mp4"
             :src="videoUrl"
           />
