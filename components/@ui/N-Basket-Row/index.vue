@@ -1,10 +1,6 @@
 <template>
-  <!-- <NuxtLink
-    tag="div"
-    :to="`/cards/${item.id}?section=${item.section.slug}`"
-  > -->
   <li :class="$style.product">
-    <div v-if="item.files[0]" :class="$style.product__img" @click="$router.push(`/cards/${item.id}?section=${item.section.slug}`)">
+    <div v-if="item.files[0]" :class="$style.product__img" @click="$router.push(`/${item.section.slug}/${item.id}`)">
       <N-Lazy-Img :src="item.item_type_id === 2 ? `${$axios.defaults.baseURL}/${item.pivot.pictureLink}` : `${$axios.defaults.baseURL}/${item.files[0].src}`" alt="изоображение товара" />
     </div>
     <div :class="$style.product__description">

@@ -39,7 +39,7 @@
           v-for="(item, index) in resultCards"
           :key="index"
           tag="div"
-          :to="`/cards/${item.id}?section=${item.section.slug}`"
+          :to="`/${item.section.slug}/${item.id}`"
           :class="$style.searchItem"
         >
           <div @click="closeBottom">
