@@ -18,7 +18,7 @@
       @backgroundLoaded="backgroundLoaded"
     >
       <n-tabs
-        v-if="$route.name !== 'cards-id'"
+        v-if="$route.name !== 'cards-id' && headerHidden"
         class="navbarSlug"
         :class="[
           $style.tabs,
@@ -87,6 +87,7 @@ export default {
     const menuBasket = ref(null)
     const menuLive = ref(null)
     const { store, route, $gsap } = useContext()
+    const headerHidden = computed(() => store.state.content.headerHidden)
     const isHomePage = computed(() => route.value.name === 'index')
     const audioSource = ref(null)
     const audioDelay = ref(false)
@@ -296,7 +297,8 @@ export default {
       audioSource,
       audioDelay,
       audioDestroy,
-      showAnimate
+      showAnimate,
+      headerHidden
     }
   }
 }

@@ -1,6 +1,7 @@
 <template>
   <div :class="$style.wrap">
-    <span :class="[$style.loader, purple && $style.purple, black && $style.black]" />
+    <!-- <span :class="[$style.loader, purple && $style.purple, black && $style.black]" /> -->
+    <n-icon name="rainbowPreloader" :class="[$style.loader, purple && $style.purple, black && $style.black]"></n-icon>
   </div>
 </template>
 
@@ -34,7 +35,11 @@
   display: block;
   width: 4.2rem;
   height: 4.2rem;
-  animation: rotate 1s linear infinite
+  animation: rotate 1s linear infinite;
+  svg {
+    height: 100%;
+    width: 100%;
+  }
 }
 .loader::before {
   content: "";
@@ -42,15 +47,15 @@
   position: absolute;
   inset: 0px;
   border-radius: 50%;
-  border: 2px solid #ffffff;
+  // border: 2px solid #ffffff;
   animation: prixClipFix 1s linear infinite ;
 }
 .purple.loader::before {
-  border-color:#6448B5;
+  // border-color:#6448B5;
 }
 
 .black.loader::before {
-  border-color:#222222;
+  // border-color:#222222;
 }
 
 @keyframes rotate {

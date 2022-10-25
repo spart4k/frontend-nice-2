@@ -1,10 +1,10 @@
 <template>
   <div>
-    <n-intro-slug>
-      <N-Preloader v-if="$fetchState.pending" />
+    <N-Preloader v-if="$fetchState.pending" />
+    <n-intro-slug v-else>
       <template>
         <NGridCard
-          ref="content"
+          ref="contentGrid"
           class="content"
           :class="[$style.content, showAnimate && $style.animateContent]"
           :items="cards"
@@ -14,6 +14,7 @@
           @clickTag="clickTag"
           @sendSection="sendSection"
           @sendNovelty="sendNovelty"
+          @sendMode="sendMode"
         />
       </template>
     </n-intro-slug>
@@ -32,7 +33,7 @@ import {
   useContext,
   useFetch,
   useMeta,
-  computed, onMounted, nextTick
+  computed, onMounted, nextTick, onUpdated
   // useMeta,
 } from '@nuxtjs/composition-api'
 // import vSelect from 'vue-select'
@@ -68,8 +69,12 @@ export default defineComponent({
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
     const selectFirst = ref(0)
     const selectSecond = ref('desc')
+    const selectPresent = ref(null)
+    const selectMode = ref('created_at')
     const priceFetch = ref(1)
+    const scrollHeight = computed(() => store?.state?.content?.scrollHeight)
     const metaTitle = computed(() => store?.state?.content?.sections?.data)
+    const firstRender = ref(true)
 
     const sendSection = (value) => {
       if (value === 0) {
@@ -80,10 +85,26 @@ export default defineComponent({
       searchCards()
     }
     const sendNovelty = (value) => {
-      if (value === 0) {
-        selectSecond.value = 'asc'
-      } else {
+      if (value) {
         selectSecond.value = 'desc'
+      } else {
+        selectSecond.value = 'asc'
+      }
+      searchCards()
+    }
+    const sendMode = (value) => {
+      if (value === 0) {
+        selectMode.value = 'created_at'
+        selectPresent.value = null
+      } else if (value === 1) {
+        selectMode.value = 'price'
+        selectPresent.value = null
+      } else if (value === 2) {
+        selectMode.value = 'like_count'
+        selectPresent.value = null
+      } else if (value === 3) {
+        selectMode.value = 'created_at'
+        selectPresent.value = true
       }
       searchCards()
     }
@@ -117,9 +138,10 @@ export default defineComponent({
         page: 1,
         count: 6,
         section_id: selectFirst.value ? selectFirst.value : '',
-        order_by_colomn: 'created_at',
+        order_by_column: selectMode.value,
         order_by_mode: selectSecond.value,
-        minPrice: priceFetch.value
+        minPrice: priceFetch.value,
+        present: selectPresent.value
       }
       const path = 'pages/getData'
       const response = await store.dispatch(path, params)
@@ -170,6 +192,32 @@ export default defineComponent({
           opacity: 0
         })
       })
+      if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
+        const lastSection = {
+          section: id.value
+        }
+        localStorage.setItem('lastSection', JSON.stringify(lastSection))
+        store.commit('content/setScrollHeight', 0)
+      }
+    })
+
+    onUpdated(() => {
+      nextTick(() => {
+          store.commit('content/setHeaderHidden', true)
+          if (firstRender.value) {
+            firstRender.value = false
+          if (JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
+            window.scroll({
+              top: scrollHeight.value,
+              left: 0
+            })
+            const lastSection = {
+              section: id.value
+            }
+            localStorage.setItem('lastSection', JSON.stringify(lastSection))
+          }
+        }
+      })
     })
 
     const fetchData = async (currentPage) => {
@@ -179,7 +227,7 @@ export default defineComponent({
         section_id: id.value,
         tags: tagId.value ? [tagId.value] : '',
         authors: authorId.value ? [authorId.value] : '',
-        order_by_colomn: 'created_at',
+        order_by_column: selectMode.value,
         order_by_mode: selectSecond.value,
         minPrice: id.value === 8 ? priceFetch.value : ''
       }
@@ -189,22 +237,27 @@ export default defineComponent({
     }
 
     useFetch(async () => {
-      try {
-        const response = await fetchData()
-        if (authorId.value) {
-          const authorResponse = await fetchAuthor()
-          author.value = authorResponse
+        try {
+          const response = await fetchData()
+          if (authorId.value) {
+            const authorResponse = await fetchAuthor()
+            author.value = authorResponse
+          }
+          if (response.data.length < 6) {
+            cardsDispatch.value = false
+          }
+          introData.value = response.quote
+          fetchLoading.value = true
+          cards.value = [...response.data]
+          startCards.value = [...cards.value]
+          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
+            cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
+            startCards.value = [...cards.value]
+            pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+          }
+        } catch (e) {
+          console.log(e)
         }
-        if (response.data.length < 6) {
-          cardsDispatch.value = false
-        }
-        introData.value = response.quote
-        fetchLoading.value = true
-        cards.value = [...response.data]
-        startCards.value = [...cards.value]
-      } catch (e) {
-        console.log(e)
-      }
     })
 
     const fetchAuthor = () => {
@@ -239,9 +292,10 @@ export default defineComponent({
         section_id: selectFirst.value ? selectFirst.value : null,
         tags: tagId.value ? [tagId.value] : null,
         authors: authorId.value ? [authorId.value] : null,
-        order_by_colomn: 'created_at',
+        order_by_column: selectMode.value,
         order_by_mode: selectSecond.value,
-        minPrice: id.value === 8 ? priceFetch.value : null
+        minPrice: id.value === 8 ? priceFetch.value : null,
+        present: selectPresent.value
       }
       pageNumber.value++
 
@@ -252,6 +306,12 @@ export default defineComponent({
         cardsLoading.value = false
         cards.value = [...startCards.value, ...response.data]
         startCards.value = [...cards.value]
+        const lastCards = {
+          cards: startCards.value,
+          section: id.value,
+          page: pageNumber.value
+        }
+        localStorage.setItem('lastCards', JSON.stringify(lastCards))
       }
     }
 
@@ -282,10 +342,15 @@ export default defineComponent({
       introData,
       selectFirst,
       selectSecond,
+      selectMode,
+      selectPresent,
       searchCards,
       sendSection,
       sendNovelty,
-      metaTitle
+      sendMode,
+      metaTitle,
+      scrollHeight,
+      firstRender
     }
   },
   head: {}

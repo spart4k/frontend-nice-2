@@ -1,9 +1,9 @@
 <template>
-  <div :class="$style.card">
+  <div v-if="avatar" :class="$style.card">
     <div :class="$style.body">
       <div :class="$style.stats">
         <!-- <div :class="$style.authorImage" /> -->
-        <img :class="$style.authorImage" :src="`${$axios.defaults.baseURL}/${$props.author.author_data.avatar.src}`" alt="avatar">
+        <img :class="$style.authorImage" :src="`${$axios.defaults.baseURL}/${avatar}`" alt="avatar">
         <div v-if="likeCounter !== undefined" :class="$style.amount">
           <h2 :class="$style.amountNumber">
             {{ likeCounter }}
@@ -30,17 +30,17 @@
         </div>
       </div>
       <h2 :class="$style.authorName">
-        {{ $props.author.author_data.name }}
+        {{ name }}
       </h2>
       <!-- <h3 :class="$style.authorId">
         @artemnice
       </h3> -->
-      <p :class="$style.authorQuote" v-html="$props.author.author_data.description" />
+      <p :class="$style.authorQuote" v-html="description" />
     </div>
   </div>
 </template>
 <script lang="js">
-import { ref } from '@nuxtjs/composition-api'
+import { ref, computed } from '@nuxtjs/composition-api'
 import { numWord } from '~/helpers/compositions/declination'
 // import dataProps from '../props'
 
@@ -55,9 +55,12 @@ export default {
   },
 //   props: { ...dataProps.props },
   setup (props) {
-    const likeCounter = ref(props.author.author_data.like_number)
-    const articleCounter = ref(props.author.author_data.articles_number_count)
-    const itemCounter = ref(props.author.author_data.items_number_count)
+    const likeCounter = computed(() => props.author?.author_data?.like_number)
+    const articleCounter = computed(() => props.author?.author_data?.articles_number_count)
+    const itemCounter = computed(() => props.author?.author_data?.items_number_count)
+    const avatar = computed(() => props.author.author_data?.avatar.src)
+    const name = computed(() => props.author.author_data?.name)
+    const description = computed(() => props.author.author_data?.description)
     const likeEnding = ref(numWord(likeCounter.value, ['лайк', 'лайка', 'лайков']))
     const articleEnding = ref(numWord(articleCounter.value, ['статья', 'статьи', 'статей']))
     const itemEnding = ref(numWord(itemCounter.value, ['товар', 'товара', 'товаров']))
@@ -67,7 +70,10 @@ export default {
       itemCounter,
       likeEnding,
       articleEnding,
-      itemEnding
+      itemEnding,
+      avatar,
+      name,
+      description
     }
   }
 }

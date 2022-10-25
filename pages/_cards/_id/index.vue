@@ -128,6 +128,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      store.commit('content/setHeaderHidden', false)
       store.commit('content/setAnimate', false)
       store.commit('content/setSingleAnimation', false)
       store.commit('content/changeAnimationEnd', true)
