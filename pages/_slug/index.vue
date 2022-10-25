@@ -98,6 +98,9 @@ export default defineComponent({
       searchCards()
     }
     const sendNovelty = (value) => {
+      if (value === 8) {
+        value = 9
+      }
       if (value) {
         selectSecond.value = 'desc'
       } else {

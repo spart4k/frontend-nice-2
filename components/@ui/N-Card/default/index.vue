@@ -98,7 +98,7 @@
           </h2>
           <template v-if="$props.detailPage">
             <p v-if="data.authors.length" :class="$style.authorName">
-              {{data.authors.length > 1 ? 'авторы' : 'автор'}}
+              {{data.authors.length > 1 ? 'авторы:' : 'автор:'}}
               <span v-for="(item, index) in data.authors" :key="index" @click="$emit('clickAuthor', item.id)">
                 {{item.name}}{{data.authors.length - 1 === index ? '' : ','}}
               </span>
