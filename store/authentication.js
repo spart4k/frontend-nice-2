@@ -3,7 +3,8 @@ export const state = () => ({
     email: '',
     nickname: '',
     id: '',
-    phone: ''
+    phone: '',
+    fullname: ''
   },
   adress: [],
   selectedAddress: '',
@@ -39,6 +40,9 @@ export const mutations = {
     state.user.email = value.email
     state.user.nickname = value.nickname
     state.user.phone = value.phone
+    if (value.link) {
+      state.user.fullname = value.link
+    }
     if (value.id) {
       state.user.id = value.id
     }

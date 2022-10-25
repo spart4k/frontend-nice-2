@@ -6,6 +6,7 @@
           <div
             v-for="(card, index) in spliceArray.colLeft"
             :key="index"
+            @click="saveHeight"
           >
             <template v-if="(selectors.id === '8') && card.hasOwnProperty('preview')">
               <n-section-intro
@@ -14,13 +15,13 @@
                 :description="card"
                 :image="card.image"
                 :class="$style.preview"
-                :select="{sections, novelty}"
-                @sendPropertySection="($event) => $emit('sendSection', $event)"
-                @sendPropertyNovelty="($event) => $emit('sendNovelty', $event)"
               />
               <div v-if="selectors.id === '8'" :class="$style.rowMobile">
                 <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
-                <N-Select :class="$style.select" :select-items="novelty" @setProperty="($event) => $emit('sendNovelty', $event)" />
+                <N-Select :class="$style.select" :select-items="searchMode" @setProperty="($event) => $emit('sendMode', $event)" />
+                <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
+                  <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
+                </div>
               </div>
             </template>
             <n-section-intro
@@ -29,9 +30,6 @@
               :description="card"
               :image="card.image"
               :class="$style.preview"
-              :select="{sections, novelty}"
-              @sendPropertySection="($event) => $emit('sendSection', $event)"
-              @sendPropertyNovelty="($event) => $emit('sendNovelty', $event)"
             />
             <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
               <img :src="card.image" alt="DOG ">
@@ -45,9 +43,12 @@
         <div v-if="spliceArray.colRight.length || (selectors.id === '8')" :class="$style.col">
           <div v-if="selectors.id === '8'" :class="$style.row">
             <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
-            <N-Select :class="$style.select" :select-items="novelty" @setProperty="($event) => $emit('sendNovelty', $event)" />
+            <N-Select :class="$style.select" :select-items="searchMode" @setProperty="($event) => $emit('sendMode', $event)" />
+            <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
+              <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
+            </div>
           </div>
-          <template v-for="(card) in spliceArray.colRight">
+          <div v-for="(card, index) in spliceArray.colRight" :key="index" @click="saveHeight">
             <section-cards
               :key="card.id"
               :section="card.section"
@@ -55,7 +56,7 @@
               :class="$style.cards__item"
               @clickTag="($event) => $emit('clickTag', card.section.id)"
             />
-          </template>
+          </div>
         </div>
       </template>
     </div>
@@ -87,20 +88,29 @@ export default {
   },
 
   setup (props) {
-    const { route } = useContext()
+    const { store, route } = useContext()
     const proxyArray = ref(props.items)
     const selectors = computed(() => {
       return route.value.query
     })
     const leftArray = ref()
     const rightArray = ref()
+    const noveltyCount = ref(false)
+    const widthFrame = computed(() => {
+      if (process.browser) {
+        return window.innerWidth
+      }
+    })
+    const saveHeight = () => {
+      store.commit('content/setScrollHeight', window.pageYOffset)
+    }
     const spliceArray = computed(() => {
-    if (route.value.query.author) {
-      proxyArray.value.unshift({
-        author_data: props.author
-      })
-    } else if (!route.value.query.tag && !route.value.query.author) {
-      if (!props.homePage) {
+      if (route.value.query.author) {
+        proxyArray.value.unshift({
+          author_data: props.author
+        })
+      } else if (!route.value.query.tag && !route.value.query.author) {
+        if (!props.homePage) {
           proxyArray.value.unshift({
             image: route.value.params.slug,
             title: props.description.title,
@@ -109,29 +119,45 @@ export default {
             preview: true,
             id: Math.random()
           })
-      } else {
-        proxyArray.value?.unshift({
-          home: true,
-          image: require('~/assets/img/preview/dogs.png'),
-          id: Math.random()
-        })
+        } else {
+          proxyArray.value?.unshift({
+            home: true,
+            image: require('~/assets/img/preview/dogs.png'),
+            id: Math.random()
+          })
+        }
       }
-    }
-    const middleIndex = Math.ceil(proxyArray.value?.length / 2)
-    const firstHalf = proxyArray.value?.splice(0, middleIndex)
-    const secondHalf = ref()
-    if (proxyArray.value.length === 1) {
-      secondHalf.value = proxyArray.value
-    } else {
-      secondHalf.value = proxyArray.value.splice(-middleIndex)
-    }
-    return {
-      colLeft: firstHalf,
-      colRight: secondHalf.value
-    }
-  })
-  const novelty = ref(['Новые', 'Старые'])
-  const sections = ref(['Все товары', 'Музыка', 'Видео', 'Искусство', 'Кухня', 'Чтиво', 'Фото', 'Одежда', 'Анонсы'])
+      const firstHalfDesktop = ref([])
+      const secondHalfDesktop = ref([])
+      proxyArray.value.forEach((item, index) => {
+        if (index % 2 === 0) {
+          firstHalfDesktop.value.push(item)
+        } else {
+          secondHalfDesktop.value.push(item)
+        }
+      })
+      const middleIndex = Math.ceil(proxyArray.value?.length / 2)
+      const firstHalf = proxyArray.value?.splice(0, middleIndex)
+      const secondHalf = ref()
+      if (proxyArray.value.length === 1) {
+        secondHalf.value = proxyArray.value
+      } else {
+        secondHalf.value = proxyArray.value.splice(-middleIndex)
+      }
+      if (widthFrame.value) {
+        return {
+          colLeft: firstHalfDesktop.value,
+          colRight: secondHalfDesktop.value
+        }
+      } else {
+        return {
+          colLeft: firstHalf,
+          colRight: secondHalf.value
+        }
+      }
+    })
+    const searchMode = ref(['Новизна', 'Цена', 'Популярность', 'Наличие'])
+    const sections = ref(['Все товары', 'Музыка', 'Видео', 'Искусство', 'Кухня', 'Чтиво', 'Фото', 'Одежда', 'Анонсы'])
 
   watch(() => props.items, () => {
     proxyArray.value = props.items
@@ -141,10 +167,13 @@ export default {
     spliceArray,
     proxyArray,
     selectors,
-    novelty,
+    searchMode,
     sections,
     leftArray,
-    rightArray
+    rightArray,
+    noveltyCount,
+    widthFrame,
+    saveHeight
     }
   }
 }
@@ -196,6 +225,7 @@ export default {
     }
   }
 }
+
 .col {
   max-width: 53.2rem;
   width: calc(50% - 1.5rem);
@@ -225,6 +255,22 @@ export default {
       width: 20.3rem;
       height: 4.4rem;
     }
+    .selectPriority {
+      width: 4.4rem;
+      height: 4.4rem;
+      background: white;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      border-radius: 50%;
+      justify-content: center;
+      cursor: pointer;
+      .icon {
+        transition-duration: .5s;
+        z-index: 5;
+        color: $pink2;
+      }
+    }
   }
   .rowMobile{
     display: flex;
@@ -235,8 +281,24 @@ export default {
       display: none;
     }
     .select {
-      width: 20.3rem;
+      width: 14.3rem;
       height: 4.4rem;
+    }
+    .selectPriority {
+      width: 4.4rem;
+      height: 4.4rem;
+      background: white;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      border-radius: 50%;
+      justify-content: center;
+      cursor: pointer;
+      .icon {
+        transition-duration: .5s;
+        z-index: 5;
+        color: $pink2;
+      }
     }
   }
 }

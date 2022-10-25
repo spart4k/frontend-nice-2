@@ -44,10 +44,7 @@ export default {
     description: {
       type: Object
     },
-    image: String,
-    select: {
-      type: Object
-    }
+    image: String
   },
   setup (props) {
     const { $gsap } = useContext()

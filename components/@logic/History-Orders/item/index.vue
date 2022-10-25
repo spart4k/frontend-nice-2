@@ -3,14 +3,17 @@
     <div :class="$style.order">
       Заказ №{{ $props.order.id }}
     </div>
+    <div :class="$style.status" :style="{ color: color }">
+      {{ $props.order.status.status_name }}
+    </div>
     <div :class="$style.title">
       {{ description }}
     </div>
     <div :class="$style.price">
       {{ $props.order.delivery_price + $props.order.cards_sum }} р.
     </div>
-    <div :class="$style.status" :style="{ color: color }">
-      {{ $props.order.status.status_name }}
+    <div :class="$style.status">
+      Детализация отправлена на адрес электоронной почты
     </div>
   </div>
 </template>

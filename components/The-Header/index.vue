@@ -8,7 +8,7 @@
           class="logo"
           :class="[$style.logo, showAnimate && $style.logoVisible]"
           :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}rem)` : '50%'}"
-          @click="$router.push('/')"
+          @click="scrollTop"
         >
           <n-logo />
         </div>
@@ -100,6 +100,14 @@ export default {
         text: numWord(calcBasketCard, ['товар', 'товара', 'товаров'])
       }
     })
+
+    const scrollTop = () => {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      })
+    }
 
     const toggleMenu = () => {
       active.value = false
@@ -203,7 +211,8 @@ export default {
       liveChat,
       windowWidthCount,
       pageLoad,
-      pageLoading
+      pageLoading,
+      scrollTop
     }
   }
 }

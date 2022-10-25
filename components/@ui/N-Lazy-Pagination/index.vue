@@ -1,10 +1,10 @@
 <template>
-  <client-only>
+  <!-- <client-only> -->
     <infinite-loading spinner="spiral" @infinite="$emit('lazyPagination', $event)">
       <div slot="no-more" />
       <div slot="no-results" />
     </infinite-loading>
-  </client-only>
+  <!-- </client-only> -->
 </template>
 
 <script>

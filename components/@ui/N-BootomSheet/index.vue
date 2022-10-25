@@ -14,7 +14,7 @@
       v-on="$attrs"
       @closed="$emit('closed')"
     >
-      <client-only>
+      <!-- <client-only> -->
         <N-Button
           type-button="small"
           color="#222222"
@@ -35,7 +35,7 @@
           <N-Icon name="arrow-back" :class="$style.backButton" />
         </N-Button>
         <slot />
-      </client-only>
+      <!-- </client-only> -->
     </vue-bottom-sheet>
   </div>
 </template>

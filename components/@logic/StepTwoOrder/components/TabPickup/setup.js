@@ -17,7 +17,7 @@ export default {
     const { formData, validate, $errors, $v, $touched } = useForm(
       {
         fields: {
-          name: { default: '', validations: { required } },
+          name: { default: store.state.authentication.user.fullname, validations: { required } },
           email: { default: store.state.authentication.user.email, validations: { email, required } },
           phone: { default: store.state.authentication.user.phone, validations: { phone, required, onlyNumeric } }
         }

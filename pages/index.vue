@@ -1,6 +1,8 @@
 <template>
   <div>
+    <N-Preloader v-if="!cards.data" />
     <n-intro
+      v-else
       :description="introTitle"
       :is-show-animation="true"
     >
@@ -15,7 +17,6 @@
         />
       </div>
       <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
-        <N-Preloader v-if="!cards.data" />
         <NGridCard
           v-if="cards && cards.data"
           ref="content"
@@ -39,7 +40,7 @@ import {
   defineComponent,
   useContext,
   useFetch, useAsync,
-  onMounted, onUnmounted,
+  onMounted, onUnmounted, onUpdated, nextTick,
   useRouter,
   useMeta
 } from '@nuxtjs/composition-api'
@@ -65,12 +66,13 @@ export default defineComponent({
     const elementAnimate = ref(null)
     const pageNumber = ref(2)
     const startCards = ref([])
-    const startCardsProxy = ref()
     const cardsLoading = ref(false)
     const cardsDispatch = ref(true)
     const fetchLoading = ref(false)
     const animationLoad = ref(false)
+    const scrollHeight = computed(() => store?.state?.content?.scrollHeight)
     const metaTags = ref({})
+    const firstRender = ref(true)
     const resize = () => {
       if (window.innerWidth < 450) {
         animationlogo()
@@ -139,14 +141,40 @@ export default defineComponent({
           animationLoad.value = true
         }, 1000)
         // }
+        if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+          const lastSection = {
+            section: 'index'
+          }
+          localStorage.setItem('lastSection', JSON.stringify(lastSection))
+          store.commit('content/setScrollHeight', 0)
+        }
     })
+
+    onUpdated(() => {
+      nextTick(() => {
+          store.commit('content/setHeaderHidden', true)
+          if (firstRender.value) {
+            firstRender.value = false
+          if (JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
+            window.scroll({
+              top: scrollHeight.value,
+              left: 0
+            })
+            const lastSection = {
+              section: 'index'
+            }
+            localStorage.setItem('lastSection', JSON.stringify(lastSection))
+          }
+        }
+      })
+    })
+
     const getSeoInfo = async () => {
       // const response = await store.dispatch('main/getSeo')
     }
     useAsync(async () => {
       try {
         const response = await fetchData()
-        startCardsProxy.value = response.data?.data
         metaTags.value = {
           seo_title: response.data.data?.seo_title,
           seo_description: response.data.data?.seo_description,
@@ -175,17 +203,22 @@ export default defineComponent({
     //   }
     // })
     useFetch(async () => {
-      try {
-        const response = await fetchData()
-        if (response.data.data.data.length < 6) {
-          cardsDispatch.value = false
+        try {
+          const response = await fetchData()
+          if (response.data.data.data.length < 6) {
+            cardsDispatch.value = false
+          }
+          totalPage.value = response?.data.last_pages
+          cards.value = response.data.data
+          startCards.value = cards.value.data
+          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
+            cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
+            startCards.value = [...cards.value.data]
+            pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+          }
+        } catch (e) {
+          console.log(e)
         }
-        totalPage.value = response?.data.last_page
-        cards.value = response.data.data
-        startCards.value = cards.value.data
-      } catch (e) {
-        console.log(e)
-      }
     })
     onUnmounted(() => {
       window.removeEventListener('resize', resize)
@@ -217,7 +250,7 @@ export default defineComponent({
             hid: 'twitter:card',
             name: 'twitter:card',
             property: 'twitter:card',
-            content: `summary_large_image`
+            content: 'summary_large_image'
           },
           {
             hid: 'twitter:image',
@@ -261,6 +294,12 @@ export default defineComponent({
           startCards.value.forEach((item) => {
             cards.value.data.push(item)
           })
+          const lastCards = {
+            cards: startCards.value,
+            section: 'index',
+            page: pageNumber.value
+          }
+          localStorage.setItem('lastCards', JSON.stringify(lastCards))
         } else {
           const params = {
             page: pageNumber.value,
@@ -280,6 +319,12 @@ export default defineComponent({
           startCards.value.forEach((item) => {
             cards.value.data.push(item)
           })
+          const lastCards = {
+            cards: startCards.value,
+            section: 'index',
+            page: pageNumber.value
+          }
+          localStorage.setItem('lastCards', JSON.stringify(lastCards))
         }
       }
     }
@@ -307,7 +352,8 @@ export default defineComponent({
       animationLoad,
       getSeoInfo,
       metaTags,
-      startCardsProxy
+      scrollHeight,
+      firstRender
     }
   },
   head: {
