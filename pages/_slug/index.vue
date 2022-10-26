@@ -36,8 +36,6 @@ import {
   computed, onMounted, nextTick, onUpdated
   // useMeta,
 } from '@nuxtjs/composition-api'
-// import vSelect from 'vue-select'
-// import 'vue-select/dist/vue-select.css'
 
 // import { pagination } from '~/plugins/pagination'
 // import { head } from '@/components/scripts/head.js'
