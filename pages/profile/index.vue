@@ -5,10 +5,10 @@
       <h1 :class="$style.profile__title">
         Мой профиль
       </h1>
-      <nuxt-link to="/basket" :class="$style.profile__basket">
+      <!-- <nuxt-link to="/basket" :class="$style.profile__basket">
         <n-icon name="basket" :class="$style.icon" />
         <span>Корзина ({{ qtyBasket }})</span>
-      </nuxt-link>
+      </nuxt-link> -->
 
       <Form-Profile-Default :class="$style.profile__form" />
       <History-Orders-Default />

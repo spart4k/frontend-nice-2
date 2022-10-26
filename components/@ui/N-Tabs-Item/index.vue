@@ -4,7 +4,7 @@
     class="navSectionItem"
     :style="{backgroundColor: BLAND_COLOR[item.slug] }"
   >
-    <nuxt-link :to="{ path: `/${item.slug}`, params:{ id: item.id }, query: { id: item.id } }">
+    <nuxt-link :to="{ path: `/${item.slug}` }">
       {{ item.title }}
     </nuxt-link>
   </li>

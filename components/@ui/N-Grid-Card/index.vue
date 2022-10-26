@@ -8,7 +8,7 @@
             :key="index"
             @click="saveHeight"
           >
-            <template v-if="(selectors.id === '8') && card.hasOwnProperty('preview')">
+            <template v-if="(selectors === 'shop') && card.hasOwnProperty('preview')">
               <n-section-intro
                 v-if="card.hasOwnProperty('preview')"
                 :key="card.id"
@@ -16,7 +16,7 @@
                 :image="card.image"
                 :class="$style.preview"
               />
-              <div v-if="selectors.id === '8'" :class="$style.rowMobile">
+              <div v-if="selectors === 'shop'" :class="$style.rowMobile">
                 <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
                 <N-Select :class="$style.select" :select-items="searchMode" @setProperty="($event) => $emit('sendMode', $event)" />
                 <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
@@ -40,8 +40,8 @@
             </template>
           </div>
         </div>
-        <div v-if="spliceArray.colRight.length || (selectors.id === '8')" :class="$style.col">
-          <div v-if="selectors.id === '8'" :class="$style.row">
+        <div v-if="spliceArray.colRight.length || (selectors === 'shop')" :class="$style.col">
+          <div v-if="selectors === 'shop'" :class="$style.row">
             <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
             <N-Select :class="$style.select" :select-items="searchMode" @setProperty="($event) => $emit('sendMode', $event)" />
             <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
@@ -91,7 +91,7 @@ export default {
     const { store, route } = useContext()
     const proxyArray = ref(props.items)
     const selectors = computed(() => {
-      return route.value.query
+      return route.value.params.slug
     })
     const leftArray = ref()
     const rightArray = ref()

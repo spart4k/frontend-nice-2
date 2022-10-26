@@ -27,11 +27,11 @@
           <div :class="$style.last_view_items">
             <ul v-if="userInfo && userInfo.length" :class="$style.last_view_list">
               <li v-for="views in userInfo" :key="views.id" :class="$style.last_view_item">
-                <nuxt-link :to="`/card/${views.card_id}`">
+                <!-- <nuxt-link :to="`/card/${views.card_id}`">
                   <template v-if="views.card && views.card.images.length">
                     <n-lazy-img :src="`${$axios.defaults.baseURL}/${views.card.images[0].src}`" :alt="views.card.title" />
                   </template>
-                </nuxt-link>
+                </nuxt-link> -->
               </li>
             </ul>
           </div>

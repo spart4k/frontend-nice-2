@@ -36,8 +36,6 @@ import {
   computed, onMounted, nextTick, onUpdated
   // useMeta,
 } from '@nuxtjs/composition-api'
-// import vSelect from 'vue-select'
-// import 'vue-select/dist/vue-select.css'
 
 // import { pagination } from '~/plugins/pagination'
 // import { head } from '@/components/scripts/head.js'
@@ -58,8 +56,21 @@ export default defineComponent({
     const totalPage = ref([])
     const pageNumber = ref(2)
     const introData = ref()
-    const id = computed(() => Number(route.value.query.id))
     const tagId = computed(() => Number(route.value.query.tag))
+    const id = computed(() => {
+      switch (route.value.params.slug) {
+        case 'music': return 1
+        case 'media': return 2
+        case 'art': return 3
+        case 'kitchen': return 4
+        case 'library': return 5
+        case 'photo': return 6
+        case 'fashion': return 7
+        case 'shop': return 8
+        case 'event': return 9
+        case 'coin': return 10
+      }
+    })
     const authorId = computed(() => Number(route.value.query.author))
     const cardsLoading = ref(false)
     const loading = ref(false)
@@ -85,6 +96,9 @@ export default defineComponent({
       searchCards()
     }
     const sendNovelty = (value) => {
+      if (value === 8) {
+        value = 9
+      }
       if (value) {
         selectSecond.value = 'desc'
       } else {
