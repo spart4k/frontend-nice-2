@@ -42,8 +42,8 @@
         </div>
         <div v-if="spliceArray.colRight.length || (selectors === 'shop')" :class="$style.col">
           <div v-if="selectors === 'shop'" :class="$style.row">
-            <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
-            <N-Select :class="$style.select" :select-items="searchMode" @setProperty="($event) => $emit('sendMode', $event)" />
+            <N-Select :class="$style.select" :select-items="sections" @setProperty="sendSection" />
+            <N-Select :class="$style.select" :select-items="searchMode" @setProperty="sendMode" />
             <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
               <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
             </div>
@@ -65,7 +65,7 @@
 
 <script>
 
-import { computed, ref, useContext, watch } from '@nuxtjs/composition-api'
+import { computed, onMounted, ref, useContext, watch } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NGridCard',
@@ -87,13 +87,14 @@ export default {
     }
   },
 
-  setup (props) {
+  setup (props, ctx) {
     const { store, route } = useContext()
     const proxyArray = ref(props.items)
     const selectors = computed(() => {
       return route.value.params.slug
     })
     const leftArray = ref()
+    const { emit } = ctx
     const rightArray = ref()
     const noveltyCount = ref(false)
     const widthFrame = computed(() => {
@@ -156,8 +157,42 @@ export default {
         }
       }
     })
+    const categories = ref([])
     const searchMode = ref(['Новизна', 'Цена', 'Популярность', 'Наличие'])
     const sections = ref(['Все товары', 'Музыка', 'Видео', 'Искусство', 'Кухня', 'Чтиво', 'Фото', 'Одежда', 'Анонсы'])
+    const getСategories = async () => {
+      const data = await store.dispatch('search/searchCards', {
+        entity: 'categories',
+        searchField: '',
+        page: 1,
+        count: 9999
+      })
+      data.data.data.forEach((item) => {
+        sections.value.push(item.name)
+        categories.value.push(item)
+      })
+    }
+    const sendMode = (value) => {
+      emit('sendMode', value)
+    }
+    const sendSection = (value) => {
+      if (value >= 9) {
+      value -= 9
+      categories.value.forEach((item, index) => {
+        if (index === value) {
+          emit('sendCategory', item.id)
+        }
+      })
+      } else {
+        emit('sendSection', value)
+      }
+    }
+
+  onMounted(() => {
+    if (selectors.value === 'shop') {
+      getСategories()
+    }
+  })
 
   watch(() => props.items, () => {
     proxyArray.value = props.items
@@ -173,7 +208,11 @@ export default {
     rightArray,
     noveltyCount,
     widthFrame,
-    saveHeight
+    saveHeight,
+    getСategories,
+    sendMode,
+    sendSection,
+    categories
     }
   }
 }
@@ -233,7 +272,7 @@ export default {
     min-width: 60rem;
   }
   @media (min-width: $tabletWidth) and (max-width: $desktopWidth) {
-    min-width: 40rem;
+    min-width: 47rem;
   }
   @media (max-width: $tabletWidth) {
     width: auto;

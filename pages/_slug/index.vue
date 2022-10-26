@@ -15,6 +15,7 @@
           @sendSection="sendSection"
           @sendNovelty="sendNovelty"
           @sendMode="sendMode"
+          @sendCategory="sendCategory"
         />
       </template>
     </n-intro-slug>
@@ -80,6 +81,7 @@ export default defineComponent({
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
     const selectFirst = ref(0)
     const selectSecond = ref('desc')
+    const selectThird = ref(null)
     const selectPresent = ref(null)
     const selectMode = ref('created_at')
     const priceFetch = ref(1)
@@ -88,6 +90,10 @@ export default defineComponent({
     const firstRender = ref(true)
 
     const sendSection = (value) => {
+      selectThird.value = null
+      if (value === 8) {
+        value = 9
+      }
       if (value === 0) {
         selectFirst.value = ''
       } else {
@@ -96,14 +102,16 @@ export default defineComponent({
       searchCards()
     }
     const sendNovelty = (value) => {
-      if (value === 8) {
-        value = 9
-      }
       if (value) {
         selectSecond.value = 'desc'
       } else {
         selectSecond.value = 'asc'
       }
+      searchCards()
+    }
+    const sendCategory = (value) => {
+      selectFirst.value = null
+      selectThird.value = value
       searchCards()
     }
     const sendMode = (value) => {
@@ -152,6 +160,7 @@ export default defineComponent({
         page: 1,
         count: 6,
         section_id: selectFirst.value ? selectFirst.value : '',
+        category_id: selectThird.value,
         order_by_column: selectMode.value,
         order_by_mode: selectSecond.value,
         minPrice: priceFetch.value,
@@ -304,6 +313,7 @@ export default defineComponent({
         page: pageNumber.value,
         count: 6,
         section_id: selectFirst.value ? selectFirst.value : null,
+        category_id: selectThird.value,
         tags: tagId.value ? [tagId.value] : null,
         authors: authorId.value ? [authorId.value] : null,
         order_by_column: selectMode.value,
@@ -356,11 +366,13 @@ export default defineComponent({
       introData,
       selectFirst,
       selectSecond,
+      selectThird,
       selectMode,
       selectPresent,
       searchCards,
       sendSection,
       sendNovelty,
+      sendCategory,
       sendMode,
       metaTitle,
       scrollHeight,
