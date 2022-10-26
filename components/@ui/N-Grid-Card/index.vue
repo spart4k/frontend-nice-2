@@ -146,6 +146,7 @@ export default {
         secondHalf.value = proxyArray.value.splice(-middleIndex)
       }
       if (widthFrame.value) {
+        console.log()
         return {
           colLeft: firstHalfDesktop.value,
           colRight: secondHalfDesktop.value
