@@ -15,6 +15,7 @@
           @sendSection="sendSection"
           @sendNovelty="sendNovelty"
           @sendMode="sendMode"
+          @sendCategory="sendCategory"
         />
       </template>
     </n-intro-slug>
@@ -80,6 +81,7 @@ export default defineComponent({
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
     const selectFirst = ref(0)
     const selectSecond = ref('desc')
+    const selectThird = ref('')
     const selectPresent = ref(null)
     const selectMode = ref('created_at')
     const priceFetch = ref(1)
@@ -88,22 +90,29 @@ export default defineComponent({
     const firstRender = ref(true)
 
     const sendSection = (value) => {
+      console.log(value)
+      selectThird.value = ''
+      if (value === 8) {
+        value = 9
+      }
       if (value === 0) {
-        selectFirst.value = ''
+        selectFirst.value = 0
       } else {
         selectFirst.value = value
       }
       searchCards()
     }
     const sendNovelty = (value) => {
-      if (value === 8) {
-        value = 9
-      }
       if (value) {
         selectSecond.value = 'desc'
       } else {
         selectSecond.value = 'asc'
       }
+      searchCards()
+    }
+    const sendCategory = (value) => {
+      selectFirst.value = 0
+      selectThird.value = value
       searchCards()
     }
     const sendMode = (value) => {
@@ -146,12 +155,14 @@ export default defineComponent({
       ]
     }))
     const searchCards = async () => {
+      fetchLoading.value = false
       pageNumber.value = 2
       cardsDispatch.value = true
       const params = {
         page: 1,
         count: 6,
         section_id: selectFirst.value ? selectFirst.value : '',
+        category_id: selectThird.value ? selectThird.value : '',
         order_by_column: selectMode.value,
         order_by_mode: selectSecond.value,
         minPrice: priceFetch.value,
@@ -161,6 +172,7 @@ export default defineComponent({
       const response = await store.dispatch(path, params)
       cards.value = [...response.data]
       startCards.value = [...cards.value]
+      fetchLoading.value = true
     }
 
     const introTitle = computed(() => {
@@ -235,9 +247,11 @@ export default defineComponent({
     })
 
     const fetchData = async (currentPage) => {
+      console.log(id.value)
       const params = {
         page: 1,
         count: 6,
+        category_id: '',
         section_id: id.value,
         tags: tagId.value ? [tagId.value] : '',
         authors: authorId.value ? [authorId.value] : '',
@@ -247,6 +261,7 @@ export default defineComponent({
       }
       const path = 'pages/getData'
       const response = await store.dispatch(path, params)
+      console.log(response)
       return response
     }
 
@@ -264,6 +279,7 @@ export default defineComponent({
           fetchLoading.value = true
           cards.value = [...response.data]
           startCards.value = [...cards.value]
+          console.log(startCards.value)
           if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
             cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
             startCards.value = [...cards.value]
@@ -295,8 +311,8 @@ export default defineComponent({
     // const { getData, dataPagination } = pagination(fetchData)
 
     const lazyPagination = async () => {
-    if (id.value !== 8) {
-      selectFirst.value = id.value
+      if (id.value !== 8) {
+        selectFirst.value = id.value
     }
     if (cardsDispatch.value && fetchLoading.value) {
       cardsLoading.value = true
@@ -304,6 +320,7 @@ export default defineComponent({
         page: pageNumber.value,
         count: 6,
         section_id: selectFirst.value ? selectFirst.value : null,
+        category_id: selectThird.value,
         tags: tagId.value ? [tagId.value] : null,
         authors: authorId.value ? [authorId.value] : null,
         order_by_column: selectMode.value,
@@ -356,11 +373,13 @@ export default defineComponent({
       introData,
       selectFirst,
       selectSecond,
+      selectThird,
       selectMode,
       selectPresent,
       searchCards,
       sendSection,
       sendNovelty,
+      sendCategory,
       sendMode,
       metaTitle,
       scrollHeight,
