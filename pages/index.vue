@@ -390,47 +390,47 @@ $heightBig: 4.6rem;
     border-radius: 4rem;
     transform: translateX(-100%);
   }
-  .muzyka {
+  .music {
     width: 5.9rem;
     height: $heightSmall;
   }
-  .video {
+  .media {
     width: 34.4rem;
     height: $heightSmall;
   }
-  .ctivo {
+  .library {
     width: 34.4rem;
     height: $heightBig;
   }
-  .iskusstvo {
+  .art {
     width: 27.1rem;
     height: $heightBig;
   }
-  .kuxnia {
+  .kitchen {
     width: 15rem;
     height: $heightBig;
   }
-  .magazin {
+  .shop {
     width: 35.5rem;
     height: $heightSmall;
   }
-  .foto {
+  .photo {
     width: 25.5rem;
     height: $heightSmall;
   }
-  .odezda {
+  .fashion {
     width: 9rem;
     height: $heightBig;
   }
-  .meropriiatiia {
+  .event {
     width: 31.8rem;
     height: $heightBig;
   }
-  .efir {
+  .broadcast {
     width: 9rem;
     height: $heightBig;
   }
-  .moneta {
+  .coin {
     width: 31.8rem;
     height: $heightBig;
   }

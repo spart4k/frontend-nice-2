@@ -11,7 +11,7 @@
               <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}/${data.files[0].src}`" :alt="data.title" />
             </div>
           </div>
-          <nuxt-link v-else :to="`cards/${data.id}?section=${data.section.slug}`" tag="div">
+          <nuxt-link v-else :to="`${data.section.slug}/${data.id}`" tag="div">
             <div :class="[$style.hat]">
               <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}/${data.files[0].src}`" :alt="data.title" />
             </div>
@@ -32,7 +32,6 @@
             playsinline
             :controls="videoPlay"
             preload="none"
-            muted
             type="video/mp4"
             :src="videoUrl"
           />
@@ -46,7 +45,7 @@
       ]"
     >
       <template>
-        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`cards/${data.id}?section=${data.section.slug}`">
+        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`${data.section.slug}/${data.id}`">
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '1.5rem' }">
             {{ data.title }}
           </h2>
@@ -99,7 +98,7 @@
           </h2>
           <template v-if="$props.detailPage">
             <p v-if="data.authors.length" :class="$style.authorName">
-              {{data.authors.length > 1 ? 'авторы' : 'автор'}}
+              {{data.authors.length > 1 ? 'авторы:' : 'автор:'}}
               <span v-for="(item, index) in data.authors" :key="index" @click="$emit('clickAuthor', item.id)">
                 {{item.name}}{{data.authors.length - 1 === index ? '' : ','}}
               </span>
