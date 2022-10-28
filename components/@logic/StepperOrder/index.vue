@@ -109,9 +109,25 @@ export default {
           } else if (loading.value && data.messageType === 'lastMessages') {
             messages.value = data.messageArray
             song.value = data.currentSong
+            if ('mediaSession' in navigator) {
+              navigator.mediaSession.metadata = new MediaMetadata({
+                title: song.value.title,
+                artwork: [
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, type: 'image/png' }
+                ]
+              })
+            }
             loading.value = false
           } else if (data.messageType === 'nextSong') {
             song.value = data.data
+            if ('mediaSession' in navigator) {
+              navigator.mediaSession.metadata = new MediaMetadata({
+                title: song.value.title,
+                artwork: [
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, type: 'image/png' }
+                ]
+              })
+            }
             emit('destroyTag')
           } else if (!loading.value) {
             await messages.value.push(data)
