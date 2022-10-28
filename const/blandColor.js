@@ -11,5 +11,5 @@ export const BLAND_COLOR = {
   broadcast: '#006350',
   coin: '#73CA55',
   '/tags': '#292BC2',
-  '/authors': '#292BC2'
+  'authors-id': '#292BC2'
 }

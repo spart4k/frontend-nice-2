@@ -106,11 +106,12 @@ export default {
       store.commit('content/setScrollHeight', window.pageYOffset)
     }
     const spliceArray = computed(() => {
-      if (route.value.query.author) {
+      console.log(route.value.name === 'authors-id')
+      if (route.value.name === 'authors-id') {
         proxyArray.value.unshift({
           author_data: props.author
         })
-      } else if (!route.value.query.tag && !route.value.query.author) {
+      } else if (!route.value.query.tag && !route.value.name === 'authors-id') {
         if (!props.homePage) {
           proxyArray.value.unshift({
             image: route.value.params.slug,
