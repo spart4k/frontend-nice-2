@@ -26,7 +26,7 @@
           v-for="(item, index) in resultAuthors"
           :key="index"
           tag="div"
-          :to="`/authors?author=${item.id}`"
+          :to="`/authors/${item.id}`"
           :class="$style.searchItem"
         >
           <div @click="closeBottom">
