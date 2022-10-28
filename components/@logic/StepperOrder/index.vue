@@ -113,7 +113,16 @@ export default {
               navigator.mediaSession.metadata = new MediaMetadata({
                 title: song.value.title,
                 artwork: [
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '1920x640', type: 'image/png' }
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '96x96', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '128x128', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '192x192', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '256x256', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '384x384', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '512x512', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '1024x1024', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '2048x2048', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '4096x4096', type: 'image/png' }
+                  // { src: 'url(....//assets/img/logo.png)', sizes: '512x512', type: 'image/png' }
                 ]
               })
             }
