@@ -330,7 +330,7 @@ export default defineComponent({
     }
 
     const clickTag = (value) => {
-      router.push({ path: '/tags', query: { tag: value } })
+      router.push({ path: `/tags/${value}` })
     }
 
     return {

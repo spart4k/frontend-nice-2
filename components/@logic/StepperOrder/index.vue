@@ -118,7 +118,16 @@ export default {
                   { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '192x192', type: 'image/png' },
                   { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '256x256', type: 'image/png' },
                   { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '384x384', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '512x512', type: 'image/png' }
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '512x512', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '57x57', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '60x60', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '72x72', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '76x76', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '114x114', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '120x120', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '144x144', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '152x152', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '180x180', type: 'image/png' }
                 ]
               })
             }
