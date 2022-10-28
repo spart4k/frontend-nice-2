@@ -50,6 +50,9 @@ export const mutations = {
   loadUserAdress (state, value) {
     state.adress.push(value)
   },
+  setUserFullname (state, value) {
+    state.user.fullname = value
+  },
   addUserAdress (state, value) {
     state.adress[0].push(value)
   },

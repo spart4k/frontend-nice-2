@@ -60,6 +60,7 @@ export default {
         }
         const result = await store.dispatch('shop/createNewOrder', params)
         if (!result.data.error) {
+          store.commit('authentication/setUserFullname', formData.name)
           tinkoffPrice.value = result.data.cards_sum + result.data.delivery_price
           orderId.value = String(result.data.id)
           store.commit('basket/lastOrderChange', result.data.id)
