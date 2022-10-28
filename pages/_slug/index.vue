@@ -347,7 +347,7 @@ export default defineComponent({
     }
 
     const clickTag = (value) => {
-      router.push({ path: '/tags', query: { tag: value } })
+      router.push({ path: `/tags/${value}` })
     }
 
     store.commit('content/changeBgIntro', route.value.params.slug)

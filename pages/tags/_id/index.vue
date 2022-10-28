@@ -57,7 +57,7 @@ export default defineComponent({
     const totalPage = ref([])
     const pageNumber = ref(2)
     const introData = ref()
-    const tagId = computed(() => Number(route.value.query.tag))
+    const tagId = computed(() => route.value.params.id)
     const id = computed(() => {
       switch (route.value.params.slug) {
         case 'music': return 1
@@ -347,7 +347,7 @@ export default defineComponent({
     }
 
     const clickTag = (value) => {
-      router.push({ path: '/tags', query: { tag: value } })
+      router.push({ path: `/tags/${value}` })
     }
 
     store.commit('content/changeBgIntro', route.value.params.slug)

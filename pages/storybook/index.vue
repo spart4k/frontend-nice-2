@@ -188,7 +188,7 @@ export default {
 
     const router = useRouter()
     const clickTag = (value) => {
-      router.push({ path: '/tags', query: { tag: value } })
+      router.push({ path: `/tags/${value}` })
     }
 
     const cardRead = {

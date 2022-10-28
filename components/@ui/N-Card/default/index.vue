@@ -11,7 +11,7 @@
               <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}/${data.files[0].src}`" :alt="data.title" />
             </div>
           </div>
-          <nuxt-link v-else :to="authorTagSection ? `../${data.section.slug}/${data.id}` : `${data.section.slug}/${data.id}`" tag="div">
+          <nuxt-link v-else :to="`../${data.section.slug}/${data.id}`" tag="div">
             <div :class="[$style.hat]">
               <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}/${data.files[0].src}`" :alt="data.title" />
             </div>
@@ -45,7 +45,7 @@
       ]"
     >
       <template>
-        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="authorTagSection ? `../${data.section.slug}/${data.id}` : `${data.section.slug}/${data.id}`">
+        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`../${data.section.slug}/${data.id}`">
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '1.5rem' }">
             {{ data.title }}
           </h2>
@@ -220,17 +220,13 @@ export default {
     const windowWidth = ref()
     const page = ref()
     const { $axios } = useContext()
-    const { store, route } = useContext()
+    const { store } = useContext()
     const videoPlay = ref(false)
     const videoPlug = ref(true)
     const totalPrice = ref(props.data.price)
     const wirePrice = ref(1000)
     const audioStop = ref(0)
     const itemCounter = ref(1)
-    const authorTagSection = computed(() => {
-      console.log(route.value.params.slug)
-      return true
-    })
     const sliderImages = computed(() => {
       const array = ref([])
       props.data.files.forEach((item) => {
@@ -463,8 +459,7 @@ export default {
       itemCounter,
       page,
       sliderImages,
-      playAudio,
-      authorTagSection
+      playAudio
     }
   }
 }
