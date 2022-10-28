@@ -73,7 +73,6 @@ export default defineComponent({
       }
     })
     const authorId = computed(() => {
-        console.log(route.value)
         return route.value.params.id
     })
     const cardsLoading = ref(false)
