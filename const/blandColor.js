@@ -10,6 +10,6 @@ export const BLAND_COLOR = {
   event: '#D13C33',
   broadcast: '#006350',
   coin: '#73CA55',
-  '/tags': '#292BC2',
+  'tags-id': '#292BC2',
   'authors-id': '#292BC2'
 }
