@@ -25,11 +25,9 @@
         <NuxtLink
           v-for="(item, index) in resultAuthors"
           :key="index"
-          tag="div"
           :to="`/authors/${item.id}`"
-          :class="$style.searchItem"
         >
-          <div @click="closeBottom">
+          <div :class="$style.searchItem" @click="closeBottom">
             <N-Search-Result
               :item="item"
             />
@@ -38,11 +36,9 @@
         <NuxtLink
           v-for="(item, index) in resultCards"
           :key="index"
-          tag="div"
           :to="`/${item.section.slug}/${item.id}`"
-          :class="$style.searchItem"
         >
-          <div @click="closeBottom">
+          <div :class="$style.searchItem" @click="closeBottom">
             <N-Search-Result
               :item="item"
             />
@@ -140,10 +136,8 @@ export default {
     padding-bottom: 2.5rem;
     .searchContainer{
       width: 100%;
-      div+div {
-        margin-top: 1.5rem;
-      }
       .searchItem{
+        margin-top: 1.5rem;
       }
     }
     .nothing{

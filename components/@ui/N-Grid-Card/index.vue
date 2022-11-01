@@ -273,7 +273,7 @@ export default {
   max-width: 53.2rem;
   width: calc(50% - 1.5rem);
   @media (min-width: $desktopWidth) {
-    min-width: 60rem;
+    min-width: 40rem;
   }
   @media (min-width: $tabletWidth) and (max-width: $desktopWidth) {
     min-width: 47rem;

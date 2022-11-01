@@ -11,7 +11,7 @@
               <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}/${data.files[0].src}`" :alt="data.title" />
             </div>
           </div>
-          <nuxt-link v-else :to="`../${data.section.slug}/${data.id}`" tag="div">
+          <nuxt-link v-else :to="`../${data.section.slug}/${data.id}`">
             <div :class="[$style.hat]">
               <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}/${data.files[0].src}`" :alt="data.title" />
             </div>
@@ -45,7 +45,7 @@
       ]"
     >
       <template>
-        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`../${data.section.slug}/${data.id}`">
+        <!-- <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`../${data.section.slug}/${data.id}`">
           <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '1.5rem' }">
             {{ data.title }}
           </h2>
@@ -90,6 +90,55 @@
             >
               +{{ chipsCounter }}
             </N-Chip>
+          </div>
+        </NuxtLink> -->
+        <NuxtLink v-if="!$props.detailPage" :to="`../${data.section.slug}/${data.id}`">
+          <div :class="$style.body__top">
+            <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '1.5rem' }">
+              {{ data.title }}
+            </h2>
+            <div v-if="data.date_event" :class="$style.time">
+              {{ dateFormat }}
+            </div>
+            <div :class="$style.cardText">
+              <div :class="$style.parser" v-html="data.subtitle" />
+            </div>
+            <template v-if="data.price && !$props.detailPage">
+              <div :class="$style.price">
+                {{ data.price }} р.
+              </div>
+            </template>
+            <div v-if="!$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
+              <div :class="$style.socialsItem">
+                <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
+                <div :class="$style.parser">
+                  {{ data.like_count }}
+                </div>
+              </div>
+              <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
+                <N-Icon name="comments" :class="$style.commentsButtonContainer" />
+                <div :class="$style.parser">
+                  {{ !$props.detailPage ? data.comments_count : 'Комментировать' }}
+                </div>
+              </div>
+            </div>
+            <div v-if="!$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '2rem' : '' }">
+              <N-Chip
+                v-for="item in data.tags"
+                :key="item.id"
+                ref="chipsArray"
+                :class="$style.chip"
+                @click="$emit('clickTag', item.id)"
+              >
+                {{ item.name }}
+              </N-Chip>
+              <N-Chip
+                v-if="chipsCounter > 0"
+                :class="$style.chip"
+              >
+                +{{ chipsCounter }}
+              </N-Chip>
+            </div>
           </div>
         </NuxtLink>
         <div v-if="$props.detailPage" ref="body" :class="[$style.body__top, detailPage && $style.detailPage]" tag="div">
@@ -686,6 +735,7 @@ export default {
       margin-bottom: 1.5rem;
     }
     &__top {
+    color: $fontColorDefault;
     word-break: break-word;
       &.detailPage {
         cursor: default;
