@@ -17,8 +17,8 @@
                 :class="$style.preview"
               />
               <div v-if="selectors === 'shop'" :class="$style.rowMobile">
-                <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
-                <N-Select :class="$style.select" :select-items="searchMode" @setProperty="($event) => $emit('sendMode', $event)" />
+                <N-Select :class="$style.select" :selectedValue="selectedSection" :select-items="sections" @setProperty="sendSection" />
+                <N-Select :class="$style.select" :selectedValue="selectedMode" :select-items="searchMode" @setProperty="sendMode" />
                 <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
                   <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
                 </div>
@@ -42,8 +42,8 @@
         </div>
         <div v-if="spliceArray.colRight.length || (selectors === 'shop')" :class="$style.col">
           <div v-if="selectors === 'shop'" :class="$style.row">
-            <N-Select :class="$style.select" :select-items="sections" @setProperty="sendSection" />
-            <N-Select :class="$style.select" :select-items="searchMode" @setProperty="sendMode" />
+            <N-Select :class="$style.select" :selectedValue="selectedSection" :select-items="sections" @setProperty="sendSection" />
+            <N-Select :class="$style.select" :selectedValue="selectedMode" :select-items="searchMode" @setProperty="sendMode" />
             <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
               <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
             </div>
@@ -70,6 +70,15 @@ import { computed, onMounted, ref, useContext, watch } from '@nuxtjs/composition
 export default {
   name: 'NGridCard',
   props: {
+    selectedSection: {
+      type: Number
+    },
+    selectedMode: {
+      type: Number
+    },
+    selectAsc: {
+      type: Boolean
+    },
     items: {
       type: Array
     },
@@ -181,6 +190,7 @@ export default {
     }
     const sendSection = (value) => {
       if (value >= 9) {
+      emit('sendCategoryNumber', value)
       value -= 9
       categories.value.forEach((item, index) => {
         if (index === value) {
@@ -195,6 +205,9 @@ export default {
   onMounted(() => {
     if (selectors.value === 'shop') {
       getСategories()
+    }
+    if (props.selectAsc) {
+      noveltyCount.value = !noveltyCount.value
     }
   })
 

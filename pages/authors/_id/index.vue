@@ -37,6 +37,8 @@ import {
   computed, onMounted, nextTick, onUpdated
   // useMeta,
 } from '@nuxtjs/composition-api'
+import { Elastic } from 'gsap'
+import animationGSAP from '~/helpers/compositions/animationGSAP'
 
 // import { pagination } from '~/plugins/pagination'
 // import { head } from '@/components/scripts/head.js'
@@ -205,6 +207,10 @@ export default defineComponent({
       }
     })
 
+    const {
+      animateNavbar
+    } = animationGSAP($gsap, Elastic)
+
     onMounted(() => {
       store.commit('content/changeAnimationEnd', true)
       store.commit('content/setAnimate', false)
@@ -220,9 +226,9 @@ export default defineComponent({
           opacity: 0
         })
       })
-      if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
+      if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'authors') {
         const lastSection = {
-          section: id.value
+          section: 'authors'
         }
         localStorage.setItem('lastSection', JSON.stringify(lastSection))
         store.commit('content/setScrollHeight', 0)
@@ -234,15 +240,14 @@ export default defineComponent({
           store.commit('content/setHeaderHidden', true)
           if (firstRender.value) {
             firstRender.value = false
-          if (JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
+          if (JSON.parse(localStorage.getItem('lastSection')).section === 'authors') {
             window.scroll({
               top: scrollHeight.value,
               left: 0
             })
-            const lastSection = {
-              section: id.value
-            }
-            localStorage.setItem('lastSection', JSON.stringify(lastSection))
+            nextTick(() => {
+              animateNavbar('.navbarSlug')
+            })
           }
         }
       })
@@ -279,7 +284,7 @@ export default defineComponent({
           fetchLoading.value = true
           cards.value = [...response.data]
           startCards.value = [...cards.value]
-          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
+          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === 'authors') {
             cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
             startCards.value = [...cards.value]
             pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
@@ -338,7 +343,7 @@ export default defineComponent({
         startCards.value = [...cards.value]
         const lastCards = {
           cards: startCards.value,
-          section: id.value,
+          section: 'authors',
           page: pageNumber.value
         }
         localStorage.setItem('lastCards', JSON.stringify(lastCards))
