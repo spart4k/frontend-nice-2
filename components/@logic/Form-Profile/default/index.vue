@@ -214,6 +214,7 @@ export default {
       }
     }
     onMounted(() => {
+      store.commit('menu/changelastStepKey', 'registration')
       fetchCities()
     })
 

@@ -66,6 +66,7 @@ export default {
     }
 
     onMounted(() => {
+      store.commit('menu/changelastStepKey', 'basket')
       window.addEventListener('keydown', subminOnEnter)
     })
 

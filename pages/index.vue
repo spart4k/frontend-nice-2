@@ -160,11 +160,10 @@ export default defineComponent({
               top: scrollHeight.value,
               left: 0
             })
-            const lastSection = {
-              section: 'index'
-            }
-            localStorage.setItem('lastSection', JSON.stringify(lastSection))
           }
+          nextTick(() => {
+            animateNavbar('.navbarSlug')
+          })
         }
       })
     })
@@ -216,6 +215,12 @@ export default defineComponent({
             startCards.value = [...cards.value.data]
             pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
           }
+          const lastCards = {
+            cards: startCards.value,
+            section: 'index',
+            page: pageNumber.value
+          }
+          localStorage.setItem('lastCards', JSON.stringify(lastCards))
         } catch (e) {
           console.log(e)
         }

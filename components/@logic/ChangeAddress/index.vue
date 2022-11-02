@@ -45,7 +45,7 @@
       :class="$style.btnBack"
       color="#C83F8E"
       :type-button="'transparent'"
-      @click="$emit('changeStep', '')"
+      @click="stepBack"
     >
       Назад
     </n-button>
@@ -65,6 +65,7 @@ export default {
     const { store } = useContext()
     const currentItem = computed(() => { return store.state.authentication.selectedAddressIndex })
     const addressItem = computed(() => { return store.state.authentication.adress[0] })
+    const lastStepKey = computed(() => { return store.state.menu.lastStepKey })
 
     const removeAddress = (value, index) => {
       useAsync(async () => {
@@ -142,6 +143,18 @@ export default {
       store.commit('authentication/setSelectedAddress', value)
       store.commit('authentication/setSelectedAddressIndex', index)
     }
+
+    const stepBack = () => {
+      if (lastStepKey.value === 'basket') {
+        emit('changeStep', '')
+      } else {
+        store.commit('menu/changeKeyMenu', {
+          key: 'registration',
+          effect: 'fx-slide-from-left'
+        })
+        store.commit('menu/changeStepMenu', { step: 1 })
+      }
+    }
     onMounted(() => {
       fetchCities()
     })
@@ -157,7 +170,9 @@ export default {
       adress,
       city,
       changeAdress,
-      setAddress
+      setAddress,
+      stepBack,
+      lastStepKey
     }
   }
 }
