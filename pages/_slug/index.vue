@@ -11,11 +11,15 @@
           :description="introTitle"
           :intro-data="introData && introData"
           :author="author"
+          :selectedSection="selectedSection"
+          :selectedMode="selectedMode"
+          :selectAsc="selectAsc"
           @clickTag="clickTag"
           @sendSection="sendSection"
           @sendNovelty="sendNovelty"
           @sendMode="sendMode"
           @sendCategory="sendCategory"
+          @sendCategoryNumber="sendCategoryNumber"
         />
       </template>
     </n-intro-slug>
@@ -37,7 +41,8 @@ import {
   computed, onMounted, nextTick, onUpdated
   // useMeta,
 } from '@nuxtjs/composition-api'
-
+import { Elastic } from 'gsap'
+import animationGSAP from '~/helpers/compositions/animationGSAP'
 // import { pagination } from '~/plugins/pagination'
 // import { head } from '@/components/scripts/head.js'
 
@@ -79,41 +84,48 @@ export default defineComponent({
     const loadingContainer = ref(null)
     const cardsDispatch = ref(true)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
-    const selectFirst = ref(0)
-    const selectSecond = ref('desc')
-    const selectThird = ref('')
+    const selectSection = ref(0)
+    const selectDescAsc = ref('desc')
+    const selectCategory = ref('')
     const selectPresent = ref(null)
     const selectMode = ref('created_at')
+    const selectCategoryNumber = ref()
     const priceFetch = ref(1)
     const scrollHeight = computed(() => store?.state?.content?.scrollHeight)
     const metaTitle = computed(() => store?.state?.content?.sections?.data)
     const firstRender = ref(true)
+    const selectedSection = ref(0)
+    const selectedMode = ref(0)
+    const selectAsc = ref(false)
 
     const sendSection = (value) => {
-      console.log(value)
-      selectThird.value = ''
+      selectCategoryNumber.value = null
+      selectCategory.value = ''
       if (value === 8) {
         value = 9
       }
       if (value === 0) {
-        selectFirst.value = 0
+        selectSection.value = 0
       } else {
-        selectFirst.value = value
+        selectSection.value = value
       }
       searchCards()
     }
     const sendNovelty = (value) => {
       if (value) {
-        selectSecond.value = 'desc'
+        selectDescAsc.value = 'desc'
       } else {
-        selectSecond.value = 'asc'
+        selectDescAsc.value = 'asc'
       }
       searchCards()
     }
     const sendCategory = (value) => {
-      selectFirst.value = 0
-      selectThird.value = value
+      selectSection.value = 0
+      selectCategory.value = value
       searchCards()
+    }
+    const sendCategoryNumber = (value) => {
+      selectCategoryNumber.value = value
     }
     const sendMode = (value) => {
       if (value === 0) {
@@ -161,10 +173,10 @@ export default defineComponent({
       const params = {
         page: 1,
         count: 6,
-        section_id: selectFirst.value ? selectFirst.value : '',
-        category_id: selectThird.value ? selectThird.value : '',
+        section_id: selectSection.value ? selectSection.value : '',
+        category_id: selectCategory.value ? selectCategory.value : '',
         order_by_column: selectMode.value,
-        order_by_mode: selectSecond.value,
+        order_by_mode: selectDescAsc.value,
         minPrice: priceFetch.value,
         present: selectPresent.value
       }
@@ -173,6 +185,24 @@ export default defineComponent({
       cards.value = [...response.data]
       startCards.value = [...cards.value]
       fetchLoading.value = true
+      const lastCards = {
+        cards: startCards.value,
+        section: id.value,
+        page: pageNumber.value
+      }
+      localStorage.setItem('lastCards', JSON.stringify(lastCards))
+      if (id.value === 8) {
+      const lastSection = {
+        section: id.value,
+        searchSection: selectSection.value,
+        searchMode: selectDescAsc.value,
+        searchCategory: selectCategory.value,
+        searchCategoryNumber: selectCategoryNumber.value,
+        searchColomn: selectMode.value,
+        searchPresent: selectPresent.value
+      }
+        localStorage.setItem('lastSection', JSON.stringify(lastSection))
+      }
     }
 
     const introTitle = computed(() => {
@@ -202,6 +232,10 @@ export default defineComponent({
         }
       }
     })
+
+    const {
+      animateNavbar
+    } = animationGSAP($gsap, Elastic)
 
     onMounted(() => {
       store.commit('content/changeAnimationEnd', true)
@@ -237,17 +271,15 @@ export default defineComponent({
               top: scrollHeight.value,
               left: 0
             })
-            const lastSection = {
-              section: id.value
-            }
-            localStorage.setItem('lastSection', JSON.stringify(lastSection))
           }
+          nextTick(() => {
+            animateNavbar('.navbarSlug')
+          })
         }
       })
     })
 
     const fetchData = async (currentPage) => {
-      console.log(id.value)
       const params = {
         page: 1,
         count: 6,
@@ -256,12 +288,11 @@ export default defineComponent({
         tags: tagId.value ? [tagId.value] : '',
         authors: authorId.value ? [authorId.value] : '',
         order_by_column: selectMode.value,
-        order_by_mode: selectSecond.value,
+        order_by_mode: selectDescAsc.value,
         minPrice: id.value === 8 ? priceFetch.value : ''
       }
       const path = 'pages/getData'
       const response = await store.dispatch(path, params)
-      console.log(response)
       return response
     }
 
@@ -279,12 +310,51 @@ export default defineComponent({
           fetchLoading.value = true
           cards.value = [...response.data]
           startCards.value = [...cards.value]
-          console.log(startCards.value)
           if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
             cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
             startCards.value = [...cards.value]
             pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+            if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
+              selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+              selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
+              if (JSON.parse(localStorage.getItem('lastSection')).searchCategory) {
+                selectCategory.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
+                selectSection.value = ''
+                selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
+                selectCategoryNumber.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
+              } else {
+                selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+              }
+              if (JSON.parse(localStorage.getItem('lastSection')).searchMode === 'asc') {
+                selectAsc.value = true
+                selectDescAsc.value = 'asc'
+              }
+              selectPresent.value = JSON.parse(localStorage.getItem('lastSection')).searchPresent
+              switch (JSON.parse(localStorage.getItem('lastSection')).searchColomn) {
+                case 'created_at': {
+                  selectedMode.value = 0
+                  if (JSON.parse(localStorage.getItem('lastSection')).searchPresent) {
+                    selectedMode.value = 3
+                  }
+                  return
+                }
+                case 'price': {
+                  selectedMode.value = 1
+                  return
+                }
+                case 'like_count': {
+                  selectedMode.value = 2
+                  return
+                }
+              }
+            }
           }
+          const lastCards = {
+            cards: startCards.value,
+            section: id.value,
+            page: pageNumber.value
+          }
+          localStorage.setItem('lastCards', JSON.stringify(lastCards))
         } catch (e) {
           console.log(e)
         }
@@ -312,19 +382,19 @@ export default defineComponent({
 
     const lazyPagination = async () => {
       if (id.value !== 8) {
-        selectFirst.value = id.value
+        selectSection.value = id.value
     }
     if (cardsDispatch.value && fetchLoading.value) {
       cardsLoading.value = true
       const params = {
         page: pageNumber.value,
         count: 6,
-        section_id: selectFirst.value ? selectFirst.value : null,
-        category_id: selectThird.value,
-        tags: tagId.value ? [tagId.value] : null,
-        authors: authorId.value ? [authorId.value] : null,
+        section_id: selectSection.value ? selectSection.value : null,
+        category_id: selectCategory.value,
+        // tags: tagId.value ? [tagId.value] : null,
+        // authors: authorId.value ? [authorId.value] : null,
         order_by_column: selectMode.value,
-        order_by_mode: selectSecond.value,
+        order_by_mode: selectDescAsc.value,
         minPrice: id.value === 8 ? priceFetch.value : null,
         present: selectPresent.value
       }
@@ -343,6 +413,20 @@ export default defineComponent({
           page: pageNumber.value
         }
         localStorage.setItem('lastCards', JSON.stringify(lastCards))
+
+          console.log(selectSection.value, selectDescAsc.value, selectCategory.value, selectMode.value, id.value)
+          if (id.value === 8) {
+            const lastSection = {
+              section: id.value,
+              searchSection: selectSection.value,
+              searchMode: selectDescAsc.value,
+              searchCategory: selectCategory.value,
+              searchCategoryNumber: selectCategoryNumber.value,
+              searchColomn: selectMode.value,
+              searchPresent: selectPresent.value
+            }
+            localStorage.setItem('lastSection', JSON.stringify(lastSection))
+          }
       }
     }
 
@@ -371,19 +455,23 @@ export default defineComponent({
       cardsDispatch,
       fetchLoading,
       introData,
-      selectFirst,
-      selectSecond,
-      selectThird,
+      selectSection,
+      selectDescAsc,
+      selectCategory,
       selectMode,
       selectPresent,
       searchCards,
       sendSection,
       sendNovelty,
       sendCategory,
+      sendCategoryNumber,
       sendMode,
       metaTitle,
       scrollHeight,
-      firstRender
+      firstRender,
+      selectedSection,
+      selectedMode,
+      selectAsc
     }
   },
   head: {}
