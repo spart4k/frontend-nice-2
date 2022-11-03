@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.container">
+  <div :class="$style.container" @click="$emit('click')">
     <img
       v-show="ready"
       :src="src"

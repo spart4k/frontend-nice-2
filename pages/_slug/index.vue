@@ -54,6 +54,7 @@ export default defineComponent({
   // components: { vSelect },
   setup () {
     const router = useRouter()
+
     const { store, route, $gsap } = useContext()
     const cards = ref([])
     const author = ref()
