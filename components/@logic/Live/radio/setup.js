@@ -28,6 +28,11 @@ export default {
     const marqueeContent = ref(null)
     const marqueeContainerLength = ref(null)
     const isMarquee = ref(true)
+    const closeBottom = () => {
+      if (window.innerWidth < 450) {
+        emit('closeState')
+      }
+    }
     const playAudio = () => {
       emit('playAudio')
       store.commit('menu/changeAudioPlaying', true)
@@ -92,7 +97,8 @@ export default {
       marqueeLengthComputed,
       marqueeContainerLength,
       isMarquee,
-      cardLink
+      cardLink,
+      closeBottom
     }
   }
 }
