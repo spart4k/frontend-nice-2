@@ -179,7 +179,8 @@ export default defineComponent({
         order_by_column: selectMode.value,
         order_by_mode: selectDescAsc.value,
         minPrice: priceFetch.value,
-        present: selectPresent.value
+        present: selectPresent.value,
+        show_in_native: id.value !== 8 ? true : ''
       }
       const path = 'pages/getData'
       const response = await store.dispatch(path, params)
@@ -290,7 +291,8 @@ export default defineComponent({
         authors: authorId.value ? [authorId.value] : '',
         order_by_column: selectMode.value,
         order_by_mode: selectDescAsc.value,
-        minPrice: id.value === 8 ? priceFetch.value : ''
+        minPrice: id.value === 8 ? priceFetch.value : '',
+        show_in_native: id.value !== 8 ? true : ''
       }
       const path = 'pages/getData'
       const response = await store.dispatch(path, params)
@@ -397,7 +399,8 @@ export default defineComponent({
         order_by_column: selectMode.value,
         order_by_mode: selectDescAsc.value,
         minPrice: id.value === 8 ? priceFetch.value : null,
-        present: selectPresent.value
+        present: selectPresent.value,
+        show_in_native: id.value !== 8 ? true : ''
       }
       pageNumber.value++
 
