@@ -364,6 +364,7 @@ export default defineComponent({
     })
 
     const fetchAuthor = () => {
+      console.log(authorId.value)
       if (authorId.value) {
         const params = {
           id: authorId.value
