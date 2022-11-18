@@ -265,10 +265,11 @@ export default defineComponent({
 
     onUpdated(() => {
       nextTick(() => {
-          store.commit('content/setHeaderHidden', true)
-          if (firstRender.value) {
-            firstRender.value = false
-          if (JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
+        store.commit('content/setHeaderHidden', true)
+        if (firstRender.value) {
+          firstRender.value = false
+          if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
+            console.log('scroll')
             window.scroll({
               top: scrollHeight.value,
               left: 0
