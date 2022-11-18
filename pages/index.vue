@@ -112,6 +112,8 @@ export default defineComponent({
 
     onMounted(() => {
       // if (backgroundLoaded.value) {
+        const body = document.querySelector('body')
+        body.style.overflow = 'hidden'
         window.addEventListener('resize', resize)
         window.addEventListener('load', () => {
           if (store.state.content.singleAnimation) {
@@ -135,6 +137,7 @@ export default defineComponent({
         if (!store.state.content.singleAnimation) {
           const logo = document.querySelector('.logo')
           logo.classList.add('animationEnd')
+          body.style.overflow = 'auto'
         }
         setTimeout(() => {
           fetchLoading.value = true
