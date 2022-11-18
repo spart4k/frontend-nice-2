@@ -114,6 +114,7 @@ body {
   // @include regular-text;
   min-height: 100vh;
   min-height: -webkit-fill-available;
+  overflow: hidden;
   &:global(.popup-opened) {
     overflow: hidden;
   }
