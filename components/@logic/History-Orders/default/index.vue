@@ -52,7 +52,7 @@ export default {
   padding: 0 1.5rem;
   overflow-y: auto;
   overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
+  transform: translate3d(0);
   height: 100%;
   .title {
     @include text-style-h2;
