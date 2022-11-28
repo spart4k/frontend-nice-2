@@ -112,16 +112,13 @@ export default {
     }
   }
   :global(.bottom-sheet__content) {
-    overflow-y: auto !important;
-    transform: translate3d(0);
+    overflow-y: unset !important;
+    // transform: translate3d(0);
 
     // overflow-y: scroll !important;
     // overflow-x: hidden !important;
     // -webkit-overflow-scrolling: touch !important;
   }
-  // :global(.bottom-sheet__content)::-webkit-scrollbar {
-  //   display: none;
-  // }
 
   :global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-left) {
     @media (min-width: $mobileWidth) {
