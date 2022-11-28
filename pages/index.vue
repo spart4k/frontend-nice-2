@@ -280,16 +280,9 @@ export default defineComponent({
             name: 'description',
             property: 'description',
             content: metaTags.value.seo_description
-          },
-          {
-            hid: 'apple-mobile-web-app-status-bar-style',
-            name: 'apple-mobile-web-app-status-bar-style',
-            property: 'apple-mobile-web-app-status-bar-style',
-            content: color.value
           }
         ]
     }))
-    console.log('in')
 
     const { page } = pagination(fetchData)
 

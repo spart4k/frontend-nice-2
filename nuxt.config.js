@@ -13,7 +13,6 @@ export default {
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'msapplication-TileColor', content: '#ffffff' },
       { name: 'msapplication-TileImage', content: '/ms-icon-144x144.png' },
-      { name: 'apple-mobile-web-app-status-bar-style', content:'black'},
       { name: 'theme-color', content: '#ffffff' }
 
     ],
