@@ -13,7 +13,7 @@
       {{ $props.order.delivery_price + $props.order.cards_sum }} р.
     </div>
     <div :class="$style.status">
-      Детализация отправлена на адрес электоронной почты
+      Детализация отправленна на Вашу электронную почту
     </div>
   </div>
 </template>

@@ -650,6 +650,15 @@ export default {
     @include regular-text;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+    p {
+      margin: 0 !important;
+    }
+    ul {
+      margin: 0 !important;
+      li {
+        margin: 0 !important;
+      }
+    }
   }
   .hatContainer {
     &.detailPage {
