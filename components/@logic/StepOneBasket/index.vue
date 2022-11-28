@@ -95,6 +95,8 @@ export default {
   overscroll-behavior-y: contain !important;
   transform: translate3d(0px, 0, 0);
   color: $fontColorDefault;
+  overflow-x: hidden;
+  transform: translate3d(0);
 }
 .title {
   margin-bottom: 2rem;
