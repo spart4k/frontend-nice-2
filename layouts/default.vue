@@ -181,7 +181,7 @@ export default {
       if (paramsColor) {
         return paramsColor
       } else {
-        return ''
+        return '#292BC2'
       }
     })
 
