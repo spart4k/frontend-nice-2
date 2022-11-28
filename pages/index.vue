@@ -282,10 +282,8 @@ export default defineComponent({
             content: metaTags.value.seo_description
           },
           {
-            hid: 'apple-mobile-web-app-capable',
-            name: 'apple-mobile-web-app-capable',
-            property: 'apple-mobile-web-app-capable',
-            content: color.value
+            name: 'apple-mobile-web-app-status-bar-style',
+            content: 'black'
           }
         ]
     }))
