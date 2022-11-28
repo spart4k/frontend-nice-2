@@ -69,6 +69,13 @@ import { BLAND_COLOR } from '~/const/blandColor'
 
 export default {
   name: 'DefaultLayout',
+  head () {
+    return {
+      meta: [
+        { name: 'theme-color', content: this.color }
+      ]
+    }
+  },
   setup (_, props) {
     const headerItems = ref([])
     const body = ref(null)

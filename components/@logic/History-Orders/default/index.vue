@@ -50,6 +50,7 @@ export default {
 <style lang="scss" module>
 .wrapper {
   padding: 0 1.5rem;
+  overflow: hidden;
   .title {
     @include text-style-h2;
     color: $fontColorDefault;
@@ -71,6 +72,7 @@ export default {
   .container {
     width: 100%;
     height: 100%;
+    overflow: hidden;
   }
   .nothing{
     width: 100%;
