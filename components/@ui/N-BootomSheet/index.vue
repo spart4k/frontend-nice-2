@@ -113,9 +113,13 @@ export default {
   }
   :global(.bottom-sheet__content) {
     // overflow: auto !important;
-    overflow-y: auto !important;
+
+    overflow-y: scroll !important;
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
+
+    // -ms-overflow-style: none;
+    // scrollbar-width: none;
   }
 
   :global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-left) {
