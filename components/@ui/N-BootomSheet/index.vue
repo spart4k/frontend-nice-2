@@ -112,7 +112,10 @@ export default {
     }
   }
   :global(.bottom-sheet__content) {
-    overflow: auto !important;
+    // overflow: auto !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   :global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-left) {
