@@ -57,7 +57,7 @@ export default defineComponent({
   props: {
   },
   setup (_, { root }) {
-    const { store, $gsap } = useContext()
+    const { store, route, $gsap } = useContext()
     const router = useRouter()
     const cards = ref([])
     const totalPage = ref(0)
@@ -100,6 +100,14 @@ export default defineComponent({
       const response = await store.dispatch('main/getData', params)
       return response
     }
+    const color = computed(() => {
+      const paramsColor = BLAND_COLOR[route.value.params?.slug] || BLAND_COLOR[route.value.name] || BLAND_COLOR[route.value.query.section] || BLAND_COLOR[route.value.path]
+      if (paramsColor) {
+        return paramsColor
+      } else {
+        return ''
+      }
+    })
 
     store.commit('content/clearBgIntro')
 
@@ -272,6 +280,12 @@ export default defineComponent({
             name: 'description',
             property: 'description',
             content: metaTags.value.seo_description
+          },
+          {
+            hid: 'apple-mobile-web-app-capable',
+            name: 'apple-mobile-web-app-capable',
+            property: 'apple-mobile-web-app-capable',
+            content: color.value
           }
         ]
     }))
@@ -362,7 +376,8 @@ export default defineComponent({
       getSeoInfo,
       metaTags,
       scrollHeight,
-      firstRender
+      firstRender,
+      color
     }
   },
   head: {
