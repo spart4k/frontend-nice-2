@@ -112,15 +112,15 @@ export default {
     }
   }
   :global(.bottom-sheet__content) {
-    // overflow: auto !important;
+    overflow: unset !important;
 
-    overflow-y: scroll !important;
-    overflow-x: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
+    // overflow-y: scroll !important;
+    // overflow-x: hidden !important;
+    // -webkit-overflow-scrolling: touch !important;
   }
-  :global(.bottom-sheet__content)::-webkit-scrollbar {
-    display: none;
-  }
+  // :global(.bottom-sheet__content)::-webkit-scrollbar {
+  //   display: none;
+  // }
 
   :global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-left) {
     @media (min-width: $mobileWidth) {
