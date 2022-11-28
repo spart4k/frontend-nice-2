@@ -112,7 +112,8 @@ export default {
     }
   }
   :global(.bottom-sheet__content) {
-    overflow: unset !important;
+    overflow-y: auto !important;
+    transform: translate3d(0);
 
     // overflow-y: scroll !important;
     // overflow-x: hidden !important;
