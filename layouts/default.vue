@@ -72,7 +72,8 @@ export default {
   head () {
     return {
       meta: [
-        { name: 'theme-color', content: this.color }
+        { name: 'theme-color', content: this.color },
+        { name: 'apple-mobile-web-app-status-bar-style', content: this.color }
       ]
     }
   },
