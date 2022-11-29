@@ -29,7 +29,7 @@
       <Nuxt />
     </n-intro-wrapper>
     <N-BootomSheet
-      v-if="$store.state.menu.isShowBottomMenu"
+      v-if="$store.state.menu.isShowBottomMenu && bottomSheetDelay"
       ref="menu"
       :effect="currentShowComponents.effect"
       max-width="39rem"
@@ -99,6 +99,7 @@ export default {
     const audioSource = ref(null)
     const audioDelay = ref(false)
     const audioDestroy = ref(false)
+    const bottomSheetDelay = ref(false)
 
     const backgroundLoaded = () => {
       isLoaded.value = true
@@ -271,6 +272,9 @@ export default {
         getVerify()
       }
       animateBackground()
+      window.addEventListener('load', () => {
+        bottomSheetDelay.value = true
+      })
     })
     provide('backgroundLoaded', isLoaded)
     provide('sheetWidth', sheetWidth)
@@ -306,7 +310,8 @@ export default {
       audioDelay,
       audioDestroy,
       showAnimate,
-      headerHidden
+      headerHidden,
+      bottomSheetDelay
     }
   }
 }
