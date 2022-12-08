@@ -132,7 +132,15 @@ export default {
         const addAdress = await store.dispatch('authentication/addAdress', params)
         await store.commit('authentication/setSelectedAddress', addAdress.data)
         await store.commit('authentication/setSelectedAddressIndex', addressItem.value.length - 1)
-        await emit('changeStep', '')
+        if (lastStepKey.value === 'basket') {
+          emit('changeStep', '')
+        } else {
+          store.commit('menu/changeKeyMenu', {
+            key: 'registration',
+            effect: 'fx-slide-from-left'
+          })
+          store.commit('menu/changeStepMenu', { step: 1 })
+        }
       } catch (e) {
         console.log(e)
       }
