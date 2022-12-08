@@ -241,7 +241,7 @@ export default {
   // @media (max-width: $tabletWidth) {
   //   height: calc(100vh - 10.3rem);
   // }
-  @media (max-width: $tabletWidth) {
+  @media (max-width: $mobileWidth) {
     height: calc(100vh - 17.5rem) !important;
   }
 }

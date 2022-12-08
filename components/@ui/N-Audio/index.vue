@@ -10,7 +10,13 @@
     <!-- <div :class="$style.controlPanel">
     </div> -->
     <div :class="$style.audioContainer">
-      <audio ref="audioSource" :src="src" preload="none" @canplay="isLoaded" :class="$style.audio" @timeupdate="onTimeUpdate" />
+      <audio ref="audioSource"
+      :src="src"
+      preload="none"
+      @canplay="isLoaded"
+      :class="$style.audio"
+      @timeupdate="onTimeUpdate"
+      />
       <div :class="$style.time" :style="{width: timeWidth}">{{currentTimeShow}} / {{durationShow}}</div>
       <div :class="$style.progressBar">
         <div :class="$style.container" ref="container" >
@@ -72,8 +78,8 @@ export default {
       type: Object
     },
     stop: {
-      type:Number
-    },
+      type: Number
+    }
   },
   setup (props, ctx) {
     const { emit } = ctx
@@ -83,7 +89,7 @@ export default {
     const marquee = ref(null)
     const marqueeLength = ref(null)
     const marqueeContent = ref(null)
-    const inputTimeLine =ref(null)
+    const inputTimeLine = ref(null)
     const marqueeContainerLength = ref(null)
     const container = ref()
     const currentTimeShow = ref('00:00')
@@ -98,8 +104,8 @@ export default {
     const lock = ref(true)
     const timeWidth = ref('8.3rem')
     const changeBackground = (val) => {
-      finished.value = (val.target.value/val.target.max) * 100
-      audioSource.value.currentTime = (val.target.value/val.target.max) * audioSource.value.duration.toFixed(0)
+      finished.value = (val.target.value / val.target.max) * 100
+      audioSource.value.currentTime = (val.target.value / val.target.max) * audioSource.value.duration.toFixed(0)
     }
     const isLoaded = () => {
       loading.value = false
@@ -113,7 +119,7 @@ export default {
       setTimeout(() => {
         audioPlaying.value = true
         audioSource.value.play()
-      },100)
+      }, 100)
     }
     const pauseAudio = () => {
       audioPlaying.value = false
@@ -143,17 +149,19 @@ export default {
     }
     const onTimeUpdate = (val) => {
       if (audioStart.value) {
-        finished.value = (inputTimeLine.value.value/inputTimeLine.value.max) * 100
+        finished.value = (inputTimeLine.value.value / inputTimeLine.value.max) * 100
         currentTime.value = audioSource.value.currentTime.toFixed(0)
         duration.value = audioSource.value.duration.toFixed(0)
-        if (audioSource.value.duration.toFixed(0)<3600) {
-          currentTimeShow.value = new Date(audioSource.value.currentTime.toFixed(0) * 1000).toISOString().substring(14, 19)
-          durationShow.value = new Date(audioSource.value.duration.toFixed(0) * 1000).toISOString().substring(14, 19)
-        } else {
-          timeWidth.value = '11.3rem'
-          currentTimeShow.value = new Date(audioSource.value.currentTime.toFixed(0) * 1000).toISOString().substring(11, 19)
-          durationShow.value = new Date(audioSource.value.duration.toFixed(0) * 1000).toISOString().substring(11, 19)
-        }
+        // if (audioSource.value.duration.toFixed(0) < 3600) {
+          console.log(new Date(audioSource.value.currentTime.toFixed(0) * 1000).toISOString())
+        currentTimeShow.value = new Date(audioSource.value.currentTime.toFixed(0) * 1000).toISOString().substring(14, 19)
+        durationShow.value = new Date(audioSource.value.duration.toFixed(0) * 1000).toISOString().substring(14, 19)
+        // }*
+        // else {
+          // timeWidth.value = '11.3rem'
+          // currentTimeShow.value = new Date(audioSource.value.currentTime.toFixed(0) * 1000).toISOString().substring(11, 19)
+          // durationShow.value = new Date(audioSource.value.duration.toFixed(0) * 1000).toISOString().substring(11, 19)
+        // }
         if (lock.value) {
           playbackTime.value = currentTime.value
         }
@@ -166,8 +174,8 @@ export default {
       lock.value = true
     }
     onMounted(() => {
-      window.addEventListener('mousedown', lockInput);
-      window.addEventListener('mouseup', unlockInput);
+      window.addEventListener('mousedown', lockInput)
+      window.addEventListener('mouseup', unlockInput)
       nextTick(() => {
           setTimeout(() => {
             marqueeLength.value = marqueeContent.value.getBoundingClientRect().width
@@ -185,8 +193,8 @@ export default {
       })
     })
     onUnmounted(() => {
-      window.removeEventListener('mousedown', lockInput);
-      window.removeEventListener('mouseup', unlockInput);
+      window.removeEventListener('mousedown', lockInput)
+      window.removeEventListener('mouseup', unlockInput)
     })
 
     watch(() => props.stop, () => {

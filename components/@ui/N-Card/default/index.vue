@@ -353,6 +353,7 @@ export default {
         text: unescape(encodeURIComponent(val)),
         sticker_id: null
       }
+      console.log('send')
       proxyComments.value.data.unshift({
         user: {
           nickname: store.state.authentication.user.nickname
