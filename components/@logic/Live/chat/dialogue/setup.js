@@ -1,4 +1,4 @@
-import { onMounted, computed, ref } from '@nuxtjs/composition-api'
+import { onMounted, computed, ref, watch } from '@nuxtjs/composition-api'
 
 export default {
   name: 'live-chat-dialogue',
@@ -6,31 +6,33 @@ export default {
     messages: {
       type: [Object, Array],
       default: () => []
+    },
+    scrollTrigger: {
+      type: Boolean,
+      default: false
     }
   },
   setup (props, ctx) {
-    const initMesassage = () => {
-
-    }
     const messageToView = computed(() => {
       const newMessages = [
         ...props.messages
       ]
       return newMessages.reverse()
     })
-    const dialog = ref(null)
-    const scroll = () => {
-      console.log('scroll')
-      // dialog.value.$el.scrollTop()
+    const dialog = ref()
+    const scrollDown = () => {
+      dialog.value.scrollTop = dialog.value.scrollHeight
     }
 
     onMounted(() => {
-      initMesassage()
+    })
+
+    watch(() => props.scrollTrigger, () => {
+      scrollDown()
     })
     return {
-      initMesassage,
       messageToView,
-      scroll,
+      scrollDown,
       dialog
     }
   }

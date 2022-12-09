@@ -18,6 +18,7 @@ module.exports = {
   rules: {
     'indent': 'off',
     'vue/multi-word-component-names': 0,
-    'unicorn/escape-case': 'off'
+    'unicorn/escape-case': 'off',
+    'object-curly-spacing': 'off'
   }
 }
