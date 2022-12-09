@@ -435,6 +435,7 @@ export default {
       windowWidth.value = window.innerWidth
     }
     onMounted(() => {
+      store.commit('content/imgLoadCounterReset')
       if (props.detailPage === true) {
         proxyComments.value.data.reverse()
       }

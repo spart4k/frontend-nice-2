@@ -10,7 +10,8 @@ export const state = () => ({
   isShowAnimationHomePage: true,
   singleAnimation: true,
   scrollHeight: 0,
-  headerHidden: true
+  headerHidden: true,
+  imgLoadCounter: 0
 })
 
 export const mutations = {
@@ -46,6 +47,12 @@ export const mutations = {
   },
   setHeaderHidden (state, value) {
     state.headerHidden = value
+  },
+  imgLoadCounterInc (state) {
+    state.imgLoadCounter += 1
+  },
+  imgLoadCounterReset (state) {
+    state.imgLoadCounter = 0
   }
 }
 
