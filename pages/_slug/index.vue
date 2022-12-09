@@ -264,12 +264,11 @@ export default defineComponent({
     })
 
     onUpdated(() => {
-      nextTick(() => {
+      if (window.innerWidth < 900) {
         store.commit('content/setHeaderHidden', true)
         if (firstRender.value) {
           firstRender.value = false
           if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
-            console.log('scroll')
             window.scroll({
               top: scrollHeight.value,
               left: 0
@@ -279,7 +278,29 @@ export default defineComponent({
             animateNavbar('.navbarSlug')
           })
         }
-      })
+      } else {
+        nextTick(() => {
+          store.commit('content/setHeaderHidden', true)
+          if (firstRender.value) {
+            firstRender.value = false
+            if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
+                window.scroll({
+                  top: 0,
+                  left: 0
+                })
+                nextTick(() => {
+                  window.scroll({
+                    top: scrollHeight.value,
+                    left: 0
+                  })
+                })
+            }
+            nextTick(() => {
+              animateNavbar('.navbarSlug')
+            })
+          }
+        })
+      }
     })
 
     const fetchData = async (currentPage) => {
@@ -441,6 +462,10 @@ export default defineComponent({
     }
 
     store.commit('content/changeBgIntro', route.value.params.slug)
+
+    onMounted(() => {
+      // console.log(route.value.fullPath)
+    })
 
     return {
       clickTag,

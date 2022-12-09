@@ -171,6 +171,7 @@ export default {
     }
 
     const closeState = () => {
+      console.log(menu)
       menu.value.$children[0].close()
     }
 
@@ -188,6 +189,7 @@ export default {
     })
 
     const openMenu = () => {
+      console.log(menu)
       setTimeout(() => {
         menu.value.$children[0].open()
         if (window.innerWidth > 450) {
