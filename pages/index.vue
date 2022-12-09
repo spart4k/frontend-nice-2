@@ -194,6 +194,9 @@ export default defineComponent({
                     left: 0
                   })
                 })
+                setTimeout(() => {
+                  console.log(window.pageYOffset)
+                }, 1000)
             }
             nextTick(() => {
               animateNavbar('.navbarSlug')
