@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from '@nuxtjs/composition-api'
+import { ref, onMounted, useContext } from '@nuxtjs/composition-api'
 
 export default {
   name: 'RImg',
@@ -22,8 +22,9 @@ export default {
   },
   setup (props) {
     const ready = ref(true)
+    const { store } = useContext()
     const loadEnd = () => {
-      console.log('asd')
+      store.commit('content/imgLoadCounterInc')
     }
 
     onMounted(() => {
