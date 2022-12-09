@@ -153,11 +153,11 @@ export default {
         currentTime.value = audioSource.value.currentTime.toFixed(0)
         duration.value = audioSource.value.duration.toFixed(0)
         // if (audioSource.value.duration.toFixed(0) < 3600) {
-          console.log(new Date(audioSource.value.currentTime.toFixed(0) * 1000).toISOString())
-        currentTimeShow.value = new Date(audioSource.value.currentTime.toFixed(0) * 1000).toISOString().substring(14, 19)
-        durationShow.value = new Date(audioSource.value.duration.toFixed(0) * 1000).toISOString().substring(14, 19)
-        // }*
-        // else {
+        // currentTimeShow.value = new Date(audioSource.value.currentTime.toFixed(0) * 1000).toISOString().substring(14, 19)
+        // durationShow.value = new Date(audioSource.value.duration.toFixed(0) * 1000).toISOString().substring(14, 19)
+        currentTimeShow.value = secConverter(currentTime.value)
+        durationShow.value = secConverter(duration.value)
+        // } else {
           // timeWidth.value = '11.3rem'
           // currentTimeShow.value = new Date(audioSource.value.currentTime.toFixed(0) * 1000).toISOString().substring(11, 19)
           // durationShow.value = new Date(audioSource.value.duration.toFixed(0) * 1000).toISOString().substring(11, 19)
@@ -166,6 +166,17 @@ export default {
           playbackTime.value = currentTime.value
         }
       }
+    }
+    const secConverter = (val) => {
+      console.log(val)
+      let sec = val
+      let minutes = 0
+      if (Math.floor(sec / 60)) {
+        minutes = Math.floor(sec / 60)
+      }
+      sec = sec - minutes * 60
+      const time = `${minutes < 10 ? '0' : ''}${minutes}:${sec < 10 ? '0' : ''}${sec}`
+      return time
     }
     const lockInput = () => {
       lock.value = false
@@ -231,7 +242,8 @@ export default {
       lock,
       lockInput,
       unlockInput,
-      timeWidth
+      timeWidth,
+      secConverter
     }
   }
 }
