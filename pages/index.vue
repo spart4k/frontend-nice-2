@@ -1,6 +1,7 @@
 <template>
   <div>
-    <N-Preloader v-if="!cards.data && loadingEnd" />
+    <!-- loadingEnd -->
+    <N-Preloader v-if="!cards.data" />
     <n-intro
       v-else
       :description="introTitle"
@@ -168,41 +169,41 @@ export default defineComponent({
 
     onUpdated(() => {
       if (window.innerWidth < 900) {
-        // store.commit('content/setHeaderHidden', true)
+        store.commit('content/setHeaderHidden', true)
         if (firstRender.value) {
-          // firstRender.value = false
+          firstRender.value = false
           if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-            // window.scroll({
-            //   top: scrollHeight.value,
-            //   left: 0
-            // })
+            window.scroll({
+              top: scrollHeight.value,
+              left: 0
+            })
           }
           nextTick(() => {
-            // animateNavbar('.navbarSlug')
+            animateNavbar('.navbarSlug')
           })
         }
       } else {
         nextTick(() => {
-          // store.commit('content/setHeaderHidden', true)
+          store.commit('content/setHeaderHidden', true)
           if (firstRender.value) {
-            // firstRender.value = false
+            firstRender.value = false
             if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-                // window.scroll({
-                //   top: 0,
-                //   left: 0
-                // })
+                window.scroll({
+                  top: 0,
+                  left: 0
+                })
                 nextTick(() => {
-                  // window.scroll({
-                  //   top: scrollHeight.value,
-                  //   left: 0
-                  // })
+                  window.scroll({
+                    top: scrollHeight.value,
+                    left: 0
+                  })
                 })
                 setTimeout(() => {
-                  // console.log(window.pageYOffset)
+                  console.log(window.pageYOffset)
                 }, 1000)
             }
             nextTick(() => {
-              // animateNavbar('.navbarSlug')
+              animateNavbar('.navbar/Slug')
             })
           }
         })
@@ -380,47 +381,47 @@ export default defineComponent({
     }
 
     watch(() => imgLoadCount.value, () => {
-      if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
-        if (window.innerWidth < 900) {
-        store.commit('content/setHeaderHidden', true)
-        if (firstRender.value) {
-          firstRender.value = false
-          if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-            loadingEnd.value = false
-            window.scroll({
-              top: scrollHeight.value,
-              left: 0
-            })
-          }
-          nextTick(() => {
-            animateNavbar('.navbarSlug')
-          })
-        }
-      } else {
-        nextTick(() => {
-          store.commit('content/setHeaderHidden', true)
-          if (firstRender.value) {
-            firstRender.value = false
-            if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-              loadingEnd.value = false
-                window.scroll({
-                  top: 0,
-                  left: 0
-                })
-                nextTick(() => {
-                  window.scroll({
-                    top: scrollHeight.value,
-                    left: 0
-                  })
-                })
-            }
-            nextTick(() => {
-              animateNavbar('.navbarSlug')
-            })
-          }
-        })
-      }
-      }
+      // if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
+      //   if (window.innerWidth < 900) {
+      //   store.commit('content/setHeaderHidden', true)
+      //   if (firstRender.value) {
+      //     firstRender.value = false
+      //     if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+      //       loadingEnd.value = false
+      //       window.scroll({
+      //         top: scrollHeight.value,
+      //         left: 0
+      //       })
+      //     }
+      //     nextTick(() => {
+      //       animateNavbar('.navbarSlug')
+      //     })
+      //   }
+      // } else {
+      //   nextTick(() => {
+      //     store.commit('content/setHeaderHidden', true)
+      //     if (firstRender.value) {
+      //       firstRender.value = false
+      //       if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+      //         loadingEnd.value = false
+      //           window.scroll({
+      //             top: 0,
+      //             left: 0
+      //           })
+      //           nextTick(() => {
+      //             window.scroll({
+      //               top: scrollHeight.value,
+      //               left: 0
+      //             })
+      //           })
+      //       }
+      //       nextTick(() => {
+      //         animateNavbar('.navbarSlug')
+      //       })
+      //     }
+      //   })
+      // }
+      // }
     })
 
     return {
