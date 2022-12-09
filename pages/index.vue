@@ -163,6 +163,7 @@ export default defineComponent({
     })
 
     onUpdated(() => {
+      console.log(scrollHeight.value)
       if (window.innerWidth < 900) {
         store.commit('content/setHeaderHidden', true)
         if (firstRender.value) {
