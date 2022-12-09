@@ -96,7 +96,7 @@ export default {
 <style lang="scss" module>
 .wrapper {
   .bottomSheet  {
-    transform: translate3d(0, 0, 0);
+    // transform: translate3d(0, 0, 0);
   }
   .trigger {
     position: absolute;
