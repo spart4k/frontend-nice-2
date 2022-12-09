@@ -2,6 +2,7 @@
   <img
     v-if="ready"
     loading="lazy"
+    @load="loadEnd"
     :src="src"
     :class="[$style.img, detailPage && $style.detailPage]"
     :alt="alt"
@@ -21,6 +22,9 @@ export default {
   },
   setup (props) {
     const ready = ref(true)
+    const loadEnd = () => {
+      console.log('asd')
+    }
 
     onMounted(() => {
       const image = new Image()
@@ -30,7 +34,8 @@ export default {
       image.src = props.src
     })
     return {
-      ready
+      ready,
+      loadEnd
     }
   }
 }
