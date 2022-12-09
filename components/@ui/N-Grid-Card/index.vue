@@ -241,7 +241,7 @@ export default {
   // @media (max-width: $tabletWidth) {
   //   height: calc(100vh - 10.3rem);
   // }
-  @media (max-width: $tabletWidth) {
+  @media (max-width: $mobileWidth) {
     height: calc(100vh - 17.5rem) !important;
   }
 }
@@ -285,7 +285,11 @@ export default {
 .col {
   max-width: 53.2rem;
   width: calc(50% - 1.5rem);
-  @media (min-width: $desktopWidth) {
+  @media (min-width: $desktopWideWidth) {
+    min-width: 62rem;
+    max-width: auto;
+  }
+  @media (min-width: $desktopWidth) and (max-width: $desktopWideWidth) {
     min-width: 40rem;
   }
   @media (min-width: $tabletWidth) and (max-width: $desktopWidth) {

@@ -1,4 +1,4 @@
-import { onMounted, useContext } from '@nuxtjs/composition-api'
+import { onMounted, useContext, ref } from '@nuxtjs/composition-api'
 
 export default {
   name: 'live-chat',
@@ -31,6 +31,19 @@ export default {
       }, 100)
       store.commit('menu/changeShowStateBottomSheetLive', { value: true })
     }
+    const scrollTrigger = ref(false)
+
+    const scrollDown = () => {
+      scrollTrigger.value = !scrollTrigger.value
+    }
+    const sendMessage = (val) => {
+      emit('sendMessage', val)
+      scrollDown()
+    }
+    const sendSticker = (val) => {
+      emit('sendSticker', val)
+      scrollDown()
+    }
     // const messages = ref([])
     // const { store } = useContext()
     // const loading = ref(true)
@@ -59,7 +72,11 @@ export default {
     })
     return {
       login,
-      registration
+      registration,
+      scrollDown,
+      sendMessage,
+      scrollTrigger,
+      sendSticker
     }
   }
 }

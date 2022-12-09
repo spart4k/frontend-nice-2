@@ -101,7 +101,7 @@
               {{ dateFormat }}
             </div>
             <div :class="$style.cardText">
-              <div :class="$style.parser" v-html="data.subtitle" />
+              <div :class="[$style.parser, $style[linkColor]]" v-html="data.subtitle" />
             </div>
             <template v-if="data.price && !$props.detailPage">
               <div :class="$style.price">
@@ -157,7 +157,7 @@
             {{ dateFormat }}
           </div>
           <div :class="$style.cardText">
-            <div :class="$style.parserDetail" v-html="data.text" />
+            <div :class="[$style.parserDetail, $style[linkColor]]" v-html="data.text" />
           </div>
           <template>
             <!-- <div :class="$style.cardAudio">
@@ -260,6 +260,8 @@ export default {
     const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
     const proxyComments = computed(() => props.comments)
+    const { store, $axios } = useContext()
+    const linkColor = computed(() => props.data.section.slug)
     const chipsCounter = ref(0)
     const chipsWidth = ref(-10)
     const chipsArray = ref()
@@ -268,8 +270,6 @@ export default {
     const loginMenu = ref()
     const windowWidth = ref()
     const page = ref()
-    const { $axios } = useContext()
-    const { store } = useContext()
     const videoPlay = ref(false)
     const videoPlug = ref(true)
     const totalPrice = ref(props.data.price)
@@ -353,6 +353,7 @@ export default {
         text: unescape(encodeURIComponent(val)),
         sticker_id: null
       }
+      console.log('send')
       proxyComments.value.data.unshift({
         user: {
           nickname: store.state.authentication.user.nickname
@@ -508,7 +509,8 @@ export default {
       itemCounter,
       page,
       sliderImages,
-      playAudio
+      playAudio,
+      linkColor
     }
   }
 }
@@ -660,6 +662,61 @@ export default {
       }
     }
   }
+    .music {
+      a {
+        color: #1C2B67;
+      }
+    }
+    .media {
+      a {
+        color: #5289C5;
+      }
+    }
+    .library {
+      a {
+        color: #D46D33;
+      }
+    }
+    .art {
+      a {
+        color: #6448B5;
+      }
+    }
+    .kitchen {
+      a {
+        color: #DCB247;
+      }
+    }
+    .shop {
+      a {
+        color: #C83F8E;
+      }
+    }
+    .photo {
+      a {
+        color: #ED6E69;
+      }
+    }
+    .fashion {
+      a {
+        color: #6CCAC8;
+      }
+    }
+    .event {
+      a {
+        color: #D13C33;
+      }
+    }
+    .broadcast {
+      a {
+        color: #006350;
+      }
+    }
+    .coin {
+      a {
+        color: #73CA55;
+      }
+    }
   .hatContainer {
     &.detailPage {
       @media (min-width: $tabletWidth) {
@@ -761,6 +818,61 @@ export default {
           margin-top: 1.5rem;
         }
       }
+      .music {
+      a {
+        color: #1C2B67;
+      }
+    }
+    .media {
+      a {
+        color: #5289C5;
+      }
+    }
+    .library {
+      a {
+        color: #D46D33;
+      }
+    }
+    .art {
+      a {
+        color: #6448B5;
+      }
+    }
+    .kitchen {
+      a {
+        color: #DCB247;
+      }
+    }
+    .shop {
+      a {
+        color: #C83F8E;
+      }
+    }
+    .photo {
+      a {
+        color: #ED6E69;
+      }
+    }
+    .fashion {
+      a {
+        color: #6CCAC8;
+      }
+    }
+    .event {
+      a {
+        color: #D13C33;
+      }
+    }
+    .broadcast {
+      a {
+        color: #006350;
+      }
+    }
+    .coin {
+      a {
+        color: #73CA55;
+      }
+    }
       h2 {
         text-decoration-line: underline;
       }

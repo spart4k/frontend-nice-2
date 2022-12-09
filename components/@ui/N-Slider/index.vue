@@ -4,20 +4,29 @@
       <N-Icon name="fullscreen" :class="$style.fullscreenButton" />
     </div>
     <div :class="$style.slider_top">
-      <div :class="$style.originalSlider">
-        <VueSlickCarousel
-          ref="c1"
-          :dots="true"
-          :infinite="true"
-          :focus-on-select="true"
-          :adaptive-height="true"
-          @beforeChange="syncSlidersTop"
-        >
+      <template v-if="sliderItem.length > 1">
+        <div :class="$style.originalSlider">
+          <VueSlickCarousel
+            ref="c1"
+            :dots="true"
+            :infinite="true"
+            :focus-on-select="true"
+            :adaptive-height="true"
+            @beforeChange="syncSlidersTop"
+          >
+            <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
+              <img v-if="item.file_type_id === 1" :src="`${$axios.defaults.baseURL}/${item.src}`" alt="">
+            </div>
+          </VueSlickCarousel>
+        </div>
+      </template>
+      <template v-else>
+        <div :class="$style.originalSliderSingle">
           <div v-for="(item, index) in sliderItem" :key="index" :class="$style.item">
             <img v-if="item.file_type_id === 1" :src="`${$axios.defaults.baseURL}/${item.src}`" alt="">
           </div>
-        </VueSlickCarousel>
-      </div>
+        </div>
+      </template>
       <portal to="sliderPopup">
         <div :style="{zIndex: popup ? 10000 : -10}" :class="$style.overlay" @click="popupChange">
           <N-Button :background-color="'rgba(255, 255, 255, 0.4)'" type-button="small" :class="$style.closeButton">
@@ -98,6 +107,12 @@ export default {
       // height: 100% !important;
       margin: auto 0;
       width: 100%;
+    }
+  }
+  .originalSliderSingle {
+    img {
+      height: 100%;
+      object-fit: contain;
     }
   }
   .fullscreen {

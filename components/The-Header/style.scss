@@ -123,6 +123,10 @@
   width: 2.7rem;
   height: 1.9rem;
   position: relative;
+  @media (min-width: $desktopWideWidth) {
+    width: 3.4rem;
+    height: 2.5rem;
+  }
 }
 
 .deviceMenu span {
@@ -188,12 +192,19 @@
   color: $white;
   text-transform: uppercase;
   @include  regular-text-small;
+  @media (min-width: $desktopWideWidth) {
+    font-size: 1.6rem;
+  }
   &__icon {
     width: 5.3rem;
     height: 5.3rem;
     @media (min-width: $tabletWidth ) {
       width: 6.3rem;
       height: 6.3rem;
+    }
+    @media (min-width: $desktopWideWidth) {
+      width: 8.3rem;
+      height: 8.3rem;
     }
     svg {
       width: 100%;

@@ -161,6 +161,10 @@ export default {
   @include regular-text-bold;
   border: none;
   outline: none;
+  background-color: white;
+  @media (max-width:$tabletWidth) {
+    font-size: 1rem;
+  }
 }
 .selectWire{
   padding-left: 0;
