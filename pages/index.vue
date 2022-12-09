@@ -125,6 +125,7 @@ export default defineComponent({
         body.style.overflow = 'hidden'
         window.addEventListener('resize', resize)
         window.addEventListener('load', () => {
+          console.log('load')
           if (store.state.content.singleAnimation) {
             localStorage.setItem('showAnimateHomePage', 'true')
             store.commit('content/setSingleAnimation', false)
