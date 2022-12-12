@@ -157,49 +157,19 @@ export default defineComponent({
           fetchLoading.value = true
           animationLoad.value = true
         }, 1000)
+        if (!localStorage.getItem('lastSection')) {
+            const lastSection = {
+              section: 'index'
+            }
+            localStorage.setItem('lastSection', JSON.stringify(lastSection))
+          }
         // }
     })
 
     onUpdated(() => {
-      // if (window.innerWidth < 900) {
-      //   store.commit('content/setHeaderHidden', true)
-      //   if (firstRender.value) {
-      //     firstRender.value = false
-      //     if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-      //       window.scroll({
-      //         top: scrollHeight.value,
-      //         left: 0
-      //       })
-      //     }
-      //     nextTick(() => {
-      //       animateNavbar('.navbarSlug')
-      //     })
-      //   }
-      // } else {
-      //   nextTick(() => {
-      //     store.commit('content/setHeaderHidden', true)
-      //     if (firstRender.value) {
-      //       firstRender.value = false
-      //       if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-      //           window.scroll({
-      //             top: 0,
-      //             left: 0
-      //           })
-      //           nextTick(() => {
-      //             window.scroll({
-      //               top: scrollHeight.value,
-      //               left: 0
-      //             })
-      //           })
-      //           setTimeout(() => {
-      //             console.log(window.pageYOffset)
-      //           }, 1000)
-      //       }
-      //       nextTick(() => {
-      //         animateNavbar('.navbarSlug')
-      //       })
-      //     }
-      //   })
+      console.log(route.value.name)
+      // if (route.value.name !== 'index') {
+      //   loadingEnd.value = false
       // }
     })
 
@@ -263,7 +233,9 @@ export default defineComponent({
           } else {
             store.commit('content/setHeaderHidden', true)
           }
+          // console.log(localStorage.getItem('lastSection'), JSON.parse(localStorage.getItem('lastSection')).section !== 'index')
           if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+            console.log('yes')
             const lastSection = {
               section: 'index'
             }
@@ -282,6 +254,8 @@ export default defineComponent({
     })
     onUnmounted(() => {
       window.removeEventListener('resize', resize)
+      loadingEnd.value = false
+      console.log(route.value.fullPath)
     })
 
     store.commit('content/clearBgIntro')
@@ -398,7 +372,7 @@ export default defineComponent({
         if (localStorage.getItem('lastCards') !== '[object Object]') {
           console.log(imgLoadCount.value, JSON.parse(localStorage.getItem('lastCards')).cards.length)
           if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
-            if (window.innerWidth < 900) {
+            if (window.innerWidth < 450) {
             store.commit('content/setHeaderHidden', true)
             if (firstRender.value) {
               firstRender.value = false
@@ -440,7 +414,7 @@ export default defineComponent({
           }
         } else if (localStorage.getItem('lastCards') === '[object Object]') {
           if (imgLoadCount.value <= 6) {
-            if (window.innerWidth < 900) {
+            if (window.innerWidth < 450) {
             store.commit('content/setHeaderHidden', true)
             if (firstRender.value) {
               firstRender.value = false

@@ -39,8 +39,8 @@ import {
   useRouter,
   useContext,
   useFetch,
-  useMeta, watch,
-  computed, onMounted, nextTick, onUpdated
+  useMeta, watch, onUnmounted,
+  computed, onMounted, nextTick
   // useMeta,
 } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
@@ -258,46 +258,12 @@ export default defineComponent({
           opacity: 0
         })
       })
-    })
-
-    onUpdated(() => {
-      // if (window.innerWidth < 900) {
-      //   store.commit('content/setHeaderHidden', true)
-      //   if (firstRender.value) {
-      //     firstRender.value = false
-      //     if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
-      //       window.scroll({
-      //         top: scrollHeight.value,
-      //         left: 0
-      //       })
-      //     }
-      //     nextTick(() => {
-      //       animateNavbar('.navbarSlug')
-      //     })
-      //   }
-      // } else {
-      //   nextTick(() => {
-      //     store.commit('content/setHeaderHidden', true)
-      //     if (firstRender.value) {
-      //       firstRender.value = false
-      //       if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
-      //           window.scroll({
-      //             top: 0,
-      //             left: 0
-      //           })
-      //           nextTick(() => {
-      //             window.scroll({
-      //               top: scrollHeight.value,
-      //               left: 0
-      //             })
-      //           })
-      //       }
-      //       nextTick(() => {
-      //         animateNavbar('.navbarSlug')
-      //       })
-      //     }
-      //   })
-      // }
+      if (!localStorage.getItem('lastSection')) {
+        const lastSection = {
+          section: id.value
+        }
+        localStorage.setItem('lastSection', JSON.stringify(lastSection))
+      }
     })
 
     const fetchData = async (currentPage) => {
@@ -386,7 +352,6 @@ export default defineComponent({
           }
           if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
             loadingEnd.value = false
-            console.log('1')
           }
           if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
             const lastSection = {
@@ -478,12 +443,16 @@ export default defineComponent({
       }
     }
 
+    onUnmounted(() => {
+      loadingEnd.value = false
+    })
+
     watch(() => imgLoadCount.value, () => {
       if (scrollHeight.value !== 0) {
         if (localStorage.getItem('lastCards') !== '[object Object]') {
           console.log(imgLoadCount.value, JSON.parse(localStorage.getItem('lastCards')).cards.length)
           if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
-            if (window.innerWidth < 900) {
+            if (window.innerWidth < 450) {
             store.commit('content/setHeaderHidden', true)
             if (firstRender.value) {
               firstRender.value = false
@@ -525,7 +494,7 @@ export default defineComponent({
           }
         } else if (localStorage.getItem('lastCards') === '[object Object]') {
           if (imgLoadCount.value <= 6) {
-            if (window.innerWidth < 900) {
+            if (window.innerWidth < 450) {
             store.commit('content/setHeaderHidden', true)
             if (firstRender.value) {
               firstRender.value = false
