@@ -258,13 +258,6 @@ export default defineComponent({
           opacity: 0
         })
       })
-      if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
-        const lastSection = {
-          section: id.value
-        }
-        localStorage.setItem('lastSection', JSON.stringify(lastSection))
-        store.commit('content/setScrollHeight', 0)
-      }
     })
 
     onUpdated(() => {
@@ -384,6 +377,13 @@ export default defineComponent({
           if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
             loadingEnd.value = false
             console.log('1')
+          }
+          if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
+            const lastSection = {
+              section: id.value
+            }
+            localStorage.setItem('lastSection', JSON.stringify(lastSection))
+            store.commit('content/setScrollHeight', 0)
           }
           const lastCards = {
             cards: startCards.value,
