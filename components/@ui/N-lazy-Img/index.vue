@@ -2,6 +2,7 @@
   <img
     v-if="ready"
     loading="lazy"
+    @load="loadEnd"
     :src="src"
     :class="[$style.img, detailPage && $style.detailPage]"
     :alt="alt"
@@ -10,7 +11,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from '@nuxtjs/composition-api'
+import { ref, onMounted, useContext } from '@nuxtjs/composition-api'
 
 export default {
   name: 'RImg',
@@ -21,6 +22,10 @@ export default {
   },
   setup (props) {
     const ready = ref(true)
+    const { store } = useContext()
+    const loadEnd = () => {
+      store.commit('content/imgLoadCounterInc')
+    }
 
     onMounted(() => {
       const image = new Image()
@@ -30,7 +35,8 @@ export default {
       image.src = props.src
     })
     return {
-      ready
+      ready,
+      loadEnd
     }
   }
 }

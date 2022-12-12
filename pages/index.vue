@@ -1,8 +1,9 @@
 <template>
   <div>
-    <N-Preloader v-if="!cards.data" />
+    <N-Preloader v-if="!cards.data || !loadingEnd" />
     <n-intro
-      v-else
+      :class="!loadingEnd && $style.disabled"
+      v-if="cards.data"
       :description="introTitle"
       :is-show-animation="true"
     >
@@ -21,6 +22,7 @@
           v-if="cards && cards.data"
           ref="content"
           :items="cards.data"
+          :class="!loadingEnd && $style.disabled"
           home-page
           @clickTag="clickTag"
         />
@@ -40,7 +42,7 @@ import {
   computed,
   defineComponent,
   useContext,
-  useFetch, useAsync,
+  useFetch, useAsync, watch,
   onMounted, onUnmounted, onUpdated, nextTick,
   useRouter,
   useMeta
@@ -71,7 +73,9 @@ export default defineComponent({
     const cardsDispatch = ref(true)
     const fetchLoading = ref(false)
     const animationLoad = ref(false)
+    const loadingEnd = ref(false)
     const scrollHeight = computed(() => store?.state?.content?.scrollHeight)
+    const imgLoadCount = computed(() => store?.state?.content?.imgLoadCounter)
     const metaTags = ref({})
     const firstRender = ref(true)
     const resize = () => {
@@ -125,6 +129,7 @@ export default defineComponent({
         body.style.overflow = 'hidden'
         window.addEventListener('resize', resize)
         window.addEventListener('load', () => {
+          console.log('load')
           if (store.state.content.singleAnimation) {
             localStorage.setItem('showAnimateHomePage', 'true')
             store.commit('content/setSingleAnimation', false)
@@ -153,53 +158,49 @@ export default defineComponent({
           animationLoad.value = true
         }, 1000)
         // }
-        if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
-          const lastSection = {
-            section: 'index'
-          }
-          localStorage.setItem('lastSection', JSON.stringify(lastSection))
-          store.commit('content/setScrollHeight', 0)
-        }
     })
 
     onUpdated(() => {
-      if (window.innerWidth < 900) {
-        store.commit('content/setHeaderHidden', true)
-        if (firstRender.value) {
-          firstRender.value = false
-          if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-            window.scroll({
-              top: scrollHeight.value,
-              left: 0
-            })
-          }
-          nextTick(() => {
-            animateNavbar('.navbarSlug')
-          })
-        }
-      } else {
-        nextTick(() => {
-          store.commit('content/setHeaderHidden', true)
-          if (firstRender.value) {
-            firstRender.value = false
-            if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-                window.scroll({
-                  top: 0,
-                  left: 0
-                })
-                nextTick(() => {
-                  window.scroll({
-                    top: scrollHeight.value,
-                    left: 0
-                  })
-                })
-            }
-            nextTick(() => {
-              animateNavbar('.navbarSlug')
-            })
-          }
-        })
-      }
+      // if (window.innerWidth < 900) {
+      //   store.commit('content/setHeaderHidden', true)
+      //   if (firstRender.value) {
+      //     firstRender.value = false
+      //     if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+      //       window.scroll({
+      //         top: scrollHeight.value,
+      //         left: 0
+      //       })
+      //     }
+      //     nextTick(() => {
+      //       animateNavbar('.navbarSlug')
+      //     })
+      //   }
+      // } else {
+      //   nextTick(() => {
+      //     store.commit('content/setHeaderHidden', true)
+      //     if (firstRender.value) {
+      //       firstRender.value = false
+      //       if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+      //           window.scroll({
+      //             top: 0,
+      //             left: 0
+      //           })
+      //           nextTick(() => {
+      //             window.scroll({
+      //               top: scrollHeight.value,
+      //               left: 0
+      //             })
+      //           })
+      //           setTimeout(() => {
+      //             console.log(window.pageYOffset)
+      //           }, 1000)
+      //       }
+      //       nextTick(() => {
+      //         animateNavbar('.navbarSlug')
+      //       })
+      //     }
+      //   })
+      // }
     })
 
     const getSeoInfo = async () => {
@@ -244,10 +245,30 @@ export default defineComponent({
           totalPage.value = response?.data.last_pages
           cards.value = response.data.data
           startCards.value = cards.value.data
-          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
-            cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
-            startCards.value = [...cards.value.data]
-            pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+          loadingEnd.value = true
+          if (scrollHeight.value !== 0) {
+            if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
+              loadingEnd.value = false
+              cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
+              startCards.value = [...cards.value.data]
+              pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+              console.log(cards.value.data)
+            }
+            if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
+              loadingEnd.value = false
+            }
+            if (JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+              store.commit('content/setHeaderHidden', true)
+            }
+          } else {
+            store.commit('content/setHeaderHidden', true)
+          }
+          if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+            const lastSection = {
+              section: 'index'
+            }
+            localStorage.setItem('lastSection', JSON.stringify(lastSection))
+            store.commit('content/setScrollHeight', 0)
           }
           const lastCards = {
             cards: startCards.value,
@@ -372,6 +393,102 @@ export default defineComponent({
       router.push({ path: `/tags/${value}` })
     }
 
+    watch(() => imgLoadCount.value, () => {
+      if (scrollHeight.value !== 0) {
+        if (localStorage.getItem('lastCards') !== '[object Object]') {
+          console.log(imgLoadCount.value, JSON.parse(localStorage.getItem('lastCards')).cards.length)
+          if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
+            if (window.innerWidth < 900) {
+            store.commit('content/setHeaderHidden', true)
+            if (firstRender.value) {
+              firstRender.value = false
+              if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+                window.scroll({
+                  top: scrollHeight.value,
+                  left: 0
+                })
+                loadingEnd.value = true
+              }
+              nextTick(() => {
+                animateNavbar('.navbarSlug')
+              })
+            }
+          } else {
+            nextTick(() => {
+              store.commit('content/setHeaderHidden', true)
+              if (firstRender.value) {
+                firstRender.value = false
+                if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+                    window.scroll({
+                      top: 0,
+                      left: 0
+                    })
+                    nextTick(() => {
+                      window.scroll({
+                        top: scrollHeight.value,
+                        left: 0
+                      })
+                      loadingEnd.value = true
+                    })
+                }
+                nextTick(() => {
+                  animateNavbar('.navbarSlug')
+                })
+              }
+            })
+          }
+          }
+        } else if (localStorage.getItem('lastCards') === '[object Object]') {
+          if (imgLoadCount.value <= 6) {
+            if (window.innerWidth < 900) {
+            store.commit('content/setHeaderHidden', true)
+            if (firstRender.value) {
+              firstRender.value = false
+              if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+                window.scroll({
+                  top: scrollHeight.value,
+                  left: 0
+                })
+                loadingEnd.value = true
+              }
+              nextTick(() => {
+                animateNavbar('.navbarSlug')
+              })
+            }
+          } else {
+            nextTick(() => {
+              store.commit('content/setHeaderHidden', true)
+              if (firstRender.value) {
+                firstRender.value = false
+                if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+                    window.scroll({
+                      top: 0,
+                      left: 0
+                    })
+                    nextTick(() => {
+                      window.scroll({
+                        top: scrollHeight.value,
+                        left: 0
+                      })
+                      loadingEnd.value = true
+                    })
+                }
+                nextTick(() => {
+                  animateNavbar('.navbarSlug')
+                })
+              }
+            })
+          }
+          }
+        }
+      }
+    })
+
+    watch(() => route, () => {
+      console.log(route)
+      console.log('changePage')
+    })
+
     return {
       lazyPagination,
       clickTag,
@@ -393,7 +510,9 @@ export default defineComponent({
       metaTags,
       scrollHeight,
       firstRender,
-      color
+      color,
+      imgLoadCount,
+      loadingEnd
     }
   },
   head: {
@@ -474,6 +593,9 @@ $heightBig: 4.6rem;
     width: 31.8rem;
     height: $heightBig;
   }
+}
+.disabled {
+  opacity: 0;
 }
 .content {
   @include container;

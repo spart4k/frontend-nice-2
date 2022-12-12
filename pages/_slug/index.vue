@@ -1,12 +1,14 @@
 <template>
   <div>
-    <N-Preloader v-if="$fetchState.pending" />
-    <n-intro-slug v-else>
+    <N-Preloader v-if="!cards  || !loadingEnd" />
+    <n-intro-slug
+    :class="!loadingEnd && $style.disabled"
+      v-if="cards">
       <template>
         <NGridCard
           ref="contentGrid"
           class="content"
-          :class="[$style.content, showAnimate && $style.animateContent]"
+          :class="[$style.content, showAnimate && $style.animateContent, !loadingEnd && $style.disabled]"
           :items="cards"
           :description="introTitle"
           :intro-data="introData && introData"
@@ -37,7 +39,7 @@ import {
   useRouter,
   useContext,
   useFetch,
-  useMeta,
+  useMeta, watch,
   computed, onMounted, nextTick, onUpdated
   // useMeta,
 } from '@nuxtjs/composition-api'
@@ -92,6 +94,8 @@ export default defineComponent({
     const selectMode = ref('created_at')
     const selectCategoryNumber = ref()
     const priceFetch = ref(1)
+    const loadingEnd = ref(false)
+    const imgLoadCount = computed(() => store?.state?.content?.imgLoadCounter)
     const scrollHeight = computed(() => store?.state?.content?.scrollHeight)
     const metaTitle = computed(() => store?.state?.content?.sections?.data)
     const firstRender = ref(true)
@@ -254,53 +258,46 @@ export default defineComponent({
           opacity: 0
         })
       })
-      if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
-        const lastSection = {
-          section: id.value
-        }
-        localStorage.setItem('lastSection', JSON.stringify(lastSection))
-        store.commit('content/setScrollHeight', 0)
-      }
     })
 
     onUpdated(() => {
-      if (window.innerWidth < 900) {
-        store.commit('content/setHeaderHidden', true)
-        if (firstRender.value) {
-          firstRender.value = false
-          if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
-            window.scroll({
-              top: scrollHeight.value,
-              left: 0
-            })
-          }
-          nextTick(() => {
-            animateNavbar('.navbarSlug')
-          })
-        }
-      } else {
-        nextTick(() => {
-          store.commit('content/setHeaderHidden', true)
-          if (firstRender.value) {
-            firstRender.value = false
-            if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
-                window.scroll({
-                  top: 0,
-                  left: 0
-                })
-                nextTick(() => {
-                  window.scroll({
-                    top: scrollHeight.value,
-                    left: 0
-                  })
-                })
-            }
-            nextTick(() => {
-              animateNavbar('.navbarSlug')
-            })
-          }
-        })
-      }
+      // if (window.innerWidth < 900) {
+      //   store.commit('content/setHeaderHidden', true)
+      //   if (firstRender.value) {
+      //     firstRender.value = false
+      //     if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
+      //       window.scroll({
+      //         top: scrollHeight.value,
+      //         left: 0
+      //       })
+      //     }
+      //     nextTick(() => {
+      //       animateNavbar('.navbarSlug')
+      //     })
+      //   }
+      // } else {
+      //   nextTick(() => {
+      //     store.commit('content/setHeaderHidden', true)
+      //     if (firstRender.value) {
+      //       firstRender.value = false
+      //       if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
+      //           window.scroll({
+      //             top: 0,
+      //             left: 0
+      //           })
+      //           nextTick(() => {
+      //             window.scroll({
+      //               top: scrollHeight.value,
+      //               left: 0
+      //             })
+      //           })
+      //       }
+      //       nextTick(() => {
+      //         animateNavbar('.navbarSlug')
+      //       })
+      //     }
+      //   })
+      // }
     })
 
     const fetchData = async (currentPage) => {
@@ -335,44 +332,68 @@ export default defineComponent({
           fetchLoading.value = true
           cards.value = [...response.data]
           startCards.value = [...cards.value]
-          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
-            cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
-            startCards.value = [...cards.value]
-            pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-            if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
-              selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
-              selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
-              if (JSON.parse(localStorage.getItem('lastSection')).searchCategory) {
-                selectCategory.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
-                selectSection.value = ''
-                selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
-                selectCategoryNumber.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
-              } else {
-                selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
-              }
-              if (JSON.parse(localStorage.getItem('lastSection')).searchMode === 'asc') {
-                selectAsc.value = true
-                selectDescAsc.value = 'asc'
-              }
-              selectPresent.value = JSON.parse(localStorage.getItem('lastSection')).searchPresent
-              switch (JSON.parse(localStorage.getItem('lastSection')).searchColomn) {
-                case 'created_at': {
-                  selectedMode.value = 0
-                  if (JSON.parse(localStorage.getItem('lastSection')).searchPresent) {
-                    selectedMode.value = 3
+          loadingEnd.value = true
+          if (scrollHeight.value !== 0) {
+            if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
+              console.log('2')
+              cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
+              startCards.value = [...cards.value]
+              pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+              loadingEnd.value = false
+              if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
+                selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+                selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
+                if (JSON.parse(localStorage.getItem('lastSection')).searchCategory) {
+                  selectCategory.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
+                  selectSection.value = ''
+                  selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
+                  selectCategoryNumber.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
+                } else {
+                  selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+                }
+                if (JSON.parse(localStorage.getItem('lastSection')).searchMode === 'asc') {
+                  selectAsc.value = true
+                  selectDescAsc.value = 'asc'
+                }
+                selectPresent.value = JSON.parse(localStorage.getItem('lastSection')).searchPresent
+                switch (JSON.parse(localStorage.getItem('lastSection')).searchColomn) {
+                  case 'created_at': {
+                    selectedMode.value = 0
+                    if (JSON.parse(localStorage.getItem('lastSection')).searchPresent) {
+                      selectedMode.value = 3
+                    }
+                    return
                   }
-                  return
-                }
-                case 'price': {
-                  selectedMode.value = 1
-                  return
-                }
-                case 'like_count': {
-                  selectedMode.value = 2
-                  return
+                  case 'price': {
+                    selectedMode.value = 1
+                    return
+                  }
+                  case 'like_count': {
+                    selectedMode.value = 2
+                    return
+                  }
                 }
               }
             }
+            if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
+              loadingEnd.value = false
+            }
+            if (JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
+              store.commit('content/setHeaderHidden', true)
+            }
+          } else {
+            store.commit('content/setHeaderHidden', true)
+          }
+          if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
+            loadingEnd.value = false
+            console.log('1')
+          }
+          if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
+            const lastSection = {
+              section: id.value
+            }
+            localStorage.setItem('lastSection', JSON.stringify(lastSection))
+            store.commit('content/setScrollHeight', 0)
           }
           const lastCards = {
             cards: startCards.value,
@@ -457,6 +478,97 @@ export default defineComponent({
       }
     }
 
+    watch(() => imgLoadCount.value, () => {
+      if (scrollHeight.value !== 0) {
+        if (localStorage.getItem('lastCards') !== '[object Object]') {
+          console.log(imgLoadCount.value, JSON.parse(localStorage.getItem('lastCards')).cards.length)
+          if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
+            if (window.innerWidth < 900) {
+            store.commit('content/setHeaderHidden', true)
+            if (firstRender.value) {
+              firstRender.value = false
+              if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
+                window.scroll({
+                  top: scrollHeight.value,
+                  left: 0
+                })
+                loadingEnd.value = true
+              }
+              nextTick(() => {
+                animateNavbar('.navbarSlug')
+              })
+            }
+          } else {
+            nextTick(() => {
+              store.commit('content/setHeaderHidden', true)
+              if (firstRender.value) {
+                firstRender.value = false
+                if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
+                    window.scroll({
+                      top: 0,
+                      left: 0
+                    })
+                    nextTick(() => {
+                      window.scroll({
+                        top: scrollHeight.value,
+                        left: 0
+                      })
+                      loadingEnd.value = true
+                    })
+                }
+                nextTick(() => {
+                  animateNavbar('.navbarSlug')
+                })
+              }
+            })
+          }
+          }
+        } else if (localStorage.getItem('lastCards') === '[object Object]') {
+          if (imgLoadCount.value <= 6) {
+            if (window.innerWidth < 900) {
+            store.commit('content/setHeaderHidden', true)
+            if (firstRender.value) {
+              firstRender.value = false
+              if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
+                window.scroll({
+                  top: scrollHeight.value,
+                  left: 0
+                })
+                loadingEnd.value = true
+              }
+              nextTick(() => {
+                animateNavbar('.navbarSlug')
+              })
+            }
+          } else {
+            nextTick(() => {
+              store.commit('content/setHeaderHidden', true)
+              if (firstRender.value) {
+                firstRender.value = false
+                if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
+                    window.scroll({
+                      top: 0,
+                      left: 0
+                    })
+                    nextTick(() => {
+                      window.scroll({
+                        top: scrollHeight.value,
+                        left: 0
+                      })
+                      loadingEnd.value = true
+                    })
+                }
+                nextTick(() => {
+                  animateNavbar('.navbarSlug')
+                })
+              }
+            })
+          }
+          }
+        }
+      }
+    })
+
     const clickTag = (value) => {
       router.push({ path: `/tags/${value}` })
     }
@@ -502,7 +614,9 @@ export default defineComponent({
       firstRender,
       selectedSection,
       selectedMode,
-      selectAsc
+      selectAsc,
+      imgLoadCount,
+      loadingEnd
     }
   },
   head: {}
@@ -530,6 +644,9 @@ export default defineComponent({
 }
 .observer {
   height: 100%;
+}
+.disabled {
+  opacity: 0;
 }
 .row{
   position: relative;

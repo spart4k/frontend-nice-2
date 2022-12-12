@@ -11,6 +11,7 @@
       :click-to-close="false"
       :is-full-screen="fullscreen"
       :rounded="$mq === 'sm'"
+      :class="$style.bottomSheet"
       v-on="$attrs"
       @closed="$emit('closed')"
     >
@@ -94,13 +95,14 @@ export default {
 
 <style lang="scss" module>
 .wrapper {
+  .bottomSheet  {
+    // transform: translate3d(0, 0, 0);
+  }
   .trigger {
     position: absolute;
     left: 0;
     width: 100%;
     height: calc(100% - 5rem);
-    background-color: red;
-    // z-index: 1000;
   }
   position: relative;
   width: 37.5rem;

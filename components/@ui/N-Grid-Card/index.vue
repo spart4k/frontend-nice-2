@@ -112,6 +112,7 @@ export default {
       }
     })
     const saveHeight = () => {
+      console.log(window.pageYOffset)
       store.commit('content/setScrollHeight', window.pageYOffset)
     }
     const spliceArray = computed(() => {
