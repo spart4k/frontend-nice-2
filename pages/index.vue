@@ -159,7 +159,6 @@ export default defineComponent({
         }, 1000)
         // }
         if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
-          loadingEnd.value = false
           const lastSection = {
             section: 'index'
           }
@@ -254,22 +253,24 @@ export default defineComponent({
           cards.value = response.data.data
           startCards.value = cards.value.data
           loadingEnd.value = true
-          if (!JSON.parse(localStorage.getItem('lastCards'))) {
-            const lastCards = {
-              cards: startCards.value,
-              section: 'index',
-              page: pageNumber.value
+            if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
+              console.log('2')
+              loadingEnd.value = false
+              cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
+              startCards.value = [...cards.value.data]
+              pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+              console.log(cards.value.data)
             }
-            localStorage.setItem('lastCards', JSON.stringify(lastCards))
+            if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
+              console.log('1')
+              loadingEnd.value = false
+            }
+          const lastCards = {
+            cards: startCards.value,
+            section: 'index',
+            page: pageNumber.value
           }
-          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
-            console.log('locals')
-            loadingEnd.value = false
-            cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
-            startCards.value = [...cards.value.data]
-            pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-            console.log(cards.value.data)
-          }
+          localStorage.setItem('lastCards', JSON.stringify(lastCards))
         } catch (e) {
           console.log(e)
         }
@@ -389,46 +390,91 @@ export default defineComponent({
 
     watch(() => imgLoadCount.value, () => {
       if (scrollHeight.value !== 0) {
-        if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
-          if (window.innerWidth < 900) {
-          store.commit('content/setHeaderHidden', true)
-          if (firstRender.value) {
-            firstRender.value = false
-            if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-              window.scroll({
-                top: scrollHeight.value,
-                left: 0
-              })
-              loadingEnd.value = true
-            }
-            nextTick(() => {
-              animateNavbar('.navbarSlug')
-            })
-          }
-        } else {
-          nextTick(() => {
+        if (localStorage.getItem('lastCards') !== '[object Object]') {
+          console.log(imgLoadCount.value, JSON.parse(localStorage.getItem('lastCards')).cards.length)
+          if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
+            if (window.innerWidth < 900) {
             store.commit('content/setHeaderHidden', true)
             if (firstRender.value) {
               firstRender.value = false
               if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-                  window.scroll({
-                    top: 0,
-                    left: 0
-                  })
-                  nextTick(() => {
-                    window.scroll({
-                      top: scrollHeight.value,
-                      left: 0
-                    })
-                    loadingEnd.value = true
-                  })
+                window.scroll({
+                  top: scrollHeight.value,
+                  left: 0
+                })
+                loadingEnd.value = true
               }
               nextTick(() => {
                 animateNavbar('.navbarSlug')
               })
             }
-          })
-        }
+          } else {
+            nextTick(() => {
+              store.commit('content/setHeaderHidden', true)
+              if (firstRender.value) {
+                firstRender.value = false
+                if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+                    window.scroll({
+                      top: 0,
+                      left: 0
+                    })
+                    nextTick(() => {
+                      window.scroll({
+                        top: scrollHeight.value,
+                        left: 0
+                      })
+                      loadingEnd.value = true
+                    })
+                }
+                nextTick(() => {
+                  animateNavbar('.navbarSlug')
+                })
+              }
+            })
+          }
+          }
+        } else if (localStorage.getItem('lastCards') === '[object Object]') {
+          if (imgLoadCount.value <= 6) {
+            if (window.innerWidth < 900) {
+            store.commit('content/setHeaderHidden', true)
+            if (firstRender.value) {
+              firstRender.value = false
+              if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+                window.scroll({
+                  top: scrollHeight.value,
+                  left: 0
+                })
+                loadingEnd.value = true
+              }
+              nextTick(() => {
+                animateNavbar('.navbarSlug')
+              })
+            }
+          } else {
+            nextTick(() => {
+              store.commit('content/setHeaderHidden', true)
+              if (firstRender.value) {
+                firstRender.value = false
+                if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+                    window.scroll({
+                      top: 0,
+                      left: 0
+                    })
+                    nextTick(() => {
+                      window.scroll({
+                        top: scrollHeight.value,
+                        left: 0
+                      })
+                      loadingEnd.value = true
+                    })
+                }
+                nextTick(() => {
+                  animateNavbar('.navbarSlug')
+                })
+              }
+            })
+          }
+          }
         }
       }
     })
