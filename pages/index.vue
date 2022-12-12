@@ -253,26 +253,24 @@ export default defineComponent({
           cards.value = response.data.data
           startCards.value = cards.value.data
           loadingEnd.value = true
-          if (localStorage.getItem('lastCards') === '[object Object]') {
-            const lastCards = {
-              cards: startCards.value,
-              section: 'index',
-              page: pageNumber.value
+            if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
+              console.log('2')
+              loadingEnd.value = false
+              cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
+              startCards.value = [...cards.value.data]
+              pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+              console.log(cards.value.data)
             }
-            localStorage.setItem('lastCards', JSON.stringify(lastCards))
+            if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
+              console.log('1')
+              loadingEnd.value = false
+            }
+          const lastCards = {
+            cards: startCards.value,
+            section: 'index',
+            page: pageNumber.value
           }
-          if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
-            console.log('12222222222222222222222222222222')
-            loadingEnd.value = false
-          }
-          if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
-            console.log('locals')
-            loadingEnd.value = false
-            cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
-            startCards.value = [...cards.value.data]
-            pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-            console.log(cards.value.data)
-          }
+          localStorage.setItem('lastCards', JSON.stringify(lastCards))
         } catch (e) {
           console.log(e)
         }
@@ -436,7 +434,7 @@ export default defineComponent({
           }
           }
         } else if (localStorage.getItem('lastCards') === '[object Object]') {
-          if (imgLoadCount.value === 6) {
+          if (imgLoadCount.value <= 6) {
             if (window.innerWidth < 900) {
             store.commit('content/setHeaderHidden', true)
             if (firstRender.value) {
