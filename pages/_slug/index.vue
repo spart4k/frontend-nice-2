@@ -375,6 +375,12 @@ export default defineComponent({
                 }
               }
             }
+            if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
+              loadingEnd.value = false
+            }
+            if (JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
+              store.commit('content/setHeaderHidden', true)
+            }
           } else {
             store.commit('content/setHeaderHidden', true)
           }
