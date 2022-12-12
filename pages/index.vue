@@ -246,8 +246,8 @@ export default defineComponent({
           cards.value = response.data.data
           startCards.value = cards.value.data
           loadingEnd.value = true
+          if (scrollHeight.value !== 0) {
             if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
-              console.log('2')
               loadingEnd.value = false
               cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
               startCards.value = [...cards.value.data]
@@ -255,9 +255,11 @@ export default defineComponent({
               console.log(cards.value.data)
             }
             if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
-              console.log('1')
               loadingEnd.value = false
             }
+          } else {
+            store.commit('content/setHeaderHidden', true)
+          }
           if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
             const lastSection = {
               section: 'index'
@@ -477,6 +479,11 @@ export default defineComponent({
           }
         }
       }
+    })
+
+    watch(() => route, () => {
+      console.log(route)
+      console.log('changePage')
     })
 
     return {

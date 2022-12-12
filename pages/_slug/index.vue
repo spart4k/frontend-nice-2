@@ -333,46 +333,50 @@ export default defineComponent({
           cards.value = [...response.data]
           startCards.value = [...cards.value]
           loadingEnd.value = true
-          if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
-            console.log('2')
-            cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
-            startCards.value = [...cards.value]
-            pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-            loadingEnd.value = false
-            if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
-              selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
-              selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
-              if (JSON.parse(localStorage.getItem('lastSection')).searchCategory) {
-                selectCategory.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
-                selectSection.value = ''
-                selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
-                selectCategoryNumber.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
-              } else {
-                selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
-              }
-              if (JSON.parse(localStorage.getItem('lastSection')).searchMode === 'asc') {
-                selectAsc.value = true
-                selectDescAsc.value = 'asc'
-              }
-              selectPresent.value = JSON.parse(localStorage.getItem('lastSection')).searchPresent
-              switch (JSON.parse(localStorage.getItem('lastSection')).searchColomn) {
-                case 'created_at': {
-                  selectedMode.value = 0
-                  if (JSON.parse(localStorage.getItem('lastSection')).searchPresent) {
-                    selectedMode.value = 3
+          if (scrollHeight.value !== 0) {
+            if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
+              console.log('2')
+              cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
+              startCards.value = [...cards.value]
+              pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+              loadingEnd.value = false
+              if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
+                selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+                selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
+                if (JSON.parse(localStorage.getItem('lastSection')).searchCategory) {
+                  selectCategory.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
+                  selectSection.value = ''
+                  selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
+                  selectCategoryNumber.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
+                } else {
+                  selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+                }
+                if (JSON.parse(localStorage.getItem('lastSection')).searchMode === 'asc') {
+                  selectAsc.value = true
+                  selectDescAsc.value = 'asc'
+                }
+                selectPresent.value = JSON.parse(localStorage.getItem('lastSection')).searchPresent
+                switch (JSON.parse(localStorage.getItem('lastSection')).searchColomn) {
+                  case 'created_at': {
+                    selectedMode.value = 0
+                    if (JSON.parse(localStorage.getItem('lastSection')).searchPresent) {
+                      selectedMode.value = 3
+                    }
+                    return
                   }
-                  return
-                }
-                case 'price': {
-                  selectedMode.value = 1
-                  return
-                }
-                case 'like_count': {
-                  selectedMode.value = 2
-                  return
+                  case 'price': {
+                    selectedMode.value = 1
+                    return
+                  }
+                  case 'like_count': {
+                    selectedMode.value = 2
+                    return
+                  }
                 }
               }
             }
+          } else {
+            store.commit('content/setHeaderHidden', true)
           }
           if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
             loadingEnd.value = false
