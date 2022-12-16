@@ -131,7 +131,6 @@ export default defineComponent({
         body.style.overflow = 'hidden'
         window.addEventListener('resize', resize)
         window.addEventListener('load', () => {
-          console.log('load')
           if (store.state.content.singleAnimation) {
             localStorage.setItem('showAnimateHomePage', 'true')
             store.commit('content/setSingleAnimation', false)
@@ -169,10 +168,6 @@ export default defineComponent({
     })
 
     onUpdated(() => {
-      // console.log('222222', route.value.name)
-      // if (fetchLoading.value) {
-      //   loadingEnd.value = false
-      // }
     })
 
     const getSeoInfo = async () => {
@@ -224,7 +219,6 @@ export default defineComponent({
               cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
               startCards.value = [...cards.value.data]
               pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-              console.log(cards.value.data)
             }
             if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
               loadingEnd.value = false
@@ -237,7 +231,6 @@ export default defineComponent({
           }
           // console.log(localStorage.getItem('lastSection'), JSON.parse(localStorage.getItem('lastSection')).section !== 'index')
           if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
-            console.log('yes')
             const lastSection = {
               section: 'index'
             }
@@ -257,7 +250,6 @@ export default defineComponent({
     onUnmounted(() => {
       window.removeEventListener('resize', resize)
       loadingEnd.value = false
-      console.log(route.value.fullPath)
     })
 
     store.commit('content/clearBgIntro')
@@ -372,7 +364,6 @@ export default defineComponent({
     watch(() => imgLoadCount.value, () => {
       if (scrollHeight.value !== 0) {
         if (localStorage.getItem('lastCards') !== '[object Object]') {
-          console.log(imgLoadCount.value, JSON.parse(localStorage.getItem('lastCards')).cards.length)
           if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
             if (window.innerWidth < 450) {
             store.commit('content/setHeaderHidden', true)
@@ -457,6 +448,8 @@ export default defineComponent({
           }
           }
         }
+      } else if (imgLoadCount.value === JSON.parse(JSON.stringify(startCards.value)).length) {
+        loadingEnd.value = true
       }
     })
 

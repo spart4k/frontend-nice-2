@@ -299,10 +299,9 @@ export default defineComponent({
           fetchLoading.value = true
           cards.value = [...response.data]
           startCards.value = [...cards.value]
-          loadingEnd.value = true
+          // loadingEnd.value = true
           if (scrollHeight.value !== 0) {
             if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
-              console.log('2')
               cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
               startCards.value = [...cards.value]
               pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
@@ -373,7 +372,6 @@ export default defineComponent({
     })
 
     const fetchAuthor = () => {
-      console.log(authorId.value)
       if (authorId.value) {
         const params = {
           id: authorId.value
@@ -428,7 +426,6 @@ export default defineComponent({
         }
         localStorage.setItem('lastCards', JSON.stringify(lastCards))
 
-          console.log(selectSection.value, selectDescAsc.value, selectCategory.value, selectMode.value, id.value)
           if (id.value === 8) {
             const lastSection = {
               section: id.value,
@@ -451,7 +448,6 @@ export default defineComponent({
     watch(() => imgLoadCount.value, () => {
       if (scrollHeight.value !== 0) {
         if (localStorage.getItem('lastCards') !== '[object Object]') {
-          console.log(imgLoadCount.value, JSON.parse(localStorage.getItem('lastCards')).cards.length)
           if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
             if (window.innerWidth < 450) {
             store.commit('content/setHeaderHidden', true)
@@ -536,6 +532,8 @@ export default defineComponent({
           }
           }
         }
+      } else if (imgLoadCount.value === JSON.parse(JSON.stringify(startCards.value)).length) {
+        loadingEnd.value = true
       }
     })
 
