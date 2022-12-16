@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.radio">
+  <div v-if="$props.song.wrap !== 'unknown' && $props.song.title !== 'unknown'" :class="$style.radio">
     <div :class="$style.wrap">
         <NuxtLink v-if="cardLink" :to="`/${cardLink.sectionName}/${cardLink.id}`">
           <N-LazyLogo :class="$style.wrapper" :src="(`${$axios.defaults.baseURL}/${$props.song.wrap}`)" @click="closeBottom" alt="" />
