@@ -76,6 +76,7 @@ export default defineComponent({
     const loadingEnd = ref(false)
     const scrollHeight = computed(() => store?.state?.content?.scrollHeight)
     const imgLoadCount = computed(() => store?.state?.content?.imgLoadCounter)
+    const contentLoader = computed(() => store?.state?.content?.contentLoader)
     const metaTags = ref({})
     const firstRender = ref(true)
     const resize = () => {
@@ -124,6 +125,7 @@ export default defineComponent({
     } = animationGSAP($gsap, Elastic)
 
     onMounted(() => {
+      store.commit('content/changeContentLoader', true)
       // if (backgroundLoaded.value) {
         const body = document.querySelector('body')
         body.style.overflow = 'hidden'
@@ -167,8 +169,8 @@ export default defineComponent({
     })
 
     onUpdated(() => {
-      console.log(route.value.name)
-      // if (route.value.name !== 'index') {
+      // console.log('222222', route.value.name)
+      // if (fetchLoading.value) {
       //   loadingEnd.value = false
       // }
     })
@@ -458,11 +460,6 @@ export default defineComponent({
       }
     })
 
-    watch(() => route, () => {
-      console.log(route)
-      console.log('changePage')
-    })
-
     return {
       lazyPagination,
       clickTag,
@@ -486,7 +483,8 @@ export default defineComponent({
       firstRender,
       color,
       imgLoadCount,
-      loadingEnd
+      loadingEnd,
+      contentLoader
     }
   },
   head: {

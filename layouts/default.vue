@@ -26,7 +26,8 @@
           !isHomePage ? $style.noHome : ''
         ]"
       />
-      <Nuxt />
+        <N-Preloader v-if="!contentLoader" />
+        <Nuxt :class="[!contentLoader && $style.disabled]" />
     </n-intro-wrapper>
     <N-BootomSheet
       v-if="$store.state.menu.isShowBottomMenu && bottomSheetDelay && !disabledSheet"
@@ -113,6 +114,7 @@ export default {
     const back = ref(false)
     const sheetWidth = ref(0)
     const disabledSheet = ref(false)
+    const contentLoader = computed(() => store?.state?.content?.contentLoader)
     const sheetRight = ref(false)
     const keyAnimation = ref('next')
     const currentShowComponents = ref({
@@ -256,6 +258,9 @@ export default {
         store.commit('menu/changeKeyMenu', { key: '', effect: 'fx-slide-from-left' })
       }
     })
+    watch(() => route.value.path, () => {
+      store.commit('content/changeContentLoader', false)
+    })
     watch(() => store.state.menu.component.key, () => {
       currentShowComponents.value.key = store.state.menu.component.key
       currentShowComponents.value.effect = store.state.menu.component.effect
@@ -364,6 +369,7 @@ export default {
       headerHidden,
       bottomSheetDelay,
       menu1,
+      contentLoader,
       disabledSheet
     }
   }
@@ -381,6 +387,9 @@ export default {
 }
 .main {
   transition-duration: .3s;
+}
+.disabled {
+  opacity: 0;
 }
 .headerContainer {
   top: 3.9rem;

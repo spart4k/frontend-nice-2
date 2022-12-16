@@ -11,7 +11,8 @@ export const state = () => ({
   singleAnimation: true,
   scrollHeight: 0,
   headerHidden: true,
-  imgLoadCounter: 0
+  imgLoadCounter: 0,
+  contentLoader: true
 })
 
 export const mutations = {
@@ -50,6 +51,9 @@ export const mutations = {
   },
   imgLoadCounterInc (state) {
     state.imgLoadCounter += 1
+  },
+  changeContentLoader (state, value) {
+    state.contentLoader = value
   },
   imgLoadCounterReset (state) {
     state.imgLoadCounter = 0
