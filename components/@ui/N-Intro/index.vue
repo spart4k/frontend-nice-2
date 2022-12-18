@@ -126,13 +126,13 @@ export default {
   left: 50%;
   transform-origin: top center;
   padding-top: var(--padding-top-logo);
-  transform: translate(-50%, 0);
+  transform: translate(-50%, 0%) translate3d(0px, 0px, 0px) scale(1, 1);
   cursor: pointer;
   //height: 15.9rem;
   &.animateContent {
     top: 50%;
     visibility: hidden;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0%) translate3d(0px, 0px, 0px) scale(1, 1);
   }
   @media (max-width: $mobileWidth) {
     top: 7rem;

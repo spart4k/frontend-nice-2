@@ -78,5 +78,9 @@ export const actions = {
     // const response = await this.$axios('api/v1/sections')
     const response = await this.$axios.post('api/v1/sectionsSearch', params)
     return response.data.data
+  },
+  async checkLikesOnCards ({ commit }, params) {
+    const response = await this.$axios.post('api/v1/checkLikesOnCards', params)
+    return response.data.data
   }
 }
