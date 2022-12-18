@@ -126,6 +126,7 @@ export default defineComponent({
 
     onMounted(() => {
       store.commit('content/changeContentLoader', true)
+      // getLikes()
       // if (backgroundLoaded.value) {
         const body = document.querySelector('body')
         body.style.overflow = 'hidden'
@@ -170,6 +171,17 @@ export default defineComponent({
     onUpdated(() => {
     })
 
+  //  const getVerify = async () => {
+  //     await store.commit('authentication/setToken')
+  //     const response = await store.dispatch('authentication/verifyToken')
+  //     if (response.error) {
+  //       localStorage.removeItem('token')
+  //     } else {
+  //       store.dispatch('basket/getBasket')
+  //       store.commit('authentication/setUserData')
+  //     }
+  //   }
+
     const getSeoInfo = async () => {
       // const response = await store.dispatch('main/getSeo')
     }
@@ -203,8 +215,33 @@ export default defineComponent({
     //     console.log(e)
     //   }
     // })
+    const getLikes = async () => {
+      const array = []
+      startCards.value.forEach((item) => {
+        array.push(item.id)
+      })
+      const params = {
+        cardIds: array
+      }
+      const response = await store.dispatch('content/checkLikesOnCards', params)
+      console.log(response)
+      for (const [key, value] of Object.entries(response)) {
+        if (value === true) {
+          startCards.value.forEach((item) => {
+            console.log(key)
+            if (key === item.id) {
+              console.log('asdsad')
+            }
+          })
+        }
+      }
+    }
+
     useFetch(async () => {
         try {
+          // await getVerify()
+          // if (localStorage.getItem('token') !== null) {
+          // }
           const response = await fetchData()
           if (response.data.data.data.length < 6) {
             cardsDispatch.value = false
@@ -329,6 +366,7 @@ export default defineComponent({
           }
           localStorage.setItem('lastCards', JSON.stringify(lastCards))
         } else {
+          console.log('wwwwwwwwwwwwwww')
           const params = {
             page: pageNumber.value,
             count: 6,
@@ -343,10 +381,15 @@ export default defineComponent({
             cardsDispatch.value = false
           }
           cardsLoading.value = false
+
           startCards.value = [...startCards.value, ...response.data]
           startCards.value.forEach((item) => {
             cards.value.data.push(item)
           })
+
+          // cards.value.data = [...startCards.value, ...response.data]
+          // startCards.value = [...cards.value]
+
           const lastCards = {
             cards: startCards.value,
             section: 'index',
@@ -477,7 +520,8 @@ export default defineComponent({
       color,
       imgLoadCount,
       loadingEnd,
-      contentLoader
+      contentLoader,
+      getLikes
     }
   },
   head: {
