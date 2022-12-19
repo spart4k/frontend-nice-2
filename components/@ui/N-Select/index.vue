@@ -19,6 +19,7 @@
           <option
             v-for="(item, index) in selectItems"
             :key="index"
+            :selected="index === selectedValue"
             :class="$style.optionItem"
             :value="item.value"
             @input="setProperty"
@@ -65,6 +66,10 @@ export default {
     },
     colorBorder: String,
     hasBorderBottom: Boolean,
+    selectedValue: {
+      type: Number,
+      default: 0
+      },
     positionArrow: {
       type: Object,
       default: () => ({ right: 0 })
@@ -80,7 +85,7 @@ export default {
   },
   setup (props, ctx) {
     const { emit } = ctx
-    const wireEnd = ref()
+    const wireEnd = ref(2)
     const setProperty = (value) => {
       emit('setProperty', value.target.selectedIndex)
     }
@@ -156,6 +161,10 @@ export default {
   @include regular-text-bold;
   border: none;
   outline: none;
+  background-color: white;
+  @media (max-width:$tabletWidth) {
+    font-size: 1rem;
+  }
 }
 .selectWire{
   padding-left: 0;

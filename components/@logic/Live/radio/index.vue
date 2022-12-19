@@ -1,7 +1,10 @@
 <template>
-  <div :class="$style.radio">
+  <div v-if="$props.song.wrap !== 'unknown' && $props.song.title !== 'unknown'" :class="$style.radio">
     <div :class="$style.wrap">
-      <N-LazyLogo :class="$style.wrapper" :src="(`${$axios.defaults.baseURL}/${$props.song.wrap}`)" alt="" />
+        <NuxtLink v-if="cardLink" :to="`/${cardLink.sectionName}/${cardLink.id}`">
+          <N-LazyLogo :class="$style.wrapper" :src="(`${$axios.defaults.baseURL}/${$props.song.wrap}`)" @click="closeBottom" alt="" />
+        </NuxtLink>
+        <N-LazyLogo v-else :class="$style.wrapper" :src="(`${$axios.defaults.baseURL}/${$props.song.wrap}`)" alt="" />
       <!-- <img :class="$style.wrapper" :src="(`${$axios.defaults.baseURL}/${$props.song.wrap}`)" alt=""> -->
       <div ref="marquee" class="marquee" :class="[ $style.marquee, $style.name ]">
         <div class="inner" :class="[$style.inner, isMarquee ? $style.active : $style.noActive ]">

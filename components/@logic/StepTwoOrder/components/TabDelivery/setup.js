@@ -38,7 +38,7 @@ export default {
     const { formData, validate, $errors, $v, $touched } = useForm(
       {
         fields: {
-          name: { default: '', validations: { required } },
+          name: { default: store.state.authentication.user.fullname, validations: { required } },
           email: { default: store.state.authentication.user.email, validations: { email, required } },
           phone: { default: store.state.authentication.user.phone, validations: { phone, required, onlyNumeric } }
         }
@@ -60,6 +60,7 @@ export default {
         }
         const result = await store.dispatch('shop/createNewOrder', params)
         if (!result.data.error) {
+          store.commit('authentication/setUserFullname', formData.name)
           tinkoffPrice.value = result.data.cards_sum + result.data.delivery_price
           orderId.value = String(result.data.id)
           store.commit('basket/lastOrderChange', result.data.id)
@@ -68,7 +69,6 @@ export default {
           })
         }
       } catch (e) {
-          console.log(e)
       } finally {
         loading.value = false
       }

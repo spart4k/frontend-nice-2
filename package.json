@@ -10,7 +10,8 @@
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint": "npm run lint:js",
     "lintfix": "npm run lint:js -- -ix",
-    "deploy_test": "sudo ssh nice@178.20.44.99 'cd /opt/test.nice/; ./dep_frontend.sh'"
+    "deploy_prod": "sudo ssh nice@178.20.44.99 'cd /opt/test.nice/; ./dep_frontend.sh'",
+    "deploy_test": "sudo ssh nice@178.20.44.99 'cd /opt/test.nice/; ./dep_frontend_sandbox.sh'"
   },
   "dependencies": {
     "@egstad/marquee": "^3.0.2",

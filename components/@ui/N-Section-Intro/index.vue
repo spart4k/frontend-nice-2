@@ -26,17 +26,17 @@
 <script>
 import { computed, onMounted, useContext, ref } from '@nuxtjs/composition-api'
 const BLAND_IMAGE = {
-  muzyka: 'muzyka.png',
-  video: 'video.png',
-  ctivo: 'ctivo.png',
-  iskusstvo: 'iskusstvo.png',
-  kuxnia: 'kuxnia.png',
-  magazin: 'magazin.png',
-  foto: 'foto.png',
-  odezda: 'odezda.png',
-  meropriiatiia: 'meropriiatiia.png',
-  efir: 'efir.png',
-  moneta: 'moneta.png'
+  music: 'music.png',
+  media: 'media.png',
+  library: 'library.png',
+  art: 'art.png',
+  kitchen: 'kitchen.png',
+  shop: 'shop.png',
+  photo: 'photo.png',
+  fashion: 'fashion.png',
+  event: 'event.png',
+  broadcast: 'broadcast.png',
+  coin: 'coin.png'
 }
 export default {
   name: 'NSectionIntro',
@@ -44,10 +44,7 @@ export default {
     description: {
       type: Object
     },
-    image: String,
-    select: {
-      type: Object
-    }
+    image: String
   },
   setup (props) {
     const { $gsap } = useContext()
@@ -92,6 +89,7 @@ export default {
   height: 100%;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 2rem;
   .title {
     @include text-style-h1;
     margin-bottom: 4rem;
@@ -127,11 +125,12 @@ export default {
   .arrowDownContainer{
     display: flex;
     justify-content: center;
+    margin-top: 2rem;
     @media (min-width: $tabletWidth) {
       display: none;
     }
     .arrowDown {
-      transform: rotate(270deg);
+      transform: rotate(270deg) !important;
       height: 1.9rem;
       width: 1.3rem;
       margin-bottom: 2rem;

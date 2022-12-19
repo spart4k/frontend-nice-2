@@ -8,6 +8,8 @@ const animation = ($gsap, Elastic) => {
   const background = ref(null)
   const animationTimeline = (NAVBAR = '.navbar', elementAnimate, display) => {
     const onComplete = () => {
+      const body = document.querySelector('body')
+      body.style.overflow = 'auto'
       const header = document.querySelector('.headerAnimation')
       const content = document.querySelector('.content')
       window.addEventListener('resize', () => {
@@ -209,7 +211,6 @@ const animation = ($gsap, Elastic) => {
 
   const animateBackground = () => {
     // const height = ref(window.innerHeight / 10)
-    // console.log(height)
     // $gsap.to('.background',
     //   {
     //     scrollTrigger: {

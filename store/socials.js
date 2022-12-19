@@ -9,7 +9,6 @@ export const actions = {
       return data
     } catch (e) {
       this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
-      console.log(e)
     }
   },
   async removeLike (state, id) {
@@ -18,7 +17,6 @@ export const actions = {
       return data
     } catch (e) {
       this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
-      console.log(e)
     }
   },
   async addComment (state, params) {
@@ -27,7 +25,6 @@ export const actions = {
       return data.data
     } catch (e) {
       this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
-      console.log(e)
     }
   },
   async getStickers (state, params) {
@@ -36,7 +33,6 @@ export const actions = {
       return data.data
     } catch (e) {
       this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
-      console.log(e)
     }
   }
 }

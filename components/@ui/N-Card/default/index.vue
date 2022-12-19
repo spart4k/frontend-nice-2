@@ -11,7 +11,7 @@
               <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}/${data.files[0].src}`" :alt="data.title" />
             </div>
           </div>
-          <nuxt-link v-else :to="`cards/${data.id}?section=${data.section.slug}`" tag="div">
+          <nuxt-link v-else :to="`../${data.section.slug}/${data.id}`">
             <div :class="[$style.hat]">
               <n-lazy-img :detail-page="detailPage" :src="`${$axios.defaults.baseURL}/${data.files[0].src}`" :alt="data.title" />
             </div>
@@ -32,7 +32,6 @@
             playsinline
             :controls="videoPlay"
             preload="none"
-            muted
             type="video/mp4"
             :src="videoUrl"
           />
@@ -46,51 +45,53 @@
       ]"
     >
       <template>
-        <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`cards/${data.id}?section=${data.section.slug}`">
-          <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '1.5rem' }">
-            {{ data.title }}
-          </h2>
-          <div v-if="data.date_event" :class="$style.time">
-            {{ dateFormat }}
-          </div>
-          <template v-if="data.price && !$props.detailPage">
-            <div :class="$style.price">
-              {{ data.price }} р.
+        <NuxtLink v-if="!$props.detailPage" :to="`../${data.section.slug}/${data.id}`">
+          <div :class="$style.body__top">
+            <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '1.5rem' }">
+              {{ data.title }}
+            </h2>
+            <div v-if="data.date_event" :class="$style.time">
+              {{ dateFormat }}
             </div>
-          </template>
-          <div :class="$style.cardText">
-            <div :class="$style.parser" v-html="data.subtitle" />
-          </div>
-          <div v-if="!$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
-            <div :class="$style.socialsItem">
-              <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
-              <div :class="$style.parser">
-                {{ data.like_count }}
+            <div :class="$style.cardText">
+              <div :class="[$style.parser, $style[linkColor]]" v-html="data.subtitle" />
+            </div>
+            <template v-if="data.price && !$props.detailPage">
+              <div :class="$style.price">
+                {{ data.price }} р.
+              </div>
+            </template>
+            <div v-if="!$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
+              <div :class="$style.socialsItem">
+                <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
+                <div :class="$style.parser">
+                  {{ data.like_count }}
+                </div>
+              </div>
+              <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
+                <N-Icon name="comments" :class="$style.commentsButtonContainer" />
+                <div :class="$style.parser">
+                  {{ !$props.detailPage ? data.comments_count : 'Комментировать' }}
+                </div>
               </div>
             </div>
-            <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
-              <N-Icon name="comments" :class="$style.commentsButtonContainer" />
-              <div :class="$style.parser">
-                {{ !$props.detailPage ? data.comments_count : 'Комментировать' }}
-              </div>
+            <div v-if="!$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '2rem' : '' }">
+              <N-Chip
+                v-for="item in data.tags"
+                :key="item.id"
+                ref="chipsArray"
+                :class="$style.chip"
+                @click="$emit('clickTag', item.id)"
+              >
+                {{ item.name }}
+              </N-Chip>
+              <N-Chip
+                v-if="chipsCounter > 0"
+                :class="$style.chip"
+              >
+                +{{ chipsCounter }}
+              </N-Chip>
             </div>
-          </div>
-          <div v-if="!$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '2rem' : '' }">
-            <N-Chip
-              v-for="item in data.tags"
-              :key="item.id"
-              ref="chipsArray"
-              :class="$style.chip"
-              @click="$emit('clickTag', item.id)"
-            >
-              {{ item.name }}
-            </N-Chip>
-            <N-Chip
-              v-if="chipsCounter > 0"
-              :class="$style.chip"
-            >
-              +{{ chipsCounter }}
-            </N-Chip>
           </div>
         </NuxtLink>
         <div v-if="$props.detailPage" ref="body" :class="[$style.body__top, detailPage && $style.detailPage]" tag="div">
@@ -99,7 +100,7 @@
           </h2>
           <template v-if="$props.detailPage">
             <p v-if="data.authors.length" :class="$style.authorName">
-              {{data.authors.length > 1 ? 'авторы' : 'автор'}}
+              {{data.authors.length > 1 ? 'авторы:' : 'автор:'}}
               <span v-for="(item, index) in data.authors" :key="index" @click="$emit('clickAuthor', item.id)">
                 {{item.name}}{{data.authors.length - 1 === index ? '' : ','}}
               </span>
@@ -109,7 +110,7 @@
             {{ dateFormat }}
           </div>
           <div :class="$style.cardText">
-            <div :class="$style.parserDetail" v-html="data.text" />
+            <div :class="[$style.parserDetail, $style[linkColor]]" v-html="data.text" />
           </div>
           <template>
             <!-- <div :class="$style.cardAudio">
@@ -212,6 +213,8 @@ export default {
     const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
     const proxyComments = computed(() => props.comments)
+    const { store, $axios } = useContext()
+    const linkColor = computed(() => props.data.section.slug)
     const chipsCounter = ref(0)
     const chipsWidth = ref(-10)
     const chipsArray = ref()
@@ -220,8 +223,6 @@ export default {
     const loginMenu = ref()
     const windowWidth = ref()
     const page = ref()
-    const { $axios } = useContext()
-    const { store } = useContext()
     const videoPlay = ref(false)
     const videoPlug = ref(true)
     const totalPrice = ref(props.data.price)
@@ -279,9 +280,33 @@ export default {
         like.value = !like.value
         if (like.value === true) {
           likeCounter.value++
+          if (localStorage.getItem('lastCards') !== '[object Object]') {
+            if (JSON.parse(localStorage.getItem('lastCards')).cards) {
+              const localInfo = JSON.parse(localStorage.getItem('lastCards'))
+              JSON.parse(localStorage.getItem('lastCards')).cards.forEach((item, index) => {
+                if (item.id === props.data.id) {
+                  localInfo.cards[index].like_count += 1
+                  localInfo.cards[index].liked = true
+                  localStorage.setItem('lastCards', JSON.stringify(localInfo))
+                }
+              })
+            }
+          }
           await store.dispatch('socials/addLike', props.data.id)
         } else {
           likeCounter.value--
+          if (localStorage.getItem('lastCards') !== '[object Object]') {
+            if (JSON.parse(localStorage.getItem('lastCards')).cards) {
+              const localInfo = JSON.parse(localStorage.getItem('lastCards'))
+              JSON.parse(localStorage.getItem('lastCards')).cards.forEach((item, index) => {
+                if (item.id === props.data.id) {
+                  localInfo.cards[index].like_count -= 1
+                  localInfo.cards[index].liked = false
+                  localStorage.setItem('lastCards', JSON.stringify(localInfo))
+                }
+              })
+            }
+          }
           await store.dispatch('socials/removeLike', props.data.id)
         }
       } else if (!store.state.menu.isShowBottomMenu) {
@@ -305,18 +330,15 @@ export default {
         text: unescape(encodeURIComponent(val)),
         sticker_id: null
       }
-      const result = await store.dispatch('socials/addComment', commentData)
-      if (!result.error) {
-        proxyComments.value.data.unshift({
-          user: {
-            nickname: result.data.user.nickname
-          },
-          text: result.data.text,
-          created_at: result.data.created_at,
-          sticker: result.data.sticker
-        })
-        commentHeightSet()
-      }
+      proxyComments.value.data.unshift({
+        user: {
+          nickname: store.state.authentication.user.nickname
+        },
+        text: val,
+        created_at: Date.now()
+      })
+      commentHeightSet()
+      await store.dispatch('socials/addComment', commentData)
     }
     const sendSticker = async (val) => {
       const stickerData = {
@@ -358,7 +380,6 @@ export default {
     })
     const videoUrl = ref()
     const commentHeightSet = () => {
-      // console.log(commentBox)
       if (props.detailPage === true) {
         setTimeout(() => {
           commentHeight.value = commentBox.value.scrollHeight + 'px'
@@ -389,6 +410,7 @@ export default {
       windowWidth.value = window.innerWidth
     }
     onMounted(() => {
+      store.commit('content/imgLoadCounterReset')
       if (props.detailPage === true) {
         proxyComments.value.data.reverse()
       }
@@ -413,20 +435,24 @@ export default {
       window.removeEventListener('resize', commentHeightSet)
     })
     const dateFormat = computed(() => {
-      const t = props.data.date_event.split(/[- :]/)
-      let min = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMinutes()
-      const hour = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getHours()
-      const day = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getDate()
-      let month = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMonth() + 1
-      const year = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getFullYear()
-      if (String(min).length === 1) {
-        min = '0' + min
+      if (props.data.date_event) {
+        const t = props.data.date_event.split(/[- :]/)
+        let min = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMinutes()
+        const hour = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getHours()
+        const day = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getDate()
+        let month = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMonth() + 1
+        const year = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getFullYear()
+        if (String(min).length === 1) {
+          min = '0' + min
+        }
+        if (String(month).length === 1) {
+          month = '0' + month
+        }
+        const totalTime = day + '.' + month + '.' + year + ' / ' + hour + ':' + min
+        return totalTime
+      } else {
+        return 0
       }
-      if (String(month).length === 1) {
-        month = '0' + month
-      }
-      const totalTime = day + '.' + month + '.' + year + ' / ' + hour + ':' + min
-      return totalTime
     })
     return {
       like,
@@ -463,7 +489,8 @@ export default {
       itemCounter,
       page,
       sliderImages,
-      playAudio
+      playAudio,
+      linkColor
     }
   }
 }
@@ -605,7 +632,71 @@ export default {
     @include regular-text;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+    p {
+      margin: 0 !important;
+    }
+    ul {
+      margin: 0 !important;
+      li {
+        margin: 0 !important;
+      }
+    }
   }
+    .music {
+      a {
+        color: #1C2B67;
+      }
+    }
+    .media {
+      a {
+        color: #5289C5;
+      }
+    }
+    .library {
+      a {
+        color: #D46D33;
+      }
+    }
+    .art {
+      a {
+        color: #6448B5;
+      }
+    }
+    .kitchen {
+      a {
+        color: #DCB247;
+      }
+    }
+    .shop {
+      a {
+        color: #C83F8E;
+      }
+    }
+    .photo {
+      a {
+        color: #ED6E69;
+      }
+    }
+    .fashion {
+      a {
+        color: #6CCAC8;
+      }
+    }
+    .event {
+      a {
+        color: #D13C33;
+      }
+    }
+    .broadcast {
+      a {
+        color: #006350;
+      }
+    }
+    .coin {
+      a {
+        color: #73CA55;
+      }
+    }
   .hatContainer {
     &.detailPage {
       @media (min-width: $tabletWidth) {
@@ -626,7 +717,7 @@ export default {
     color: $fontColorDefault;
     @include regular-text-bold;
     margin-bottom:2rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
   }
   .buyButton {
     margin-bottom: 2rem;
@@ -690,6 +781,7 @@ export default {
       margin-bottom: 1.5rem;
     }
     &__top {
+    color: $fontColorDefault;
     word-break: break-word;
       &.detailPage {
         cursor: default;
@@ -706,6 +798,61 @@ export default {
           margin-top: 1.5rem;
         }
       }
+      .music {
+      a {
+        color: #1C2B67;
+      }
+    }
+    .media {
+      a {
+        color: #5289C5;
+      }
+    }
+    .library {
+      a {
+        color: #D46D33;
+      }
+    }
+    .art {
+      a {
+        color: #6448B5;
+      }
+    }
+    .kitchen {
+      a {
+        color: #DCB247;
+      }
+    }
+    .shop {
+      a {
+        color: #C83F8E;
+      }
+    }
+    .photo {
+      a {
+        color: #ED6E69;
+      }
+    }
+    .fashion {
+      a {
+        color: #6CCAC8;
+      }
+    }
+    .event {
+      a {
+        color: #D13C33;
+      }
+    }
+    .broadcast {
+      a {
+        color: #006350;
+      }
+    }
+    .coin {
+      a {
+        color: #73CA55;
+      }
+    }
       h2 {
         text-decoration-line: underline;
       }

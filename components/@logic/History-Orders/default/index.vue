@@ -35,7 +35,6 @@ export default {
         loading.value = false
         return data.data
       } catch (e) {
-        console.log(e)
       }
     })
 
@@ -50,6 +49,10 @@ export default {
 <style lang="scss" module>
 .wrapper {
   padding: 0 1.5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transform: translate3d(0);
+  height: 100%;
   .title {
     @include text-style-h2;
     color: $fontColorDefault;
@@ -70,7 +73,8 @@ export default {
   }
   .container {
     width: 100%;
-    height: 100%;
+    // height: 100%;
+    // overflow: hidden;
   }
   .nothing{
     width: 100%;

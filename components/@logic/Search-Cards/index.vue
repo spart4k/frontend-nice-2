@@ -25,11 +25,9 @@
         <NuxtLink
           v-for="(item, index) in resultAuthors"
           :key="index"
-          tag="div"
-          :to="`/authors?author=${item.id}`"
-          :class="$style.searchItem"
+          :to="`/authors/${item.id}`"
         >
-          <div @click="closeBottom">
+          <div :class="$style.searchItem" @click="closeBottom">
             <N-Search-Result
               :item="item"
             />
@@ -38,11 +36,9 @@
         <NuxtLink
           v-for="(item, index) in resultCards"
           :key="index"
-          tag="div"
-          :to="`/cards/${item.id}?section=${item.section.slug}`"
-          :class="$style.searchItem"
+          :to="`/${item.section.slug}/${item.id}`"
         >
-          <div @click="closeBottom">
+          <div :class="$style.searchItem" @click="closeBottom">
             <N-Search-Result
               :item="item"
             />
@@ -89,7 +85,6 @@ export default {
       if (val.length) {
         loading.value = true
         const searchResult = await store.dispatch('search/searchCards', searchData)
-        console.log(searchResult.data)
         resultCards.value = searchResult.data.cards
         resultAuthors.value = searchResult.data.authors
         loading.value = false
@@ -114,6 +109,10 @@ export default {
 <style scoped lang="scss" module>
 .wrapper{
   padding: 0 1.5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transform: translate3d(0);
+  height: 100%;
   .title {
     @include text-style-h2;
     color: $fontColorDefault;
@@ -140,10 +139,8 @@ export default {
     padding-bottom: 2.5rem;
     .searchContainer{
       width: 100%;
-      div+div {
-        margin-top: 1.5rem;
-      }
       .searchItem{
+        margin-top: 1.5rem;
       }
     }
     .nothing{

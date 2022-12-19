@@ -45,7 +45,7 @@
       :class="$style.btnBack"
       color="#C83F8E"
       :type-button="'transparent'"
-      @click="$emit('changeStep', '')"
+      @click="stepBack"
     >
       Назад
     </n-button>
@@ -61,10 +61,11 @@ import 'vue-select/dist/vue-select.css'
 export default {
   name: 'ChangeAddress',
   components: { NButton, vSelect },
-  setup () {
+  setup (props, { emit }) {
     const { store } = useContext()
     const currentItem = computed(() => { return store.state.authentication.selectedAddressIndex })
     const addressItem = computed(() => { return store.state.authentication.adress[0] })
+    const lastStepKey = computed(() => { return store.state.menu.lastStepKey })
 
     const removeAddress = (value, index) => {
       useAsync(async () => {
@@ -74,7 +75,6 @@ export default {
             store.commit('authentication/removeUserAdress', index)
           }
         } catch (e) {
-          console.log(e)
         }
       })
     }
@@ -101,7 +101,6 @@ export default {
             citiesArray.value.push(item.name)
           })
         } catch (e) {
-          console.log(e)
         }
       })
     }
@@ -129,15 +128,36 @@ export default {
       }
       try {
         const addAdress = await store.dispatch('authentication/addAdress', params)
-        console.log(addAdress.error)
+        await store.commit('authentication/setSelectedAddress', addAdress.data)
+        await store.commit('authentication/setSelectedAddressIndex', addressItem.value.length - 1)
+        if (lastStepKey.value === 'basket') {
+          emit('changeStep', '')
+        } else {
+          store.commit('menu/changeKeyMenu', {
+            key: 'registration',
+            effect: 'fx-slide-from-left'
+          })
+          store.commit('menu/changeStepMenu', { step: 1 })
+        }
       } catch (e) {
-        console.log(e)
       }
     }
 
     const setAddress = (value, index) => {
       store.commit('authentication/setSelectedAddress', value)
       store.commit('authentication/setSelectedAddressIndex', index)
+    }
+
+    const stepBack = () => {
+      if (lastStepKey.value === 'basket') {
+        emit('changeStep', '')
+      } else {
+        store.commit('menu/changeKeyMenu', {
+          key: 'registration',
+          effect: 'fx-slide-from-left'
+        })
+        store.commit('menu/changeStepMenu', { step: 1 })
+      }
     }
     onMounted(() => {
       fetchCities()
@@ -154,7 +174,9 @@ export default {
       adress,
       city,
       changeAdress,
-      setAddress
+      setAddress,
+      stepBack,
+      lastStepKey
     }
   }
 }

@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Nice',
+    title: 'Найс',
     htmlAttrs: {
       lang: 'ru'
     },
@@ -12,8 +12,7 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'msapplication-TileColor', content: '#ffffff' },
-      { name: 'msapplication-TileImage', content: '/ms-icon-144x144.png' },
-      { name: 'theme-color', content: '#ffffff' }
+      { name: 'msapplication-TileImage', content: '/ms-icon-144x144.png' }
 
     ],
     link: [
@@ -68,9 +67,14 @@ export default {
       },
       {
         rel: 'apple-touch-icon',
-        sizes: '180x180',
         type: 'image/png',
         href: '/favicons/apple-icon-180x180.png'
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '192x192',
+        type: 'image/png',
+        href: '/favicons/apple-icon-192x192.png'
       },
       {
         rel: 'icon',
@@ -137,7 +141,8 @@ export default {
     '@plugins/v-lazyload.js',
     '@plugins/v-debounce.js',
     { src: '@plugins/v-infinity-scroll.js', ssr: false },
-    { src: '@plugins/vue-bottom-sheet.js', ssr: false }
+    { src: '@plugins/vue-bottom-sheet.js', ssr: false },
+    { src: '@/plugins/v-masonry', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -174,7 +179,7 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: 'https://test.itisthenice.com'
+    baseURL: 'https://itisthenice.com'
     // baseURL: 'http://192.168.1.19:8999'
   },
 

@@ -1,27 +1,21 @@
 <template>
   <div>
-    <N-Preloader v-if="!cards  || !loadingEnd" />
-    <n-intro-slug
-    :class="!loadingEnd && $style.disabled"
-      v-if="cards">
+    <N-Preloader v-if="$fetchState.pending" />
+    <n-intro-slug v-else>
       <template>
         <NGridCard
           ref="contentGrid"
           class="content"
-          :class="[$style.content, showAnimate && $style.animateContent, !loadingEnd && $style.disabled]"
+          :class="[$style.content, showAnimate && $style.animateContent]"
           :items="cards"
           :description="introTitle"
           :intro-data="introData && introData"
           :author="author"
-          :selectedSection="selectedSection"
-          :selectedMode="selectedMode"
-          :selectAsc="selectAsc"
           @clickTag="clickTag"
           @sendSection="sendSection"
           @sendNovelty="sendNovelty"
           @sendMode="sendMode"
           @sendCategory="sendCategory"
-          @sendCategoryNumber="sendCategoryNumber"
         />
       </template>
     </n-intro-slug>
@@ -39,12 +33,13 @@ import {
   useRouter,
   useContext,
   useFetch,
-  useMeta, watch, onUnmounted,
-  computed, onMounted, nextTick
+  useMeta,
+  computed, onMounted, nextTick, onUpdated
   // useMeta,
 } from '@nuxtjs/composition-api'
 import { Elastic } from 'gsap'
 import animationGSAP from '~/helpers/compositions/animationGSAP'
+
 // import { pagination } from '~/plugins/pagination'
 // import { head } from '@/components/scripts/head.js'
 
@@ -56,7 +51,6 @@ export default defineComponent({
   // components: { vSelect },
   setup () {
     const router = useRouter()
-
     const { store, route, $gsap } = useContext()
     const cards = ref([])
     const author = ref()
@@ -80,57 +74,49 @@ export default defineComponent({
         case 'coin': return 10
       }
     })
-    const authorId = computed(() => Number(route.value.query.author))
+    const authorId = computed(() => {
+        return route.value.params.id
+    })
     const cardsLoading = ref(false)
     const loading = ref(false)
     const fetchLoading = ref(false)
     const loadingContainer = ref(null)
     const cardsDispatch = ref(true)
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
-    const selectSection = ref(0)
-    const selectDescAsc = ref('desc')
-    const selectCategory = ref('')
+    const selectFirst = ref(0)
+    const selectSecond = ref('desc')
+    const selectThird = ref('')
     const selectPresent = ref(null)
     const selectMode = ref('created_at')
-    const selectCategoryNumber = ref()
     const priceFetch = ref(1)
-    const loadingEnd = ref(false)
-    const imgLoadCount = computed(() => store?.state?.content?.imgLoadCounter)
     const scrollHeight = computed(() => store?.state?.content?.scrollHeight)
     const metaTitle = computed(() => store?.state?.content?.sections?.data)
     const firstRender = ref(true)
-    const selectedSection = ref(0)
-    const selectedMode = ref(0)
-    const selectAsc = ref(false)
 
     const sendSection = (value) => {
-      selectCategoryNumber.value = null
-      selectCategory.value = ''
+      selectThird.value = ''
       if (value === 8) {
         value = 9
       }
       if (value === 0) {
-        selectSection.value = 0
+        selectFirst.value = 0
       } else {
-        selectSection.value = value
+        selectFirst.value = value
       }
       searchCards()
     }
     const sendNovelty = (value) => {
       if (value) {
-        selectDescAsc.value = 'desc'
+        selectSecond.value = 'desc'
       } else {
-        selectDescAsc.value = 'asc'
+        selectSecond.value = 'asc'
       }
       searchCards()
     }
     const sendCategory = (value) => {
-      selectSection.value = 0
-      selectCategory.value = value
+      selectFirst.value = 0
+      selectThird.value = value
       searchCards()
-    }
-    const sendCategoryNumber = (value) => {
-      selectCategoryNumber.value = value
     }
     const sendMode = (value) => {
       if (value === 0) {
@@ -178,37 +164,18 @@ export default defineComponent({
       const params = {
         page: 1,
         count: 6,
-        section_id: selectSection.value ? selectSection.value : '',
-        category_id: selectCategory.value ? selectCategory.value : '',
+        section_id: selectFirst.value ? selectFirst.value : '',
+        category_id: selectThird.value ? selectThird.value : '',
         order_by_column: selectMode.value,
-        order_by_mode: selectDescAsc.value,
+        order_by_mode: selectSecond.value,
         minPrice: priceFetch.value,
-        present: selectPresent.value,
-        show_in_native: id.value !== 8 ? true : ''
+        present: selectPresent.value
       }
       const path = 'pages/getData'
       const response = await store.dispatch(path, params)
       cards.value = [...response.data]
       startCards.value = [...cards.value]
       fetchLoading.value = true
-      const lastCards = {
-        cards: startCards.value,
-        section: id.value,
-        page: pageNumber.value
-      }
-      localStorage.setItem('lastCards', JSON.stringify(lastCards))
-      if (id.value === 8) {
-      const lastSection = {
-        section: id.value,
-        searchSection: selectSection.value,
-        searchMode: selectDescAsc.value,
-        searchCategory: selectCategory.value,
-        searchCategoryNumber: selectCategoryNumber.value,
-        searchColomn: selectMode.value,
-        searchPresent: selectPresent.value
-      }
-        localStorage.setItem('lastSection', JSON.stringify(lastSection))
-      }
     }
 
     const introTitle = computed(() => {
@@ -259,11 +226,52 @@ export default defineComponent({
           opacity: 0
         })
       })
-      if (!localStorage.getItem('lastSection')) {
+      if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'authors') {
         const lastSection = {
-          section: id.value
+          section: 'authors'
         }
         localStorage.setItem('lastSection', JSON.stringify(lastSection))
+        store.commit('content/setScrollHeight', 0)
+      }
+    })
+
+    onUpdated(() => {
+      if (window.innerWidth < 900) {
+        store.commit('content/setHeaderHidden', true)
+        if (firstRender.value) {
+          firstRender.value = false
+          if (JSON.parse(localStorage.getItem('lastSection')).section === 'authors' && scrollHeight.value !== 0) {
+            window.scroll({
+              top: scrollHeight.value,
+              left: 0
+            })
+          }
+          nextTick(() => {
+            animateNavbar('.navbarSlug')
+          })
+        }
+      } else {
+        nextTick(() => {
+          store.commit('content/setHeaderHidden', true)
+          if (firstRender.value) {
+            firstRender.value = false
+            if (JSON.parse(localStorage.getItem('lastSection')).section === 'authors' && scrollHeight.value !== 0) {
+                window.scroll({
+                  top: 0,
+                  left: 0
+                })
+                nextTick(() => {
+                  window.scroll({
+                    top: scrollHeight.value,
+                    left: 0
+                  })
+                })
+            }
+            nextTick(() => {
+              animateNavbar('.navbarSlug')
+            })
+          }
+        })
       }
     })
 
@@ -276,9 +284,8 @@ export default defineComponent({
         tags: tagId.value ? [tagId.value] : '',
         authors: authorId.value ? [authorId.value] : '',
         order_by_column: selectMode.value,
-        order_by_mode: selectDescAsc.value,
-        minPrice: id.value === 8 ? priceFetch.value : '',
-        show_in_native: id.value !== 8 ? true : ''
+        order_by_mode: selectSecond.value,
+        minPrice: id.value === 8 ? priceFetch.value : ''
       }
       const path = 'pages/getData'
       const response = await store.dispatch(path, params)
@@ -299,73 +306,11 @@ export default defineComponent({
           fetchLoading.value = true
           cards.value = [...response.data]
           startCards.value = [...cards.value]
-          // loadingEnd.value = true
-          if (scrollHeight.value !== 0) {
-            if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
-              cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
-              startCards.value = [...cards.value]
-              pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-              loadingEnd.value = false
-              if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
-                selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
-                selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
-                if (JSON.parse(localStorage.getItem('lastSection')).searchCategory) {
-                  selectCategory.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
-                  selectSection.value = ''
-                  selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
-                  selectCategoryNumber.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
-                } else {
-                  selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
-                }
-                if (JSON.parse(localStorage.getItem('lastSection')).searchMode === 'asc') {
-                  selectAsc.value = true
-                  selectDescAsc.value = 'asc'
-                }
-                selectPresent.value = JSON.parse(localStorage.getItem('lastSection')).searchPresent
-                switch (JSON.parse(localStorage.getItem('lastSection')).searchColomn) {
-                  case 'created_at': {
-                    selectedMode.value = 0
-                    if (JSON.parse(localStorage.getItem('lastSection')).searchPresent) {
-                      selectedMode.value = 3
-                    }
-                    return
-                  }
-                  case 'price': {
-                    selectedMode.value = 1
-                    return
-                  }
-                  case 'like_count': {
-                    selectedMode.value = 2
-                    return
-                  }
-                }
-              }
-            }
-            if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
-              loadingEnd.value = false
-            }
-            if (JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
-              store.commit('content/setHeaderHidden', true)
-            }
-          } else {
-            store.commit('content/setHeaderHidden', true)
+          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === 'authors') {
+            cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
+            startCards.value = [...cards.value]
+            pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
           }
-          if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
-            loadingEnd.value = false
-          }
-          if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
-            const lastSection = {
-              section: id.value
-            }
-            localStorage.setItem('lastSection', JSON.stringify(lastSection))
-            store.commit('content/setScrollHeight', 0)
-          }
-          const lastCards = {
-            cards: startCards.value,
-            section: id.value,
-            page: pageNumber.value
-          }
-          localStorage.setItem('lastCards', JSON.stringify(lastCards))
         } catch (e) {
         }
     })
@@ -392,22 +337,21 @@ export default defineComponent({
 
     const lazyPagination = async () => {
       if (id.value !== 8) {
-        selectSection.value = id.value
+        selectFirst.value = id.value
     }
     if (cardsDispatch.value && fetchLoading.value) {
       cardsLoading.value = true
       const params = {
         page: pageNumber.value,
         count: 6,
-        section_id: selectSection.value ? selectSection.value : null,
-        category_id: selectCategory.value,
-        // tags: tagId.value ? [tagId.value] : null,
-        // authors: authorId.value ? [authorId.value] : null,
+        section_id: selectFirst.value ? selectFirst.value : null,
+        category_id: selectThird.value,
+        tags: tagId.value ? [tagId.value] : null,
+        authors: authorId.value ? [authorId.value] : null,
         order_by_column: selectMode.value,
-        order_by_mode: selectDescAsc.value,
+        order_by_mode: selectSecond.value,
         minPrice: id.value === 8 ? priceFetch.value : null,
-        present: selectPresent.value,
-        show_in_native: id.value !== 8 ? true : ''
+        present: selectPresent.value
       }
       pageNumber.value++
 
@@ -420,130 +364,18 @@ export default defineComponent({
         startCards.value = [...cards.value]
         const lastCards = {
           cards: startCards.value,
-          section: id.value,
+          section: 'authors',
           page: pageNumber.value
         }
         localStorage.setItem('lastCards', JSON.stringify(lastCards))
-
-          if (id.value === 8) {
-            const lastSection = {
-              section: id.value,
-              searchSection: selectSection.value,
-              searchMode: selectDescAsc.value,
-              searchCategory: selectCategory.value,
-              searchCategoryNumber: selectCategoryNumber.value,
-              searchColomn: selectMode.value,
-              searchPresent: selectPresent.value
-            }
-            localStorage.setItem('lastSection', JSON.stringify(lastSection))
-          }
       }
     }
-
-    onUnmounted(() => {
-      loadingEnd.value = false
-    })
-
-    watch(() => imgLoadCount.value, () => {
-      if (scrollHeight.value !== 0) {
-        if (localStorage.getItem('lastCards') !== '[object Object]') {
-          if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
-            if (window.innerWidth < 450) {
-            store.commit('content/setHeaderHidden', true)
-            if (firstRender.value) {
-              firstRender.value = false
-              if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
-                window.scroll({
-                  top: scrollHeight.value,
-                  left: 0
-                })
-                loadingEnd.value = true
-              }
-              nextTick(() => {
-                animateNavbar('.navbarSlug')
-              })
-            }
-          } else {
-            nextTick(() => {
-              store.commit('content/setHeaderHidden', true)
-              if (firstRender.value) {
-                firstRender.value = false
-                if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
-                    window.scroll({
-                      top: 0,
-                      left: 0
-                    })
-                    nextTick(() => {
-                      window.scroll({
-                        top: scrollHeight.value,
-                        left: 0
-                      })
-                      loadingEnd.value = true
-                    })
-                }
-                nextTick(() => {
-                  animateNavbar('.navbarSlug')
-                })
-              }
-            })
-          }
-          }
-        } else if (localStorage.getItem('lastCards') === '[object Object]') {
-          if (imgLoadCount.value <= 6) {
-            if (window.innerWidth < 450) {
-            store.commit('content/setHeaderHidden', true)
-            if (firstRender.value) {
-              firstRender.value = false
-              if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
-                window.scroll({
-                  top: scrollHeight.value,
-                  left: 0
-                })
-                loadingEnd.value = true
-              }
-              nextTick(() => {
-                animateNavbar('.navbarSlug')
-              })
-            }
-          } else {
-            nextTick(() => {
-              store.commit('content/setHeaderHidden', true)
-              if (firstRender.value) {
-                firstRender.value = false
-                if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
-                    window.scroll({
-                      top: 0,
-                      left: 0
-                    })
-                    nextTick(() => {
-                      window.scroll({
-                        top: scrollHeight.value,
-                        left: 0
-                      })
-                      loadingEnd.value = true
-                    })
-                }
-                nextTick(() => {
-                  animateNavbar('.navbarSlug')
-                })
-              }
-            })
-          }
-          }
-        }
-      } else if (imgLoadCount.value === JSON.parse(JSON.stringify(startCards.value)).length) {
-        loadingEnd.value = true
-      }
-    })
 
     const clickTag = (value) => {
       router.push({ path: `/tags/${value}` })
     }
 
     store.commit('content/changeBgIntro', route.value.params.slug)
-
-    onMounted(() => {
-    })
 
     return {
       clickTag,
@@ -564,25 +396,19 @@ export default defineComponent({
       cardsDispatch,
       fetchLoading,
       introData,
-      selectSection,
-      selectDescAsc,
-      selectCategory,
+      selectFirst,
+      selectSecond,
+      selectThird,
       selectMode,
       selectPresent,
       searchCards,
       sendSection,
       sendNovelty,
       sendCategory,
-      sendCategoryNumber,
       sendMode,
       metaTitle,
       scrollHeight,
-      firstRender,
-      selectedSection,
-      selectedMode,
-      selectAsc,
-      imgLoadCount,
-      loadingEnd
+      firstRender
     }
   },
   head: {}
@@ -610,9 +436,6 @@ export default defineComponent({
 }
 .observer {
   height: 100%;
-}
-.disabled {
-  opacity: 0;
 }
 .row{
   position: relative;

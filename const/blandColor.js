@@ -1,15 +1,15 @@
 export const BLAND_COLOR = {
-  muzyka: '#1C2B67',
-  video: '#5289C5',
-  ctivo: '#D46D33',
-  iskusstvo: '#6448B5',
-  kuxnia: '#DCB247',
-  magazin: '#C83F8E',
-  foto: '#ED6E69',
-  odezda: '#6CCAC8',
-  meropriiatiia: '#D13C33',
-  efir: '#006350',
-  moneta: '#73CA55',
-  '/tags': '#292BC2',
-  '/authors': '#292BC2'
+  music: '#1C2B67',
+  media: '#5289C5',
+  library: '#D46D33',
+  art: '#6448B5',
+  kitchen: '#DCB247',
+  shop: '#C83F8E',
+  photo: '#ED6E69',
+  fashion: '#6CCAC8',
+  event: '#D13C33',
+  broadcast: '#006350',
+  coin: '#73CA55',
+  'tags-id': '#292BC2',
+  'authors-id': '#292BC2'
 }

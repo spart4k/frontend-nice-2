@@ -8,7 +8,11 @@ export const state = () => ({
   sections: [],
   headerItems: [],
   isShowAnimationHomePage: true,
-  singleAnimation: true
+  singleAnimation: true,
+  scrollHeight: 0,
+  headerHidden: true,
+  imgLoadCounter: 0,
+  contentLoader: true
 })
 
 export const mutations = {
@@ -38,6 +42,21 @@ export const mutations = {
   },
   setSingleAnimation (state, value) {
     state.singleAnimation = value
+  },
+  setScrollHeight (state, value) {
+    state.scrollHeight = value
+  },
+  setHeaderHidden (state, value) {
+    state.headerHidden = value
+  },
+  imgLoadCounterInc (state) {
+    state.imgLoadCounter += 1
+  },
+  changeContentLoader (state, value) {
+    state.contentLoader = value
+  },
+  imgLoadCounterReset (state) {
+    state.imgLoadCounter = 0
   }
 }
 
@@ -58,6 +77,10 @@ export const actions = {
   async getHeader ({ commit }, params) {
     // const response = await this.$axios('api/v1/sections')
     const response = await this.$axios.post('api/v1/sectionsSearch', params)
+    return response.data.data
+  },
+  async checkLikesOnCards ({ commit }, params) {
+    const response = await this.$axios.post('api/v1/checkLikesOnCards', params)
     return response.data.data
   }
 }

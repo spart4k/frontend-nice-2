@@ -5,12 +5,16 @@ export const state = () => ({
   isShowBottomLive: false,
   stepCurrentComponent: 0,
   basketLength: 0,
-  audioPlaying: false
+  audioPlaying: false,
+  lastStepKey: ''
 })
 
 export const mutations = {
   changeShowStateBottomSheetStepper (store, value) {
     store.isShowBottomSheetStepper = value
+  },
+  changelastStepKey (store, value) {
+    store.lastStepKey = value
   },
   changeShowStateBottomSheetMenu (store, { value }) {
     store.isShowBottomMenu = value

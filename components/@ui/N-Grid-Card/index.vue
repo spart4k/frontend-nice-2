@@ -1,26 +1,26 @@
 <template>
-  <div>
     <div :class="$style.cards">
-      <template v-if="spliceArray.colLeft && spliceArray.colRight">
+      <!-- <template v-if="spliceArray.colLeft && spliceArray.colRight">
         <div :class="$style.col">
           <div
             v-for="(card, index) in spliceArray.colLeft"
             :key="index"
+            @click="saveHeight"
           >
-            <template v-if="(selectors.id === '8') && card.hasOwnProperty('preview')">
+            <template v-if="(selectors === 'shop') && card.hasOwnProperty('preview')">
               <n-section-intro
                 v-if="card.hasOwnProperty('preview')"
                 :key="card.id"
                 :description="card"
                 :image="card.image"
                 :class="$style.preview"
-                :select="{sections, novelty}"
-                @sendPropertySection="($event) => $emit('sendSection', $event)"
-                @sendPropertyNovelty="($event) => $emit('sendNovelty', $event)"
               />
-              <div v-if="selectors.id === '8'" :class="$style.rowMobile">
-                <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
-                <N-Select :class="$style.select" :select-items="novelty" @setProperty="($event) => $emit('sendNovelty', $event)" />
+              <div v-if="selectors === 'shop'" :class="$style.rowMobile">
+                <N-Select :class="$style.select" :selectedValue="selectedSection" :select-items="sections" @setProperty="sendSection" />
+                <N-Select :class="$style.select" :selectedValue="selectedMode" :select-items="searchMode" @setProperty="sendMode" />
+                <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
+                  <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
+                </div>
               </div>
             </template>
             <n-section-intro
@@ -29,9 +29,6 @@
               :description="card"
               :image="card.image"
               :class="$style.preview"
-              :select="{sections, novelty}"
-              @sendPropertySection="($event) => $emit('sendSection', $event)"
-              @sendPropertyNovelty="($event) => $emit('sendNovelty', $event)"
             />
             <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
               <img :src="card.image" alt="DOG ">
@@ -42,33 +39,96 @@
             </template>
           </div>
         </div>
-        <div v-if="spliceArray.colRight.length || (selectors.id === '8')" :class="$style.col">
-          <div v-if="selectors.id === '8'" :class="$style.row">
-            <N-Select :class="$style.select" :select-items="sections" @setProperty="($event) => $emit('sendSection', $event)" />
-            <N-Select :class="$style.select" :select-items="novelty" @setProperty="($event) => $emit('sendNovelty', $event)" />
+        <template v-if="spliceArray.colRight">
+          <div v-if="spliceArray.colRight.length || (selectors === 'shop')" :class="$style.col">
+            <div v-if="selectors === 'shop'" :class="$style.row">
+              <N-Select :class="$style.select" :selectedValue="selectedSection" :select-items="sections" @setProperty="sendSection" />
+              <N-Select :class="$style.select" :selectedValue="selectedMode" :select-items="searchMode" @setProperty="sendMode" />
+              <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
+                <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
+              </div>
+            </div>
+            <div v-for="(card, index) in spliceArray.colRight" :key="index" @click="saveHeight">
+              <section-cards
+                :key="card.id"
+                :section="card.section"
+                :card="card"
+                :class="$style.cards__item"
+                @clickTag="($event) => $emit('clickTag', card.section.id)"
+              />
+            </div>
           </div>
-          <template v-for="(card) in spliceArray.colRight">
-            <section-cards
-              :key="card.id"
-              :section="card.section"
-              :card="card"
-              :class="$style.cards__item"
-              @clickTag="($event) => $emit('clickTag', card.section.id)"
-            />
-          </template>
-        </div>
+        </template>
+      </template> -->
+      <template v-if="spliceArray.colFull">
+        <!-- <div :class="$style.col"> -->
+          <div v-masonry
+          id="masonry"
+          transition-duration="0"
+          item-selector=".item"
+          :class="$style.masonry"
+          class="masonry-container">
+            <div
+              v-masonry-tile
+              class="item"
+              :class="$style.masonryItem"
+              v-for="(card, index) in spliceArray.colFull"
+              :key="index"
+              @click="saveHeight"
+            >
+              <!-- <template v-if="(selectors === 'shop') && card.hasOwnProperty('preview')">
+                <n-section-intro
+                  v-if="card.hasOwnProperty('preview')"
+                  :key="card.id"
+                  :description="card"
+                  :image="card.image"
+                  :class="$style.preview"
+                />
+                <div v-if="selectors === 'shop'" :class="$style.rowMobile">
+                  <N-Select :class="$style.select" :selectedValue="selectedSection" :select-items="sections" @setProperty="sendSection" />
+                  <N-Select :class="$style.select" :selectedValue="selectedMode" :select-items="searchMode" @setProperty="sendMode" />
+                  <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
+                    <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
+                  </div>
+                </div>
+              </template>
+              <n-section-intro
+                v-else-if="card.hasOwnProperty('preview')"
+                :key="card.id"
+                :description="card"
+                :image="card.image"
+                :class="$style.preview"
+              />
+              <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
+                <img :src="card.image" alt="DOG ">
+              </div>
+              <N-Card-Author v-else-if="card.hasOwnProperty('author_data')" :author="card" :class="$style.authorCard" /> -->
+              <template>
+                <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
+              </template>
+            </div>
+          </div>
+        <!-- </div> -->
       </template>
     </div>
-  </div>
 </template>
 
 <script>
 
-import { computed, ref, useContext, watch } from '@nuxtjs/composition-api'
+import { computed, onMounted, ref, useContext, onUnmounted, watch } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NGridCard',
   props: {
+    selectedSection: {
+      type: Number
+    },
+    selectedMode: {
+      type: Number
+    },
+    selectAsc: {
+      type: Boolean
+    },
     items: {
       type: Array
     },
@@ -86,65 +146,164 @@ export default {
     }
   },
 
-  setup (props) {
-    const { route } = useContext()
+  setup (props, ctx) {
+    const { store, route } = useContext()
     const proxyArray = ref(props.items)
     const selectors = computed(() => {
-      return route.value.query
+      return route.value.params.slug
     })
     const leftArray = ref()
+    const { emit } = ctx
     const rightArray = ref()
+    const isShowBottomMenu = computed(() => store.state.menu.isShowBottomMenu)
+    const noveltyCount = ref(false)
+    const windowWidth = ref()
+    const widthFrameStart = computed(() => {
+      if (process.browser) {
+        return window.innerWidth
+      }
+    })
+    const saveHeight = () => {
+      store.commit('content/setScrollHeight', window.pageYOffset)
+    }
+    const windowWidthCount = () => {
+      windowWidth.value = window.innerWidth
+    }
+    const masonryRebuild = () => {
+      window.dispatchEvent(new Event('resize'))
+    }
     const spliceArray = computed(() => {
-    if (route.value.query.author) {
-      proxyArray.value.unshift({
-        author_data: props.author
+      // if (route.value.name === 'authors-id') {
+      //   proxyArray.value.unshift({
+      //     author_data: props.author
+      //   })
+      // // } else if (!route.value.query.tag && !route.value.query.author) {
+      // } else if (route.value.name !== 'tags-id' && route.value.name !== 'authors-id') {
+      //   if (!props.homePage) {
+      //     proxyArray.value.unshift({
+      //       image: route.value.params.slug,
+      //       title: props.description.title,
+      //       text: props.introData?.quote_text,
+      //       author: props.introData?.author,
+      //       preview: true,
+      //       id: Math.random()
+      //     })
+      //   } else {
+      //     proxyArray.value?.unshift({
+      //       home: true,
+      //       image: require('~/assets/img/preview/dogs.png'),
+      //       id: Math.random()
+      //     })
+      //   }
+      // }
+      const firstHalfDesktop = ref([])
+      const secondHalfDesktop = ref([])
+      const fullArray = ref([])
+      proxyArray.value.forEach((item, index) => {
+        if (index % 2 === 0) {
+          firstHalfDesktop.value.push(item)
+        } else {
+          secondHalfDesktop.value.push(item)
+        }
+        fullArray.value.push(item)
       })
-    } else if (!route.value.query.tag && !route.value.query.author) {
-      if (!props.homePage) {
-          proxyArray.value.unshift({
-            image: route.value.params.slug,
-            title: props.description.title,
-            text: props.introData?.quote_text,
-            author: props.introData?.author,
-            preview: true,
-            id: Math.random()
-          })
+      const middleIndex = Math.ceil(proxyArray.value?.length / 2)
+      const firstHalf = proxyArray.value?.splice(0, middleIndex)
+      const secondHalf = ref()
+      if (proxyArray.value.length === 1) {
+        secondHalf.value = proxyArray.value
       } else {
-        proxyArray.value?.unshift({
-          home: true,
-          image: require('~/assets/img/preview/dogs.png'),
-          id: Math.random()
-        })
+        secondHalf.value = proxyArray.value.splice(-middleIndex)
+      }
+      if (widthFrameStart.value) {
+        return {
+          colLeft: firstHalfDesktop.value,
+          colRight: secondHalfDesktop.value,
+          colFull: fullArray.value
+        }
+      } else {
+        return {
+          colLeft: firstHalf,
+          colRight: secondHalf.value
+        }
+      }
+    })
+    const categories = ref([])
+    const searchMode = ref(['Новизна', 'Цена', 'Популярность', 'Наличие'])
+    const sections = ref(['Все товары', 'Музыка', 'Видео', 'Искусство', 'Кухня', 'Чтиво', 'Фото', 'Одежда', 'Анонсы'])
+    const getСategories = async () => {
+      const data = await store.dispatch('search/searchCards', {
+        entity: 'categories',
+        searchField: '',
+        page: 1,
+        count: 9999
+      })
+      data.data.data.forEach((item) => {
+        sections.value.push(item.name)
+        categories.value.push(item)
+      })
+    }
+    const sendMode = (value) => {
+      emit('sendMode', value)
+    }
+    const sendSection = (value) => {
+      if (value >= 9) {
+      emit('sendCategoryNumber', value)
+      value -= 9
+      categories.value.forEach((item, index) => {
+        if (index === value) {
+          emit('sendCategory', item.id)
+        }
+      })
+      } else {
+        emit('sendSection', value)
       }
     }
-    const middleIndex = Math.ceil(proxyArray.value?.length / 2)
-    const firstHalf = proxyArray.value?.splice(0, middleIndex)
-    const secondHalf = ref()
-    if (proxyArray.value.length === 1) {
-      secondHalf.value = proxyArray.value
-    } else {
-      secondHalf.value = proxyArray.value.splice(-middleIndex)
+
+  onMounted(() => {
+    windowWidthCount()
+    window.addEventListener('resize', windowWidthCount)
+    if (selectors.value === 'shop') {
+      getСategories()
     }
-    return {
-      colLeft: firstHalf,
-      colRight: secondHalf.value
+    if (props.selectAsc) {
+      noveltyCount.value = !noveltyCount.value
     }
   })
-  const novelty = ref(['Новые', 'Старые'])
-  const sections = ref(['Все товары', 'Музыка', 'Видео', 'Искусство', 'Кухня', 'Чтиво', 'Фото', 'Одежда', 'Анонсы'])
+
+  onUnmounted(() => {
+      window.removeEventListener('resize', windowWidthCount)
+    })
 
   watch(() => props.items, () => {
     proxyArray.value = props.items
+  })
+
+  watch(() => isShowBottomMenu.value, () => {
+    setTimeout(() => {
+      masonryRebuild()
+    }, 500)
   })
 
   return {
     spliceArray,
     proxyArray,
     selectors,
-    novelty,
+    searchMode,
     sections,
     leftArray,
-    rightArray
+    rightArray,
+    noveltyCount,
+    widthFrameStart,
+    windowWidth,
+    windowWidthCount,
+    saveHeight,
+    getСategories,
+    sendMode,
+    sendSection,
+    categories,
+    masonryRebuild,
+    isShowBottomMenu
     }
   }
 }
@@ -156,7 +315,7 @@ export default {
   // @media (max-width: $tabletWidth) {
   //   height: calc(100vh - 10.3rem);
   // }
-  @media (max-width: $tabletWidth) {
+  @media (max-width: $mobileWidth) {
     height: calc(100vh - 17.5rem) !important;
   }
 }
@@ -164,14 +323,15 @@ export default {
   display: flex;
   margin: 0 auto;
   justify-content: center;
-  @media (min-width: $desktopWidth) {
-    width: calc(100%);
-  }
-  @media (max-width: $tabletWidth) {
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-  }
+  width: 100%;
+  // @media (min-width: $desktopWidth) {
+  //   width: calc(100%);
+  // }
+  // @media (max-width: $tabletWidth) {
+  //   flex-direction: column;
+  //   justify-content: center;
+  //   width: 100%;
+  // }
   &__item {
     margin-bottom: 2rem;
     display: flex;
@@ -196,11 +356,19 @@ export default {
     }
   }
 }
+
 .col {
   max-width: 53.2rem;
   width: calc(50% - 1.5rem);
-  @media (min-width: $tabletWidth) {
+  @media (min-width: $desktopWideWidth) {
+    min-width: 62rem;
+    max-width: auto;
+  }
+  @media (min-width: $desktopWidth) and (max-width: $desktopWideWidth) {
     min-width: 40rem;
+  }
+  @media (min-width: $tabletWidth) and (max-width: $desktopWidth) {
+    min-width: 47rem;
   }
   @media (max-width: $tabletWidth) {
     width: auto;
@@ -222,6 +390,22 @@ export default {
       width: 20.3rem;
       height: 4.4rem;
     }
+    .selectPriority {
+      width: 4.4rem;
+      height: 4.4rem;
+      background: white;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      border-radius: 50%;
+      justify-content: center;
+      cursor: pointer;
+      .icon {
+        transition-duration: .5s;
+        z-index: 5;
+        color: $pink2;
+      }
+    }
   }
   .rowMobile{
     display: flex;
@@ -232,8 +416,24 @@ export default {
       display: none;
     }
     .select {
-      width: 20.3rem;
+      width: 14.3rem;
       height: 4.4rem;
+    }
+    .selectPriority {
+      width: 4.4rem;
+      height: 4.4rem;
+      background: white;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      border-radius: 50%;
+      justify-content: center;
+      cursor: pointer;
+      .icon {
+        transition-duration: .5s;
+        z-index: 5;
+        color: $pink2;
+      }
     }
   }
 }
@@ -241,6 +441,18 @@ export default {
   margin-left: 3rem;
   @media (max-width: $tabletWidth) {
     margin-left: 0;
+  }
+}
+.masonry {
+  width: 100%;
+  max-width: 1094px;
+  .masonryItem {
+    width: 50%;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    @media (max-width: $mobileWidth) {
+      width: 100%;
+    }
   }
 }
 </style>

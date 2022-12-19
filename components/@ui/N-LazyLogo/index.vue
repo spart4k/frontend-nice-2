@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.container">
+  <div :class="$style.container" @click="$emit('click')">
     <img
       v-show="ready"
       :src="src"
@@ -30,7 +30,6 @@ export default {
     onMounted(() => {
       // const image = new Image()
       // image.onload = () => {
-      //   console.log('asd')
       //   ready.value = true
       // }
       // image.src = props.src

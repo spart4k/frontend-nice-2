@@ -108,7 +108,6 @@ export default {
         loading.value = false
         return getStickers.data.data
       } catch (e) {
-        console.log(e)
       }
     })
     return {

@@ -3,23 +3,24 @@
   <div class="">
     <header>
       <div class="headerAnimation" :class="[$style.header, (showAnimate && $route.name === 'index') && $style.animateContent]">
-        <div
+        <nuxt-link
           v-show="$route.name === 'index'"
           class="logo"
+          :to="'/'"
           :class="[$style.logo, showAnimate && $style.logoVisible]"
           :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}rem)` : '50%'}"
-          @click="$router.push('/')"
+          v-on:click.native="scrollTop"
         >
           <n-logo />
-        </div>
-        <div
+        </nuxt-link>
+        <nuxt-link
           v-show="$route.name !== 'index'"
           :class="$style.logoSlug"
+          :to="'/'"
           :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}rem)` : '50%'}"
-          @click="$router.push('/')"
         >
           <n-logo />
-        </div>
+        </nuxt-link>
         <!--    v-if="$route.name !== 'index'"-->
         <n-button
           type-button="transparent"
@@ -100,6 +101,14 @@ export default {
         text: numWord(calcBasketCard, ['товар', 'товара', 'товаров'])
       }
     })
+
+    const scrollTop = () => {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      })
+    }
 
     const toggleMenu = () => {
       active.value = false
@@ -203,7 +212,8 @@ export default {
       liveChat,
       windowWidthCount,
       pageLoad,
-      pageLoading
+      pageLoading,
+      scrollTop
     }
   }
 }

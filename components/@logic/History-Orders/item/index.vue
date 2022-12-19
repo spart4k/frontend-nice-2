@@ -3,14 +3,17 @@
     <div :class="$style.order">
       Заказ №{{ $props.order.id }}
     </div>
+    <div :class="$style.status" :style="{ color: color }">
+      {{ $props.order.status.status_name }}
+    </div>
     <div :class="$style.title">
       {{ description }}
     </div>
     <div :class="$style.price">
       {{ $props.order.delivery_price + $props.order.cards_sum }} р.
     </div>
-    <div :class="$style.status" :style="{ color: color }">
-      {{ $props.order.status.status_name }}
+    <div :class="$style.status">
+      Детализация отправленна на Вашу электронную почту
     </div>
   </div>
 </template>
@@ -33,7 +36,6 @@ export default {
         props.order.basket.cards.forEach((item) => {
           string.value += item.title + ', ' + item.pivot.quantity + 'шт. '
           if (item.pivot.details) {
-            console.log(item.pivot.details)
             string.value += JSON.parse(item.pivot.details).начало + ', ' + JSON.parse(item.pivot.details).конец + ', ' + JSON.parse(item.pivot.details).длина + 'см. '
           }
         })

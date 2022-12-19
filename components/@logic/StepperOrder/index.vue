@@ -97,7 +97,6 @@ export default {
     const socketCloseListener = (event) => {
       socket.onmessage = async (event) => {
         const data = JSON.parse(event.data)
-        console.log(data)
           if (data.messageType === 'bank' && data.status === 'CONFIRMED' && data.status === 'CONFIRMED' && data.user_id === store.state.authentication.user.id) {
             store.commit('menu/changeKeyMenu', {
               key: 'basket',
@@ -109,9 +108,41 @@ export default {
           } else if (loading.value && data.messageType === 'lastMessages') {
             messages.value = data.messageArray
             song.value = data.currentSong
+            if ('mediaSession' in navigator) {
+              navigator.mediaSession.metadata = new MediaMetadata({
+                title: song.value.title,
+                artwork: [
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '96x96', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '128x128', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '192x192', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '256x256', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '384x384', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '512x512', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '1024x1024', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '2048x2048', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '4096x4096', type: 'image/png' }
+                ]
+              })
+            }
             loading.value = false
           } else if (data.messageType === 'nextSong') {
             song.value = data.data
+            if ('mediaSession' in navigator) {
+              navigator.mediaSession.metadata = new MediaMetadata({
+                title: song.value.title,
+                artwork: [
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '96x96', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '128x128', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '192x192', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '256x256', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '384x384', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '512x512', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '1024x1024', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '2048x2048', type: 'image/png' },
+                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '4096x4096', type: 'image/png' }
+                ]
+              })
+            }
             emit('destroyTag')
           } else if (!loading.value) {
             await messages.value.push(data)

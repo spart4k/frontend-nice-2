@@ -17,12 +17,22 @@ export default {
     const audioSource = ref(null)
     const audioPause = ref(null)
     const audioPlay = ref(null)
+    const cardLink = computed(() => {
+      if (props.song.link) {
+        return JSON.parse(props.song.link)
+      }
+    })
     const audioPlaying = computed(() => store.state.menu.audioPlaying)
     const marquee = ref(null)
     const marqueeLength = ref(null)
     const marqueeContent = ref(null)
     const marqueeContainerLength = ref(null)
     const isMarquee = ref(true)
+    const closeBottom = () => {
+      if (window.innerWidth < 450) {
+        emit('closeState')
+      }
+    }
     const playAudio = () => {
       emit('playAudio')
       store.commit('menu/changeAudioPlaying', true)
@@ -86,7 +96,9 @@ export default {
       marqueeContent,
       marqueeLengthComputed,
       marqueeContainerLength,
-      isMarquee
+      isMarquee,
+      cardLink,
+      closeBottom
     }
   }
 }

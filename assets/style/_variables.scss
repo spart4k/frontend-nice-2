@@ -1,5 +1,6 @@
+$desktopWideWidth: 1921px;
 $desktopWidth: 1440px;
-$tabletWidth: 800px;
+$tabletWidth: 450px;
 $mobileWidth: 450px;
 
 $border-radius-1: 1.5rem;
@@ -60,8 +61,10 @@ $animationTiming1: cubic-bezier(.71,.01,.15,1);
 }
 
 @mixin container {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  // padding-left: 1.5rem;
+  // padding-right: 1.5rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
   max-width: $desktopWidth;
   margin: 0 auto;
 }

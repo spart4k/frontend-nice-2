@@ -9,7 +9,6 @@ export const actions = {
       return data
     } catch (e) {
       this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
-      console.log(e)
     }
   },
   async getSeo (state, params) {
@@ -18,7 +17,6 @@ export const actions = {
       return data
     } catch (e) {
       // this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
-      console.log(e)
     }
   }
 }

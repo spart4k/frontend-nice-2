@@ -90,7 +90,6 @@ export default {
           store.commit('basket/addToBasket', result.data[0])
         }
       } catch (e) {
-        console.log(e)
       } finally {
         loading.value = false
       }

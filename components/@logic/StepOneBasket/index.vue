@@ -55,7 +55,6 @@ export default {
             store.commit('basket/removeFromBasket', index)
           }
         } catch (e) {
-          console.log(e)
         }
       })
     }
@@ -66,6 +65,7 @@ export default {
     }
 
     onMounted(() => {
+      store.commit('menu/changelastStepKey', 'basket')
       window.addEventListener('keydown', subminOnEnter)
     })
 
@@ -94,6 +94,8 @@ export default {
   overscroll-behavior-y: contain !important;
   transform: translate3d(0px, 0, 0);
   color: $fontColorDefault;
+  overflow-x: hidden;
+  transform: translate3d(0);
 }
 .title {
   margin-bottom: 2rem;

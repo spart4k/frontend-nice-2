@@ -54,11 +54,11 @@ export default defineComponent({
     })
     const metaTags = ref({})
     const clickTag = (value) => {
-      router.push({ path: '/tags', query: { tag: value } })
+      router.push({ path: `/tags/${value}` })
     }
 
     const clickAuthor = (value) => {
-      router.push({ path: '/authors', query: { author: value } })
+      router.push({ path: `/authors/${value}` })
     }
 
     const card = useAsync(async () => {
@@ -79,7 +79,6 @@ export default defineComponent({
           comments: responseComments.data
         }
         } catch (e) {
-          console.log(e)
         }
       }, route.value.params.id)
     useMeta(() => ({
@@ -128,6 +127,8 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      store.commit('content/changeContentLoader', true)
+      store.commit('content/setHeaderHidden', false)
       store.commit('content/setAnimate', false)
       store.commit('content/setSingleAnimation', false)
       store.commit('content/changeAnimationEnd', true)

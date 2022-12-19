@@ -1,6 +1,9 @@
 <template>
   <div>
+    <N-Preloader v-if="!cards.data || !loadingEnd" />
     <n-intro
+      :class="!loadingEnd && $style.disabled"
+      v-if="cards.data"
       :description="introTitle"
       :is-show-animation="true"
     >
@@ -15,11 +18,11 @@
         />
       </div>
       <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
-        <N-Preloader v-if="!cards.data" />
         <NGridCard
           v-if="cards && cards.data"
           ref="content"
           :items="cards.data"
+          :class="!loadingEnd && $style.disabled"
           home-page
           @clickTag="clickTag"
         />
@@ -31,6 +34,7 @@
     </div>
   </div>
 </template>
+
 <script>
 
 import {
@@ -38,8 +42,8 @@ import {
   computed,
   defineComponent,
   useContext,
-  useFetch, useAsync,
-  onMounted, onUnmounted,
+  useFetch, useAsync, watch,
+  onMounted, onUnmounted, onUpdated, nextTick,
   useRouter,
   useMeta
 } from '@nuxtjs/composition-api'
@@ -56,7 +60,7 @@ export default defineComponent({
   props: {
   },
   setup (_, { root }) {
-    const { store, $gsap } = useContext()
+    const { store, route, $gsap } = useContext()
     const router = useRouter()
     const cards = ref([])
     const totalPage = ref(0)
@@ -69,7 +73,12 @@ export default defineComponent({
     const cardsDispatch = ref(true)
     const fetchLoading = ref(false)
     const animationLoad = ref(false)
+    const loadingEnd = ref(false)
+    const scrollHeight = computed(() => store?.state?.content?.scrollHeight)
+    const imgLoadCount = computed(() => store?.state?.content?.imgLoadCounter)
+    const contentLoader = computed(() => store?.state?.content?.contentLoader)
     const metaTags = ref({})
+    const firstRender = ref(true)
     const resize = () => {
       if (window.innerWidth < 450) {
         animationlogo()
@@ -89,12 +98,23 @@ export default defineComponent({
         page: 1,
         count: 6,
         show_in_main: 1,
-        section_id: ''
+        section_id: '',
+        order_by_colomn: 'created_at',
+        order_by_mode: 'desc'
       }
 
       const response = await store.dispatch('main/getData', params)
+      console.dir(response.data)
       return response
     }
+    const color = computed(() => {
+      const paramsColor = BLAND_COLOR[route.value.params?.slug] || BLAND_COLOR[route.value.name] || BLAND_COLOR[route.value.query.section] || BLAND_COLOR[route.value.path]
+      if (paramsColor) {
+        return paramsColor
+      } else {
+        return ''
+      }
+    })
 
     store.commit('content/clearBgIntro')
 
@@ -106,13 +126,14 @@ export default defineComponent({
     } = animationGSAP($gsap, Elastic)
 
     onMounted(() => {
-      // if (backgroundLoaded.value) {
+      store.commit('content/changeContentLoader', true)
+        const body = document.querySelector('body')
+        body.style.overflow = 'hidden'
         window.addEventListener('resize', resize)
         window.addEventListener('load', () => {
           if (store.state.content.singleAnimation) {
             localStorage.setItem('showAnimateHomePage', 'true')
             store.commit('content/setSingleAnimation', false)
-            // store.commit('content/setAnimate', false)
           }
           if (window.innerWidth < 450) {
             animationlogo()
@@ -130,15 +151,24 @@ export default defineComponent({
         if (!store.state.content.singleAnimation) {
           const logo = document.querySelector('.logo')
           logo.classList.add('animationEnd')
+          body.style.overflow = 'auto'
         }
         setTimeout(() => {
           fetchLoading.value = true
           animationLoad.value = true
         }, 1000)
-        // }
+        if (!localStorage.getItem('lastSection')) {
+            const lastSection = {
+              section: 'index'
+            }
+            localStorage.setItem('lastSection', JSON.stringify(lastSection))
+          }
     })
+
+    onUpdated(() => {
+    })
+
     const getSeoInfo = async () => {
-      // const response = await store.dispatch('main/getSeo')
     }
     useAsync(async () => {
       try {
@@ -149,36 +179,59 @@ export default defineComponent({
           seo_image: response.data.data?.seo_file_id?.src
         }
       } catch (e) {
-        console.log(e)
       }
     })
+
+    const getLikes = async () => {
+    }
+
     useFetch(async () => {
-      try {
-        const response = await fetchData()
-        if (response.data.data.data.length < 6) {
-          cardsDispatch.value = false
+        try {
+          const response = await fetchData()
+          if (response.data.data.data.length < 6) {
+            cardsDispatch.value = false
+          }
+          totalPage.value = response?.data.last_pages
+          cards.value = response.data.data
+          startCards.value = cards.value.data
+          loadingEnd.value = true
+          if (scrollHeight.value !== 0) {
+            if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
+              loadingEnd.value = false
+              cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
+              startCards.value = [...cards.value.data]
+              pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+            }
+            if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
+              loadingEnd.value = false
+            }
+            if (JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+              store.commit('content/setHeaderHidden', true)
+            }
+          } else {
+            store.commit('content/setHeaderHidden', true)
+          }
+          if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+            const lastSection = {
+              section: 'index'
+            }
+            localStorage.setItem('lastSection', JSON.stringify(lastSection))
+            store.commit('content/setScrollHeight', 0)
+          }
+          const lastCards = {
+            cards: startCards.value,
+            section: 'index',
+            page: pageNumber.value
+          }
+          localStorage.setItem('lastCards', JSON.stringify(lastCards))
+        } catch (e) {
         }
-        totalPage.value = response?.data.last_page
-        cards.value = response.data.data
-        startCards.value = cards.value.data
-      } catch (e) {
-        console.log(e)
-      }
     })
     onUnmounted(() => {
       window.removeEventListener('resize', resize)
+      loadingEnd.value = false
     })
-    // const metaContent = metaTags.value
-    // const { title, meta } = useMeta()
-    // title.value = metaContent.seo_title
-    // meta.value = [
-    //   {
-    //     hid: 'og:title',
-    //     name: 'og:title',
-    //     property: 'og:title',
-    //     content: metaContent.seo_title
-    //   }
-    // ]
+
     store.commit('content/clearBgIntro')
     useMeta(() => ({
         title: metaTags.value.seo_title,
@@ -202,6 +255,18 @@ export default defineComponent({
             content: `https://test.itisthenice.com/${metaTags.value.seo_image}`
           },
           {
+            hid: 'twitter:card',
+            name: 'twitter:card',
+            property: 'twitter:card',
+            content: 'summary_large_image'
+          },
+          {
+            hid: 'twitter:image',
+            name: 'twitter:image',
+            property: 'twitter:image',
+            content: `https://test.itisthenice.com/${metaTags.value.seo_image}`
+          },
+          {
             hid: 'description',
             name: 'description',
             property: 'description',
@@ -209,17 +274,7 @@ export default defineComponent({
           }
         ]
     }))
-    // useMeta({
-    //     title: 'Мой заголовок',
-    //     meta: [
-    //       {
-    //           hid: 'description',
-    //           name: 'description',
-    //           content: 'Моё описание...'
-    //       }
-    //     ]
-    // })
-    // head(useMeta, metaTags.value)
+
     const { page } = pagination(fetchData)
 
     const lazyPagination = async () => {
@@ -230,22 +285,37 @@ export default defineComponent({
             page: 1,
             count: 12,
             section_id: '',
-            show_in_main: 1
+            show_in_main: 1,
+            order_by_colomn: 'created_at',
+            order_by_mode: 'desc'
           }
           pageNumber.value++
           const response = await store.dispatch('pages/getData', params)
           if (response.data.length < 6) {
             cardsDispatch.value = false
           }
+          // cardsLoading.value = false
+          // cards.value.data = [...startCards.value, ...response.data]
+          // startCards.value = [...cards.value.data]
           cardsLoading.value = false
-          cards.value.data = [...startCards.value, ...response.data]
-          startCards.value = [...cards.value.data]
+          startCards.value = [...startCards.value, ...response.data]
+          startCards.value.forEach((item) => {
+            cards.value.data.push(item)
+          })
+          const lastCards = {
+            cards: startCards.value,
+            section: 'index',
+            page: pageNumber.value
+          }
+          localStorage.setItem('lastCards', JSON.stringify(lastCards))
         } else {
           const params = {
             page: pageNumber.value,
             count: 6,
             section_id: '',
-            show_in_main: 1
+            show_in_main: 1,
+            order_by_colomn: 'created_at',
+            order_by_mode: 'desc'
           }
           pageNumber.value++
           const response = await store.dispatch('pages/getData', params)
@@ -253,15 +323,120 @@ export default defineComponent({
             cardsDispatch.value = false
           }
           cardsLoading.value = false
-          cards.value.data = [...startCards.value, ...response.data]
-          startCards.value = [...cards.value.data]
+
+          startCards.value = [...startCards.value, ...response.data]
+          startCards.value.forEach((item) => {
+            cards.value.data.push(item)
+          })
+
+          // cards.value.data = [...startCards.value, ...response.data]
+          // startCards.value = [...cards.value]
+
+          const lastCards = {
+            cards: startCards.value,
+            section: 'index',
+            page: pageNumber.value
+          }
+          localStorage.setItem('lastCards', JSON.stringify(lastCards))
         }
       }
     }
 
     const clickTag = (value) => {
-      router.push({ path: '/tags', query: { tag: value } })
+      router.push({ path: `/tags/${value}` })
     }
+
+    watch(() => imgLoadCount.value, () => {
+      if (scrollHeight.value !== 0) {
+        if (localStorage.getItem('lastCards') !== '[object Object]') {
+          if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
+            if (window.innerWidth < 450) {
+            store.commit('content/setHeaderHidden', true)
+            if (firstRender.value) {
+              firstRender.value = false
+              if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+                window.scroll({
+                  top: scrollHeight.value,
+                  left: 0
+                })
+                loadingEnd.value = true
+              }
+              nextTick(() => {
+                animateNavbar('.navbarSlug')
+              })
+            }
+          } else {
+            nextTick(() => {
+              store.commit('content/setHeaderHidden', true)
+              if (firstRender.value) {
+                firstRender.value = false
+                if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+                    window.scroll({
+                      top: 0,
+                      left: 0
+                    })
+                    nextTick(() => {
+                      window.scroll({
+                        top: scrollHeight.value,
+                        left: 0
+                      })
+                      loadingEnd.value = true
+                    })
+                }
+                nextTick(() => {
+                  animateNavbar('.navbarSlug')
+                })
+              }
+            })
+          }
+          }
+        } else if (localStorage.getItem('lastCards') === '[object Object]') {
+          if (imgLoadCount.value <= 6) {
+            if (window.innerWidth < 450) {
+            store.commit('content/setHeaderHidden', true)
+            if (firstRender.value) {
+              firstRender.value = false
+              if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+                window.scroll({
+                  top: scrollHeight.value,
+                  left: 0
+                })
+                loadingEnd.value = true
+              }
+              nextTick(() => {
+                animateNavbar('.navbarSlug')
+              })
+            }
+          } else {
+            nextTick(() => {
+              store.commit('content/setHeaderHidden', true)
+              if (firstRender.value) {
+                firstRender.value = false
+                if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+                    window.scroll({
+                      top: 0,
+                      left: 0
+                    })
+                    nextTick(() => {
+                      window.scroll({
+                        top: scrollHeight.value,
+                        left: 0
+                      })
+                      loadingEnd.value = true
+                    })
+                }
+                nextTick(() => {
+                  animateNavbar('.navbarSlug')
+                })
+              }
+            })
+          }
+          }
+        }
+      } else if (imgLoadCount.value === JSON.parse(JSON.stringify(startCards.value)).length) {
+        loadingEnd.value = true
+      }
+    })
 
     return {
       lazyPagination,
@@ -281,7 +456,14 @@ export default defineComponent({
       fetchLoading,
       animationLoad,
       getSeoInfo,
-      metaTags
+      metaTags,
+      scrollHeight,
+      firstRender,
+      color,
+      imgLoadCount,
+      loadingEnd,
+      contentLoader,
+      getLikes
     }
   },
   head: {
@@ -318,50 +500,53 @@ $heightBig: 4.6rem;
     border-radius: 4rem;
     transform: translateX(-100%);
   }
-  .muzyka {
+  .music {
     width: 5.9rem;
     height: $heightSmall;
   }
-  .video {
+  .media {
     width: 34.4rem;
     height: $heightSmall;
   }
-  .ctivo {
+  .library {
     width: 34.4rem;
     height: $heightBig;
   }
-  .iskusstvo {
+  .art {
     width: 27.1rem;
     height: $heightBig;
   }
-  .kuxnia {
+  .kitchen {
     width: 15rem;
     height: $heightBig;
   }
-  .magazin {
+  .shop {
     width: 35.5rem;
     height: $heightSmall;
   }
-  .foto {
+  .photo {
     width: 25.5rem;
     height: $heightSmall;
   }
-  .odezda {
+  .fashion {
     width: 9rem;
     height: $heightBig;
   }
-  .meropriiatiia {
+  .event {
     width: 31.8rem;
     height: $heightBig;
   }
-  .efir {
+  .broadcast {
     width: 9rem;
     height: $heightBig;
   }
-  .moneta {
+  .coin {
     width: 31.8rem;
     height: $heightBig;
   }
+}
+.disabled {
+  opacity: 0;
 }
 .content {
   @include container;

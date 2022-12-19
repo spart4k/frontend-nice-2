@@ -5,16 +5,17 @@
       :effect="$mq === 'sm' ? 'fx-default' : effect"
       :max-width="maxWidth"
       :max-height="maxHeight"
-      :swipe-able="$mq === 'sm'"
-      :background-scrollable="$mq === 'sm' ? false : true"
+      :swipe-able="$mq === 'sm' && touchEnable"
+      :background-scrollable="$mq === 'sm' ? false : true && touchEnable"
       :background-clickable="true"
       :click-to-close="false"
       :is-full-screen="fullscreen"
       :rounded="$mq === 'sm'"
+      :class="$style.bottomSheet"
       v-on="$attrs"
       @closed="$emit('closed')"
     >
-      <client-only>
+      <!-- <client-only> -->
         <N-Button
           type-button="small"
           color="#222222"
@@ -34,8 +35,10 @@
         >
           <N-Icon name="arrow-back" :class="$style.backButton" />
         </N-Button>
-        <slot />
-      </client-only>
+        <span ref="trigger">
+          <slot />
+        </span>
+      <!-- </client-only> -->
     </vue-bottom-sheet>
   </div>
 </template>
@@ -57,19 +60,34 @@ export default {
   },
   setup () {
     const windowWidth = ref()
+    const trigger = ref()
+    const touchEnable = ref(true)
     const windowWidthCount = () => {
       windowWidth.value = window.innerWidth
+    }
+    const scrollDown = () => {
+      touchEnable.value = false
+      window.addEventListener('touchend', scrollUp)
+    }
+    const scrollUp = () => {
+      touchEnable.value = true
     }
     onMounted(() => {
       windowWidthCount()
       window.addEventListener('resize', windowWidthCount)
+      trigger.value.addEventListener('touchstart', scrollDown)
     })
     onUnmounted(() => {
       window.removeEventListener('resize', windowWidthCount)
+      trigger.value.removeEventListener('touchstart', scrollDown)
     })
     return {
       windowWidth,
-      windowWidthCount
+      windowWidthCount,
+      trigger,
+      scrollDown,
+      scrollUp,
+      touchEnable
     }
   }
 }
@@ -77,6 +95,15 @@ export default {
 
 <style lang="scss" module>
 .wrapper {
+  .bottomSheet  {
+    // transform: translate3d(0, 0, 0);
+  }
+  .trigger {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 5rem);
+  }
   position: relative;
   width: 37.5rem;
   .close, .back {
@@ -112,7 +139,12 @@ export default {
     }
   }
   :global(.bottom-sheet__content) {
-    overflow: auto !important;
+    overflow-y: unset !important;
+    // transform: translate3d(0);
+
+    // overflow-y: scroll !important;
+    // overflow-x: hidden !important;
+    // -webkit-overflow-scrolling: touch !important;
   }
 
   :global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-left) {
