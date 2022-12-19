@@ -1,6 +1,6 @@
 module.exports = {
   apps: [{
-    name: 'nice-test-admin',
+    name: 'nice-test-frontend-sandbox',
     script: 'npm run start'
   }]
 }
