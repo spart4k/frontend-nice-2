@@ -117,7 +117,7 @@ export default {
   transform-origin: top center;
   padding-top: var(--padding-top-logo);
   top: 9rem;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, 0%) translate3d(0px, 0px, 0px) scale(1, 1);
   @media (max-width: $tabletWidth){
     top: 7rem;
   }
