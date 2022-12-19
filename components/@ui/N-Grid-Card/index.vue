@@ -1,7 +1,7 @@
 <template>
   <div>
     <div :class="$style.cards">
-      <template v-if="spliceArray.colLeft && spliceArray.colRight && (widthFrameStart > 450 || windowWidth > 450)">
+      <template v-if="spliceArray.colLeft && spliceArray.colRight">
         <div :class="$style.col">
           <div
             v-for="(card, index) in spliceArray.colLeft"
@@ -61,7 +61,7 @@
           </div>
         </template>
       </template>
-      <template v-else-if="spliceArray.colFull && (widthFrameStart < 450 || windowWidth < 450)">
+      <template v-else-if="spliceArray.colFull">
         <div :class="$style.col">
           <div
             v-for="(card, index) in spliceArray.colFull"
