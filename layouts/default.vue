@@ -26,10 +26,11 @@
           !isHomePage ? $style.noHome : ''
         ]"
       />
-      <Nuxt />
+        <N-Preloader v-if="!contentLoader" />
+        <Nuxt :class="[!contentLoader && $style.disabled]" />
     </n-intro-wrapper>
     <N-BootomSheet
-      v-if="$store.state.menu.isShowBottomMenu && bottomSheetDelay"
+      v-if="$store.state.menu.isShowBottomMenu && bottomSheetDelay && !disabledSheet"
       ref="menu"
       :effect="currentShowComponents.effect"
       max-width="39rem"
@@ -42,6 +43,33 @@
     >
       <stepperOrder
         ref="stepper"
+        :header-items="headerItems"
+        :key-animation="keyAnimation"
+        :step="step"
+        :curr-comp="currentShowComponents.key"
+        @clearStep="step = 0"
+        @changeComp="changeComp"
+        @changeStep="changeStep"
+        @closeState="closeState"
+        @playAudio="playAudio"
+        @pauseAudio="pauseAudio"
+        @destroyTag="destroyTag"
+      />
+    </N-BootomSheet>
+    <N-BootomSheet
+      v-if="$store.state.menu.isShowBottomMenu && bottomSheetDelay && disabledSheet"
+      ref="menu1"
+      :effect="currentShowComponents.effect"
+      max-width="39rem"
+      :max-height="'100%'"
+      :fullscreen="true"
+      :is-show-button-back="step > 0 && step !== 3"
+      @closeMenu="closeState"
+      @closed="changeState"
+      @back="changeStep"
+    >
+      <stepperOrder
+        ref="stepper1"
         :header-items="headerItems"
         :key-animation="keyAnimation"
         :step="step"
@@ -81,9 +109,12 @@ export default {
     const headerItems = ref([])
     const body = ref(null)
     const menu = ref(null)
+    const menu1 = ref(null)
     const stepper = ref(null)
     const back = ref(false)
     const sheetWidth = ref(0)
+    const disabledSheet = ref(false)
+    const contentLoader = computed(() => store?.state?.content?.contentLoader)
     const sheetRight = ref(false)
     const keyAnimation = ref('next')
     const currentShowComponents = ref({
@@ -171,8 +202,11 @@ export default {
     }
 
     const closeState = () => {
-      console.log(menu)
-      menu.value.$children[0].close()
+      if (menu.value) {
+        menu.value.$children[0].close()
+      } else {
+        menu1.value.$children[0].close()
+      }
     }
 
     const {
@@ -189,16 +223,28 @@ export default {
     })
 
     const openMenu = () => {
-      console.log(menu)
-      setTimeout(() => {
-        menu.value.$children[0].open()
-        if (window.innerWidth > 450) {
-          sheetWidth.value = 39
-          if (sheetRight.value) {
-            sheetWidth.value = -sheetWidth.value
+      if (menu.value) {
+        setTimeout(() => {
+          menu.value.$children[0].open()
+          if (window.innerWidth > 450) {
+            sheetWidth.value = 39
+            if (sheetRight.value) {
+              sheetWidth.value = -sheetWidth.value
+            }
           }
-        }
-      }, 100)
+        }, 100)
+      } else {
+        disabledSheet.value = true
+        setTimeout(() => {
+          menu1.value.$children[0].open()
+          if (window.innerWidth > 450) {
+            sheetWidth.value = 39
+            if (sheetRight.value) {
+              sheetWidth.value = -sheetWidth.value
+            }
+          }
+        }, 100)
+      }
     }
     const closeMenu = () => {
       sheetWidth.value = 0
@@ -211,6 +257,9 @@ export default {
       if (store.state.menu.stepCurrentComponent === 0) {
         store.commit('menu/changeKeyMenu', { key: '', effect: 'fx-slide-from-left' })
       }
+    })
+    watch(() => route.value.path, () => {
+      store.commit('content/changeContentLoader', false)
     })
     watch(() => store.state.menu.component.key, () => {
       currentShowComponents.value.key = store.state.menu.component.key
@@ -241,6 +290,10 @@ export default {
         currentShowComponents.value.key = ''
       }
     })
+
+    // watch(() => route.value.name, () => {
+    //   store.commit('content/setHeaderHidden', false)
+    // })
 
     const changeStep = (value) => {
       if (value === 'increment') {
@@ -314,7 +367,10 @@ export default {
       audioDestroy,
       showAnimate,
       headerHidden,
-      bottomSheetDelay
+      bottomSheetDelay,
+      menu1,
+      contentLoader,
+      disabledSheet
     }
   }
 }
@@ -331,6 +387,9 @@ export default {
 }
 .main {
   transition-duration: .3s;
+}
+.disabled {
+  opacity: 0;
 }
 .headerContainer {
   top: 3.9rem;

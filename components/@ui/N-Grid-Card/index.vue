@@ -40,22 +40,64 @@
             </template>
           </div>
         </div>
-        <div v-if="spliceArray.colRight.length || (selectors === 'shop')" :class="$style.col">
-          <div v-if="selectors === 'shop'" :class="$style.row">
-            <N-Select :class="$style.select" :selectedValue="selectedSection" :select-items="sections" @setProperty="sendSection" />
-            <N-Select :class="$style.select" :selectedValue="selectedMode" :select-items="searchMode" @setProperty="sendMode" />
-            <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
-              <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
+        <template v-if="spliceArray.colRight">
+          <div v-if="spliceArray.colRight.length || (selectors === 'shop')" :class="$style.col">
+            <div v-if="selectors === 'shop'" :class="$style.row">
+              <N-Select :class="$style.select" :selectedValue="selectedSection" :select-items="sections" @setProperty="sendSection" />
+              <N-Select :class="$style.select" :selectedValue="selectedMode" :select-items="searchMode" @setProperty="sendMode" />
+              <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
+                <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
+              </div>
+            </div>
+            <div v-for="(card, index) in spliceArray.colRight" :key="index" @click="saveHeight">
+              <section-cards
+                :key="card.id"
+                :section="card.section"
+                :card="card"
+                :class="$style.cards__item"
+                @clickTag="($event) => $emit('clickTag', card.section.id)"
+              />
             </div>
           </div>
-          <div v-for="(card, index) in spliceArray.colRight" :key="index" @click="saveHeight">
-            <section-cards
+        </template>
+      </template>
+      <template v-else-if="spliceArray.colFull">
+        <div :class="$style.col">
+          <div
+            v-for="(card, index) in spliceArray.colFull"
+            :key="index"
+            @click="saveHeight"
+          >
+            <template v-if="(selectors === 'shop') && card.hasOwnProperty('preview')">
+              <n-section-intro
+                v-if="card.hasOwnProperty('preview')"
+                :key="card.id"
+                :description="card"
+                :image="card.image"
+                :class="$style.preview"
+              />
+              <div v-if="selectors === 'shop'" :class="$style.rowMobile">
+                <N-Select :class="$style.select" :selectedValue="selectedSection" :select-items="sections" @setProperty="sendSection" />
+                <N-Select :class="$style.select" :selectedValue="selectedMode" :select-items="searchMode" @setProperty="sendMode" />
+                <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
+                  <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
+                </div>
+              </div>
+            </template>
+            <n-section-intro
+              v-else-if="card.hasOwnProperty('preview')"
               :key="card.id"
-              :section="card.section"
-              :card="card"
-              :class="$style.cards__item"
-              @clickTag="($event) => $emit('clickTag', card.section.id)"
+              :description="card"
+              :image="card.image"
+              :class="$style.preview"
             />
+            <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
+              <img :src="card.image" alt="DOG ">
+            </div>
+            <N-Card-Author v-else-if="card.hasOwnProperty('author_data')" :author="card" :class="$style.authorCard" />
+            <template v-else>
+              <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
+            </template>
           </div>
         </div>
       </template>
@@ -65,7 +107,7 @@
 
 <script>
 
-import { computed, onMounted, ref, useContext, watch } from '@nuxtjs/composition-api'
+import { computed, onMounted, ref, useContext, onUnmounted, watch } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NGridCard',
@@ -106,14 +148,17 @@ export default {
     const { emit } = ctx
     const rightArray = ref()
     const noveltyCount = ref(false)
-    const widthFrame = computed(() => {
+    const windowWidth = ref()
+    const widthFrameStart = computed(() => {
       if (process.browser) {
         return window.innerWidth
       }
     })
     const saveHeight = () => {
-      console.log(window.pageYOffset)
       store.commit('content/setScrollHeight', window.pageYOffset)
+    }
+    const windowWidthCount = () => {
+      windowWidth.value = window.innerWidth
     }
     const spliceArray = computed(() => {
       // if (route.value.query.author) {
@@ -143,12 +188,14 @@ export default {
       }
       const firstHalfDesktop = ref([])
       const secondHalfDesktop = ref([])
+      const fullArray = ref([])
       proxyArray.value.forEach((item, index) => {
         if (index % 2 === 0) {
           firstHalfDesktop.value.push(item)
         } else {
           secondHalfDesktop.value.push(item)
         }
+        fullArray.value.push(item)
       })
       const middleIndex = Math.ceil(proxyArray.value?.length / 2)
       const firstHalf = proxyArray.value?.splice(0, middleIndex)
@@ -158,11 +205,11 @@ export default {
       } else {
         secondHalf.value = proxyArray.value.splice(-middleIndex)
       }
-      if (widthFrame.value) {
-        console.log()
+      if (widthFrameStart.value) {
         return {
           colLeft: firstHalfDesktop.value,
-          colRight: secondHalfDesktop.value
+          colRight: secondHalfDesktop.value,
+          colFull: fullArray.value
         }
       } else {
         return {
@@ -204,6 +251,8 @@ export default {
     }
 
   onMounted(() => {
+    windowWidthCount()
+    window.addEventListener('resize', windowWidthCount)
     if (selectors.value === 'shop') {
       getСategories()
     }
@@ -211,6 +260,10 @@ export default {
       noveltyCount.value = !noveltyCount.value
     }
   })
+
+  onUnmounted(() => {
+      window.removeEventListener('resize', windowWidthCount)
+    })
 
   watch(() => props.items, () => {
     proxyArray.value = props.items
@@ -225,7 +278,9 @@ export default {
     leftArray,
     rightArray,
     noveltyCount,
-    widthFrame,
+    widthFrameStart,
+    windowWidth,
+    windowWidthCount,
     saveHeight,
     getСategories,
     sendMode,

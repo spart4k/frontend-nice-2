@@ -212,6 +212,7 @@ export default defineComponent({
     } = animationGSAP($gsap, Elastic)
 
     onMounted(() => {
+      store.commit('content/changeContentLoader', true)
       store.commit('content/changeAnimationEnd', true)
       store.commit('content/setAnimate', false)
       store.commit('content/setSingleAnimation', false)

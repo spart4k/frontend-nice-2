@@ -76,6 +76,7 @@ export default defineComponent({
     const loadingEnd = ref(false)
     const scrollHeight = computed(() => store?.state?.content?.scrollHeight)
     const imgLoadCount = computed(() => store?.state?.content?.imgLoadCounter)
+    const contentLoader = computed(() => store?.state?.content?.contentLoader)
     const metaTags = ref({})
     const firstRender = ref(true)
     const resize = () => {
@@ -124,12 +125,13 @@ export default defineComponent({
     } = animationGSAP($gsap, Elastic)
 
     onMounted(() => {
+      store.commit('content/changeContentLoader', true)
+      // getLikes()
       // if (backgroundLoaded.value) {
         const body = document.querySelector('body')
         body.style.overflow = 'hidden'
         window.addEventListener('resize', resize)
         window.addEventListener('load', () => {
-          console.log('load')
           if (store.state.content.singleAnimation) {
             localStorage.setItem('showAnimateHomePage', 'true')
             store.commit('content/setSingleAnimation', false)
@@ -157,51 +159,28 @@ export default defineComponent({
           fetchLoading.value = true
           animationLoad.value = true
         }, 1000)
+        if (!localStorage.getItem('lastSection')) {
+            const lastSection = {
+              section: 'index'
+            }
+            localStorage.setItem('lastSection', JSON.stringify(lastSection))
+          }
         // }
     })
 
     onUpdated(() => {
-      // if (window.innerWidth < 900) {
-      //   store.commit('content/setHeaderHidden', true)
-      //   if (firstRender.value) {
-      //     firstRender.value = false
-      //     if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-      //       window.scroll({
-      //         top: scrollHeight.value,
-      //         left: 0
-      //       })
-      //     }
-      //     nextTick(() => {
-      //       animateNavbar('.navbarSlug')
-      //     })
-      //   }
-      // } else {
-      //   nextTick(() => {
-      //     store.commit('content/setHeaderHidden', true)
-      //     if (firstRender.value) {
-      //       firstRender.value = false
-      //       if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-      //           window.scroll({
-      //             top: 0,
-      //             left: 0
-      //           })
-      //           nextTick(() => {
-      //             window.scroll({
-      //               top: scrollHeight.value,
-      //               left: 0
-      //             })
-      //           })
-      //           setTimeout(() => {
-      //             console.log(window.pageYOffset)
-      //           }, 1000)
-      //       }
-      //       nextTick(() => {
-      //         animateNavbar('.navbarSlug')
-      //       })
-      //     }
-      //   })
-      // }
     })
+
+  //  const getVerify = async () => {
+  //     await store.commit('authentication/setToken')
+  //     const response = await store.dispatch('authentication/verifyToken')
+  //     if (response.error) {
+  //       localStorage.removeItem('token')
+  //     } else {
+  //       store.dispatch('basket/getBasket')
+  //       store.commit('authentication/setUserData')
+  //     }
+  //   }
 
     const getSeoInfo = async () => {
       // const response = await store.dispatch('main/getSeo')
@@ -236,8 +215,33 @@ export default defineComponent({
     //     console.log(e)
     //   }
     // })
+    const getLikes = async () => {
+      const array = []
+      startCards.value.forEach((item) => {
+        array.push(item.id)
+      })
+      const params = {
+        cardIds: array
+      }
+      const response = await store.dispatch('content/checkLikesOnCards', params)
+      console.log(response)
+      for (const [key, value] of Object.entries(response)) {
+        if (value === true) {
+          startCards.value.forEach((item) => {
+            console.log(key)
+            if (key === item.id) {
+              console.log('asdsad')
+            }
+          })
+        }
+      }
+    }
+
     useFetch(async () => {
         try {
+          // await getVerify()
+          // if (localStorage.getItem('token') !== null) {
+          // }
           const response = await fetchData()
           if (response.data.data.data.length < 6) {
             cardsDispatch.value = false
@@ -252,7 +256,6 @@ export default defineComponent({
               cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
               startCards.value = [...cards.value.data]
               pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-              console.log(cards.value.data)
             }
             if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
               loadingEnd.value = false
@@ -263,6 +266,7 @@ export default defineComponent({
           } else {
             store.commit('content/setHeaderHidden', true)
           }
+          // console.log(localStorage.getItem('lastSection'), JSON.parse(localStorage.getItem('lastSection')).section !== 'index')
           if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
             const lastSection = {
               section: 'index'
@@ -282,6 +286,7 @@ export default defineComponent({
     })
     onUnmounted(() => {
       window.removeEventListener('resize', resize)
+      loadingEnd.value = false
     })
 
     store.commit('content/clearBgIntro')
@@ -361,6 +366,7 @@ export default defineComponent({
           }
           localStorage.setItem('lastCards', JSON.stringify(lastCards))
         } else {
+          console.log('wwwwwwwwwwwwwww')
           const params = {
             page: pageNumber.value,
             count: 6,
@@ -375,10 +381,15 @@ export default defineComponent({
             cardsDispatch.value = false
           }
           cardsLoading.value = false
+
           startCards.value = [...startCards.value, ...response.data]
           startCards.value.forEach((item) => {
             cards.value.data.push(item)
           })
+
+          // cards.value.data = [...startCards.value, ...response.data]
+          // startCards.value = [...cards.value]
+
           const lastCards = {
             cards: startCards.value,
             section: 'index',
@@ -396,9 +407,8 @@ export default defineComponent({
     watch(() => imgLoadCount.value, () => {
       if (scrollHeight.value !== 0) {
         if (localStorage.getItem('lastCards') !== '[object Object]') {
-          console.log(imgLoadCount.value, JSON.parse(localStorage.getItem('lastCards')).cards.length)
           if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
-            if (window.innerWidth < 900) {
+            if (window.innerWidth < 450) {
             store.commit('content/setHeaderHidden', true)
             if (firstRender.value) {
               firstRender.value = false
@@ -440,7 +450,7 @@ export default defineComponent({
           }
         } else if (localStorage.getItem('lastCards') === '[object Object]') {
           if (imgLoadCount.value <= 6) {
-            if (window.innerWidth < 900) {
+            if (window.innerWidth < 450) {
             store.commit('content/setHeaderHidden', true)
             if (firstRender.value) {
               firstRender.value = false
@@ -481,12 +491,9 @@ export default defineComponent({
           }
           }
         }
+      } else if (imgLoadCount.value === JSON.parse(JSON.stringify(startCards.value)).length) {
+        loadingEnd.value = true
       }
-    })
-
-    watch(() => route, () => {
-      console.log(route)
-      console.log('changePage')
     })
 
     return {
@@ -512,7 +519,9 @@ export default defineComponent({
       firstRender,
       color,
       imgLoadCount,
-      loadingEnd
+      loadingEnd,
+      contentLoader,
+      getLikes
     }
   },
   head: {

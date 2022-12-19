@@ -11,7 +11,8 @@ export const state = () => ({
   singleAnimation: true,
   scrollHeight: 0,
   headerHidden: true,
-  imgLoadCounter: 0
+  imgLoadCounter: 0,
+  contentLoader: true
 })
 
 export const mutations = {
@@ -51,6 +52,9 @@ export const mutations = {
   imgLoadCounterInc (state) {
     state.imgLoadCounter += 1
   },
+  changeContentLoader (state, value) {
+    state.contentLoader = value
+  },
   imgLoadCounterReset (state) {
     state.imgLoadCounter = 0
   }
@@ -73,6 +77,10 @@ export const actions = {
   async getHeader ({ commit }, params) {
     // const response = await this.$axios('api/v1/sections')
     const response = await this.$axios.post('api/v1/sectionsSearch', params)
+    return response.data.data
+  },
+  async checkLikesOnCards ({ commit }, params) {
+    const response = await this.$axios.post('api/v1/checkLikesOnCards', params)
     return response.data.data
   }
 }
