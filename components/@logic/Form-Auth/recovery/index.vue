@@ -59,7 +59,6 @@ export default {
           emit('closeState')
         }
       } catch (e) {
-        console.log(e)
       } finally {
         loading.value = false
       }

@@ -133,7 +133,6 @@ export default {
             totalPrice.value = responseCount.data
             priceLoading.value = false
         } catch (e) {
-          console.log(e)
         }
       })
     } else {
@@ -205,7 +204,6 @@ export default {
           store.commit('basket/addToBasket', result.data[0])
         }
       } catch (e) {
-        console.log(e)
       } finally {
         loading.value = false
       }
@@ -250,7 +248,6 @@ export default {
             })
             optionsOutput.value = wiresName
           } catch (e) {
-            console.log(e)
           }
         })
       }
@@ -285,7 +282,6 @@ export default {
         //       })
         //       optionsInput.value = wiresName
         //     } catch (e) {
-        //       console.log(e)
         //     }
         // })
       // }
@@ -309,7 +305,6 @@ export default {
       optionsDefault.value = responseWire.data.data
       optionsDefaultName.value = wiresName
     } catch (e) {
-      console.log(e)
     }
   })
 

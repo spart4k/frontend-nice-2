@@ -50,7 +50,6 @@ export default {
         })
         // optionsOutput.value = wiresName
       } catch (e) {
-        console.log(e)
       }
     })
   }

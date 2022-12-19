@@ -141,7 +141,8 @@ export default {
     '@plugins/v-lazyload.js',
     '@plugins/v-debounce.js',
     { src: '@plugins/v-infinity-scroll.js', ssr: false },
-    { src: '@plugins/vue-bottom-sheet.js', ssr: false }
+    { src: '@plugins/vue-bottom-sheet.js', ssr: false },
+    { src: '@/plugins/v-masonry', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -178,7 +179,7 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: 'https://test.itisthenice.com'
+    baseURL: 'https://itisthenice.com'
     // baseURL: 'http://192.168.1.19:8999'
   },
 

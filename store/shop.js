@@ -11,7 +11,6 @@ export const actions = {
       return data
     } catch (e) {
       this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
-      console.log(e)
     }
   },
   async getDataForShop (state, params) {
@@ -20,7 +19,6 @@ export const actions = {
       return data
     } catch (e) {
       this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
-      console.log(e)
     }
   },
   async getWires (state, params) {
@@ -29,7 +27,6 @@ export const actions = {
       return data.data
     } catch (e) {
       this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
-      console.log(e)
     }
   },
   async getPrice (state, params) {
@@ -38,7 +35,6 @@ export const actions = {
       return data.data
     } catch (e) {
       this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
-      console.log(e)
     }
   },
   async createNewOrder ({ commit }, params) {
@@ -47,7 +43,6 @@ export const actions = {
       return data.data
     } catch (e) {
       this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
-      console.log(e)
     }
   }
 }

@@ -168,7 +168,6 @@ export default {
       }
     }
     const secConverter = (val) => {
-      console.log(val)
       let sec = val
       let minutes = 0
       if (Math.floor(sec / 60)) {

@@ -94,7 +94,6 @@ export default defineComponent({
     const firstRender = ref(true)
 
     const sendSection = (value) => {
-      console.log(value)
       selectThird.value = ''
       if (value === 8) {
         value = 9
@@ -313,7 +312,6 @@ export default defineComponent({
             pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
           }
         } catch (e) {
-          console.log(e)
         }
     })
 

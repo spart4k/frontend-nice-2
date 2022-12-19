@@ -35,7 +35,6 @@ export default {
         loading.value = false
         return data.data
       } catch (e) {
-        console.log(e)
       }
     })
 
