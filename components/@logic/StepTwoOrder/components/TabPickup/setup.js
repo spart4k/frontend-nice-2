@@ -52,7 +52,6 @@ export default {
             })
           }
         } catch (e) {
-          console.log(e)
         } finally {
           loading.value = false
         }
@@ -86,7 +85,6 @@ export default {
             store.commit('menu/changeStepMenu', { step: 3 })
           }
         } catch (e) {
-          console.log(e)
         } finally {
           loading.value = false
         }

@@ -45,53 +45,6 @@
       ]"
     >
       <template>
-        <!-- <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`../${data.section.slug}/${data.id}`">
-          <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '1.5rem' }">
-            {{ data.title }}
-          </h2>
-          <div v-if="data.date_event" :class="$style.time">
-            {{ dateFormat }}
-          </div>
-          <div :class="$style.cardText">
-            <div :class="$style.parser" v-html="data.subtitle" />
-          </div>
-          <template v-if="data.price && !$props.detailPage">
-            <div :class="$style.price">
-              {{ data.price }} р.
-            </div>
-          </template>
-          <div v-if="!$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
-            <div :class="$style.socialsItem">
-              <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
-              <div :class="$style.parser">
-                {{ data.like_count }}
-              </div>
-            </div>
-            <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
-              <N-Icon name="comments" :class="$style.commentsButtonContainer" />
-              <div :class="$style.parser">
-                {{ !$props.detailPage ? data.comments_count : 'Комментировать' }}
-              </div>
-            </div>
-          </div>
-          <div v-if="!$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '2rem' : '' }">
-            <N-Chip
-              v-for="item in data.tags"
-              :key="item.id"
-              ref="chipsArray"
-              :class="$style.chip"
-              @click="$emit('clickTag', item.id)"
-            >
-              {{ item.name }}
-            </N-Chip>
-            <N-Chip
-              v-if="chipsCounter > 0"
-              :class="$style.chip"
-            >
-              +{{ chipsCounter }}
-            </N-Chip>
-          </div>
-        </NuxtLink> -->
         <NuxtLink v-if="!$props.detailPage" :to="`../${data.section.slug}/${data.id}`">
           <div :class="$style.body__top">
             <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '1.5rem' }">
@@ -327,9 +280,33 @@ export default {
         like.value = !like.value
         if (like.value === true) {
           likeCounter.value++
+          if (localStorage.getItem('lastCards') !== '[object Object]') {
+            if (JSON.parse(localStorage.getItem('lastCards')).cards) {
+              const localInfo = JSON.parse(localStorage.getItem('lastCards'))
+              JSON.parse(localStorage.getItem('lastCards')).cards.forEach((item, index) => {
+                if (item.id === props.data.id) {
+                  localInfo.cards[index].like_count += 1
+                  localInfo.cards[index].liked = true
+                  localStorage.setItem('lastCards', JSON.stringify(localInfo))
+                }
+              })
+            }
+          }
           await store.dispatch('socials/addLike', props.data.id)
         } else {
           likeCounter.value--
+          if (localStorage.getItem('lastCards') !== '[object Object]') {
+            if (JSON.parse(localStorage.getItem('lastCards')).cards) {
+              const localInfo = JSON.parse(localStorage.getItem('lastCards'))
+              JSON.parse(localStorage.getItem('lastCards')).cards.forEach((item, index) => {
+                if (item.id === props.data.id) {
+                  localInfo.cards[index].like_count -= 1
+                  localInfo.cards[index].liked = false
+                  localStorage.setItem('lastCards', JSON.stringify(localInfo))
+                }
+              })
+            }
+          }
           await store.dispatch('socials/removeLike', props.data.id)
         }
       } else if (!store.state.menu.isShowBottomMenu) {
@@ -353,7 +330,6 @@ export default {
         text: unescape(encodeURIComponent(val)),
         sticker_id: null
       }
-      console.log('send')
       proxyComments.value.data.unshift({
         user: {
           nickname: store.state.authentication.user.nickname
@@ -404,7 +380,6 @@ export default {
     })
     const videoUrl = ref()
     const commentHeightSet = () => {
-      // console.log(commentBox)
       if (props.detailPage === true) {
         setTimeout(() => {
           commentHeight.value = commentBox.value.scrollHeight + 'px'
@@ -460,20 +435,24 @@ export default {
       window.removeEventListener('resize', commentHeightSet)
     })
     const dateFormat = computed(() => {
-      const t = props.data.date_event.split(/[- :]/)
-      let min = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMinutes()
-      const hour = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getHours()
-      const day = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getDate()
-      let month = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMonth() + 1
-      const year = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getFullYear()
-      if (String(min).length === 1) {
-        min = '0' + min
+      if (props.data.date_event) {
+        const t = props.data.date_event.split(/[- :]/)
+        let min = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMinutes()
+        const hour = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getHours()
+        const day = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getDate()
+        let month = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMonth() + 1
+        const year = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getFullYear()
+        if (String(min).length === 1) {
+          min = '0' + min
+        }
+        if (String(month).length === 1) {
+          month = '0' + month
+        }
+        const totalTime = day + '.' + month + '.' + year + ' / ' + hour + ':' + min
+        return totalTime
+      } else {
+        return 0
       }
-      if (String(month).length === 1) {
-        month = '0' + month
-      }
-      const totalTime = day + '.' + month + '.' + year + ' / ' + hour + ':' + min
-      return totalTime
     })
     return {
       like,

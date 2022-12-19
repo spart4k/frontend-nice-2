@@ -211,7 +211,6 @@ const animation = ($gsap, Elastic) => {
 
   const animateBackground = () => {
     // const height = ref(window.innerHeight / 10)
-    // console.log(height)
     // $gsap.to('.background',
     //   {
     //     scrollTrigger: {

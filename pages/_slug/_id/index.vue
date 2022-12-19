@@ -79,7 +79,6 @@ export default defineComponent({
           comments: responseComments.data
         }
         } catch (e) {
-          console.log(e)
         }
       }, route.value.params.id)
     useMeta(() => ({

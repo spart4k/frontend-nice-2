@@ -104,6 +104,7 @@ export default defineComponent({
       }
 
       const response = await store.dispatch('main/getData', params)
+      console.dir(response.data)
       return response
     }
     const color = computed(() => {
@@ -126,8 +127,6 @@ export default defineComponent({
 
     onMounted(() => {
       store.commit('content/changeContentLoader', true)
-      // getLikes()
-      // if (backgroundLoaded.value) {
         const body = document.querySelector('body')
         body.style.overflow = 'hidden'
         window.addEventListener('resize', resize)
@@ -135,7 +134,6 @@ export default defineComponent({
           if (store.state.content.singleAnimation) {
             localStorage.setItem('showAnimateHomePage', 'true')
             store.commit('content/setSingleAnimation', false)
-            // store.commit('content/setAnimate', false)
           }
           if (window.innerWidth < 450) {
             animationlogo()
@@ -165,25 +163,12 @@ export default defineComponent({
             }
             localStorage.setItem('lastSection', JSON.stringify(lastSection))
           }
-        // }
     })
 
     onUpdated(() => {
     })
 
-  //  const getVerify = async () => {
-  //     await store.commit('authentication/setToken')
-  //     const response = await store.dispatch('authentication/verifyToken')
-  //     if (response.error) {
-  //       localStorage.removeItem('token')
-  //     } else {
-  //       store.dispatch('basket/getBasket')
-  //       store.commit('authentication/setUserData')
-  //     }
-  //   }
-
     const getSeoInfo = async () => {
-      // const response = await store.dispatch('main/getSeo')
     }
     useAsync(async () => {
       try {
@@ -194,54 +179,14 @@ export default defineComponent({
           seo_image: response.data.data?.seo_file_id?.src
         }
       } catch (e) {
-        console.log(e)
       }
     })
-    // const getSeoInfo = async () => {
-    //   const response = await store.dispatch('main/getSeo')
-    //   return response
-    // }
-    // useAsync(async () => {
-    //   try {
-    //     const response = await fetchData()
-    //     startCardsProxy.value = response.data?.data
-    //     const responseMeta = await getSeoInfo()
-    //     metaTags.value = {
-    //       seo_title: responseMeta.data?.data[0]?.seo_title,
-    //       seo_description: responseMeta.data?.data[0]?.seo_description,
-    //       seo_image: responseMeta.data?.data[0]?.seo_file_id?.src
-    //     }
-    //   } catch (e) {
-    //     console.log(e)
-    //   }
-    // })
+
     const getLikes = async () => {
-      const array = []
-      startCards.value.forEach((item) => {
-        array.push(item.id)
-      })
-      const params = {
-        cardIds: array
-      }
-      const response = await store.dispatch('content/checkLikesOnCards', params)
-      console.log(response)
-      for (const [key, value] of Object.entries(response)) {
-        if (value === true) {
-          startCards.value.forEach((item) => {
-            console.log(key)
-            if (key === item.id) {
-              console.log('asdsad')
-            }
-          })
-        }
-      }
     }
 
     useFetch(async () => {
         try {
-          // await getVerify()
-          // if (localStorage.getItem('token') !== null) {
-          // }
           const response = await fetchData()
           if (response.data.data.data.length < 6) {
             cardsDispatch.value = false
@@ -266,7 +211,6 @@ export default defineComponent({
           } else {
             store.commit('content/setHeaderHidden', true)
           }
-          // console.log(localStorage.getItem('lastSection'), JSON.parse(localStorage.getItem('lastSection')).section !== 'index')
           if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
             const lastSection = {
               section: 'index'
@@ -281,7 +225,6 @@ export default defineComponent({
           }
           localStorage.setItem('lastCards', JSON.stringify(lastCards))
         } catch (e) {
-          console.log(e)
         }
     })
     onUnmounted(() => {
@@ -366,7 +309,6 @@ export default defineComponent({
           }
           localStorage.setItem('lastCards', JSON.stringify(lastCards))
         } else {
-          console.log('wwwwwwwwwwwwwww')
           const params = {
             page: pageNumber.value,
             count: 6,

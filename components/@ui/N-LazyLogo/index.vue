@@ -30,7 +30,6 @@ export default {
     onMounted(() => {
       // const image = new Image()
       // image.onload = () => {
-      //   console.log('asd')
       //   ready.value = true
       // }
       // image.src = props.src

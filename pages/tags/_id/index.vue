@@ -92,7 +92,6 @@ export default defineComponent({
     const firstRender = ref(true)
 
     const sendSection = (value) => {
-      console.log(value)
       selectThird.value = ''
       if (value === 8) {
         value = 9
@@ -288,7 +287,6 @@ export default defineComponent({
       }
       const path = 'pages/getData'
       const response = await store.dispatch(path, params)
-      console.log(response)
       return response
     }
 
@@ -306,14 +304,12 @@ export default defineComponent({
           fetchLoading.value = true
           cards.value = [...response.data]
           startCards.value = [...cards.value]
-          console.log(startCards.value)
           if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === 'tags') {
             cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
             startCards.value = [...cards.value]
             pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
           }
         } catch (e) {
-          console.log(e)
         }
     })
 

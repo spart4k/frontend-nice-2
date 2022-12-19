@@ -125,7 +125,7 @@ export default {
           store.commit('authentication/setUserInfo', userData)
         }
       } catch (e) {
-        console.log(e)
+
       } finally {
         changeAdress()
         loading.value = false
@@ -153,7 +153,6 @@ export default {
             store.commit('authentication/removeUserAdress', index)
           }
         } catch (e) {
-          console.log(e)
         }
       })
     }
@@ -180,7 +179,6 @@ export default {
             citiesArray.value.push(item.name)
           })
         } catch (e) {
-          console.log(e)
         }
       })
     }
@@ -208,10 +206,8 @@ export default {
           city_id: cityId.value
         }
         try {
-          const addAdress = await store.dispatch('authentication/addAdress', params)
-          console.log(addAdress.error)
+          await store.dispatch('authentication/addAdress', params)
         } catch (e) {
-          console.log(e)
         }
       }
     }

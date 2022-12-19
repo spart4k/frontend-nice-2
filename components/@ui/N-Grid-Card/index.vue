@@ -1,7 +1,6 @@
 <template>
-  <div>
     <div :class="$style.cards">
-      <template v-if="spliceArray.colLeft && spliceArray.colRight">
+      <!-- <template v-if="spliceArray.colLeft && spliceArray.colRight">
         <div :class="$style.col">
           <div
             v-for="(card, index) in spliceArray.colLeft"
@@ -60,49 +59,58 @@
             </div>
           </div>
         </template>
-      </template>
-      <template v-else-if="spliceArray.colFull">
-        <div :class="$style.col">
-          <div
-            v-for="(card, index) in spliceArray.colFull"
-            :key="index"
-            @click="saveHeight"
-          >
-            <template v-if="(selectors === 'shop') && card.hasOwnProperty('preview')">
+      </template> -->
+      <template v-if="spliceArray.colFull">
+        <!-- <div :class="$style.col"> -->
+          <div v-masonry
+          id="masonry"
+          transition-duration="0"
+          item-selector=".item"
+          :class="$style.masonry"
+          class="masonry-container">
+            <div
+              v-masonry-tile
+              class="item"
+              :class="$style.masonryItem"
+              v-for="(card, index) in spliceArray.colFull"
+              :key="index"
+              @click="saveHeight"
+            >
+              <!-- <template v-if="(selectors === 'shop') && card.hasOwnProperty('preview')">
+                <n-section-intro
+                  v-if="card.hasOwnProperty('preview')"
+                  :key="card.id"
+                  :description="card"
+                  :image="card.image"
+                  :class="$style.preview"
+                />
+                <div v-if="selectors === 'shop'" :class="$style.rowMobile">
+                  <N-Select :class="$style.select" :selectedValue="selectedSection" :select-items="sections" @setProperty="sendSection" />
+                  <N-Select :class="$style.select" :selectedValue="selectedMode" :select-items="searchMode" @setProperty="sendMode" />
+                  <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
+                    <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
+                  </div>
+                </div>
+              </template>
               <n-section-intro
-                v-if="card.hasOwnProperty('preview')"
+                v-else-if="card.hasOwnProperty('preview')"
                 :key="card.id"
                 :description="card"
                 :image="card.image"
                 :class="$style.preview"
               />
-              <div v-if="selectors === 'shop'" :class="$style.rowMobile">
-                <N-Select :class="$style.select" :selectedValue="selectedSection" :select-items="sections" @setProperty="sendSection" />
-                <N-Select :class="$style.select" :selectedValue="selectedMode" :select-items="searchMode" @setProperty="sendMode" />
-                <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
-                  <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
-                </div>
+              <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
+                <img :src="card.image" alt="DOG ">
               </div>
-            </template>
-            <n-section-intro
-              v-else-if="card.hasOwnProperty('preview')"
-              :key="card.id"
-              :description="card"
-              :image="card.image"
-              :class="$style.preview"
-            />
-            <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
-              <img :src="card.image" alt="DOG ">
+              <N-Card-Author v-else-if="card.hasOwnProperty('author_data')" :author="card" :class="$style.authorCard" /> -->
+              <template>
+                <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
+              </template>
             </div>
-            <N-Card-Author v-else-if="card.hasOwnProperty('author_data')" :author="card" :class="$style.authorCard" />
-            <template v-else>
-              <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
-            </template>
           </div>
-        </div>
+        <!-- </div> -->
       </template>
     </div>
-  </div>
 </template>
 
 <script>
@@ -147,6 +155,7 @@ export default {
     const leftArray = ref()
     const { emit } = ctx
     const rightArray = ref()
+    const isShowBottomMenu = computed(() => store.state.menu.isShowBottomMenu)
     const noveltyCount = ref(false)
     const windowWidth = ref()
     const widthFrameStart = computed(() => {
@@ -160,32 +169,33 @@ export default {
     const windowWidthCount = () => {
       windowWidth.value = window.innerWidth
     }
+    const masonryRebuild = () => {
+      window.dispatchEvent(new Event('resize'))
+    }
     const spliceArray = computed(() => {
-      // if (route.value.query.author) {
-      console.log(route.value.name === 'authors-id')
-      if (route.value.name === 'authors-id') {
-        proxyArray.value.unshift({
-          author_data: props.author
-        })
-      // } else if (!route.value.query.tag && !route.value.query.author) {
-      } else if (route.value.name !== 'tags-id' && route.value.name !== 'authors-id') {
-        if (!props.homePage) {
-          proxyArray.value.unshift({
-            image: route.value.params.slug,
-            title: props.description.title,
-            text: props.introData?.quote_text,
-            author: props.introData?.author,
-            preview: true,
-            id: Math.random()
-          })
-        } else {
-          proxyArray.value?.unshift({
-            home: true,
-            image: require('~/assets/img/preview/dogs.png'),
-            id: Math.random()
-          })
-        }
-      }
+      // if (route.value.name === 'authors-id') {
+      //   proxyArray.value.unshift({
+      //     author_data: props.author
+      //   })
+      // // } else if (!route.value.query.tag && !route.value.query.author) {
+      // } else if (route.value.name !== 'tags-id' && route.value.name !== 'authors-id') {
+      //   if (!props.homePage) {
+      //     proxyArray.value.unshift({
+      //       image: route.value.params.slug,
+      //       title: props.description.title,
+      //       text: props.introData?.quote_text,
+      //       author: props.introData?.author,
+      //       preview: true,
+      //       id: Math.random()
+      //     })
+      //   } else {
+      //     proxyArray.value?.unshift({
+      //       home: true,
+      //       image: require('~/assets/img/preview/dogs.png'),
+      //       id: Math.random()
+      //     })
+      //   }
+      // }
       const firstHalfDesktop = ref([])
       const secondHalfDesktop = ref([])
       const fullArray = ref([])
@@ -269,6 +279,12 @@ export default {
     proxyArray.value = props.items
   })
 
+  watch(() => isShowBottomMenu.value, () => {
+    setTimeout(() => {
+      masonryRebuild()
+    }, 500)
+  })
+
   return {
     spliceArray,
     proxyArray,
@@ -285,7 +301,9 @@ export default {
     getСategories,
     sendMode,
     sendSection,
-    categories
+    categories,
+    masonryRebuild,
+    isShowBottomMenu
     }
   }
 }
@@ -305,14 +323,15 @@ export default {
   display: flex;
   margin: 0 auto;
   justify-content: center;
-  @media (min-width: $desktopWidth) {
-    width: calc(100%);
-  }
-  @media (max-width: $tabletWidth) {
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-  }
+  width: 100%;
+  // @media (min-width: $desktopWidth) {
+  //   width: calc(100%);
+  // }
+  // @media (max-width: $tabletWidth) {
+  //   flex-direction: column;
+  //   justify-content: center;
+  //   width: 100%;
+  // }
   &__item {
     margin-bottom: 2rem;
     display: flex;
@@ -422,6 +441,18 @@ export default {
   margin-left: 3rem;
   @media (max-width: $tabletWidth) {
     margin-left: 0;
+  }
+}
+.masonry {
+  width: 100%;
+  max-width: 1094px;
+  .masonryItem {
+    width: 50%;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    @media (max-width: $mobileWidth) {
+      width: 100%;
+    }
   }
 }
 </style>

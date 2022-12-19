@@ -84,7 +84,6 @@ export default {
           }, 300)
         }
       } catch (e) {
-        console.log(e)
       } finally {
         loading.value = false
       }

@@ -367,7 +367,6 @@ export default defineComponent({
           }
           localStorage.setItem('lastCards', JSON.stringify(lastCards))
         } catch (e) {
-          console.log(e)
         }
     })
 
@@ -544,7 +543,6 @@ export default defineComponent({
     store.commit('content/changeBgIntro', route.value.params.slug)
 
     onMounted(() => {
-      // console.log(route.value.fullPath)
     })
 
     return {
