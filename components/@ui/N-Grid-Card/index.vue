@@ -62,8 +62,10 @@
       </template> -->
       <template v-if="spliceArray.colFull">
         <!-- <div :class="$style.col"> -->
+        <client-only>
           <div v-masonry
           id="masonry"
+          ref="masonryList"
           transition-duration="0"
           item-selector=".item"
           :class="$style.masonry"
@@ -74,12 +76,12 @@
                 :description="previewCard"
                 :image="previewCard.image"
                 class="item"
-                :class="[$style.preview, $style.masonryItem]"
+                :class="[$style.preview, $style.masonryItem, transitionMasonry ? $style.transition: '']"
               />
-              <div v-if="selectors === 'shop'" class="item" :class="[$style.row, $style.masonryItem, $style.filters]">
+              <div v-if="selectors === 'shop'" class="item" :class="[$style.rowMobile, $style.masonryItem, $style.filters, transitionMasonry ? $style.transition: '']">
                 <N-Select :class="$style.select" :selectedValue="selectedSection" :select-items="sections" @setProperty="sendSection" />
                 <N-Select :class="$style.select" :selectedValue="selectedMode" :select-items="searchMode" @setProperty="sendMode" />
-                <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
+                <div :class="$style.selectPriority"  @click="sendSort">
                   <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
                 </div>
               </div>
@@ -88,16 +90,17 @@
               v-else-if="previewCard.hasOwnProperty('preview')"
               :description="previewCard"
               :image="previewCard.image"
-              :class="[$style.preview, $style.masonryItem]"
+              class="item"
+              :class="[$style.preview, $style.masonryItem, transitionMasonry ? $style.transition: '']"
             />
-            <div v-else-if="previewCard.hasOwnProperty('home')" :class="$style.image">
+            <div v-else-if="previewCard.hasOwnProperty('home')" class="item" :class="[$style.image, $style.masonryItem, transitionMasonry ? $style.transition: '']">
               <img :src="previewCard.image" alt="DOG ">
             </div>
-            <N-Card-Author v-else-if="previewCard.hasOwnProperty('author_data')" :author="previewCard" :class="$style.authorCard" />
+            <N-Card-Author v-else-if="previewCard.hasOwnProperty('author_data')" class="item" :author="previewCard" :class="[$style.authorCard, $style.masonryItem, transitionMasonry ? $style.transition: '']" />
             <div
               v-masonry-tile
               class="item"
-              :class="$style.masonryItem"
+              :class="[$style.masonryItem, transitionMasonry ? $style.transition: '']"
               v-for="(card, index) in spliceArray.colFull"
               :key="index"
               @click="saveHeight"
@@ -107,13 +110,14 @@
               </template>
             </div>
           </div>
+        </client-only>
         <!-- </div> -->
       </template>
     </div>
 </template>
 
 <script>
-
+import Vue from 'vue'
 import { computed, onMounted, ref, useContext, onUnmounted, watch } from '@nuxtjs/composition-api'
 
 export default {
@@ -158,6 +162,8 @@ export default {
     const isShowBottomMenu = computed(() => store.state.menu.isShowBottomMenu)
     const noveltyCount = ref(false)
     const windowWidth = ref()
+    const masonryList = ref(null)
+    const transitionMasonry = ref(false)
     const widthFrameStart = computed(() => {
       if (process.browser) {
         return window.innerWidth
@@ -170,7 +176,8 @@ export default {
       windowWidth.value = window.innerWidth
     }
     const masonryRebuild = () => {
-      window.dispatchEvent(new Event('resize'))
+      // window.dispatchEvent(new Event('resize'))
+      Vue.prototype.$redrawVueMasonry()
     }
     const spliceArray = computed(() => {
       console.log('test')
@@ -272,6 +279,15 @@ export default {
     if (props.selectAsc) {
       noveltyCount.value = !noveltyCount.value
     }
+    setTimeout(() => {
+      const block = masonryList.value.childNodes
+      block.forEach((item) => {
+        if (item.style && item.style.left !== '0px') {
+          console.log(item)
+          item.style.left = '50%'
+        }
+      })
+    }, 1000)
   })
 
   onUnmounted(() => {
@@ -281,11 +297,42 @@ export default {
   watch(() => props.items, () => {
     proxyArray.value = props.items
   })
-
-  watch(() => isShowBottomMenu.value, () => {
+  const timeoutTransition = () => {
+    const timeout = setTimeout(() => {
+      transitionMasonry.value = false
+    }, 2000)
+    return timeout
+  }
+  const sendSort = () => {
+    emit('sendNovelty', noveltyCount.value)
+    noveltyCount.value = !noveltyCount.value
     setTimeout(() => {
+      transitionMasonry.value = true
       masonryRebuild()
     }, 500)
+  }
+  watch(() => isShowBottomMenu.value, (curVal) => {
+    let timer = null
+    transitionMasonry.value = true
+    if (curVal) {
+      timer = 500
+    } else {
+      timer = 200
+    }
+    setTimeout((timer) => {
+      masonryRebuild()
+      console.log(timeoutTransition.value)
+      setTimeout(() => {
+      const block = masonryList.value.childNodes
+        block.forEach((item) => {
+          if (item.style && item.style.left !== '0px') {
+            console.log(item)
+            // item.style.left = '50%'
+            // console.log('after', item)
+          }
+        })
+      }, 300)
+    }, timer)
   })
 
   return {
@@ -307,7 +354,11 @@ export default {
     categories,
     masonryRebuild,
     isShowBottomMenu,
-    previewCard
+    previewCard,
+    transitionMasonry,
+    masonryList,
+    timeoutTransition,
+    sendSort
     }
   }
 }
@@ -420,7 +471,7 @@ export default {
       display: none;
     }
     .select {
-      width: 14.3rem;
+      width: 20.3rem;
       height: 4.4rem;
     }
     .selectPriority {
@@ -455,11 +506,15 @@ export default {
 }
 .masonry {
   width: 100%;
-  max-width: 1094px;
+  max-width: 115rem;
+  display: flex;
   .masonryItem {
     width: 50%;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+    &.transition {
+      transition: .2s;
+    }
     @media (max-width: $mobileWidth) {
       width: 100%;
     }

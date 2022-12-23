@@ -65,6 +65,7 @@ export default defineComponent({
     const totalPage = ref([])
     const pageNumber = ref(2)
     const introData = ref()
+    const contentGrid = ref(null)
     const tagId = computed(() => Number(route.value.query.tag))
     const id = computed(() => {
       switch (route.value.params.slug) {
@@ -209,6 +210,11 @@ export default defineComponent({
       }
         localStorage.setItem('lastSection', JSON.stringify(lastSection))
       }
+      setTimeout(() => {
+        contentGrid.value.masonryRebuild()
+        // console.log(contentGrid.value)
+        // console.log('rebuild')
+      }, 0)
     }
 
     const introTitle = computed(() => {
@@ -582,7 +588,8 @@ export default defineComponent({
       selectedMode,
       selectAsc,
       imgLoadCount,
-      loadingEnd
+      loadingEnd,
+      contentGrid
     }
   },
   head: {}
