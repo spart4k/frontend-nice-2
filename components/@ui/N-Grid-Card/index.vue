@@ -484,6 +484,9 @@ export default {
       border-radius: 50%;
       justify-content: center;
       cursor: pointer;
+      @media (max-width: $tabletWidth) {
+        width: 6.4rem;
+      }
       .icon {
         transition-duration: .5s;
         z-index: 5;
