@@ -62,7 +62,7 @@
       </template> -->
       <template v-if="spliceArray.colFull">
         <!-- <div :class="$style.col"> -->
-        <client-only>
+        <no-ssr>
           <div v-masonry
           id="masonry"
           ref="masonryList"
@@ -110,7 +110,7 @@
               </template>
             </div>
           </div>
-        </client-only>
+        </no-ssr>
         <!-- </div> -->
       </template>
     </div>

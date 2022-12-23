@@ -163,6 +163,9 @@ export default defineComponent({
             }
             localStorage.setItem('lastSection', JSON.stringify(lastSection))
           }
+      setTimeout(() => {
+        content.value.masonryRebuild()
+      }, 1000)
     })
 
     onUpdated(() => {

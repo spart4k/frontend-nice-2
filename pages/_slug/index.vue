@@ -549,6 +549,9 @@ export default defineComponent({
     store.commit('content/changeBgIntro', route.value.params.slug)
 
     onMounted(() => {
+      setTimeout(() => {
+        contentGrid.value.masonryRebuild()
+      }, 1000)
     })
 
     return {
