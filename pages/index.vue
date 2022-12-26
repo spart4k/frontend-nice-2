@@ -104,7 +104,7 @@ export default defineComponent({
       }
 
       const response = await store.dispatch('main/getData', params)
-      console.dir(response.data)
+      console.dir(response)
       return response
     }
     const color = computed(() => {

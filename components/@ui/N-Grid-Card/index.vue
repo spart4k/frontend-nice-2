@@ -509,7 +509,7 @@ export default {
 }
 .masonry {
   width: 100%;
-  max-width: 115rem;
+  max-width: 105rem;
   display: flex;
   .masonryItem {
     width: 50%;
@@ -520,6 +520,8 @@ export default {
     }
     @media (max-width: $mobileWidth) {
       width: 100%;
+      padding-left: 0rem;
+      padding-right: 0rem;
     }
   }
 }
