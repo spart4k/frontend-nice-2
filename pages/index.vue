@@ -104,7 +104,7 @@ export default defineComponent({
       }
 
       const response = await store.dispatch('main/getData', params)
-      console.dir(response)
+      console.log(response)
       return response
     }
     const color = computed(() => {
@@ -181,6 +181,7 @@ export default defineComponent({
           seo_description: response.data.data?.seo_description,
           seo_image: response.data.data?.seo_file_id?.src
         }
+        cards.value = response.data.data
       } catch (e) {
       }
     })

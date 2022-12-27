@@ -2,13 +2,14 @@
   <main :class="$style.main">
     <div :class="$style.wrapper">
       <N-Preloader v-if="!card" />
-      <template v-if="card">
+      <template v-if="card && section">
         <SectionCards
           :key="card.id"
-          :section="card.card.data.section"
+          :section="section"
           detail-page
           :card="card.card"
           :comments="card.comments"
+          @setStateLike="setLike"
           @clickTag="clickTag"
           @clickAuthor="clickAuthor"
         />
@@ -32,7 +33,7 @@
 </template>
 
 <script>
-import { ref, useAsync, useContext, defineComponent, useRouter, useMeta, computed, onMounted } from '@nuxtjs/composition-api'
+import { ref, useAsync, useContext, defineComponent, useRouter, useMeta, computed, onMounted, useFetch } from '@nuxtjs/composition-api'
 // import { head } from '@/components/scripts/head.js'
 
 export default defineComponent({
@@ -60,52 +61,80 @@ export default defineComponent({
     const clickAuthor = (value) => {
       router.push({ path: `/authors/${value}` })
     }
-
-    const card = useAsync(async () => {
+    const card = ref({
+      card: {},
+      comments: {}
+    })
+    const section = computed(() => {
+      return card?.value?.card?.data?.section
+    })
+    const fetchData = async () => {
       const params = {
         card_id: route.value.params.id,
         count: 99
       }
+      const responseCard = await store.dispatch('detailPage/getData', route.value.params.id)
+      const responseComments = await store.dispatch('detailPage/getComments', params)
+      return {
+        responseCard,
+        responseComments
+      }
+    }
+    useAsync(async () => {
       try {
-        const responseCard = await store.dispatch('detailPage/getData', route.value.params.id)
-        const responseComments = await store.dispatch('detailPage/getComments', params)
+        const response = await fetchData()
+        console.log(response)
         metaTags.value = {
-          seo_title: responseComments.data?.seo_title,
-          seo_description: responseComments.data?.seo_description,
-          seo_image: responseComments.data?.seo_file_id?.src
+          seo_title: response.responseCard.data?.data?.seo_title,
+          seo_description: response.responseCard.data?.data?.seo_description,
+          seo_image: response.responseCard.data?.seo_file_id?.data?.src
         }
-        return {
-          card: responseCard.data,
-          comments: responseComments.data
+        card.value = {
+          card: response.responseCard.data,
+          comments: response.responseComments.data
         }
+        console.log(card.value)
+        console.log(section.value)
+        } catch (e) {
+        }
+      }, route.value.params.id)
+    useFetch(() => {
+      try {
+        // const response = await fetchData()
+        // card.value = {
+        //   card: response.responseCard
+        //   // comments: response.responseComments.data
+        // }
+        // console.log(response)
         } catch (e) {
         }
       }, route.value.params.id)
     useMeta(() => ({
-        title: card?.value?.card?.data?.seo_title,
+        title: metaTags.value.seo_title,
         meta: [
           {
             hid: 'og:title',
             name: 'og:title',
             property: 'og:title',
-            content: card?.value?.card?.data?.seo_title
+            content: metaTags.value.seo_title
           },
           {
             hid: 'og:description',
             name: 'og:description',
             property: 'og:description',
-            content: card?.value?.card?.data?.seo_description
+            content: metaTags.value.seo_description
           },
           {
             hid: 'description',
             name: 'description',
             property: 'description',
-            content: card?.value?.[0]?.data?.seo_description
+            content: metaTags.value.seo_description
           }
         ]
     }))
     const bgName = computed(() => {
-      const find = sections.value?.find(item => Number(item.id) === +card.value?.section.id)
+      console.log(sections.value)
+      const find = sections.value?.data?.find(item => Number(item.id) === +card.value?.card.data?.section.id)
       return find
     })
 
@@ -133,6 +162,11 @@ export default defineComponent({
       store.commit('content/setSingleAnimation', false)
       store.commit('content/changeAnimationEnd', true)
     })
+    const setLike = (state) => {
+      console.log('set')
+      console.log(state)
+      card.value.card.data.liked = state
+    }
 
     return {
       card,
@@ -143,8 +177,9 @@ export default defineComponent({
       isAddedBasket,
       bgName,
       isAuth,
-      metaTags
-
+      metaTags,
+      section,
+      setLike
     }
   },
   head: {},

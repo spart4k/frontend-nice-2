@@ -39,6 +39,7 @@ import {
   useRouter,
   useContext,
   useFetch,
+  useAsync,
   useMeta, watch, onUnmounted,
   computed, onMounted, nextTick
   // useMeta,
@@ -290,7 +291,14 @@ export default defineComponent({
       const response = await store.dispatch(path, params)
       return response
     }
-
+    useAsync(async () => {
+      try {
+        const response = await fetchData()
+        console.log(response.data)
+        cards.value = response.data
+      } catch (e) {
+      }
+    })
     useFetch(async () => {
         try {
           const response = await fetchData()

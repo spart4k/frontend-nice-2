@@ -63,7 +63,7 @@
             </template>
             <div v-if="!$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
               <div :class="$style.socialsItem">
-                <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
+                <N-Like v-model="isLiked" :class="$style.likeContainer" :value="isLiked" />
                 <div :class="$style.parser">
                   {{ data.like_count }}
                 </div>
@@ -158,7 +158,7 @@
         </div>
         <div v-if="$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
           <div :class="$style.socialsItem" @click="addLike">
-            <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
+            <N-Like v-model="isLiked" :class="$style.likeContainer" :value="isLiked" />
             <div :class="$style.parser">
               {{ 'Нравится' }}
             </div>
@@ -206,10 +206,13 @@ export default {
   components: {
   },
   props: { ...dataProps.props },
-  setup (props) {
+  setup (props, ctx) {
+    const { emit } = ctx
     const videoRef = ref(null)
     const showComments = ref(false)
-    const like = ref(props.data.liked)
+    const isLiked = computed(() => {
+      return props.data.liked
+    })
     const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
     const proxyComments = computed(() => props.comments)
@@ -277,8 +280,9 @@ export default {
     }
     const addLike = async () => {
       if (store.state.authentication.authorizated) {
-        like.value = !like.value
-        if (like.value === true) {
+        // like.value = !like.value
+        emit('setLike', !isLiked.value)
+        if (isLiked.value === true) {
           likeCounter.value++
           if (localStorage.getItem('lastCards') !== '[object Object]') {
             if (JSON.parse(localStorage.getItem('lastCards')).cards) {
@@ -455,7 +459,7 @@ export default {
       }
     })
     return {
-      like,
+      // like,
       likeCounter,
       chipsCounter,
       showComments,
@@ -490,7 +494,8 @@ export default {
       page,
       sliderImages,
       playAudio,
-      linkColor
+      linkColor,
+      isLiked
     }
   }
 }

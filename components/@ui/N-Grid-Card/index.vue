@@ -334,6 +334,10 @@ export default {
       }, 300)
     }, timer)
   })
+  const setLike = (state) => {
+    console.log('set')
+    console.log(state)
+  }
 
   return {
     spliceArray,
@@ -358,7 +362,8 @@ export default {
     transitionMasonry,
     masonryList,
     timeoutTransition,
-    sendSort
+    sendSort,
+    setLike
     }
   }
 }
