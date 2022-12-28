@@ -211,6 +211,7 @@ export default defineComponent({
       }
         localStorage.setItem('lastSection', JSON.stringify(lastSection))
       }
+      loadingEnd.value = true
       setTimeout(() => {
         contentGrid.value.masonryRebuild()
         // console.log(contentGrid.value)
@@ -308,7 +309,7 @@ export default defineComponent({
         fetchLoading.value = true
         cards.value = [...response.data]
         startCards.value = [...cards.value]
-        loadingEnd.value = true
+        // loadingEnd.value = true
         if (scrollHeight.value !== 0) {
           if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
             cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
@@ -363,7 +364,7 @@ export default defineComponent({
         if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
           loadingEnd.value = false
           console.log('end')
-          loadingEnd.value = true
+          // loadingEnd.value = true
         }
         if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
           const lastSection = {
@@ -372,7 +373,7 @@ export default defineComponent({
           localStorage.setItem('lastSection', JSON.stringify(lastSection))
           store.commit('content/setScrollHeight', 0)
           console.log('end')
-          loadingEnd.value = true
+          // loadingEnd.value = true
         }
         const lastCards = {
           cards: startCards.value,
