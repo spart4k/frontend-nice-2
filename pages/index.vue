@@ -184,13 +184,15 @@ export default defineComponent({
         cards.value = response.data.data
         if (scrollHeight.value !== 0) {
           if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
-            loadingEnd.value = false
             cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
             startCards.value = [...cards.value.data]
             pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+            loadingEnd.value = true
+            console.log('false, 234')
           }
           if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
             loadingEnd.value = false
+            console.log('false, 195')
           }
           if (JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
             store.commit('content/setHeaderHidden', true)
@@ -230,13 +232,18 @@ export default defineComponent({
           loadingEnd.value = true
           if (scrollHeight.value !== 0) {
             if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
-              loadingEnd.value = false
               cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
               startCards.value = [...cards.value.data]
+              startCards.value
+              console.log(cards.value.data)
+              console.log(startCards.value)
               pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+              // loadingEnd.value = true
+              console.log('false, 234')
             }
             if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
               loadingEnd.value = false
+              console.log('false, 243')
             }
             if (JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
               store.commit('content/setHeaderHidden', true)
@@ -263,6 +270,7 @@ export default defineComponent({
     onUnmounted(() => {
       window.removeEventListener('resize', resize)
       loadingEnd.value = false
+      console.log('false, 268')
     })
 
     store.commit('content/clearBgIntro')

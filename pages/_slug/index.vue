@@ -5,24 +5,26 @@
     :class="!loadingEnd && $style.disabled"
       v-if="cards">
       <template>
-        <NGridCard
-          ref="contentGrid"
-          class="content"
-          :class="[$style.content, showAnimate && $style.animateContent, !loadingEnd && $style.disabled]"
-          :items="cards"
-          :description="introTitle"
-          :intro-data="introData && introData"
-          :author="author"
-          :selectedSection="selectedSection"
-          :selectedMode="selectedMode"
-          :selectAsc="selectAsc"
-          @clickTag="clickTag"
-          @sendSection="sendSection"
-          @sendNovelty="sendNovelty"
-          @sendMode="sendMode"
-          @sendCategory="sendCategory"
-          @sendCategoryNumber="sendCategoryNumber"
-        />
+        <client-only>
+          <NGridCard
+            ref="contentGrid"
+            class="content"
+            :class="[$style.content, showAnimate && $style.animateContent, !loadingEnd && $style.disabled]"
+            :items="cards"
+            :description="introTitle"
+            :intro-data="introData && introData"
+            :author="author"
+            :selectedSection="selectedSection"
+            :selectedMode="selectedMode"
+            :selectAsc="selectAsc"
+            @clickTag="clickTag"
+            @sendSection="sendSection"
+            @sendNovelty="sendNovelty"
+            @sendMode="sendMode"
+            @sendCategory="sendCategory"
+            @sendCategoryNumber="sendCategoryNumber"
+          />
+        </client-only>
       </template>
     </n-intro-slug>
     <div :ref="loadingContainer" :class="$style.loadingContainer">
@@ -211,7 +213,6 @@ export default defineComponent({
       }
         localStorage.setItem('lastSection', JSON.stringify(lastSection))
       }
-      loadingEnd.value = true
       setTimeout(() => {
         contentGrid.value.masonryRebuild()
         // console.log(contentGrid.value)
@@ -267,9 +268,6 @@ export default defineComponent({
           opacity: 0
         })
       })
-      setTimeout(() => {
-        loadingEnd.value = true
-        }, 1000)
       if (!localStorage.getItem('lastSection')) {
         const lastSection = {
           section: id.value
@@ -309,14 +307,15 @@ export default defineComponent({
         fetchLoading.value = true
         cards.value = [...response.data]
         startCards.value = [...cards.value]
-        // loadingEnd.value = true
+        loadingEnd.value = true
+        console.log('true', '310')
         if (scrollHeight.value !== 0) {
           if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
             cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
             startCards.value = [...cards.value]
             pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-            loadingEnd.value = false
-            console.log('end')
+            loadingEnd.value = true
+            console.log('trie, 316')
             if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
               selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
               selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
@@ -354,6 +353,7 @@ export default defineComponent({
           }
           if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
             loadingEnd.value = false
+            console.log('false, 354')
           }
           if (JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
             store.commit('content/setHeaderHidden', true)
@@ -362,9 +362,8 @@ export default defineComponent({
           store.commit('content/setHeaderHidden', true)
         }
         if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
-          loadingEnd.value = false
-          console.log('end')
-          // loadingEnd.value = true
+          loadingEnd.value = true
+          console.log('true, 364')
         }
         if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
           const lastSection = {
@@ -372,8 +371,6 @@ export default defineComponent({
           }
           localStorage.setItem('lastSection', JSON.stringify(lastSection))
           store.commit('content/setScrollHeight', 0)
-          console.log('end')
-          // loadingEnd.value = true
         }
         const lastCards = {
           cards: startCards.value,
@@ -381,9 +378,6 @@ export default defineComponent({
           page: pageNumber.value
         }
         localStorage.setItem('lastCards', JSON.stringify(lastCards))
-        setTimeout(() => {
-          loadingEnd.value = true
-        }, 500)
       } catch (e) {
       }
     })
@@ -401,13 +395,14 @@ export default defineComponent({
           fetchLoading.value = true
           cards.value = [...response.data]
           startCards.value = [...cards.value]
-          // loadingEnd.value = true
+          loadingEnd.value = true
           if (scrollHeight.value !== 0) {
             if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
               cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
               startCards.value = [...cards.value]
               pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-              loadingEnd.value = false
+              loadingEnd.value = true
+              console.log('false, 401')
               if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
                 selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
                 selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
@@ -445,6 +440,7 @@ export default defineComponent({
             }
             if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
               loadingEnd.value = false
+              console.log('false, 439')
             }
             if (JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
               store.commit('content/setHeaderHidden', true)
@@ -454,6 +450,7 @@ export default defineComponent({
           }
           if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
             loadingEnd.value = false
+            console.log('false, 449')
           }
           if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
             const lastSection = {
@@ -471,7 +468,6 @@ export default defineComponent({
         } catch (e) {
         }
     })
-
     const fetchAuthor = () => {
       if (authorId.value) {
         const params = {
@@ -544,6 +540,7 @@ export default defineComponent({
 
     onUnmounted(() => {
       loadingEnd.value = false
+      console.log('false, 542')
     })
 
     watch(() => imgLoadCount.value, () => {
@@ -560,6 +557,7 @@ export default defineComponent({
                   left: 0
                 })
                 loadingEnd.value = true
+                console.log('true', '558')
               }
               nextTick(() => {
                 animateNavbar('.navbarSlug')
@@ -581,6 +579,7 @@ export default defineComponent({
                         left: 0
                       })
                       loadingEnd.value = true
+                      console.log('true', '581')
                     })
                 }
                 nextTick(() => {
@@ -602,6 +601,7 @@ export default defineComponent({
                   left: 0
                 })
                 loadingEnd.value = true
+                console.log('true', '602')
               }
               nextTick(() => {
                 animateNavbar('.navbarSlug')
@@ -623,6 +623,7 @@ export default defineComponent({
                         left: 0
                       })
                       loadingEnd.value = true
+                      console.log('true', '624')
                     })
                 }
                 nextTick(() => {
@@ -646,7 +647,7 @@ export default defineComponent({
 
     onMounted(() => {
       setTimeout(() => {
-        // contentGrid.value.masonryRebuild()
+        contentGrid.value.masonryRebuild()
       }, 500)
     })
 
