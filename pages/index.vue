@@ -182,6 +182,35 @@ export default defineComponent({
           seo_image: response.data.data?.seo_file_id?.src
         }
         cards.value = response.data.data
+        if (scrollHeight.value !== 0) {
+          if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
+            loadingEnd.value = false
+            cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
+            startCards.value = [...cards.value.data]
+            pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+          }
+          if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
+            loadingEnd.value = false
+          }
+          if (JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+            store.commit('content/setHeaderHidden', true)
+          }
+        } else {
+          store.commit('content/setHeaderHidden', true)
+        }
+        if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+          const lastSection = {
+            section: 'index'
+          }
+          localStorage.setItem('lastSection', JSON.stringify(lastSection))
+          store.commit('content/setScrollHeight', 0)
+        }
+        const lastCards = {
+          cards: startCards.value,
+          section: 'index',
+          page: pageNumber.value
+        }
+        localStorage.setItem('lastCards', JSON.stringify(lastCards))
       } catch (e) {
       }
     })

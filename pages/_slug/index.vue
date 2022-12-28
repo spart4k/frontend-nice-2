@@ -266,6 +266,9 @@ export default defineComponent({
           opacity: 0
         })
       })
+      setTimeout(() => {
+        loadingEnd.value = true
+        }, 1000)
       if (!localStorage.getItem('lastSection')) {
         const lastSection = {
           section: id.value
@@ -294,8 +297,92 @@ export default defineComponent({
     useAsync(async () => {
       try {
         const response = await fetchData()
-        console.log(response.data)
-        cards.value = response.data
+        if (authorId.value) {
+          const authorResponse = await fetchAuthor()
+          author.value = authorResponse
+        }
+        if (response.data.length < 6) {
+          cardsDispatch.value = false
+        }
+        introData.value = response.quote
+        fetchLoading.value = true
+        cards.value = [...response.data]
+        startCards.value = [...cards.value]
+        loadingEnd.value = true
+        if (scrollHeight.value !== 0) {
+          if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
+            cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
+            startCards.value = [...cards.value]
+            pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+            loadingEnd.value = false
+            console.log('end')
+            if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
+              selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+              selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
+              if (JSON.parse(localStorage.getItem('lastSection')).searchCategory) {
+                selectCategory.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
+                selectSection.value = ''
+                selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
+                selectCategoryNumber.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
+              } else {
+                selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+              }
+              if (JSON.parse(localStorage.getItem('lastSection')).searchMode === 'asc') {
+                selectAsc.value = true
+                selectDescAsc.value = 'asc'
+              }
+              selectPresent.value = JSON.parse(localStorage.getItem('lastSection')).searchPresent
+              switch (JSON.parse(localStorage.getItem('lastSection')).searchColomn) {
+                case 'created_at': {
+                  selectedMode.value = 0
+                  if (JSON.parse(localStorage.getItem('lastSection')).searchPresent) {
+                    selectedMode.value = 3
+                  }
+                  return
+                }
+                case 'price': {
+                  selectedMode.value = 1
+                  return
+                }
+                case 'like_count': {
+                  selectedMode.value = 2
+                  return
+                }
+              }
+            }
+          }
+          if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
+            loadingEnd.value = false
+          }
+          if (JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
+            store.commit('content/setHeaderHidden', true)
+          }
+        } else {
+          store.commit('content/setHeaderHidden', true)
+        }
+        if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
+          loadingEnd.value = false
+          console.log('end')
+          loadingEnd.value = true
+        }
+        if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
+          const lastSection = {
+            section: id.value
+          }
+          localStorage.setItem('lastSection', JSON.stringify(lastSection))
+          store.commit('content/setScrollHeight', 0)
+          console.log('end')
+          loadingEnd.value = true
+        }
+        const lastCards = {
+          cards: startCards.value,
+          section: id.value,
+          page: pageNumber.value
+        }
+        localStorage.setItem('lastCards', JSON.stringify(lastCards))
+        setTimeout(() => {
+          loadingEnd.value = true
+        }, 500)
       } catch (e) {
       }
     })
@@ -558,8 +645,8 @@ export default defineComponent({
 
     onMounted(() => {
       setTimeout(() => {
-        contentGrid.value.masonryRebuild()
-      }, 1000)
+        // contentGrid.value.masonryRebuild()
+      }, 500)
     })
 
     return {
