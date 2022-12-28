@@ -5,26 +5,24 @@
     :class="!loadingEnd && $style.disabled"
       v-if="cards">
       <template>
-        <client-only>
-          <NGridCard
-            ref="contentGrid"
-            class="content"
-            :class="[$style.content, showAnimate && $style.animateContent, !loadingEnd && $style.disabled]"
-            :items="cards"
-            :description="introTitle"
-            :intro-data="introData && introData"
-            :author="author"
-            :selectedSection="selectedSection"
-            :selectedMode="selectedMode"
-            :selectAsc="selectAsc"
-            @clickTag="clickTag"
-            @sendSection="sendSection"
-            @sendNovelty="sendNovelty"
-            @sendMode="sendMode"
-            @sendCategory="sendCategory"
-            @sendCategoryNumber="sendCategoryNumber"
-          />
-        </client-only>
+        <NGridCard
+          ref="contentGrid"
+          class="content"
+          :class="[$style.content, showAnimate && $style.animateContent, !loadingEnd && $style.disabled]"
+          :items="cards"
+          :description="introTitle"
+          :intro-data="introData && introData"
+          :author="author"
+          :selectedSection="selectedSection"
+          :selectedMode="selectedMode"
+          :selectAsc="selectAsc"
+          @clickTag="clickTag"
+          @sendSection="sendSection"
+          @sendNovelty="sendNovelty"
+          @sendMode="sendMode"
+          @sendCategory="sendCategory"
+          @sendCategoryNumber="sendCategoryNumber"
+        />
       </template>
     </n-intro-slug>
     <div :ref="loadingContainer" :class="$style.loadingContainer">
@@ -40,7 +38,7 @@ import {
   defineComponent,
   useRouter,
   useContext,
-  useFetch,
+  // useFetch,
   useAsync,
   useMeta, watch, onUnmounted,
   computed, onMounted, nextTick
@@ -274,6 +272,9 @@ export default defineComponent({
         }
         localStorage.setItem('lastSection', JSON.stringify(lastSection))
       }
+      setTimeout(() => {
+        content.value.masonryRebuild()
+      }, 1000)
     })
 
     const fetchData = async (currentPage) => {
@@ -293,6 +294,94 @@ export default defineComponent({
       const response = await store.dispatch(path, params)
       return response
     }
+    // useAsync(async () => {
+    //   // try {
+    //   //   const response = await fetchData()
+    //   //   if (authorId.value) {
+    //   //     const authorResponse = await fetchAuthor()
+    //   //     author.value = authorResponse
+    //   //   }
+    //   //   if (response.data.length < 6) {
+    //   //     cardsDispatch.value = false
+    //   //   }
+    //   //   introData.value = response.quote
+    //   //   fetchLoading.value = true
+    //   //   cards.value = [...response.data]
+    //   //   startCards.value = [...cards.value]
+    //   //   loadingEnd.value = true
+    //   //   console.log('true', '310')
+    //   //   if (scrollHeight.value !== 0) {
+    //   //     if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
+    //   //       cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
+    //   //       startCards.value = [...cards.value]
+    //   //       pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+    //   //       loadingEnd.value = true
+    //   //       console.log('trie, 316')
+    //   //       if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
+    //   //         selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+    //   //         selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
+    //   //         if (JSON.parse(localStorage.getItem('lastSection')).searchCategory) {
+    //   //           selectCategory.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
+    //   //           selectSection.value = ''
+    //   //           selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
+    //   //           selectCategoryNumber.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
+    //   //         } else {
+    //   //           selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+    //   //         }
+    //   //         if (JSON.parse(localStorage.getItem('lastSection')).searchMode === 'asc') {
+    //   //           selectAsc.value = true
+    //   //           selectDescAsc.value = 'asc'
+    //   //         }
+    //   //         selectPresent.value = JSON.parse(localStorage.getItem('lastSection')).searchPresent
+    //   //         switch (JSON.parse(localStorage.getItem('lastSection')).searchColomn) {
+    //   //           case 'created_at': {
+    //   //             selectedMode.value = 0
+    //   //             if (JSON.parse(localStorage.getItem('lastSection')).searchPresent) {
+    //   //               selectedMode.value = 3
+    //   //             }
+    //   //             return
+    //   //           }
+    //   //           case 'price': {
+    //   //             selectedMode.value = 1
+    //   //             return
+    //   //           }
+    //   //           case 'like_count': {
+    //   //             selectedMode.value = 2
+    //   //             return
+    //   //           }
+    //   //         }
+    //   //       }
+    //   //     }
+    //   //     if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
+    //   //       loadingEnd.value = false
+    //   //       console.log('false, 354')
+    //   //     }
+    //   //     if (JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
+    //   //       store.commit('content/setHeaderHidden', true)
+    //   //     }
+    //   //   } else {
+    //   //     store.commit('content/setHeaderHidden', true)
+    //   //   }
+    //   //   if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
+    //   //     loadingEnd.value = true
+    //   //     console.log('true, 364')
+    //   //   }
+    //   //   if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
+    //   //     const lastSection = {
+    //   //       section: id.value
+    //   //     }
+    //   //     localStorage.setItem('lastSection', JSON.stringify(lastSection))
+    //   //     store.commit('content/setScrollHeight', 0)
+    //   //   }
+    //   //   const lastCards = {
+    //   //     cards: startCards.value,
+    //   //     section: id.value,
+    //   //     page: pageNumber.value
+    //   //   }
+    //   //   localStorage.setItem('lastCards', JSON.stringify(lastCards))
+    //   // } catch (e) {
+    //   // }
+    // })
     useAsync(async () => {
       try {
         const response = await fetchData()
@@ -307,15 +396,13 @@ export default defineComponent({
         fetchLoading.value = true
         cards.value = [...response.data]
         startCards.value = [...cards.value]
-        loadingEnd.value = true
-        console.log('true', '310')
+        // loadingEnd.value = true
         if (scrollHeight.value !== 0) {
           if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
             cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
             startCards.value = [...cards.value]
             pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-            loadingEnd.value = true
-            console.log('trie, 316')
+            loadingEnd.value = false
             if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
               selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
               selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
@@ -353,7 +440,6 @@ export default defineComponent({
           }
           if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
             loadingEnd.value = false
-            console.log('false, 354')
           }
           if (JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
             store.commit('content/setHeaderHidden', true)
@@ -362,8 +448,7 @@ export default defineComponent({
           store.commit('content/setHeaderHidden', true)
         }
         if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
-          loadingEnd.value = true
-          console.log('true, 364')
+          loadingEnd.value = false
         }
         if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
           const lastSection = {
@@ -380,93 +465,6 @@ export default defineComponent({
         localStorage.setItem('lastCards', JSON.stringify(lastCards))
       } catch (e) {
       }
-    })
-    useFetch(async () => {
-        try {
-          const response = await fetchData()
-          if (authorId.value) {
-            const authorResponse = await fetchAuthor()
-            author.value = authorResponse
-          }
-          if (response.data.length < 6) {
-            cardsDispatch.value = false
-          }
-          introData.value = response.quote
-          fetchLoading.value = true
-          cards.value = [...response.data]
-          startCards.value = [...cards.value]
-          loadingEnd.value = true
-          if (scrollHeight.value !== 0) {
-            if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
-              cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
-              startCards.value = [...cards.value]
-              pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-              loadingEnd.value = true
-              console.log('false, 401')
-              if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
-                selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
-                selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
-                if (JSON.parse(localStorage.getItem('lastSection')).searchCategory) {
-                  selectCategory.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
-                  selectSection.value = ''
-                  selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
-                  selectCategoryNumber.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
-                } else {
-                  selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
-                }
-                if (JSON.parse(localStorage.getItem('lastSection')).searchMode === 'asc') {
-                  selectAsc.value = true
-                  selectDescAsc.value = 'asc'
-                }
-                selectPresent.value = JSON.parse(localStorage.getItem('lastSection')).searchPresent
-                switch (JSON.parse(localStorage.getItem('lastSection')).searchColomn) {
-                  case 'created_at': {
-                    selectedMode.value = 0
-                    if (JSON.parse(localStorage.getItem('lastSection')).searchPresent) {
-                      selectedMode.value = 3
-                    }
-                    return
-                  }
-                  case 'price': {
-                    selectedMode.value = 1
-                    return
-                  }
-                  case 'like_count': {
-                    selectedMode.value = 2
-                    return
-                  }
-                }
-              }
-            }
-            if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
-              loadingEnd.value = false
-              console.log('false, 439')
-            }
-            if (JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
-              store.commit('content/setHeaderHidden', true)
-            }
-          } else {
-            store.commit('content/setHeaderHidden', true)
-          }
-          if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
-            loadingEnd.value = false
-            console.log('false, 449')
-          }
-          if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
-            const lastSection = {
-              section: id.value
-            }
-            localStorage.setItem('lastSection', JSON.stringify(lastSection))
-            store.commit('content/setScrollHeight', 0)
-          }
-          const lastCards = {
-            cards: startCards.value,
-            section: id.value,
-            page: pageNumber.value
-          }
-          localStorage.setItem('lastCards', JSON.stringify(lastCards))
-        } catch (e) {
-        }
     })
     const fetchAuthor = () => {
       if (authorId.value) {
@@ -646,9 +644,11 @@ export default defineComponent({
     store.commit('content/changeBgIntro', route.value.params.slug)
 
     onMounted(() => {
+      loadingEnd.value = false
       setTimeout(() => {
         contentGrid.value.masonryRebuild()
-      }, 500)
+        loadingEnd.value = true
+      }, 1000)
     })
 
     return {

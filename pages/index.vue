@@ -42,7 +42,7 @@ import {
   computed,
   defineComponent,
   useContext,
-  useFetch, useAsync, watch,
+  useAsync, watch,
   onMounted, onUnmounted, onUpdated, nextTick,
   useRouter,
   useMeta
@@ -163,9 +163,9 @@ export default defineComponent({
             }
             localStorage.setItem('lastSection', JSON.stringify(lastSection))
           }
-      setTimeout(() => {
-        content.value.masonryRebuild()
-      }, 1000)
+      // setTimeout(() => {
+      //   content.value.masonryRebuild()
+      // }, 1000)
     })
 
     onUpdated(() => {
@@ -173,26 +173,71 @@ export default defineComponent({
 
     const getSeoInfo = async () => {
     }
+    // useAsync(async () => {
+    //   try {
+    //     const response = await fetchData()
+    //     metaTags.value = {
+    //       seo_title: response.data.data?.seo_title,
+    //       seo_description: response.data.data?.seo_description,
+    //       seo_image: response.data.data?.seo_file_id?.src
+    //     }
+    //     cards.value = response.data.data
+    //     if (scrollHeight.value !== 0) {
+    //       if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
+    //         cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
+    //         startCards.value = [...cards.value.data]
+    //         pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+    //         loadingEnd.value = false
+    //         console.log('false, 234')
+    //       }
+    //       if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
+    //         loadingEnd.value = false
+    //         console.log('false, 195')
+    //       }
+    //       if (JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+    //         store.commit('content/setHeaderHidden', true)
+    //       }
+    //     } else {
+    //       store.commit('content/setHeaderHidden', true)
+    //     }
+    //     if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+    //       const lastSection = {
+    //         section: 'index'
+    //       }
+    //       localStorage.setItem('lastSection', JSON.stringify(lastSection))
+    //       store.commit('content/setScrollHeight', 0)
+    //     }
+    //     const lastCards = {
+    //       cards: startCards.value,
+    //       section: 'index',
+    //       page: pageNumber.value
+    //     }
+    //     localStorage.setItem('lastCards', JSON.stringify(lastCards))
+    //   } catch (e) {
+    //   }
+    // })
+    const getLikes = async () => {
+    }
+
     useAsync(async () => {
       try {
         const response = await fetchData()
-        metaTags.value = {
-          seo_title: response.data.data?.seo_title,
-          seo_description: response.data.data?.seo_description,
-          seo_image: response.data.data?.seo_file_id?.src
+        if (response.data.data.data.length < 6) {
+          cardsDispatch.value = false
         }
+        totalPage.value = response?.data.last_pages
         cards.value = response.data.data
+        startCards.value = cards.value.data
+        loadingEnd.value = true
         if (scrollHeight.value !== 0) {
           if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
+            loadingEnd.value = false
             cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
             startCards.value = [...cards.value.data]
             pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-            loadingEnd.value = true
-            console.log('false, 234')
           }
           if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
             loadingEnd.value = false
-            console.log('false, 195')
           }
           if (JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
             store.commit('content/setHeaderHidden', true)
@@ -215,57 +260,6 @@ export default defineComponent({
         localStorage.setItem('lastCards', JSON.stringify(lastCards))
       } catch (e) {
       }
-    })
-
-    const getLikes = async () => {
-    }
-
-    useFetch(async () => {
-        try {
-          const response = await fetchData()
-          if (response.data.data.data.length < 6) {
-            cardsDispatch.value = false
-          }
-          totalPage.value = response?.data.last_pages
-          cards.value = response.data.data
-          startCards.value = cards.value.data
-          loadingEnd.value = true
-          if (scrollHeight.value !== 0) {
-            if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
-              cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
-              startCards.value = [...cards.value.data]
-              startCards.value
-              console.log(cards.value.data)
-              console.log(startCards.value)
-              pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-              // loadingEnd.value = true
-              console.log('false, 234')
-            }
-            if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
-              loadingEnd.value = false
-              console.log('false, 243')
-            }
-            if (JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
-              store.commit('content/setHeaderHidden', true)
-            }
-          } else {
-            store.commit('content/setHeaderHidden', true)
-          }
-          if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
-            const lastSection = {
-              section: 'index'
-            }
-            localStorage.setItem('lastSection', JSON.stringify(lastSection))
-            store.commit('content/setScrollHeight', 0)
-          }
-          const lastCards = {
-            cards: startCards.value,
-            section: 'index',
-            page: pageNumber.value
-          }
-          localStorage.setItem('lastCards', JSON.stringify(lastCards))
-        } catch (e) {
-        }
     })
     onUnmounted(() => {
       window.removeEventListener('resize', resize)
