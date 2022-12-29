@@ -1,6 +1,6 @@
 <template>
   <div>
-    <N-Preloader v-if="!cards.data || !loadingEnd" />
+    <N-Preloader v-if="!loadingEnd" />
     <n-intro
       :class="!loadingEnd && $style.disabled"
       v-if="cards.data"
@@ -41,7 +41,7 @@ import {
   ref,
   computed,
   defineComponent,
-  useContext,
+  useContext, useFetch,
   useAsync, watch,
   onMounted, onUnmounted, onUpdated, nextTick,
   useRouter,
@@ -163,9 +163,10 @@ export default defineComponent({
             }
             localStorage.setItem('lastSection', JSON.stringify(lastSection))
           }
-      // setTimeout(() => {
-      //   content.value.masonryRebuild()
-      // }, 1000)
+      setTimeout(() => {
+        content.value.masonryRebuild()
+        loadingEnd.value = true
+      }, 1200)
     })
 
     onUpdated(() => {
@@ -173,49 +174,50 @@ export default defineComponent({
 
     const getSeoInfo = async () => {
     }
-    // useAsync(async () => {
-    //   try {
-    //     const response = await fetchData()
-    //     metaTags.value = {
-    //       seo_title: response.data.data?.seo_title,
-    //       seo_description: response.data.data?.seo_description,
-    //       seo_image: response.data.data?.seo_file_id?.src
-    //     }
-    //     cards.value = response.data.data
-    //     if (scrollHeight.value !== 0) {
-    //       if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
-    //         cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
-    //         startCards.value = [...cards.value.data]
-    //         pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-    //         loadingEnd.value = false
-    //         console.log('false, 234')
-    //       }
-    //       if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
-    //         loadingEnd.value = false
-    //         console.log('false, 195')
-    //       }
-    //       if (JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
-    //         store.commit('content/setHeaderHidden', true)
-    //       }
-    //     } else {
-    //       store.commit('content/setHeaderHidden', true)
-    //     }
-    //     if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
-    //       const lastSection = {
-    //         section: 'index'
-    //       }
-    //       localStorage.setItem('lastSection', JSON.stringify(lastSection))
-    //       store.commit('content/setScrollHeight', 0)
-    //     }
-    //     const lastCards = {
-    //       cards: startCards.value,
-    //       section: 'index',
-    //       page: pageNumber.value
-    //     }
-    //     localStorage.setItem('lastCards', JSON.stringify(lastCards))
-    //   } catch (e) {
-    //   }
-    // })
+    useFetch(async () => {
+      try {
+        const response = await fetchData()
+        if (response.data.data.data.length < 6) {
+          cardsDispatch.value = false
+        }
+        totalPage.value = response?.data.last_pages
+        cards.value = response.data.data
+        startCards.value = cards.value.data
+        setTimeout(() => {
+          loadingEnd.value = true
+        }, 1200)
+        if (scrollHeight.value !== 0) {
+          if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
+            loadingEnd.value = false
+            cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
+            startCards.value = [...cards.value.data]
+            pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+          }
+          if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
+            loadingEnd.value = false
+          }
+          if (JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+            store.commit('content/setHeaderHidden', true)
+          }
+        } else {
+          store.commit('content/setHeaderHidden', true)
+        }
+        if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+          const lastSection = {
+            section: 'index'
+          }
+          localStorage.setItem('lastSection', JSON.stringify(lastSection))
+          store.commit('content/setScrollHeight', 0)
+        }
+        const lastCards = {
+          cards: startCards.value,
+          section: 'index',
+          page: pageNumber.value
+        }
+        localStorage.setItem('lastCards', JSON.stringify(lastCards))
+      } catch (e) {
+      }
+    })
     const getLikes = async () => {
     }
 
@@ -228,7 +230,9 @@ export default defineComponent({
         totalPage.value = response?.data.last_pages
         cards.value = response.data.data
         startCards.value = cards.value.data
-        loadingEnd.value = true
+        // setTimeout(() => {
+        //   loadingEnd.value = true
+        // }, 1200)
         if (scrollHeight.value !== 0) {
           if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
             loadingEnd.value = false
@@ -382,19 +386,22 @@ export default defineComponent({
     }
 
     watch(() => imgLoadCount.value, () => {
+      console.log(imgLoadCount.value)
       if (scrollHeight.value !== 0) {
         if (localStorage.getItem('lastCards') !== '[object Object]') {
           if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
+            console.log(JSON.parse(localStorage.getItem('lastCards')).cards.length)
             if (window.innerWidth < 450) {
             store.commit('content/setHeaderHidden', true)
             if (firstRender.value) {
               firstRender.value = false
               if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-                window.scroll({
-                  top: scrollHeight.value,
-                  left: 0
-                })
-                loadingEnd.value = true
+                  window.scroll({
+                    top: scrollHeight.value,
+                    left: 0
+                  })
+                  console.log('render')
+                  loadingEnd.value = true
               }
               nextTick(() => {
                 animateNavbar('.navbarSlug')
@@ -410,13 +417,14 @@ export default defineComponent({
                       top: 0,
                       left: 0
                     })
-                    nextTick(() => {
+                    // setTimeout(() => {
                       window.scroll({
                         top: scrollHeight.value,
                         left: 0
                       })
+                      console.log('render')
                       loadingEnd.value = true
-                    })
+                    // }, 1200)
                 }
                 nextTick(() => {
                   animateNavbar('.navbarSlug')
@@ -432,11 +440,14 @@ export default defineComponent({
             if (firstRender.value) {
               firstRender.value = false
               if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-                window.scroll({
-                  top: scrollHeight.value,
-                  left: 0
-                })
-                loadingEnd.value = true
+                // setTimeout(() => {
+                  window.scroll({
+                    top: scrollHeight.value,
+                    left: 0
+                  })
+                  console.log('render')
+                  loadingEnd.value = true
+                // }, 1200)
               }
               nextTick(() => {
                 animateNavbar('.navbarSlug')
@@ -452,13 +463,14 @@ export default defineComponent({
                       top: 0,
                       left: 0
                     })
-                    nextTick(() => {
+                    // setTimeout(() => {
                       window.scroll({
                         top: scrollHeight.value,
                         left: 0
                       })
                       loadingEnd.value = true
-                    })
+                      console.log('render')
+                    // }, 1200)
                 }
                 nextTick(() => {
                   animateNavbar('.navbarSlug')
@@ -469,7 +481,9 @@ export default defineComponent({
           }
         }
       } else if (imgLoadCount.value === JSON.parse(JSON.stringify(startCards.value)).length) {
-        loadingEnd.value = true
+        setTimeout(() => {
+          loadingEnd.value = true
+        }, 1200)
       }
     })
 
