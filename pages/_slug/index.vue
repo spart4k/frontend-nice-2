@@ -556,10 +556,12 @@ export default defineComponent({
             if (firstRender.value) {
               firstRender.value = false
               if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
-                window.scroll({
-                  top: scrollHeight.value,
-                  left: 0
-                })
+                setTimeout(() => {
+                  window.scroll({
+                    top: scrollHeight.value,
+                    left: 0
+                  })
+                }, 2000)
                 loadingEnd.value = true
                 console.log('true', '558')
               }
@@ -579,10 +581,12 @@ export default defineComponent({
                     })
                     console.log(scrollHeight.value)
                     nextTick(() => {
-                      window.scroll({
-                        top: scrollHeight.value,
-                        left: 0
-                      })
+                      setTimeout(() => {
+                        window.scroll({
+                          top: scrollHeight.value,
+                          left: 0
+                        })
+                      }, 2000)
                       loadingEnd.value = true
                       console.log('true', '581')
                     })
@@ -601,10 +605,12 @@ export default defineComponent({
             if (firstRender.value) {
               firstRender.value = false
               if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
-                window.scroll({
-                  top: scrollHeight.value,
-                  left: 0
-                })
+                setTimeout(() => {
+                  window.scroll({
+                    top: scrollHeight.value,
+                    left: 0
+                  })
+                }, 2000)
                 loadingEnd.value = true
                 console.log('true', '602')
               }
