@@ -467,7 +467,7 @@ export default defineComponent({
         loadingEnd.value = false
         setTimeout(() => {
           contentGrid.value.masonryRebuild()
-          loadingEnd.value = true
+          // loadingEnd.value = true
         }, 1000)
       } catch (e) {
       }
