@@ -273,7 +273,7 @@ export default defineComponent({
         localStorage.setItem('lastSection', JSON.stringify(lastSection))
       }
       setTimeout(() => {
-        content.value.masonryRebuild()
+        contentGrid.value.masonryRebuild()
       }, 1000)
     })
 
@@ -394,6 +394,7 @@ export default defineComponent({
         }
         introData.value = response.quote
         fetchLoading.value = true
+        console.log('true, 398')
         cards.value = [...response.data]
         startCards.value = [...cards.value]
         // loadingEnd.value = true
@@ -463,6 +464,11 @@ export default defineComponent({
           page: pageNumber.value
         }
         localStorage.setItem('lastCards', JSON.stringify(lastCards))
+        loadingEnd.value = false
+        setTimeout(() => {
+          contentGrid.value.masonryRebuild()
+          loadingEnd.value = true
+        }, 1000)
       } catch (e) {
       }
     })
@@ -571,6 +577,7 @@ export default defineComponent({
                       top: 0,
                       left: 0
                     })
+                    console.log(scrollHeight.value)
                     nextTick(() => {
                       window.scroll({
                         top: scrollHeight.value,
@@ -642,14 +649,6 @@ export default defineComponent({
     }
 
     store.commit('content/changeBgIntro', route.value.params.slug)
-
-    onMounted(() => {
-      loadingEnd.value = false
-      setTimeout(() => {
-        contentGrid.value.masonryRebuild()
-        loadingEnd.value = true
-      }, 1000)
-    })
 
     return {
       clickTag,
