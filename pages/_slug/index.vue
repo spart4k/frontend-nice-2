@@ -548,6 +548,8 @@ export default defineComponent({
     })
 
     watch(() => imgLoadCount.value, () => {
+      console.log(imgLoadCount.value)
+      console.log('change')
       if (scrollHeight.value !== 0) {
         if (localStorage.getItem('lastCards') !== '[object Object]') {
           if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
@@ -561,8 +563,8 @@ export default defineComponent({
                     top: scrollHeight.value,
                     left: 0
                   })
-                }, 2000)
-                loadingEnd.value = true
+                  loadingEnd.value = true
+                }, 1200)
                 console.log('true', '558')
               }
               nextTick(() => {
@@ -586,8 +588,8 @@ export default defineComponent({
                           top: scrollHeight.value,
                           left: 0
                         })
-                      }, 2000)
-                      loadingEnd.value = true
+                        loadingEnd.value = true
+                      }, 1200)
                       console.log('true', '581')
                     })
                 }
@@ -610,8 +612,8 @@ export default defineComponent({
                     top: scrollHeight.value,
                     left: 0
                   })
-                }, 2000)
-                loadingEnd.value = true
+                  loadingEnd.value = true
+                }, 1200)
                 console.log('true', '602')
               }
               nextTick(() => {
@@ -629,11 +631,13 @@ export default defineComponent({
                       left: 0
                     })
                     nextTick(() => {
-                      window.scroll({
-                        top: scrollHeight.value,
-                        left: 0
-                      })
-                      loadingEnd.value = true
+                      setTimeout(() => {
+                        window.scroll({
+                          top: scrollHeight.value,
+                          left: 0
+                        })
+                        loadingEnd.value = true
+                      }, 1200)
                       console.log('true', '624')
                     })
                 }
