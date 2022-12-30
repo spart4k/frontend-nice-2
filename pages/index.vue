@@ -169,6 +169,7 @@ export default defineComponent({
         setTimeout(() => {
           content.value.masonryRebuild()
           store.commit('content/setAnimate', false)
+          // document.querySelector('.logo').style.visibility = 'visible'
         }, 3200)
         if (!localStorage.getItem('lastSection')) {
             const lastSection = {
@@ -403,11 +404,11 @@ export default defineComponent({
           if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
             console.log(JSON.parse(localStorage.getItem('lastCards')).cards.length)
             if (window.innerWidth < 450) {
-            store.commit('content/setHeaderHidden', true)
             if (firstRender.value) {
               firstRender.value = false
               if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
                   setTimeout(() => {
+                    store.commit('content/setHeaderHidden', true)
                     content.value.masonryRebuild()
                     window.scroll({
                       top: scrollHeight.value,
