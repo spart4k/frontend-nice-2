@@ -453,12 +453,12 @@ export default defineComponent({
         } else if (localStorage.getItem('lastCards') === '[object Object]') {
           if (imgLoadCount.value <= 6) {
             if (window.innerWidth < 450) {
-            store.commit('content/setHeaderHidden', true)
             if (firstRender.value) {
               firstRender.value = false
               if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
                 // setTimeout(() => {
                   setTimeout(() => {
+                    store.commit('content/setHeaderHidden', true)
                     content.value.masonryRebuild()
                     window.scroll({
                       top: scrollHeight.value,
