@@ -293,6 +293,7 @@ export default defineComponent({
       }
       const path = 'pages/getData'
       const response = await store.dispatch(path, params)
+      console.log(response)
       return response
     }
     // useAsync(async () => {
@@ -386,6 +387,7 @@ export default defineComponent({
     useAsync(async () => {
       try {
         const response = await fetchData()
+        console.log(response)
         if (authorId.value) {
           const authorResponse = await fetchAuthor()
           author.value = authorResponse
@@ -397,6 +399,7 @@ export default defineComponent({
         fetchLoading.value = true
         console.log('true, 398')
         cards.value = [...response.data]
+        console.log(cards.value)
         startCards.value = [...cards.value]
         // loadingEnd.value = true
         if (scrollHeight.value !== 0) {
@@ -546,6 +549,7 @@ export default defineComponent({
 
     watch(() => imgLoadCount.value, () => {
       console.log(imgLoadCount.value)
+      console.log(JSON.parse(JSON.stringify(startCards.value)).length)
       console.log('change')
       if (scrollHeight.value !== 0) {
         if (localStorage.getItem('lastCards') !== '[object Object]') {
@@ -563,7 +567,6 @@ export default defineComponent({
                     top: scrollHeight.value,
                     left: 0
                   })
-                  
                   loadingEnd.value = true
                 // }, 1200)
                 console.log('true', '558')

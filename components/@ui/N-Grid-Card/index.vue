@@ -296,6 +296,7 @@ export default {
     })
 
   watch(() => props.items, () => {
+    console.log('item')
     proxyArray.value = props.items
   })
   const timeoutTransition = () => {

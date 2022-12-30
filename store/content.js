@@ -41,6 +41,7 @@ export const mutations = {
     state.isShowAnimationHomePage = value
   },
   setSingleAnimation (state, value) {
+    console.log(value)
     state.singleAnimation = value
   },
   setScrollHeight (state, value) {
