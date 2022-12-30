@@ -137,7 +137,6 @@ export default defineComponent({
         window.addEventListener('resize', resize)
         window.addEventListener('load', () => {
           if (store.state.content.singleAnimation) {
-            console.log(JSON.parse(localStorage.getItem('showAnimateHomePage')))
             localStorage.setItem('showAnimateHomePage', true)
             console.log(JSON.parse(localStorage.getItem('showAnimateHomePage')))
             store.commit('content/setSingleAnimation', false)
@@ -145,10 +144,10 @@ export default defineComponent({
           if (window.innerWidth < 450) {
             animationlogo()
           }
-          animateSubtitle()
-          animateNavbar('.navbarSlug')
-          const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
-          console.log(isPlayAnimation)
+            animateSubtitle()
+            animateNavbar('.navbarSlug')
+            const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+            console.log(isPlayAnimation)
           if (!isPlayAnimation) {
             store.commit('content/setAnimate', false)
             console.log(showAnimate.value)
@@ -156,31 +155,33 @@ export default defineComponent({
           } else {
             animationTimeline('.navbarSlug', elementAnimate.value, root.$mq)
           }
-        })
-        if (!store.state.content.singleAnimation) {
-          const logo = document.querySelector('.logo')
-          logo.classList.add('animationEnd')
-          body.style.overflow = 'auto'
-        }
-        setTimeout(() => {
-          fetchLoading.value = true
-          animationLoad.value = true
-        }, 1000)
-        if (!localStorage.getItem('lastSection')) {
+          if (!store.state.content.singleAnimation) {
+            const logo = document.querySelector('.logo')
+            logo.classList.add('animationEnd')
+            body.style.overflow = 'auto'
+          }
+          setTimeout(() => {
+            fetchLoading.value = true
+            animationLoad.value = true
+          }, 1000)
+          if (!localStorage.getItem('lastSection')) {
             const lastSection = {
               section: 'index'
             }
             localStorage.setItem('lastSection', JSON.stringify(lastSection))
           }
+          console.log(JSON.parse(localStorage.getItem('showAnimateHomePage')))
+          if (JSON.parse(localStorage.getItem('showAnimateHomePage'))) {
+            console.log('show elements')
+            setTimeout(() => {
+              store.commit('content/setAnimate', false)
+            }, 3500)
+          }
+        })
       // setTimeout(() => {
       //   content.value.masonryRebuild()
       //   loadingEnd.value = true
       // }, 1200)
-      if (JSON.parse(localStorage.getItem('showAnimateHomePage'))) {
-        setTimeout(() => {
-          store.commit('content/setAnimate', false)
-        }, 3500)
-      }
     })
 
     onUpdated(() => {
