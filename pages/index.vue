@@ -164,6 +164,7 @@ export default defineComponent({
           animationLoad.value = true
         }, 1000)
         setTimeout(() => {
+          content.value.masonryRebuild()
           store.commit('content/setAnimate', false)
         }, 3200)
         if (!localStorage.getItem('lastSection')) {
