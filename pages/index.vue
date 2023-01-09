@@ -231,14 +231,15 @@ export default defineComponent({
     useAsync(async () => {
       try {
         const response = await fetchData()
+        const seo = await store.dispatch('main/getSeo')
+        console.log(seo.data.data[0])
+        metaTags.value = seo.data.data[0]
         console.log(response.data.data.data)
         if (response.data.data.data.length < 6) {
           cardsDispatch.value = false
         }
         totalPage.value = response?.data.last_pages
         cards.value = response.data.data
-        console.log(cards.value.data)
-        console.log(response.data.data.data.length)
         startCards.value = [...cards.value.data]
         console.log(startCards.value)
         if (scrollHeight.value !== 0) {
@@ -279,7 +280,7 @@ export default defineComponent({
       loadingEnd.value = false
       console.log('false, 268')
     })
-
+    console.log(metaTags.value.seo_title)
     store.commit('content/clearBgIntro')
     useMeta(() => ({
         title: metaTags.value.seo_title,
@@ -291,8 +292,6 @@ export default defineComponent({
             content: metaTags.value.seo_title
           },
           {
-            hid: 'og:description',
-            name: 'og:description',
             property: 'og:description',
             content: metaTags.value.seo_description
           },
