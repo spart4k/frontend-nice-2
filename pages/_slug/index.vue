@@ -249,7 +249,7 @@ export default defineComponent({
           hid: 'og:image',
           name: 'og:image',
           property: 'og:image',
-          content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_file_id?.src}`
+          content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_image}`
         },
         {
           hid: 'twitter:card',
@@ -264,23 +264,18 @@ export default defineComponent({
         {
           hid: 'twitter:title',
           property: 'twitter:title',
-          content: metaTitle.value[id.value - 1]?.seo_title
-        },
-        {
-          hid: 'twitter:card',
-          property: 'twitter:description',
-          content: metaTitle.value[id.value - 1]?.seo_description
+          content: metaTags.value?.seo_title
         },
         {
           hid: 'twitter:description',
           property: 'twitter:description',
-          content: metaTitle.value[id.value - 1]?.seo_description
+          content: metaTags.value?.seo_description
         },
         {
           hid: 'twitter:image',
           name: 'twitter:image',
           property: 'twitter:image',
-          content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_file_id?.src}`
+          content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_image}`
         }
       ]
     }))

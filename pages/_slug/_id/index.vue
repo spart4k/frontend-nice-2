@@ -87,8 +87,9 @@ export default defineComponent({
         metaTags.value = {
           seo_title: response.responseCard.data?.data?.seo_title,
           seo_description: response.responseCard.data?.data?.seo_description,
-          seo_image: response.responseCard.data?.seo_file_id?.data?.src
+          seo_image: response.responseCard.data?.data?.seo_file?.src
         }
+        console.log(metaTags.value)
         card.value = {
           card: response.responseCard.data,
           comments: response.responseComments.data
@@ -129,7 +130,7 @@ export default defineComponent({
             hid: 'og:image',
             name: 'og:image',
             property: 'og:image',
-            content: `${root.$axios.defaults.baseURL}/${metaTags.value.seo_file?.src}`
+            content: `${root.$axios.defaults.baseURL}/${metaTags.value.seo_image}`
           },
           {
             hid: 'twitter:card',
@@ -160,7 +161,7 @@ export default defineComponent({
             hid: 'twitter:image',
             name: 'twitter:image',
             property: 'twitter:image',
-            content: `${root.$axios.defaults.baseURL}/${metaTags.value.seo_file?.src}`
+            content: `${root.$axios.defaults.baseURL}/${metaTags.value.seo_image}`
           }
         ]
     }))
