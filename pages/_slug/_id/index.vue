@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { ref, useAsync, useContext, defineComponent, useRouter, useMeta, computed, onMounted, useFetch } from '@nuxtjs/composition-api'
+import { ref, useAsync, useContext, defineComponent, useRouter, useMeta, computed, onMounted } from '@nuxtjs/composition-api'
 // import { head } from '@/components/scripts/head.js'
 
 export default defineComponent({
@@ -41,7 +41,7 @@ export default defineComponent({
   layout: 'default',
   // middleware: 'background',
   // transition: 'home',
-  setup () {
+  setup (_, {root}) {
     const isAddedBasket = ref(false)
     const { route, store } = useContext()
     const router = useRouter()
@@ -83,7 +83,7 @@ export default defineComponent({
     useAsync(async () => {
       try {
         const response = await fetchData()
-        console.log(response)
+        console.log(response.responseCard.data?.data)
         metaTags.value = {
           seo_title: response.responseCard.data?.data?.seo_title,
           seo_description: response.responseCard.data?.data?.seo_description,
@@ -98,20 +98,23 @@ export default defineComponent({
         } catch (e) {
         }
       }, route.value.params.id)
-    useFetch(() => {
-      try {
-        // const response = await fetchData()
-        // card.value = {
-        //   card: response.responseCard
-        //   // comments: response.responseComments.data
-        // }
-        // console.log(response)
-        } catch (e) {
-        }
-      }, route.value.params.id)
     useMeta(() => ({
         title: metaTags.value.seo_title,
         meta: [
+          {
+            hid: 'title',
+            name: 'title',
+            content: metaTags.value.seo_title
+          },
+          {
+            hid: 'description',
+            name: 'description',
+            content: metaTags.value.seo_description
+          },
+          {
+            property: 'og:url',
+            content: root.$axios.defaults.baseURL
+          },
           {
             hid: 'og:title',
             name: 'og:title',
@@ -119,16 +122,45 @@ export default defineComponent({
             content: metaTags.value.seo_title
           },
           {
-            hid: 'og:description',
-            name: 'og:description',
             property: 'og:description',
             content: metaTags.value.seo_description
           },
           {
-            hid: 'description',
-            name: 'description',
-            property: 'description',
+            hid: 'og:image',
+            name: 'og:image',
+            property: 'og:image',
+            content: `${root.$axios.defaults.baseURL}/${metaTags.value.seo_file?.src}`
+          },
+          {
+            hid: 'twitter:card',
+            property: 'twitter:card',
+            content: 'summary_large_image'
+          },
+          {
+            hid: 'twitter:url',
+            property: 'twitter:url',
+            content: root.$axios.defaults.baseURL
+          },
+          {
+            hid: 'twitter:title',
+            property: 'twitter:title',
+            content: metaTags.value.seo_title
+          },
+          {
+            hid: 'twitter:card',
+            property: 'twitter:description',
             content: metaTags.value.seo_description
+          },
+          {
+            hid: 'twitter:description',
+            property: 'twitter:description',
+            content: metaTags.value.seo_description
+          },
+          {
+            hid: 'twitter:image',
+            name: 'twitter:image',
+            property: 'twitter:image',
+            content: `${root.$axios.defaults.baseURL}/${metaTags.value.seo_file?.src}`
           }
         ]
     }))

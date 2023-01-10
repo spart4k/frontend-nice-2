@@ -55,7 +55,7 @@ export default defineComponent({
     return path
   },
   // components: { vSelect },
-  setup () {
+  setup (_, {root}) {
     const router = useRouter()
 
     const { store, route, $gsap } = useContext()
@@ -66,6 +66,7 @@ export default defineComponent({
     const totalPage = ref([])
     const pageNumber = ref(2)
     const introData = ref()
+    const metaTags = ref({})
     const contentGrid = ref(null)
     const tagId = computed(() => Number(route.value.query.tag))
     const id = computed(() => {
@@ -150,26 +151,136 @@ export default defineComponent({
       }
       searchCards()
     }
+    // const { title, meta } = useMeta()
+    // console.log(title.value)
+    // title.value = metaTags.value?.seo_title
+    // console.log(metaTags.value)
+    // meta.value = [
+    //   {
+    //     hid: 'title',
+    //     name: 'title',
+    //     content: metaTags.value?.seo_title
+    //   },
+    //   {
+    //     hid: 'description',
+    //     name: 'description',
+    //     content: metaTags.value?.seo_description
+    //   },
+    //   {
+    //     property: 'og:url',
+    //     content: root.$axios.defaults.baseURL
+    //   },
+    //   {
+    //     hid: 'og:title',
+    //     name: 'og:title',
+    //     property: 'og:title',
+    //     content: metaTags.value?.seo_title
+    //   },
+    //   {
+    //     property: 'og:description',
+    //     content: metaTags.value?.seo_description
+    //   },
+    //   {
+    //     hid: 'og:image',
+    //     name: 'og:image',
+    //     property: 'og:image',
+    //     content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_file_id?.src}`
+    //   },
+    //   {
+    //     hid: 'twitter:card',
+    //     property: 'twitter:card',
+    //     content: 'summary_large_image'
+    //   },
+    //   {
+    //     hid: 'twitter:url',
+    //     property: 'twitter:url',
+    //     content: root.$axios.defaults.baseURL
+    //   },
+    //   {
+    //     hid: 'twitter:title',
+    //     property: 'twitter:title',
+    //     content: metaTitle.value[id.value - 1]?.seo_title
+    //   },
+    //   {
+    //     hid: 'twitter:card',
+    //     property: 'twitter:description',
+    //     content: metaTitle.value[id.value - 1]?.seo_description
+    //   },
+    //   {
+    //     hid: 'twitter:description',
+    //     property: 'twitter:description',
+    //     content: metaTitle.value[id.value - 1]?.seo_description
+    //   },
+    //   {
+    //     hid: 'twitter:image',
+    //     name: 'twitter:image',
+    //     property: 'twitter:image',
+    //     content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_file_id?.src}`
+    //   }
+    // ]
     useMeta(() => ({
-      title: metaTitle.value[id.value - 1]?.seo_title,
+      title: metaTags.value?.seo_title,
       meta: [
         {
-          hid: 'og:title',
-          name: 'og:title',
-          property: 'og:title',
-          content: metaTitle.value[id.value - 1]?.seo_title
-        },
-        {
-          hid: 'og:description',
-          name: 'og:description',
-          property: 'og:description',
-          content: metaTitle.value[id.value - 1]?.seo_description
+          hid: 'title',
+          name: 'title',
+          content: metaTags.value?.seo_title
         },
         {
           hid: 'description',
           name: 'description',
-          property: 'description',
+          content: metaTags.value?.seo_description
+        },
+        {
+          property: 'og:url',
+          content: root.$axios.defaults.baseURL
+        },
+        {
+          hid: 'og:title',
+          name: 'og:title',
+          property: 'og:title',
+          content: metaTags.value?.seo_title
+        },
+        {
+          property: 'og:description',
+          content: metaTags.value?.seo_description
+        },
+        {
+          hid: 'og:image',
+          name: 'og:image',
+          property: 'og:image',
+          content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_file_id?.src}`
+        },
+        {
+          hid: 'twitter:card',
+          property: 'twitter:card',
+          content: 'summary_large_image'
+        },
+        {
+          hid: 'twitter:url',
+          property: 'twitter:url',
+          content: root.$axios.defaults.baseURL
+        },
+        {
+          hid: 'twitter:title',
+          property: 'twitter:title',
+          content: metaTitle.value[id.value - 1]?.seo_title
+        },
+        {
+          hid: 'twitter:card',
+          property: 'twitter:description',
           content: metaTitle.value[id.value - 1]?.seo_description
+        },
+        {
+          hid: 'twitter:description',
+          property: 'twitter:description',
+          content: metaTitle.value[id.value - 1]?.seo_description
+        },
+        {
+          hid: 'twitter:image',
+          name: 'twitter:image',
+          property: 'twitter:image',
+          content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_file_id?.src}`
         }
       ]
     }))
@@ -388,6 +499,12 @@ export default defineComponent({
       try {
         const response = await fetchData()
         console.log(response)
+        // metaTags.value = response
+        metaTags.value = {
+          seo_title: response.seo_title,
+          seo_description: response.seo_description,
+          seo_image: response.seo_file_id.src
+        }
         if (authorId.value) {
           const authorResponse = await fetchAuthor()
           author.value = authorResponse
@@ -722,7 +839,8 @@ export default defineComponent({
       selectAsc,
       imgLoadCount,
       loadingEnd,
-      contentGrid
+      contentGrid,
+      metaTags
     }
   },
   head: {}

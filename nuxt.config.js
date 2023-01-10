@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Найс',
+    // title: 'Найс',
     htmlAttrs: {
       lang: 'ru'
     },
@@ -12,8 +12,8 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'msapplication-TileColor', content: '#ffffff' },
-      { name: 'msapplication-TileImage', content: '/ms-icon-144x144.png' }
-
+      { name: 'msapplication-TileImage', content: '/ms-icon-144x144.png' },
+      { property: 'og:type', content: 'website' },
     ],
     link: [
       // { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },

@@ -286,6 +286,20 @@ export default defineComponent({
         title: metaTags.value.seo_title,
         meta: [
           {
+            hid: 'title',
+            name: 'title',
+            content: metaTags.value.seo_title
+          },
+          {
+            hid: 'description',
+            name: 'description',
+            content: metaTags.value.seo_description
+          },
+          {
+            property: 'og:url',
+            content: root.$axios.defaults.baseURL
+          },
+          {
             hid: 'og:title',
             name: 'og:title',
             property: 'og:title',
@@ -299,25 +313,38 @@ export default defineComponent({
             hid: 'og:image',
             name: 'og:image',
             property: 'og:image',
-            content: `https://test.itisthenice.com/${metaTags.value.seo_image}`
+            content: `${root.$axios.defaults.baseURL}/${metaTags.value.seo_file?.src}`
           },
           {
             hid: 'twitter:card',
-            name: 'twitter:card',
             property: 'twitter:card',
             content: 'summary_large_image'
+          },
+          {
+            hid: 'twitter:url',
+            property: 'twitter:url',
+            content: root.$axios.defaults.baseURL
+          },
+          {
+            hid: 'twitter:title',
+            property: 'twitter:title',
+            content: metaTags.value.seo_title
+          },
+          {
+            hid: 'twitter:card',
+            property: 'twitter:description',
+            content: metaTags.value.seo_description
+          },
+          {
+            hid: 'twitter:description',
+            property: 'twitter:description',
+            content: metaTags.value.seo_description
           },
           {
             hid: 'twitter:image',
             name: 'twitter:image',
             property: 'twitter:image',
-            content: `https://test.itisthenice.com/${metaTags.value.seo_image}`
-          },
-          {
-            hid: 'description',
-            name: 'description',
-            property: 'description',
-            content: metaTags.value.seo_description
+            content: `${root.$axios.defaults.baseURL}/${metaTags.value.seo_file?.src}`
           }
         ]
     }))
