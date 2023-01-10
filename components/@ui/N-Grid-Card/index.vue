@@ -96,7 +96,9 @@
             <div v-else-if="previewCard.hasOwnProperty('home')" class="item" :class="[$style.image, $style.masonryItem, transitionMasonry ? $style.transition: '']">
               <img :src="previewCard.image" alt="DOG ">
             </div>
-            <N-Card-Author v-else-if="previewCard.hasOwnProperty('author_data')" class="item" :author="previewCard" :class="[$style.authorCard, $style.masonryItem, transitionMasonry ? $style.transition: '']" />
+            <div class="item" v-else-if="previewCard.hasOwnProperty('author_data')" :class="[$style.authorCard, $style.masonryItem, transitionMasonry ? $style.transition: '']">
+              <N-Card-Author :author="previewCard" />
+            </div>
             <div
               v-masonry-tile
               class="item"
@@ -106,6 +108,7 @@
               @click="saveHeight"
             >
               <template>
+                <!-- {{ card }} -->
                 <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
               </template>
             </div>
@@ -183,9 +186,12 @@ export default {
     const spliceArray = computed(() => {
       console.log('test')
       if (route.value.name === 'authors-id') {
-        proxyArray.value.unshift({
+        // proxyArray.value.unshift({
+        //   author_data: props.author
+        // })
+        previewCard.value = {
           author_data: props.author
-        })
+        }
       // } else if (!route.value.query.tag && !route.value.query.author) {
       } else if (route.value.name !== 'tags-id' && route.value.name !== 'authors-id') {
         if (!props.homePage) {
@@ -281,13 +287,13 @@ export default {
       noveltyCount.value = !noveltyCount.value
     }
     setTimeout(() => {
-      const block = masonryList.value.childNodes
-      block.forEach((item) => {
-        if (item.style && item.style.left !== '0px') {
-          console.log(item)
-          item.style.left = '50%'
-        }
-      })
+      // const block = masonryList.value.childNodes
+      // block.forEach((item) => {
+      //   if (item.style && item.style.left !== '0px') {
+      //     console.log(item)
+      //     item.style.left = '50%'
+      //   }
+      // })
     }, 1000)
   })
 
@@ -418,7 +424,9 @@ export default {
     }
   }
 }
-
+.authorCard {
+  margin-bottom: 2rem;
+}
 .col {
   max-width: 53.2rem;
   width: calc(50% - 1.5rem);
@@ -436,9 +444,6 @@ export default {
     width: auto;
     max-width: none;
     min-width: none;
-  }
-  .authorCard {
-    margin-bottom: 2rem;
   }
   .filters {
     .row {
