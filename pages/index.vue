@@ -1,6 +1,6 @@
 <template>
   <div>
-    <N-Preloader v-if="!cards  || !loadingEnd" />
+    <N-Preloader v-if="!cards  || !loadingEnd && !showAnimate" />
     <n-intro
       :class="!loadingEnd && $style.disabled"
       v-if="cards.data"
@@ -229,6 +229,9 @@ export default defineComponent({
     }
 
     useAsync(async () => {
+      // if (showAnimate.value) {
+      //   loadingEnd.value = true
+      // }
       try {
         const response = await fetchData()
         const seo = await store.dispatch('main/getSeo')
@@ -449,7 +452,6 @@ export default defineComponent({
             }
           } else {
             nextTick(() => {
-              store.commit('content/setHeaderHidden', true)
               if (firstRender.value) {
                 firstRender.value = false
                 if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
@@ -460,6 +462,7 @@ export default defineComponent({
                     })
                     // setTimeout(() => {
                       setTimeout(() => {
+                        store.commit('content/setHeaderHidden', true)
                         content.value.masonryRebuild()
                         window.scroll({
                           top: scrollHeight.value,
@@ -500,7 +503,6 @@ export default defineComponent({
             }
           } else {
             nextTick(() => {
-              store.commit('content/setHeaderHidden', true)
               if (firstRender.value) {
                 firstRender.value = false
                 if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
@@ -511,6 +513,7 @@ export default defineComponent({
                     })
                     // setTimeout(() => {
                       setTimeout(() => {
+                        store.commit('content/setHeaderHidden', true)
                         content.value.masonryRebuild()
                         window.scroll({
                           top: scrollHeight.value,
