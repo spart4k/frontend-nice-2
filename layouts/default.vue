@@ -84,7 +84,7 @@
       />
     </N-BootomSheet>
     <portal-target name="sliderPopup" />
-    <audio v-if="audioDelay && audioDestroy" ref="audioSource" src="https://test.itisthenice.com/stream" />
+    <audio v-if="audioDelay && audioDestroy" ref="audioSource" :src="`${$axios.defaults.baseURL}/stream`" />
     <!-- <N-Websocket v-if="websocketDelay" :message="mes" /> -->
   </div>
 </template>
@@ -105,7 +105,7 @@ export default {
       ]
     }
   },
-  setup (_, props) {
+  setup (props, {root}) {
     const headerItems = ref([])
     const body = ref(null)
     const menu = ref(null)

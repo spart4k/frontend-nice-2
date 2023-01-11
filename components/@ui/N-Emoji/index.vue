@@ -17,7 +17,7 @@
             v-for="(item, index) in stickers"
             :key="index"
             :class="$style.sticker"
-            :src="`https://test.itisthenice.com/${item.file.src}`"
+            :src="`${$axios.defaults.baseURL}/${item.file.src}`"
             alt=""
             @click="$emit('stickerWrite', item.id)"
           >

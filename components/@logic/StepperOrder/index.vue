@@ -19,7 +19,7 @@
 
 <script>
 import { ref, useContext, computed } from '@nuxtjs/composition-api'
-
+// import socket from '@/compositions/socket'
 export default {
   name: 'StepperOrder',
   props: {
@@ -30,7 +30,7 @@ export default {
     basketData: Object
     // messages: Array
   },
-  setup (props, { emit }) {
+  setup (props, { emit, root }) {
   const { store } = useContext()
   const isAddress = ref(false)
   const changeStep = (value) => {
@@ -93,10 +93,20 @@ export default {
     const loading = ref(true)
     // const ws = new WebSocket('wss://test.itisthenice.com/websocket')
     // const ws = new WebSocket('ws://192.168.1.19:8999/websocket')
-    const socket = new WebSocket('wss://test.itisthenice.com/websocket')
+    let socket = null
+    const websocketUrl = 'wss://itisthenice.com/websockets'
+    try {
+      socket = new WebSocket(websocketUrl)
+      socket.onerror = function () {
+        root.$toast.error(`Ошибка: WebSocket connection to "${websocketUrl}" failed: Unexpected response code: 400`, { position: 'bottom-right', icon: true })
+      }
+    } catch (e) {
+      console.error('Sorry, the web socket at "%s" is un-available', e)
+    }
     const socketCloseListener = (event) => {
       socket.onmessage = async (event) => {
         const data = JSON.parse(event.data)
+          console.log(event)
           if (data.messageType === 'bank' && data.status === 'CONFIRMED' && data.status === 'CONFIRMED' && data.user_id === store.state.authentication.user.id) {
             store.commit('menu/changeKeyMenu', {
               key: 'basket',
@@ -107,20 +117,21 @@ export default {
             store.commit('basket/setBasketSum', 0)
           } else if (loading.value && data.messageType === 'lastMessages') {
             messages.value = data.messageArray
+            console.log(messages.value)
             song.value = data.currentSong
             if ('mediaSession' in navigator) {
               navigator.mediaSession.metadata = new MediaMetadata({
                 title: song.value.title,
                 artwork: [
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '96x96', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '128x128', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '192x192', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '256x256', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '384x384', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '512x512', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '1024x1024', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '2048x2048', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '4096x4096', type: 'image/png' }
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '96x96', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '128x128', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '192x192', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '256x256', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '384x384', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '512x512', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '1024x1024', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '2048x2048', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '4096x4096', type: 'image/png' }
                 ]
               })
             }
@@ -131,15 +142,15 @@ export default {
               navigator.mediaSession.metadata = new MediaMetadata({
                 title: song.value.title,
                 artwork: [
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '96x96', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '128x128', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '192x192', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '256x256', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '384x384', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '512x512', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '1024x1024', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '2048x2048', type: 'image/png' },
-                  { src: `https://test.itisthenice.com/${song.value.wrap}`, sizes: '4096x4096', type: 'image/png' }
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '96x96', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '128x128', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '192x192', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '256x256', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '384x384', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '512x512', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '1024x1024', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '2048x2048', type: 'image/png' },
+                  { src: `${root.$axios.defaults.baseURL}/${song.value.wrap}`, sizes: '4096x4096', type: 'image/png' }
                 ]
               })
             }
@@ -160,11 +171,19 @@ export default {
     socketCloseListener()
 
     const sendMessage = (message) => {
-      socket.send(JSON.stringify({ user_id: store.state.authentication.user.id, message_text: unescape(encodeURIComponent(message)), sticker_id: 1, messageType: 'chat' }))
+      try {
+        socket.send(JSON.stringify({ user_id: store.state.authentication.user.id, message_text: unescape(encodeURIComponent(message)), sticker_id: 1, messageType: 'chat' }))
+      } catch (err) {
+        console.log(err)
+      }
     }
 
     const sendSticker = (val) => {
-      socket.send(JSON.stringify({ user_id: store.state.authentication.user.id, message_text: null, sticker_id: val, messageType: 'chat' }))
+      try {
+        socket.send(JSON.stringify({ user_id: store.state.authentication.user.id, message_text: null, sticker_id: val, messageType: 'chat' }))
+      } catch (err) {
+        console.log(err)
+      }
     }
 
     return {
