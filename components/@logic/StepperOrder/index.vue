@@ -94,7 +94,7 @@ export default {
     // const ws = new WebSocket('wss://test.itisthenice.com/websocket')
     // const ws = new WebSocket('ws://192.168.1.19:8999/websocket')
     let socket = null
-    const websocketUrl = 'wss://itisthenice.com/websockets'
+    const websocketUrl = 'wss://itisthenice.com/websocket'
     try {
       socket = new WebSocket(websocketUrl)
       socket.onerror = function () {
