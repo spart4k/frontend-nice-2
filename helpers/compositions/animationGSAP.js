@@ -12,6 +12,8 @@ const animation = ($gsap, Elastic) => {
       body.style.overflow = 'auto'
       const header = document.querySelector('.headerAnimation')
       const content = document.querySelector('.content')
+      console.log('content')
+      console.log(content)
       window.addEventListener('resize', () => {
         if (window.innerWidth > 450 && content.getBoundingClientRect().top > 0) {
           logo.style.top = '2.9rem'

@@ -3,7 +3,7 @@
     <N-Preloader v-if="!cards  || !loadingEnd && !showAnimate" />
     <n-intro
       :class="!loadingEnd && $style.disabled"
-      v-if="cards.data"
+      v-show="cards.data"
       :description="introTitle"
       :is-show-animation="true"
     >
@@ -129,54 +129,53 @@ export default defineComponent({
       animateNavbar,
       animationTimeline
     } = animationGSAP($gsap, Elastic)
-
     onMounted(() => {
+      console.log(cards.value.data)
       store.commit('content/changeContentLoader', true)
-        const body = document.querySelector('body')
-        body.style.overflow = 'hidden'
-        window.addEventListener('resize', resize)
-        window.addEventListener('load', () => {
-          if (store.state.content.singleAnimation) {
-            localStorage.setItem('showAnimateHomePage', 'true')
-            store.commit('content/setSingleAnimation', false)
-          }
-          if (window.innerWidth < 450) {
-            animationlogo()
-          }
-          animateSubtitle()
-          animateNavbar('.navbarSlug')
-          const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
-          console.log(isPlayAnimation)
-          if (!isPlayAnimation) {
-            store.commit('content/setAnimate', false)
-            document.querySelector('.logo').style.visibility = 'visible'
-          } else {
-            animationTimeline('.navbarSlug', elementAnimate.value, root.$mq)
-          }
-        })
-        if (!store.state.content.singleAnimation) {
-          const logo = document.querySelector('.logo')
-          logo.classList.add('animationEnd')
-          body.style.overflow = 'auto'
+      const body = document.querySelector('body')
+      body.style.overflow = 'hidden'
+      window.addEventListener('resize', resize)
+      window.addEventListener('load', () => {
+        if (store.state.content.singleAnimation) {
+          localStorage.setItem('showAnimateHomePage', 'true')
+          store.commit('content/setSingleAnimation', false)
         }
-        setTimeout(() => {
-          fetchLoading.value = true
-          animationLoad.value = true
-        }, 1000)
-        setTimeout(() => {
-          content.value.masonryRebuild()
-        }, 2500)
-        setTimeout(() => {
-          content.value.masonryRebuild()
+        if (window.innerWidth < 450) {
+          animationlogo()
+        }
+        animateSubtitle()
+        animateNavbar('.navbarSlug')
+        const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+        if (!isPlayAnimation) {
           store.commit('content/setAnimate', false)
-          // document.querySelector('.logo').style.visibility = 'visible'
-        }, 3200)
-        if (!localStorage.getItem('lastSection')) {
-            const lastSection = {
-              section: 'index'
-            }
-            localStorage.setItem('lastSection', JSON.stringify(lastSection))
+          document.querySelector('.logo').style.visibility = 'visible'
+        } else {
+          animationTimeline('.navbarSlug', elementAnimate.value, root.$mq)
+        }
+      })
+      if (!store.state.content.singleAnimation) {
+        const logo = document.querySelector('.logo')
+        logo.classList.add('animationEnd')
+        body.style.overflow = 'auto'
+      }
+      setTimeout(() => {
+        // fetchLoading.value = true
+        // animationLoad.value = true
+      }, 1000)
+      setTimeout(() => {
+        content.value.masonryRebuild()
+      }, 2500)
+      setTimeout(() => {
+        content.value.masonryRebuild()
+        // store.commit('content/setAnimate', false)
+        // document.querySelector('.logo').style.visibility = 'visible'
+      }, 3200)
+      if (!localStorage.getItem('lastSection')) {
+          const lastSection = {
+            section: 'index'
           }
+          localStorage.setItem('lastSection', JSON.stringify(lastSection))
+        }
     })
 
     onUpdated(() => {
