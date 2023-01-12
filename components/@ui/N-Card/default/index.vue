@@ -54,7 +54,7 @@
               {{ dateFormat }}
             </div>
             <div :class="$style.cardText">
-              <div :class="[$style.parser, $style[linkColor]]" v-html="data.subtitle" />
+              <div :style="{}" :class="[$style.parser, $style[linkColor]]" v-html="data.subtitle" />
             </div>
             <template v-if="data.price && !$props.detailPage">
               <div :class="$style.price">
@@ -216,7 +216,8 @@ export default {
     const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
     const proxyComments = computed(() => props.comments)
-    const { store, $axios } = useContext()
+    const { store, $axios, route } = useContext()
+    console.log(route)
     const linkColor = computed(() => props.data.section.slug)
     const chipsCounter = ref(0)
     const chipsWidth = ref(-10)
@@ -414,6 +415,7 @@ export default {
       windowWidth.value = window.innerWidth
     }
     onMounted(() => {
+      console.log()
       store.commit('content/imgLoadCounterReset')
       if (props.detailPage === true) {
         proxyComments.value.data.reverse()
@@ -628,6 +630,9 @@ export default {
     @include regular-text;
     // -webkit-line-clamp: 3;
     // -webkit-box-orient: vertical;
+    a {
+      color: #000 !important;
+    }
   }
   .parserDetail{
     word-break: break-word;
@@ -845,7 +850,7 @@ export default {
     }
     .event {
       a {
-        color: #D13C33;
+        color: #D46D33;
       }
     }
     .broadcast {
