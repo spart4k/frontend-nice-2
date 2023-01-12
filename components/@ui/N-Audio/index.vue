@@ -319,6 +319,7 @@ input[type="range"]::-ms-track {
   .time {
     @include regular-text-small;
     opacity: 0.5;
+    white-space: nowrap;
     @media (max-width: $mobileWidth) {
       // width: 14.5rem;
     }
