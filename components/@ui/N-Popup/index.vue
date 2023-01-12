@@ -38,9 +38,12 @@ export default {
       const body = document.querySelector('body')
       if (props.value) {
         body.style.overflow = 'hidden'
+        console.log('hidden')
+        document.documentElement.style.overflow = 'hidden'
         return
       }
       body.style.overflow = 'visible'
+      document.documentElement.style.overflow = 'visible'
     })
     return {
       close

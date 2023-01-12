@@ -120,6 +120,9 @@ export default {
     // const headerAnimation = document.querySelector('.headerAnimation')
 
     const openMenu = () => {
+      if (window.innerWidth <= 768) {
+        document.documentElement.style.overflow = 'hidden'
+      }
       if (document.querySelector('.headerAnimation').classList.contains('pageLoaded') || pageLoading.value) {
         if (store.state.menu.isShowBottomMenu && !store.state.menu.isShowBottomLive && pageLoad.value) {
           setTimeout(() => {
@@ -138,6 +141,9 @@ export default {
     }
 
     const openLive = () => {
+      if (window.innerWidth <= 768) {
+        document.documentElement.style.overflow = 'hidden'
+      }
       if (document.querySelector('.headerAnimation').classList.contains('pageLoaded') || pageLoading.value) {
         if (store.state.menu.isShowBottomMenu && store.state.menu.isShowBottomLive && pageLoad.value) {
           emit('closeState')
