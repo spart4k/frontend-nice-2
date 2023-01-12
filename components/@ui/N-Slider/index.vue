@@ -74,6 +74,11 @@ export default {
     const popup = ref(false)
     const popupChange = () => {
       popup.value = !popup.value
+      if (popup.value) {
+        document.documentElement.style.overflow = 'hidden'
+      } else {
+        document.documentElement.style.overflow = 'auto'
+      }
     }
     const syncSlidersBottom = (value, sliderTwo) => {
       c1.value.goTo(sliderTwo)
