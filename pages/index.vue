@@ -159,8 +159,8 @@ export default defineComponent({
         body.style.overflow = 'auto'
       }
       setTimeout(() => {
-        // fetchLoading.value = true
-        // animationLoad.value = true
+        fetchLoading.value = true
+        animationLoad.value = true
       }, 1000)
       setTimeout(() => {
         content.value.masonryRebuild()
@@ -354,6 +354,7 @@ export default defineComponent({
     const { page } = pagination(fetchData)
 
     const lazyPagination = async () => {
+      console.log('load')
       if (cardsDispatch.value && fetchLoading.value) {
         cardsLoading.value = true
         if (!startCards.value.length) {
@@ -367,6 +368,7 @@ export default defineComponent({
           }
           pageNumber.value++
           const response = await store.dispatch('pages/getData', params)
+          console.log(response)
           if (response.data.length < 6) {
             cardsDispatch.value = false
           }
