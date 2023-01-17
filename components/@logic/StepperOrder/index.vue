@@ -98,7 +98,7 @@ export default {
     try {
       socket = new WebSocket(websocketUrl)
       socket.onerror = function () {
-        // root.$toast.error(`Ошибка: WebSocket connection to "${websocketUrl}" failed: Unexpected response code: 400`, { position: 'bottom-right', icon: true })
+        root.$toast.error(`Ошибка: WebSocket connection to "${websocketUrl}" failed: Unexpected response code: 400`, { position: 'bottom-right', icon: true })
       }
     } catch (e) {
       console.error('Sorry, the web socket at "%s" is un-available', e)
