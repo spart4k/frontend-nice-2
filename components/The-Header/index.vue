@@ -122,6 +122,7 @@ export default {
     const openMenu = () => {
       if (window.innerWidth <= 768) {
         document.documentElement.style.overflow = 'hidden'
+        document.body.style.overflow = 'hidden'
       }
       if (document.querySelector('.headerAnimation').classList.contains('pageLoaded') || pageLoading.value) {
         if (store.state.menu.isShowBottomMenu && !store.state.menu.isShowBottomLive && pageLoad.value) {
@@ -143,6 +144,7 @@ export default {
     const openLive = () => {
       if (window.innerWidth <= 768) {
         document.documentElement.style.overflow = 'hidden'
+        document.body.style.overflow = 'hidden'
       }
       if (document.querySelector('.headerAnimation').classList.contains('pageLoaded') || pageLoading.value) {
         if (store.state.menu.isShowBottomMenu && store.state.menu.isShowBottomLive && pageLoad.value) {

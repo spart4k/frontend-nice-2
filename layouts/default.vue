@@ -248,6 +248,7 @@ export default {
     }
     const closeMenu = () => {
       if (window.innerWidth <= 768) {
+        document.body.style.overflow = 'auto'
         document.documentElement.style.overflow = 'auto'
       }
       sheetWidth.value = 0
