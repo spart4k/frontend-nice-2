@@ -535,6 +535,7 @@ export default {
           min-width: 50%;
           max-width: 50%;
           :global(.slick-slider) {
+            touch-action: auto!important;
             height: 100% !important;
             display: flex;
             :global(.slick-dots) {
@@ -547,6 +548,7 @@ export default {
                 height: 100%;
                 :global(.slick-slide) {
                   height: 100%;
+                  touch-action: auto!important;
                   :global(div) {
                     height: 100%;
                     img {

@@ -266,6 +266,7 @@ export default {
         height: inherit !important;
         display: flex;
         padding: 1rem 1rem;
+        touch-action: auto!important;
         :global(.slick-list) {
           height: 100% !important;
           margin: auto 0;
