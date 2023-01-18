@@ -8,6 +8,7 @@
   .wrap {
     display: flex;
     flex-direction: column-reverse;
+    flex-grow: 1;
     position: relative;
     overflow-y: scroll;
     -ms-overflow-style: none;
