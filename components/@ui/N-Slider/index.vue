@@ -76,9 +76,11 @@ export default {
       popup.value = !popup.value
       if (popup.value) {
         document.documentElement.style.overflow = 'hidden'
+        document.documentElement.style.position = 'relative'
         document.body.style.overflow = 'hidden'
       } else {
         document.documentElement.style.overflow = 'auto'
+        document.documentElement.style.position = ''
         document.body.style.overflow = 'auto'
       }
     }

@@ -40,10 +40,12 @@ export default {
         body.style.overflow = 'hidden'
         console.log('hidden')
         document.documentElement.style.overflow = 'hidden'
+        document.documentElement.style.position = 'relative'
         return
       }
       body.style.overflow = 'visible'
       document.documentElement.style.overflow = 'visible'
+      document.documentElement.style.position = ''
     })
     return {
       close
