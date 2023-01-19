@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { ref, useContext, computed } from '@nuxtjs/composition-api'
+import { ref, useContext, computed, onMounted } from '@nuxtjs/composition-api'
 // import socket from '@/compositions/socket'
 export default {
   name: 'StepperOrder',
@@ -173,6 +173,7 @@ export default {
     const sendMessage = (message) => {
       try {
         socket.send(JSON.stringify({ user_id: store.state.authentication.user.id, message_text: unescape(encodeURIComponent(message)), sticker_id: 1, messageType: 'chat' }))
+        console.log(unescape(encodeURIComponent(message)))
       } catch (err) {
         console.log(err)
       }
@@ -185,6 +186,17 @@ export default {
         console.log(err)
       }
     }
+    onMounted(() => {
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          socketCloseListener()
+        } else {
+          socket = new WebSocket(websocketUrl)
+          console.log('connect')
+          // socketCloseListener()
+        }
+      })
+    })
 
     return {
       isCurrentPage,
