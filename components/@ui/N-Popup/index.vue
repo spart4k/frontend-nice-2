@@ -39,13 +39,11 @@ export default {
       if (props.value) {
         body.style.overflow = 'hidden'
         console.log('hidden')
-        document.documentElement.style.overflow = 'hidden'
-        document.documentElement.style.position = 'relative'
+        document.documentElement.classList.add('noScroll')
         return
       }
       body.style.overflow = 'visible'
-      document.documentElement.style.overflow = 'visible'
-      document.documentElement.style.position = ''
+      document.documentElement.classList.remove('noScroll')
     })
     return {
       close

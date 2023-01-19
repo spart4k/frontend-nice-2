@@ -105,6 +105,11 @@ html {
   @media (max-width: $mobileWidth) {
     font-size: calc((10 / 390) * 100vw);
   }
+  &.noScroll {
+    position: fixed;
+    overflow: hidden;
+    height: 100%;
+  }
 }
 
 body {

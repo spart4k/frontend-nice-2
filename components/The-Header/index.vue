@@ -121,8 +121,7 @@ export default {
 
     const openMenu = () => {
       if (window.innerWidth <= 768) {
-        document.documentElement.style.overflow = 'hidden'
-        document.documentElement.style.position = 'relative'
+        document.documentElement.classList.add('noScroll')
         document.body.style.overflow = 'hidden'
       }
       if (document.querySelector('.headerAnimation').classList.contains('pageLoaded') || pageLoading.value) {
@@ -144,8 +143,7 @@ export default {
 
     const openLive = () => {
       if (window.innerWidth <= 768) {
-        document.documentElement.style.overflow = 'hidden'
-        document.documentElement.style.position = 'relative'
+        document.documentElement.classList.add('noScroll')
         document.body.style.overflow = 'hidden'
       }
       if (document.querySelector('.headerAnimation').classList.contains('pageLoaded') || pageLoading.value) {

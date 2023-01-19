@@ -249,9 +249,7 @@ export default {
     const closeMenu = () => {
       if (window.innerWidth <= 768) {
         document.body.style.overflow = 'auto'
-        document.documentElement.style.overflow = 'auto'
-        document.documentElement.style.overflow = 'auto'
-        document.documentElement.style.position = ''
+        document.documentElement.classList.remove('noScroll')
       }
       sheetWidth.value = 0
       store.commit('menu/changeKeyMenu', { key: '', effect: 'fx-slide-from-left' })
