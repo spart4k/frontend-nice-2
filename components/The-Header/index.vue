@@ -120,8 +120,9 @@ export default {
     // const headerAnimation = document.querySelector('.headerAnimation')
 
     const openMenu = () => {
+      const wrap = document.getElementById('__nuxt')
       if (window.innerWidth <= 768) {
-        document.documentElement.classList.add('noScroll')
+        wrap.classList.add('noScroll')
         document.body.style.overflow = 'hidden'
       }
       if (document.querySelector('.headerAnimation').classList.contains('pageLoaded') || pageLoading.value) {
@@ -142,8 +143,9 @@ export default {
     }
 
     const openLive = () => {
+      const wrap = document.getElementById('__nuxt')
       if (window.innerWidth <= 768) {
-        document.documentElement.classList.add('noScroll')
+        wrap.classList.add('noScroll')
         document.body.style.overflow = 'hidden'
       }
       if (document.querySelector('.headerAnimation').classList.contains('pageLoaded') || pageLoading.value) {

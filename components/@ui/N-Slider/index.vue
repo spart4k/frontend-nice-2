@@ -74,11 +74,12 @@ export default {
     const popup = ref(false)
     const popupChange = () => {
       popup.value = !popup.value
+      const wrap = document.getElementById('__nuxt')
       if (popup.value) {
-        document.documentElement.classList.add('noScroll')
+        wrap.classList.add('noScroll')
         document.body.style.overflow = 'hidden'
       } else {
-        document.documentElement.classList.remove('noScroll')
+        wrap.classList.remove('noScroll')
         document.body.style.overflow = 'auto'
       }
     }

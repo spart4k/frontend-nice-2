@@ -247,9 +247,10 @@ export default {
       }
     }
     const closeMenu = () => {
+      const wrap = document.getElementById('__nuxt')
       if (window.innerWidth <= 768) {
         document.body.style.overflow = 'auto'
-        document.documentElement.classList.remove('noScroll')
+        wrap.classList.remove('noScroll')
       }
       sheetWidth.value = 0
       store.commit('menu/changeKeyMenu', { key: '', effect: 'fx-slide-from-left' })
