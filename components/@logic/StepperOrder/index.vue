@@ -189,11 +189,12 @@ export default {
     onMounted(() => {
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
-          socketCloseListener()
+          socket.close()
         } else {
           socket = new WebSocket(websocketUrl)
+          console.log()
           console.log('connect')
-          // socketCloseListener()
+          socketCloseListener()
         }
       })
     })
