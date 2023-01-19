@@ -106,7 +106,7 @@ html {
     font-size: calc((10 / 390) * 100vw);
   }
   &.noScroll {
-    position: fixed;
+    position: relative;
     overflow: hidden;
     height: 100%;
   }
