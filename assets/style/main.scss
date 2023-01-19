@@ -106,9 +106,12 @@ html {
     font-size: calc((10 / 390) * 100vw);
   }
   &.noScroll {
-    position: relative;
+    position: fixed;
     overflow: hidden;
     height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
   }
 }
 #__nuxt {
