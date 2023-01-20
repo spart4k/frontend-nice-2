@@ -25,7 +25,7 @@ export default {
       console.log(dialog.value.scrollHeight)
       console.log(dialog.value.scrollTop)
       console.log(dialog.value.scrollTop)
-      dialog.value.scrollTop = -1
+      dialog.value.scrollTop = 0
       // setTimeout(() => {
       //   alert('scrollTop =' + dialog.value.scrollTop)
       //   alert('scrollHeight =' + dialog.value.scrollHeight)

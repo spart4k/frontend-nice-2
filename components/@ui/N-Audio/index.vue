@@ -112,18 +112,30 @@ export default {
     }
     const playAudio = () => {
       audioStart.value = true
-      if (!audioSource.value.readyState) {
+      try {
+        if (!audioSource.value.readyState) {
         loading.value = true
+      }
+      } catch (e) {
+        console.log(e)
       }
       emit('playAudio')
       setTimeout(() => {
         audioPlaying.value = true
-        audioSource.value.play()
-      }, 100)
+        if (audioSource.value) {
+          audioSource.value.play()
+        }
+      }, 150)
     }
     const pauseAudio = () => {
-      audioPlaying.value = false
-      audioSource.value.pause()
+      try {
+        audioPlaying.value = false
+        if (audioSource.value) {
+          audioSource.value.pause()
+        }
+      } catch (e) {
+        console.log(e)
+      }
     }
     const innerHeight = ref(null)
     const marqueeLengthComputed = computed(() => {

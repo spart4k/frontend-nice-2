@@ -901,6 +901,7 @@ export default {
       will-change: max-height;
       transition: max-height .5s, opacity .5s, margin-top .5s;
       overflow: hidden;
+      padding-bottom: 0.2rem;
       opacity: 0;
       &__title {
         color: $fontColorDefault;
