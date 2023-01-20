@@ -148,7 +148,7 @@ export default {
     // overflow-y: scroll !important;
     // overflow-x: hidden !important;
     // -webkit-overflow-scrolling: touch !important;
-    height: calc(100% - 10rem) !important;
+    height: calc(100% - 5rem) !important;
     display: flex;
     flex-direction: column;
     flex: 1;
