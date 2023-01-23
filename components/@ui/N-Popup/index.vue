@@ -39,7 +39,6 @@ export default {
       const wrap = document.getElementById('__nuxt')
       if (props.value) {
         body.style.overflow = 'hidden'
-        console.log('hidden')
         wrap.classList.add('noScroll')
         return
       }

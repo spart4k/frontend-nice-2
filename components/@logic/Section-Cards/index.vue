@@ -52,7 +52,6 @@ export default defineComponent({
   setup (props, ctx) {
     const { emit } = ctx
     const changeLike = (state) => {
-      console.log(state)
       emit('setStateLike', state)
     }
     return {

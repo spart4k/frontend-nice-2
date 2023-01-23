@@ -399,7 +399,6 @@ export default defineComponent({
       }
       const path = 'pages/getData'
       const response = await store.dispatch(path, params)
-      console.log(response)
       return response
     }
     // useAsync(async () => {
@@ -493,7 +492,6 @@ export default defineComponent({
     useAsync(async () => {
       try {
         const response = await fetchData()
-        console.log(response)
         // metaTags.value = response
         metaTags.value = {
           seo_title: response.seo_title,
@@ -509,9 +507,7 @@ export default defineComponent({
         }
         introData.value = response.quote
         fetchLoading.value = true
-        console.log('true, 398')
         cards.value = [...response.data]
-        console.log(cards.value)
         startCards.value = [...cards.value]
         // loadingEnd.value = true
         if (scrollHeight.value !== 0) {
@@ -656,13 +652,9 @@ export default defineComponent({
 
     onUnmounted(() => {
       loadingEnd.value = false
-      console.log('false, 542')
     })
 
     watch(() => imgLoadCount.value, () => {
-      console.log(imgLoadCount.value)
-      console.log(JSON.parse(JSON.stringify(startCards.value)).length)
-      console.log('change')
       if (scrollHeight.value !== 0) {
         if (localStorage.getItem('lastCards') !== '[object Object]') {
           if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
@@ -673,15 +665,12 @@ export default defineComponent({
               if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
                 // setTimeout(() => {
                   contentGrid.value.masonryRebuild()
-                  console.log(contentGrid.value)
-                  console.log('rebuild')
                   window.scroll({
                     top: scrollHeight.value,
                     left: 0
                   })
                   loadingEnd.value = true
                 // }, 1200)
-                console.log('true', '558')
               }
               nextTick(() => {
                 animateNavbar('.navbarSlug')
@@ -694,25 +683,19 @@ export default defineComponent({
                 firstRender.value = false
                 if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
                     contentGrid.value.masonryRebuild()
-                    console.log(contentGrid.value)
-                    console.log('rebuild, 583')
                     window.scroll({
                       top: 0,
                       left: 0
                     })
-                    console.log(scrollHeight.value)
                     nextTick(() => {
                       // setTimeout(() => {
                         contentGrid.value.masonryRebuild()
-                        console.log(contentGrid.value)
-                        console.log('rebuild, 590')
                         window.scroll({
                           top: scrollHeight.value,
                           left: 0
                         })
                         loadingEnd.value = true
                       // }, 1200)
-                      console.log('true', '581')
                     })
                 }
                 nextTick(() => {
@@ -731,15 +714,12 @@ export default defineComponent({
               if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
                 // setTimeout(() => {
                   contentGrid.value.masonryRebuild()
-                  console.log(contentGrid.value)
-                  console.log('rebuild, 617')
                   window.scroll({
                     top: scrollHeight.value,
                     left: 0
                   })
                   loadingEnd.value = true
                 // }, 1200)
-                console.log('true', '602')
               }
               nextTick(() => {
                 animateNavbar('.navbarSlug')
@@ -752,8 +732,6 @@ export default defineComponent({
                 firstRender.value = false
                 if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
                     contentGrid.value.masonryRebuild()
-                    console.log(contentGrid.value)
-                    console.log('rebuild, 641')
                     window.scroll({
                       top: 0,
                       left: 0
@@ -761,15 +739,12 @@ export default defineComponent({
                     nextTick(() => {
                       // setTimeout(() => {
                         contentGrid.value.masonryRebuild()
-                        console.log(contentGrid.value)
-                        console.log('rebuild, 590')
                         window.scroll({
                           top: scrollHeight.value,
                           left: 0
                         })
                         loadingEnd.value = true
                       // }, 1200)
-                      console.log('true', '624')
                     })
                 }
                 nextTick(() => {
@@ -783,8 +758,6 @@ export default defineComponent({
       } else if (imgLoadCount.value === JSON.parse(JSON.stringify(startCards.value)).length) {
         setTimeout(() => {
           contentGrid.value.masonryRebuild()
-          console.log(contentGrid.value)
-          console.log('rebuild, 671')
           loadingEnd.value = true
         }, 200)
       }

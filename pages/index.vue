@@ -106,10 +106,6 @@ export default defineComponent({
       }
 
       const response = await store.dispatch('main/getData', params)
-      console.log(response.data.data.data)
-      response.data.data.data.forEach((item) => {
-        console.log(item)
-      })
       return response
     }
     const color = computed(() => {
@@ -130,7 +126,6 @@ export default defineComponent({
       animationTimeline
     } = animationGSAP($gsap, Elastic)
     onMounted(() => {
-      console.log(cards.value.data)
       store.commit('content/changeContentLoader', true)
       const body = document.querySelector('body')
       body.style.overflow = 'hidden'
@@ -234,16 +229,13 @@ export default defineComponent({
       try {
         const response = await fetchData()
         const seo = await store.dispatch('main/getSeo')
-        console.log(seo.data.data[0])
         metaTags.value = seo.data.data[0]
-        console.log(response.data.data.data)
         if (response.data.data.data.length < 6) {
           cardsDispatch.value = false
         }
         totalPage.value = response?.data.last_pages
         cards.value = response.data.data
         startCards.value = [...cards.value.data]
-        console.log(startCards.value)
         if (scrollHeight.value !== 0) {
           if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
             loadingEnd.value = false
@@ -280,9 +272,7 @@ export default defineComponent({
     onUnmounted(() => {
       window.removeEventListener('resize', resize)
       loadingEnd.value = false
-      console.log('false, 268')
     })
-    console.log(metaTags.value.seo_title)
     store.commit('content/clearBgIntro')
     useMeta(() => ({
         title: metaTags.value.seo_title,
@@ -354,7 +344,6 @@ export default defineComponent({
     const { page } = pagination(fetchData)
 
     const lazyPagination = async () => {
-      console.log('load')
       if (cardsDispatch.value && fetchLoading.value) {
         cardsLoading.value = true
         if (!startCards.value.length) {
@@ -368,7 +357,6 @@ export default defineComponent({
           }
           pageNumber.value++
           const response = await store.dispatch('pages/getData', params)
-          console.log(response)
           if (response.data.length < 6) {
             cardsDispatch.value = false
           }
@@ -425,14 +413,10 @@ export default defineComponent({
     }
 
     watch(() => imgLoadCount.value, () => {
-      console.log(JSON.parse(JSON.stringify(startCards.value)))
       const cardsCount = startCards.value.length
-      console.log(imgLoadCount.value)
-      console.log(cardsCount)
       if (scrollHeight.value !== 0) {
         if (localStorage.getItem('lastCards') !== '[object Object]') {
           if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
-            console.log(JSON.parse(localStorage.getItem('lastCards')).cards.length)
             if (window.innerWidth < 450) {
             if (firstRender.value) {
               firstRender.value = false
@@ -533,11 +517,8 @@ export default defineComponent({
           }
         }
       } else if (imgLoadCount.value === cardsCount) {
-        console.log('try')
-        console.log(cardsCount)
         // setTimeout(() => {
         content.value.masonryRebuild()
-        console.log('false')
         loadingEnd.value = true
         // }, 200)
       }

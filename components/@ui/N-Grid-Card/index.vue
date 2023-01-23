@@ -173,7 +173,6 @@ export default {
       }
     })
     const saveHeight = () => {
-      console.log(window.pageYOffset)
       store.commit('content/setScrollHeight', window.pageYOffset)
     }
     const windowWidthCount = () => {
@@ -184,7 +183,6 @@ export default {
       Vue.prototype.$redrawVueMasonry()
     }
     const spliceArray = computed(() => {
-      console.log('test')
       if (route.value.name === 'authors-id') {
         // proxyArray.value.unshift({
         //   author_data: props.author
@@ -203,14 +201,12 @@ export default {
             preview: true,
             id: Math.random()
           }
-          console.log(previewCard.value)
         } else {
           previewCard.value = {
             home: true,
             image: require('~/assets/img/preview/dogs.png'),
             id: Math.random()
           }
-          console.log(previewCard.value)
         }
       }
       const firstHalfDesktop = ref([])
@@ -302,7 +298,6 @@ export default {
     })
 
   watch(() => props.items, () => {
-    console.log('item')
     proxyArray.value = props.items
   })
   const timeoutTransition = () => {
@@ -323,29 +318,14 @@ export default {
     let timer = null
     transitionMasonry.value = true
     if (curVal) {
-      timer = 500
+      timer = 400
     } else {
       timer = 200
     }
     setTimeout((timer) => {
       masonryRebuild()
-      console.log(timeoutTransition.value)
-      setTimeout(() => {
-      const block = masonryList.value.childNodes
-        block.forEach((item) => {
-          if (item.style && item.style.left !== '0px') {
-            console.log(item)
-            // item.style.left = '50%'
-            // console.log('after', item)
-          }
-        })
-      }, 300)
     }, timer)
   })
-  const setLike = (state) => {
-    console.log('set')
-    console.log(state)
-  }
 
   return {
     spliceArray,
@@ -370,8 +350,7 @@ export default {
     transitionMasonry,
     masonryList,
     timeoutTransition,
-    sendSort,
-    setLike
+    sendSort
     }
   }
 }

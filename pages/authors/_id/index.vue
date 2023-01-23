@@ -338,11 +338,9 @@ export default defineComponent({
           const response = await fetchData()
           const seo = await store.dispatch('main/getSeo')
           metaTags.value = seo.data.data[0]
-          console.log(metaTags.value)
           if (authorId.value) {
             const authorResponse = await fetchAuthor()
             author.value = authorResponse
-            console.log(authorResponse)
           }
           if (response.data.length < 6) {
             cardsDispatch.value = false

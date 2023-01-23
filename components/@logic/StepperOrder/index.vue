@@ -106,7 +106,6 @@ export default {
     const socketCloseListener = (event) => {
       socket.onmessage = async (event) => {
         const data = JSON.parse(event.data)
-          console.log(event)
           if (data.messageType === 'bank' && data.status === 'CONFIRMED' && data.status === 'CONFIRMED' && data.user_id === store.state.authentication.user.id) {
             store.commit('menu/changeKeyMenu', {
               key: 'basket',
@@ -117,7 +116,6 @@ export default {
             store.commit('basket/setBasketSum', 0)
           } else if (loading.value && data.messageType === 'lastMessages') {
             messages.value = data.messageArray
-            console.log(messages.value)
             song.value = data.currentSong
             if ('mediaSession' in navigator) {
               navigator.mediaSession.metadata = new MediaMetadata({
@@ -173,7 +171,6 @@ export default {
     const sendMessage = (message) => {
       try {
         socket.send(JSON.stringify({ user_id: store.state.authentication.user.id, message_text: unescape(encodeURIComponent(message)), sticker_id: 1, messageType: 'chat' }))
-        console.log(unescape(encodeURIComponent(message)))
       } catch (err) {
         console.log(err)
       }
@@ -192,8 +189,7 @@ export default {
           socket.close()
         } else {
           socket = new WebSocket(websocketUrl)
-          console.log()
-          console.log('connect')
+          console.log('connect: ' + websocketUrl)
           socketCloseListener()
         }
       })

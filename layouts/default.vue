@@ -325,9 +325,6 @@ export default {
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
 
     onMounted(() => {
-      setTimeout(() => {
-        console.log(menu.value)
-      }, 2000)
       localStorage.setItem('lastCards', {})
       setTimeout(() => {
         audioDelay.value = true

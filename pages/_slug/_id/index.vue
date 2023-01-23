@@ -83,19 +83,15 @@ export default defineComponent({
     useAsync(async () => {
       try {
         const response = await fetchData()
-        console.log(response.responseCard.data?.data)
         metaTags.value = {
           seo_title: response.responseCard.data?.data?.seo_title,
           seo_description: response.responseCard.data?.data?.seo_description,
           seo_image: response.responseCard.data?.data?.seo_file?.src
         }
-        console.log(metaTags.value)
         card.value = {
           card: response.responseCard.data,
           comments: response.responseComments.data
         }
-        console.log(card.value)
-        console.log(section.value)
         } catch (e) {
         }
       }, route.value.params.id)
@@ -166,7 +162,6 @@ export default defineComponent({
         ]
     }))
     const bgName = computed(() => {
-      console.log(sections.value)
       const find = sections.value?.data?.find(item => Number(item.id) === +card.value?.card.data?.section.id)
       return find
     })
@@ -196,8 +191,6 @@ export default defineComponent({
       store.commit('content/changeAnimationEnd', true)
     })
     const setLike = (state) => {
-      console.log('set')
-      console.log(state)
       card.value.card.data.liked = state
     }
 
