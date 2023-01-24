@@ -145,8 +145,11 @@ export default {
       audioDestroy.value = true
 
       nextTick(() => {
-        audioSource.value.src = `${root.$axios.defaults.baseURL}/stream`
-        audioSource.value.play()
+        setTimeout(() => {
+          audioSource.value.src = `${root.$axios.defaults.baseURL}/stream`
+          audioSource.value.load()
+          audioSource.value.play()
+        }, 0)
       })
     }
 
