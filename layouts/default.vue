@@ -84,7 +84,11 @@
       />
     </N-BootomSheet>
     <portal-target name="sliderPopup" />
-    <audio v-if="audioDelay && audioDestroy" ref="audioSource" id="audioLive" playsinline :src="`${$axios.defaults.baseURL}/stream`" />
+    <audio v-if="audioDelay && audioDestroy"
+    ref="audioSource"
+    id="audioLive"
+    playsinline
+    autoplay />
     <!-- <N-Websocket v-if="websocketDelay" :message="mes" /> -->
   </div>
 </template>
@@ -137,14 +141,17 @@ export default {
       isLoaded.value = true
     }
 
-    const playAudio = async () => {
+    const playAudio = () => {
       audioDestroy.value = true
+
       nextTick(() => {
+        audioSource.value.src = `${root.$axios.defaults.baseURL}/stream`
         audioSource.value.play()
       })
     }
 
     const pauseAudio = () => {
+      audioSource.value.src = ''
       audioSource.value.pause()
       audioDestroy.value = false
     }
