@@ -139,19 +139,6 @@ export default {
 
     const playAudio = async () => {
       audioDestroy.value = true
-      let stream = null
-      const mediaStreamConstraints = {
-        audio: {
-          channelCount: 1,
-          sampleRate: 99999999,
-          sampleSize: 256,
-          volume: 5
-        },
-
-        video: true
-      }
-      stream = await navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
-      console.log(stream)
       nextTick(() => {
         audioSource.value.play()
       })
