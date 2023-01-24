@@ -143,9 +143,9 @@ export default {
       const mediaStreamConstraints = {
         audio: {
           channelCount: 1,
-          sampleRate: 16000,
-          sampleSize: 16,
-          volume: 1
+          sampleRate: 99999999,
+          sampleSize: 256,
+          volume: 5
         },
 
         video: true
