@@ -116,7 +116,7 @@ export default {
             store.commit('basket/setBasketSum', 0)
           } else if (loading.value && data.messageType === 'lastMessages') {
             messages.value = data.messageArray
-            song.value = data.currentSong
+            // song.value = data.currentSong
             if ('mediaSession' in navigator) {
               navigator.mediaSession.metadata = new MediaMetadata({
                 title: song.value.title,
@@ -135,7 +135,7 @@ export default {
             }
             loading.value = false
           } else if (data.messageType === 'nextSong') {
-            song.value = data.data
+            // song.value = data.data
             if ('mediaSession' in navigator) {
               navigator.mediaSession.metadata = new MediaMetadata({
                 title: song.value.title,
@@ -183,6 +183,97 @@ export default {
         console.log(err)
       }
     }
+    class Connect {
+      constructor () {
+          this.#init()
+      }
+
+      #init () {
+          console.log(this)
+          this.clickHandler = this.clickHandler.bind(this)
+      }
+
+      clickHandler (e) {
+          if (e.target.tagName === 'BUTTON') {
+              const {
+                  type
+              } = e.target.dataset
+
+              if (type === 'start-btn') {
+                  this.startEvents()
+              } else if (type === 'stop-btn') {
+                  this.stopEvents()
+              }
+
+              this.changeDisabled()
+          }
+      }
+
+      changeDisabled () {
+          if (this.stopBtn.disabled) {
+              this.stopBtn.disabled = false
+              this.startBtn.disabled = true
+          } else {
+              this.stopBtn.disabled = true
+              this.startBtn.disabled = false
+          }
+      }
+
+      startEvents () {
+          function getTimestampInSeconds () {
+            return Math.floor(Date.now() / 1000)
+          }
+          console.log(getTimestampInSeconds())
+          this.eventSource = new EventSource(`${root.$axios.defaults.baseURL}/radioApi/events/${getTimestampInSeconds()}`)
+
+          this.eventLog = 'Accepting data from the server.'
+
+          this.eventSource.addEventListener('nextSong', (e) => {
+              const userData = JSON.parse(e.data)
+              song.value = userData
+              console.log(userData)
+          })
+
+          this.eventSource.addEventListener('currentSong', (e) => {
+              const userData = JSON.parse(e.data)
+              song.value = userData
+              console.log(song.value)
+              if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: userData.title,
+                    artwork: [
+                    { src: `${userData.wrap}`, sizes: '96x96', type: 'image/jpg' },
+                    { src: `${userData.wrap}`, sizes: '128x128', type: 'image/jpg' },
+                    { src: `${userData.wrap}`, sizes: '192x192', type: 'image/jpg' },
+                    { src: `${userData.wrap}`, sizes: '256x256', type: 'image/jpg' },
+                    { src: `${userData.wrap}`, sizes: '384x384', type: 'image/jpg' },
+                    { src: `${userData.wrap}`, sizes: '512x512', type: 'image/jpg' },
+                    { src: `${userData.wrap}`, sizes: '1024x1024', type: 'image/jpg' },
+                    { src: `${userData.wrap}`, sizes: '2048x2048', type: 'image/jpg' },
+                    { src: `${userData.wrap}`, sizes: '4096x4096', type: 'image/jpg' }
+                    ]
+                })
+                }
+          })
+
+          this.eventSource.addEventListener('error', (e) => {
+            console.log(e)
+            console.log('error')
+            // const template = getTemplateError()
+              // this.eventSource.close()
+
+              // this.eventLog.textContent = `Got an error: ${e}`
+
+              // this.changeDisabled()
+          }, {once: true})
+      }
+
+      stopEvents () {
+          this.eventSource.close()
+          this.eventLog.textContent = 'Event stream closed by client.'
+      }
+    }
+
     onMounted(() => {
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
@@ -193,6 +284,8 @@ export default {
           socketCloseListener()
         }
       })
+      const app = new Connect('main')
+      app.startEvents()
     })
 
     return {
