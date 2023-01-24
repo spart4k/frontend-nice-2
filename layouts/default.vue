@@ -87,8 +87,7 @@
     <audio v-if="audioDelay && audioDestroy"
     ref="audioSource"
     id="audioLive"
-    playsinline
-    autoplay />
+    />
     <!-- <N-Websocket v-if="websocketDelay" :message="mes" /> -->
   </div>
 </template>
@@ -148,8 +147,12 @@ export default {
         setTimeout(() => {
           audioSource.value.src = `${root.$axios.defaults.baseURL}/stream`
           audioSource.value.load()
-          audioSource.value.play()
-        }, 0)
+
+          audioSource.value.addEventListener('canplaythrough', () => {
+            console.log('loaded audio')
+            audioSource.value.play()
+          })
+        }, 60)
       })
     }
 
@@ -163,7 +166,7 @@ export default {
        pauseAudio()
        setTimeout(() => {
         playAudio()
-       }, 50)
+       }, 100)
     }
 
     const changeComp = (value) => {

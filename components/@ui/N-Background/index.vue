@@ -1,12 +1,12 @@
 <template>
   <div v-lazy:background-image="backgroundImage" :alt="backgroundImage" :class="[$style.wrapper, $style.bg]">
-    <div :class="$style.overlay" :style="{backgroundColor: isHomePage ? '#292BC2' : color }" />
+    <div :class="$style.overlay" :style="{backgroundColor: 'transparent' }" />
   </div>
 </template>
 
 <script>
-import { computed, onMounted } from '@nuxtjs/composition-api'
-
+import { computed, onMounted, useContext } from '@nuxtjs/composition-api'
+import { BLAND_BACKGROUNDS } from '~/const/blandBackgrounds'
 export default {
   name: 'NBackground',
   props: {
@@ -23,19 +23,26 @@ export default {
     color: String
   },
   setup (_, ctx) {
-  const { emit } = ctx
-  const { $Lazyload } = ctx.root
-  const backgroundImage = computed(() => {
-      return require('~/assets/img/background/default-background.jpeg')
-  })
-  onMounted(() => {
-    $Lazyload.$once('loaded', ({ el, src }) => {
-      emit('backgroundLoaded')
+    const { emit } = ctx
+    console.log(BLAND_BACKGROUNDS)
+    const { route } = useContext()
+    console.log(route.value.params.slug)
+    const { $Lazyload } = ctx.root
+    const backgroundImage = computed(() => {
+        if (route.value.params.slug === undefined) {
+          return `/backgrounds/${BLAND_BACKGROUNDS.music}`
+        } else {
+          return `/backgrounds/${BLAND_BACKGROUNDS[route.value.params.slug]}`
+        }
     })
-  })
-  return {
-  backgroundImage
-}
+    onMounted(() => {
+      $Lazyload.$once('loaded', ({ el, src }) => {
+        emit('backgroundLoaded')
+      })
+    })
+    return {
+      backgroundImage
+    }
   }
 }
 </script>

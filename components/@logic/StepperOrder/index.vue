@@ -296,9 +296,9 @@ export default {
         if (document.hidden) {
           socket.close()
         } else {
-          socket = new WebSocket(websocketUrl)
-          console.log('connect: ' + websocketUrl)
-          socketCloseListener()
+           socket = new WebSocket(websocketUrl)
+           console.log('connect: ' + websocketUrl)
+           socketCloseListener()
         }
       })
       const app = new Connect('main')
