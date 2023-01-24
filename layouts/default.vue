@@ -137,41 +137,23 @@ export default {
       isLoaded.value = true
     }
 
-    const playAudio = () => {
+    const playAudio = async () => {
       audioDestroy.value = true
+      let stream = null
+      const mediaStreamConstraints = {
+        audio: {
+          channelCount: 1,
+          sampleRate: 16000,
+          sampleSize: 16,
+          volume: 1
+        },
+
+        video: true
+      }
+      stream = await navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
+      console.log(stream)
       nextTick(() => {
-        const mediaElement = document.getElementById('audioLive')
-        const url = mediaElement.src
-        let sourceBuffer
-
-        const ctx = new AudioContext()
-        const request = new Request(url)
-        fetch(request, {mode: 'cors'})
-          .then(response => response.arrayBuffer())
-          .then(arrayBuffer => ctx.decodeAudioData(arrayBuffer))
-          .then((audioBuffer) => {
-            sourceBuffer = ctx.createBufferSource()
-            sourceBuffer.buffer = audioBuffer
-            sourceBuffer.connect(ctx.destination)
-            document.getElementById('play-buffer').disabled = false
-          })
-
-        function playElement () {
-          // To be honest, I have no idea, why this has to be in an event listener
-          // Also, seems to have to be right before the play call for some reason
-          // Does not make sense to me, I hope it's a quirk of the snippet environment
-          mediaElement.addEventListener('play', () => {
-            const sourceElement = ctx.createMediaElementSource(mediaElement)
-            sourceElement.connect(ctx.destination)
-          })
-          mediaElement.play()
-        }
-
-        // function playBuffer () {
-        //   sourceBuffer.start()
-        // }
-        playElement()
-        // audioSource.value.play()
+        audioSource.value.play()
       })
     }
 
@@ -181,10 +163,10 @@ export default {
     }
 
     const destroyTag = () => {
-      // pauseAudio()
-      // setTimeout(() => {
-      //  playAudio()
-      // }, 50)
+       pauseAudio()
+       setTimeout(() => {
+        playAudio()
+       }, 50)
     }
 
     const changeComp = (value) => {
