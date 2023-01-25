@@ -390,7 +390,11 @@ export default {
           windowResizeFunction()
         }
       })
-      window.addEventListener('orientationchange', windowResizeFunction)
+      window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+          windowResizeFunction()
+        }, 50)
+      })
       // if (window.matchMedia('(orientation: portrait)').matches) {
       //   windowResizeFunction()
       // } else if (window.matchMedia('(orientation: landscape)').matches) {
