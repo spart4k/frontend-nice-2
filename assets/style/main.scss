@@ -181,3 +181,178 @@ input[type=number] {
 h1,h2,h3,h4,h5,h6,p {
   margin: 0;
 }
+
+#resize-container{
+  display: none;
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  z-index: 9001;
+
+  background-color: rgba(0,0,0,0.2);
+  backdrop-filter: blur(20px);
+
+
+
+}
+
+#resize-container.show{
+  display: block;
+  opacity: 1;
+}
+
+#resize-text{
+  color: #fff;
+  position: relative;
+  top: 50%;
+  margin-top: -25px;
+  float: left;
+}
+
+#resize-text-mobile{
+  display: none;
+  font-size: 22px;
+  color: #fff;
+  position: absolute;
+  top: 20px;
+  left: 32px;
+  float: left;
+}
+
+#resize-value{
+  float: right;
+  color: #fff;
+  position: relative;
+  top: 50%;
+  margin-top: -25px;
+  text-align: right;
+}
+
+#resize-value-mobile{
+  display: none;
+  font-size: 22px;
+  color: #fff;
+  position: absolute;
+  bottom: 23px;
+  left: 32px;
+  float: left;
+}
+
+.grid-line-h{
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #fff;
+  opacity: 0.2;
+
+}
+
+#grid-line-h-0{
+  top: 10%;
+  left: 0px;
+}
+
+#grid-line-h-1{
+  top: 50%;
+  left: 0px;
+  margin-top: -22px;
+}
+
+#grid-line-h-2{
+  bottom: 10%;
+  left: 0px;
+}
+
+.grid-line-v{
+  position: absolute;
+  width: 1px;
+  height: 100%;
+  background-color: #fff;
+  opacity: 0.2;
+
+}
+
+#grid-line-v-0{
+  top: 0px;
+  left: 16px;
+}
+
+#grid-line-v-1{
+  top: 0px;
+  left: 0px;
+  margin-left: -8px;
+}
+
+#grid-line-v-2{
+  top: 0px;
+  left: 50px;
+}
+
+#grid-line-v-3{
+  top: 0px;
+  right: 50px;
+}
+
+#grid-line-v-4{
+  top: 0px;
+  right: 0px;
+  margin-right: -8px;
+}
+
+#grid-line-v-5{
+  top: 0px;
+  right: 16px;
+}
+
+.main-container{
+
+
+  width: 100%;
+  height: 100%;
+
+  padding-left: 0px;
+  padding-right: 0px;
+
+}
+
+.main-inner-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding-right: 32px;
+    padding-left: 32px;
+    box-sizing: border-box;
+}
+
+.content-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 1040px;
+    margin: auto;
+}
+
+#resize-text {
+    color: #fff;
+    position: relative;
+    top: 50%;
+    margin-top: -25px;
+    float: left;
+  font-size: 24px;
+    font-family: Helvetica;
+}
+
+#resize-value {
+    font-size: 24px;
+    font-family: Helvetica;
+    float: right;
+    color: #fff;
+    position: relative;
+    top: 50%;
+    margin-top: -25px;
+    text-align: right;
+}

@@ -284,7 +284,6 @@ export default {
       windowWidthCount()
     })
     window.addEventListener('resize', () => {
-      console.log('resize')
       setTimeout(() => {
         masonryRebuild()
       }, 200)

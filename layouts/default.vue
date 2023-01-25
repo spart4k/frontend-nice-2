@@ -89,6 +89,16 @@
     id="audioLive"
     />
     <!-- <N-Websocket v-if="websocketDelay" :message="mes" /> -->
+    <div id="resize-container">
+      <div class="main-container">
+        <div class="main-inner-container">
+          <div class="content-container">
+            <div id="resize-text"></div>
+            <div id="resize-value"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -336,8 +346,53 @@ export default {
       }
     }
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
+    const instanceBlur = () => {
+      const resizeContainer = document.getElementById('resize-container')
+      console.log(resizeContainer)
+      const resizeText = document.getElementById('resize-text')
+      const resizeValue = document.getElementById('resize-value')
+      // const resizeValueMobile = document.getElementById('resize-value-mobile')
 
+      let isMobile = false
+      let timeout = null
+      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        isMobile = true
+      }
+      console.log(isMobile)
+      const windowResizeFunction = function () {
+        console.log('resize')
+        clearTimeout(timeout)
+        timeout = setTimeout(windowResizeStopFunction, 600)
+
+        const screenHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+        const screenWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+
+        if (screenWidth > 1023) {
+          resizeText.innerHTML = 'Desktop'
+        } else if (screenWidth > 859) {
+          resizeText.innerHTML = 'Tablet'
+        } else {
+          resizeText.innerHTML = 'Mobile'
+        }
+        resizeValue.innerHTML = screenWidth + ' &mdash; ' + screenHeight
+        // resizeValueMobile.innerHTML = screenWidth +' &mdash; '+screenHeight;
+        resizeContainer.classList.add('show')
+        console.log(resizeContainer)
+        console.log('resize')
+      }
+      const windowResizeStopFunction = function () {
+        resizeContainer.classList.remove('show')
+      }
+      window.addEventListener('resize', function (event) {
+        console.log('log')
+        if (!isMobile) {
+          console.log('log')
+          windowResizeFunction()
+        }
+      })
+    }
     onMounted(() => {
+      instanceBlur()
       localStorage.setItem('lastCards', {})
       setTimeout(() => {
         audioDelay.value = true
