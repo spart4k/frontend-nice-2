@@ -193,6 +193,7 @@ h1,h2,h3,h4,h5,h6,p {
   width: 100%;
   height: 100%;
   z-index: 9001;
+  will-change: auto;
   background-color: rgba(0,0,0,0.2);
   backdrop-filter: blur(50px);
   transform: translate3d(0,0,99999px);
