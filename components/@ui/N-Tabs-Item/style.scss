@@ -8,7 +8,6 @@
   flex-shrink: 0;
   list-style: none;
   text-align: center;
-  transform: scale(1);
   &.showAnimate {
     opacity: 0;
   }
@@ -21,7 +20,8 @@
     color: inherit;
     display: block;
     padding: 0 2rem;
-    transition: .15s;
+    transition: scale .15s;
+    transform: scale(1);
     &:active {
       transform: scale(.95);
     }
