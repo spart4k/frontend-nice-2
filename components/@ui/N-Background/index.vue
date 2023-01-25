@@ -100,7 +100,7 @@ export default {
   left: 0;
   top: 0;
   height: 100%;
-  opacity: 0.5;
+  opacity: 0.8;
   z-index: 2;
   mix-blend-mode: multiply;
   pointer-events: none;
