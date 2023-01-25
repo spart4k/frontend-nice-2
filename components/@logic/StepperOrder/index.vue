@@ -224,7 +224,7 @@ export default {
             return Math.floor(Date.now() / 1000)
           }
           console.log(getTimestampInSeconds())
-          this.eventSource = new EventSource(`${root.$axios.defaults.baseURL}/radioApi/events/${getTimestampInSeconds()}`)
+          this.eventSource = new EventSource(`${root.$axios.defaults.baseURL}/events/${getTimestampInSeconds()}`)
 
           this.eventLog = 'Accepting data from the server.'
 
