@@ -9,7 +9,6 @@
         @closeState="closeState"
       />
     </div>
-
     <n-intro-wrapper
       :class="$style.main"
       :is-home-page="isHomePage"
@@ -368,11 +367,11 @@ export default {
         const screenWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
 
         if (screenWidth > 1023) {
-          resizeText.innerHTML = 'Desktop'
+          resizeText.innerHTML = 'Компьютер'
         } else if (screenWidth > 859) {
-          resizeText.innerHTML = 'Tablet'
+          resizeText.innerHTML = 'Планшет'
         } else {
-          resizeText.innerHTML = 'Mobile'
+          resizeText.innerHTML = 'Телефон'
         }
         resizeValue.innerHTML = screenWidth + ' &mdash; ' + screenHeight
         // resizeValueMobile.innerHTML = screenWidth +' &mdash; '+screenHeight;
