@@ -390,9 +390,12 @@ export default {
           windowResizeFunction()
         }
       })
-      window.addEventListener('orientationchange', function () {
-        windowResizeFunction()
-      }, false)
+      window.addEventListener('orientationchange', windowResizeFunction)
+      // if (window.matchMedia('(orientation: portrait)').matches) {
+      //   windowResizeFunction()
+      // } else if (window.matchMedia('(orientation: landscape)').matches) {
+      //   windowResizeFunction()
+      // }
     }
     onMounted(() => {
       instanceBlur()
