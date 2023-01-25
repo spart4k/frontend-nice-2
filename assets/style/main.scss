@@ -96,7 +96,7 @@ html {
   font-size: 10px;
   background-color: $blueBlack3;
   height: -webkit-fill-available;
-  @media (max-width: 1980px) {
+  @media (max-width: $desktopWidth) {
     font-size: calc((10 / 1440) * 100vw);
   }
   @media (max-width: $tabletWidth) {
