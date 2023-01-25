@@ -385,10 +385,7 @@ export default {
       }
       window.addEventListener('resize', function (event) {
         console.log('log')
-        if (!isMobile) {
-          console.log('log')
           windowResizeFunction()
-        }
       })
     }
     onMounted(() => {
