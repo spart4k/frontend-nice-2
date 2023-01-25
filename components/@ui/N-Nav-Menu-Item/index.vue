@@ -46,7 +46,7 @@ export default {
   width: 100%;
   // height: 10rem;
   color: rgb(255, 255, 255);
-  border-radius: 20px;
+  border-radius: 2rem;
   @include regular-text-bold;
   font-size: 1.8rem;
   background-repeat: no-repeat;

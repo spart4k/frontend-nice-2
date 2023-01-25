@@ -101,6 +101,7 @@
             </div>
             <div
               v-masonry-tile
+              resize="false"
               class="item"
               :class="[$style.masonryItem, transitionMasonry ? $style.transition: '']"
               v-for="(card, index) in spliceArray.colFull"
@@ -275,7 +276,19 @@ export default {
 
   onMounted(() => {
     windowWidthCount()
-    window.addEventListener('resize', windowWidthCount)
+    // const grid = document.getElementById('masonry')
+    // this.msnry = new Masonry(grid, {
+    //    columnWidth: 25
+    // })
+    window.addEventListener('resize', () => {
+      windowWidthCount()
+    })
+    window.addEventListener('resize', () => {
+      console.log('resize')
+      setTimeout(() => {
+        masonryRebuild()
+      }, 200)
+    })
     if (selectors.value === 'shop') {
       getСategories()
     }

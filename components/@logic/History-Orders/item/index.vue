@@ -66,7 +66,7 @@ export default {
     width: 100%;
     display: flex;
     background: #F5F5F5;
-    border-radius: 20px;
+    border-radius: 2rem;
     padding: 1.5rem;
     flex-direction: column;
     .order {
