@@ -11,6 +11,7 @@
     </div>
     <n-intro-wrapper
       :class="$style.main"
+      class="main-wrap"
       :is-home-page="isHomePage"
       :style="{ marginLeft: sheetWidth && !sheetRight ? '39rem' : '0', marginRight: sheetWidth && sheetRight ? '39rem' : '0' }"
       :color="color"
@@ -469,6 +470,7 @@ export default {
 }
 .main {
   transition-duration: .3s;
+  position: relative;
 }
 .disabled {
   opacity: 0;
