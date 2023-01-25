@@ -20,7 +20,7 @@
     color: inherit;
     display: block;
     padding: 0 2rem;
-    transition: scale .15s;
+    transition: transform .15s;
     transform: scale(1);
     &:active {
       transform: scale(.95);
