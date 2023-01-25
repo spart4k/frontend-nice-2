@@ -152,7 +152,7 @@ export default {
                 ]
               })
             }
-            emit('destroyTag')
+            // emit('destroyTag')
           } else if (!loading.value) {
             await messages.value.push(data)
             if (messages.value.length > 99) {
@@ -248,7 +248,7 @@ export default {
                     ]
                 })
               }
-              emit('destroyTag')
+              // emit('destroyTag')
           })
 
           this.eventSource.addEventListener('currentSong', (e) => {
