@@ -2,8 +2,13 @@
   <!--<div v-lazy:background-image="backgroundImage" :alt="backgroundImage" :class="[$style.wrapper, $style.bg]">
     <div :class="$style.overlay" :style="{backgroundColor: 'transparent' }" />
   </div>-->
-  <div :class="$style.backgroundWrap">
-    <div  v-for="(item, index) of BLAND_BACKGROUNDS" :key="index" v-lazy:background-image=" item.image ? `/backgrounds/${item.image}` : `/backgrounds/index.jpg`" :alt="item" :class="[$style.wrapper, $style.bg, pageName === item.key ? $style.show : '' ]">
+  <div class="background" :class="$style.backgroundWrap">
+    <div
+    v-for="(item, index) of BLAND_BACKGROUNDS"
+    :key="index"
+    v-lazy:background-image=" item.image ? `/backgrounds/${item.image}` : `/backgrounds/index.jpg`"
+    :alt="item"
+    :class="[$style.wrapper, $style.bg, pageName === item.key ? $style.show : '' ]">
     </div>
     <div :class="$style.overlay" :style="{backgroundColor: isHomePage ? '#292BC2' : $props.color }" />
   </div>
@@ -72,6 +77,7 @@ export default {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  transform: scale(1.3);
 }
 .wrapper{
   position: fixed;
@@ -83,7 +89,6 @@ export default {
   min-height: 100vh;
   // background-image: url('@/assets/img/background/coin-background.png');
   background-size: cover;
-  transform: scale(1.3);
   opacity: 0;
   &.show {
     opacity: 1
@@ -97,8 +102,8 @@ export default {
   height: 100%;
   opacity: 0.5;
   z-index: 2;
-  mix-blend-mode: hard-light;
+  mix-blend-mode: multiply;
   pointer-events: none;
-  transition: background-color .5s;
+  transition: background-color .25s;
 }
 </style>
