@@ -289,6 +289,10 @@ export default {
     watch(() => route.value.path, () => {
       store.commit('content/changeContentLoader', false)
     })
+    watch(() => color.value, () => {
+      console.log('change color')
+      document.body.style.backgroundColor = color.value
+    })
     watch(() => store.state.menu.component.key, () => {
       currentShowComponents.value.key = store.state.menu.component.key
       currentShowComponents.value.effect = store.state.menu.component.effect
@@ -404,6 +408,7 @@ export default {
     onMounted(() => {
       instanceBlur()
       localStorage.setItem('lastCards', {})
+      document.body.style.backgroundColor = color.value
       setTimeout(() => {
         audioDelay.value = true
       }, 500)
