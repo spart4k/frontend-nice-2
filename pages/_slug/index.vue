@@ -493,11 +493,14 @@ export default defineComponent({
       try {
         const response = await fetchData()
         // metaTags.value = response
+        const seo = await store.dispatch('main/getSeo')
+        console.log(seo)
         metaTags.value = {
           seo_title: response.seo_title,
           seo_description: response.seo_description,
-          seo_image: response.seo_file_id.src
+          seo_image: seo.data.data[0].seo_file.src
         }
+        console.log(metaTags.value)
         if (authorId.value) {
           const authorResponse = await fetchAuthor()
           author.value = authorResponse

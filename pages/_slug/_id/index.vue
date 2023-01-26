@@ -88,6 +88,7 @@ export default defineComponent({
           seo_description: response.responseCard.data?.data?.seo_description,
           seo_image: response.responseCard.data?.data?.seo_file?.src
         }
+        console.log(metaTags.value)
         card.value = {
           card: response.responseCard.data,
           comments: response.responseComments.data
