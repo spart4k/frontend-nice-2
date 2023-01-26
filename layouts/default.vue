@@ -87,6 +87,7 @@
     <audio
     @playing="playingRadio"
     @paused="pausedRadio"
+    :src="`${$axios.defaults.baseURL}/stream`"
     v-if="audioDelay && audioDestroy"
     ref="audioSource"
     id="audioLive"

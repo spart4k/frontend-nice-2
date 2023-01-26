@@ -118,6 +118,7 @@ export default {
             messages.value = data.messageArray
             // song.value = data.currentSong
             if ('mediaSession' in navigator) {
+              console.log(root.$axios.defaults.baseURL)
               navigator.mediaSession.metadata = new MediaMetadata({
                 title: song.value.title,
                 artwork: [
@@ -137,6 +138,7 @@ export default {
           } else if (data.messageType === 'nextSong') {
             // song.value = data.data
             if ('mediaSession' in navigator) {
+              console.log(root.$axios.defaults.baseURL)
               navigator.mediaSession.metadata = new MediaMetadata({
                 title: song.value.title,
                 artwork: [
@@ -236,15 +238,15 @@ export default {
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: userData.title,
                     artwork: [
-                    { src: `${userData.wrap}`, sizes: '96x96', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '128x128', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '192x192', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '256x256', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '384x384', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '512x512', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '1024x1024', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '2048x2048', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '4096x4096', type: 'image/jpg' }
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '96x96', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '128x128', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '192x192', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '256x256', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '384x384', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '512x512', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '1024x1024', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '2048x2048', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '4096x4096', type: 'image/*' }
                     ]
                 })
               }
@@ -256,18 +258,19 @@ export default {
               song.value = userData
               console.log(song.value)
               if ('mediaSession' in navigator) {
+                console.log(`${root.$axios.defaults.baseURL}/${userData.wrap}`)
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: userData.title,
                     artwork: [
-                    { src: `${userData.wrap}`, sizes: '96x96', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '128x128', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '192x192', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '256x256', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '384x384', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '512x512', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '1024x1024', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '2048x2048', type: 'image/jpg' },
-                    { src: `${userData.wrap}`, sizes: '4096x4096', type: 'image/jpg' }
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '96x96', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '128x128', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '192x192', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '256x256', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '384x384', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '512x512', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '1024x1024', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '2048x2048', type: 'image/*' },
+                    { src: `${root.$axios.defaults.baseURL}/${userData.wrap}`, sizes: '4096x4096', type: 'image/*' }
                     ]
                 })
               }
