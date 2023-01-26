@@ -12,6 +12,9 @@
     <div :class="$style.audioContainer">
       <audio ref="audioSource"
       :src="src"
+      class="audioCard"
+      @playing="playingEvent"
+      @pause="pausedEvent"
       preload="none"
       @canplay="isLoaded"
       :class="$style.audio"
@@ -61,7 +64,7 @@
   </div> -->
 </template>
 <script lang="js">
-import { ref, onMounted, nextTick, computed, onUnmounted, watch } from '@nuxtjs/composition-api'
+import { ref, onMounted, nextTick, useContext, computed, onUnmounted, watch } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NAudio',
@@ -83,6 +86,7 @@ export default {
   },
   setup (props, ctx) {
     const { emit } = ctx
+    const { store } = useContext()
     const audioPlaying = ref(false)
     const audioSource = ref(null)
     const audioTitle = computed(() => { return props.title.slice(0, -4) })
@@ -159,6 +163,11 @@ export default {
       }
       loop()
     }
+    const playingEvent = () => {
+      console.log('playing')
+      store.commit('menu/changeAudioPlaying', false)
+      emit('playingEvent')
+    }
     const onTimeUpdate = (val) => {
       if (audioStart.value) {
         finished.value = (inputTimeLine.value.value / inputTimeLine.value.max) * 100
@@ -224,6 +233,11 @@ export default {
       audioSource.value.pause()
     })
 
+    const pausedEvent = () => {
+      console.log('paused Auio')
+      audioPlaying.value = false
+    }
+
     return {
       audioPlaying,
       currentTimeShow,
@@ -254,7 +268,9 @@ export default {
       lockInput,
       unlockInput,
       timeWidth,
-      secConverter
+      secConverter,
+      playingEvent,
+      pausedEvent
     }
   }
 }

@@ -48,6 +48,9 @@
       >
         Изменить адрес
       </n-button>
+      <div v-if="$errors.address_id" :class="$style.errorAddress">
+        {{ $errors.address_id[0] }}
+      </div>
     </div>
     <n-row>
       <n-row>

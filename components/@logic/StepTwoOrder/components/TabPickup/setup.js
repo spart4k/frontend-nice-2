@@ -3,7 +3,7 @@ import useForm from '~/compositions/useForm'
 import { email, required, phone, onlyNumeric } from '~/utills/validations'
 
 export default {
-  name: 'TabDelivery',
+  name: 'TabPickup',
   setup (_, ctx) {
     const { store } = useContext()
     const activePayment = ref('card')

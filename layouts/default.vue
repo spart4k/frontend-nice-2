@@ -84,7 +84,10 @@
       />
     </N-BootomSheet>
     <portal-target name="sliderPopup" />
-    <audio v-if="audioDelay && audioDestroy"
+    <audio
+    @playing="playingRadio"
+    @paused="pausedRadio"
+    v-if="audioDelay && audioDestroy"
     ref="audioSource"
     id="audioLive"
     />
@@ -93,8 +96,7 @@
       <div class="main-container">
         <div class="main-inner-container">
           <div class="content-container">
-            <div id="resize-text"></div>
-            <div id="resize-value"></div>
+            <img src="/company-logo.png" alt="">
           </div>
         </div>
       </div>
@@ -353,8 +355,6 @@ export default {
     const instanceBlur = () => {
       const resizeContainer = document.getElementById('resize-container')
       console.log(resizeContainer)
-      const resizeText = document.getElementById('resize-text')
-      const resizeValue = document.getElementById('resize-value')
       // const resizeValueMobile = document.getElementById('resize-value-mobile')
 
       let isMobile = false
@@ -366,19 +366,7 @@ export default {
       const windowResizeFunction = function () {
         console.log('resize')
         clearTimeout(timeout)
-        timeout = setTimeout(windowResizeStopFunction, 600)
-
-        const screenHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-        const screenWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-
-        if (screenWidth > 1023) {
-          resizeText.innerHTML = 'Компьютер'
-        } else if (screenWidth > 859) {
-          resizeText.innerHTML = 'Планшет'
-        } else {
-          resizeText.innerHTML = 'Телефон'
-        }
-        resizeValue.innerHTML = screenWidth + ' &mdash; ' + screenHeight
+        timeout = setTimeout(windowResizeStopFunction, 1000)
         // resizeValueMobile.innerHTML = screenWidth +' &mdash; '+screenHeight;
         resizeContainer.classList.add('show')
         console.log(resizeContainer)
@@ -404,6 +392,12 @@ export default {
       // } else if (window.matchMedia('(orientation: landscape)').matches) {
       //   windowResizeFunction()
       // }
+    }
+    const pausedRadio = () => {
+      console.log('pause radio')
+    }
+    const playingRadio = () => {
+      console.log('play radio')
     }
     onMounted(() => {
       instanceBlur()
@@ -458,7 +452,9 @@ export default {
       bottomSheetDelay,
       menu1,
       contentLoader,
-      disabledSheet
+      disabledSheet,
+      pausedRadio,
+      playingRadio
     }
   }
 }

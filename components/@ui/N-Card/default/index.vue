@@ -117,7 +117,13 @@
               <N-Audio :files="data.files" />
             </div> -->
             <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
-              <N-Audio v-if="item.file_type_id === 3" :title="item.title" :src="`${$axios.defaults.baseURL}/${item.src}`" :stop="audioStop" @playAudio="playAudio" />
+              <N-Audio
+              @playingEvent="playingEvent"
+              v-if="item.file_type_id === 3"
+              :title="item.title"
+              :src="`${$axios.defaults.baseURL}/${item.src}`"
+              :stop="audioStop"
+              @playAudio="playAudio" />
             </div>
           </template>
           <template v-if="data.price && $props.detailPage">
@@ -243,6 +249,30 @@ export default {
     })
     const playAudio = () => {
       audioStop.value++
+      console.log('play')
+      console.log(props.data.title)
+      const radio = document.getElementById('audioLive')
+      if (radio) {
+        radio.pause()
+      }
+      if ('mediaSession' in navigator) {
+        const wrapPlayer = ctx.root.$axios.defaults.baseURL + '/' + sliderImages.value[0].src
+        console.log(wrapPlayer)
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: props.data.title,
+          artwork: [
+            { src: wrapPlayer, sizes: '96x96', type: 'image/png' },
+            { src: wrapPlayer, sizes: '128x128', type: 'image/png' },
+            { src: wrapPlayer, sizes: '192x192', type: 'image/png' },
+            { src: wrapPlayer, sizes: '256x256', type: 'image/png' },
+            { src: wrapPlayer, sizes: '384x384', type: 'image/png' },
+            { src: wrapPlayer, sizes: '512x512', type: 'image/png' },
+            { src: wrapPlayer, sizes: '1024x1024', type: 'image/png' },
+            { src: wrapPlayer, sizes: '2048x2048', type: 'image/png' },
+            { src: wrapPlayer, sizes: '4096x4096', type: 'image/png' }
+          ]
+        })
+      }
     }
     const login = () => {
       if (!store.state.menu.isShowBottomMenu) {
@@ -439,6 +469,27 @@ export default {
       window.removeEventListener('resize', windowWidthCount)
       window.removeEventListener('resize', commentHeightSet)
     })
+    const playingEvent = () => {
+      // console.log('play')
+      if ('mediaSession' in navigator) {
+        const wrapPlayer = ctx.root.$axios.defaults.baseURL + '/' + sliderImages.value[0].src
+        console.log(wrapPlayer)
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: props.data.title,
+          artwork: [
+            { src: wrapPlayer, sizes: '96x96', type: 'image/png' },
+            { src: wrapPlayer, sizes: '128x128', type: 'image/png' },
+            { src: wrapPlayer, sizes: '192x192', type: 'image/png' },
+            { src: wrapPlayer, sizes: '256x256', type: 'image/png' },
+            { src: wrapPlayer, sizes: '384x384', type: 'image/png' },
+            { src: wrapPlayer, sizes: '512x512', type: 'image/png' },
+            { src: wrapPlayer, sizes: '1024x1024', type: 'image/png' },
+            { src: wrapPlayer, sizes: '2048x2048', type: 'image/png' },
+            { src: wrapPlayer, sizes: '4096x4096', type: 'image/png' }
+          ]
+        })
+      }
+    }
     const dateFormat = computed(() => {
       if (props.data.date_event) {
         const t = props.data.date_event.split(/[- :]/)
@@ -496,7 +547,8 @@ export default {
       sliderImages,
       playAudio,
       linkColor,
-      isLiked
+      isLiked,
+      playingEvent
     }
   }
 }

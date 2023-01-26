@@ -35,6 +35,11 @@ export default {
     }
     const playAudio = () => {
       emit('playAudio')
+      const audioCard = document.querySelector('.audioCard')
+      if (audioCard) {
+        audioCard.pause()
+      }
+      console.log(audioCard)
       store.commit('menu/changeAudioPlaying', true)
     }
     const pauseAudio = () => {
