@@ -384,9 +384,7 @@ export default {
         }
       })
       window.addEventListener('orientationchange', () => {
-        setTimeout(() => {
-          windowResizeFunction()
-        }, 50)
+        windowResizeFunction()
       })
       // if (window.matchMedia('(orientation: portrait)').matches) {
       //   windowResizeFunction()
