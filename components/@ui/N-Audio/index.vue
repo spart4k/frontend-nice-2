@@ -123,7 +123,7 @@ export default {
       } catch (e) {
         console.log(e)
       }
-      emit('playAudio')
+      emit('playAudio', audioTitle.value)
       setTimeout(() => {
         audioPlaying.value = true
         if (audioSource.value) {
@@ -166,7 +166,7 @@ export default {
     const playingEvent = () => {
       console.log('playing')
       store.commit('menu/changeAudioPlaying', false)
-      emit('playingEvent')
+      emit('playingEvent', audioTitle.value)
     }
     const onTimeUpdate = (val) => {
       if (audioStart.value) {
@@ -224,7 +224,7 @@ export default {
       })
     })
     onUnmounted(() => {
-      window.removeEventListener('mousedown', lockInput)
+      window.removeEventListener('mousedofwn', lockInput)
       window.removeEventListener('mouseup', unlockInput)
     })
 

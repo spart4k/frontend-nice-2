@@ -247,9 +247,10 @@ export default {
       })
       return array.value
     })
-    const playAudio = () => {
+    const playAudio = (title) => {
       audioStop.value++
       console.log('play')
+      console.log(title)
       console.log(props.data.title)
       const radio = document.getElementById('audioLive')
       if (radio) {
@@ -259,7 +260,7 @@ export default {
         const wrapPlayer = ctx.root.$axios.defaults.baseURL + '/' + sliderImages.value[0].src
         console.log(wrapPlayer)
         navigator.mediaSession.metadata = new MediaMetadata({
-          title: props.data.title,
+          title,
           artwork: [
             { src: wrapPlayer, sizes: '96x96', type: 'image/png' },
             { src: wrapPlayer, sizes: '128x128', type: 'image/png' },
@@ -469,13 +470,14 @@ export default {
       window.removeEventListener('resize', windowWidthCount)
       window.removeEventListener('resize', commentHeightSet)
     })
-    const playingEvent = () => {
+    const playingEvent = (title) => {
+      console.log(title)
       // console.log('play')
       if ('mediaSession' in navigator) {
         const wrapPlayer = ctx.root.$axios.defaults.baseURL + '/' + sliderImages.value[0].src
         console.log(wrapPlayer)
         navigator.mediaSession.metadata = new MediaMetadata({
-          title: props.data.title,
+          title,
           artwork: [
             { src: wrapPlayer, sizes: '96x96', type: 'image/png' },
             { src: wrapPlayer, sizes: '128x128', type: 'image/png' },
