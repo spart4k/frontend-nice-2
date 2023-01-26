@@ -260,7 +260,8 @@ export default {
         const wrapPlayer = ctx.root.$axios.defaults.baseURL + '/' + sliderImages.value[0].src
         console.log(wrapPlayer)
         navigator.mediaSession.metadata = new MediaMetadata({
-          title,
+          title: 'Найс',
+          artist: title,
           artwork: [
             { src: wrapPlayer, sizes: '96x96', type: 'image/png' },
             { src: wrapPlayer, sizes: '128x128', type: 'image/png' },
@@ -477,7 +478,8 @@ export default {
         const wrapPlayer = ctx.root.$axios.defaults.baseURL + '/' + sliderImages.value[0].src
         console.log(wrapPlayer)
         navigator.mediaSession.metadata = new MediaMetadata({
-          title,
+          title: 'Найс',
+          artist: title,
           artwork: [
             { src: wrapPlayer, sizes: '96x96', type: 'image/png' },
             { src: wrapPlayer, sizes: '128x128', type: 'image/png' },
