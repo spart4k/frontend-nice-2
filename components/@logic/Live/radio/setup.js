@@ -19,9 +19,10 @@ export default {
     const audioPlay = ref(null)
     const cardLink = computed(() => {
       if (props.song.link) {
-        return JSON.parse(props.song.link)
+        return props.song.link
       }
     })
+    console.log()
     const audioPlaying = computed(() => store.state.menu.audioPlaying)
     const marquee = ref(null)
     const marqueeLength = ref(null)
