@@ -423,6 +423,7 @@ export default defineComponent({
               if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
                   setTimeout(() => {
                     store.commit('content/setHeaderHidden', true)
+                    console.log(store.state.content.hearerHidden)
                     content.value.masonryRebuild()
                     window.scroll({
                       top: scrollHeight.value,
@@ -445,17 +446,18 @@ export default defineComponent({
                       top: 0,
                       left: 0
                     })
-                    // setTimeout(() => {
+                    setTimeout(() => {
+                      store.commit('content/setHeaderHidden', true)
                       setTimeout(() => {
-                        store.commit('content/setHeaderHidden', true)
+                        console.log(scrollHeight.value)
                         content.value.masonryRebuild()
                         window.scroll({
                           top: scrollHeight.value,
                           left: 0
                         })
                         loadingEnd.value = true
-                      }, 300)
-                    // }, 1200)
+                      }, 1)
+                    }, 300)
                 }
                 nextTick(() => {
                   animateNavbar('.navbarSlug')
@@ -473,6 +475,7 @@ export default defineComponent({
                 // setTimeout(() => {
                   setTimeout(() => {
                     store.commit('content/setHeaderHidden', true)
+                    console.log(store.state.content.hearerHidden)
                     content.value.masonryRebuild()
                     window.scroll({
                       top: scrollHeight.value,
@@ -499,6 +502,7 @@ export default defineComponent({
                     // setTimeout(() => {
                       setTimeout(() => {
                         store.commit('content/setHeaderHidden', true)
+                        console.log(store.state.content.hearerHidden)
                         content.value.masonryRebuild()
                         window.scroll({
                           top: scrollHeight.value,
