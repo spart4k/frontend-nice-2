@@ -267,10 +267,12 @@ export default defineComponent({
           opacity: 0
         })
       })
-      if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'authors') {
+      if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== route.value.path) {
+        console.log(route.value)
         const lastSection = {
-          section: 'authors'
+          section: route.value.path
         }
+        console.log(JSON.stringify(lastSection))
         localStorage.setItem('lastSection', JSON.stringify(lastSection))
         store.commit('content/setScrollHeight', 0)
       }
@@ -281,7 +283,7 @@ export default defineComponent({
         store.commit('content/setHeaderHidden', true)
         if (firstRender.value) {
           firstRender.value = false
-          if (JSON.parse(localStorage.getItem('lastSection')).section === 'authors' && scrollHeight.value !== 0) {
+          if (JSON.parse(localStorage.getItem('lastSection')).section === route.value.path && scrollHeight.value !== 0) {
             window.scroll({
               top: scrollHeight.value,
               left: 0
@@ -296,7 +298,7 @@ export default defineComponent({
           store.commit('content/setHeaderHidden', true)
           if (firstRender.value) {
             firstRender.value = false
-            if (JSON.parse(localStorage.getItem('lastSection')).section === 'authors' && scrollHeight.value !== 0) {
+            if (JSON.parse(localStorage.getItem('lastSection')).section === route.value.path && scrollHeight.value !== 0) {
                 window.scroll({
                   top: 0,
                   left: 0
@@ -349,7 +351,7 @@ export default defineComponent({
           fetchLoading.value = true
           cards.value = [...response.data]
           startCards.value = [...cards.value]
-          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === 'authors') {
+          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === route.value.path) {
             cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
             startCards.value = [...cards.value]
             pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
@@ -407,7 +409,7 @@ export default defineComponent({
         startCards.value = [...cards.value]
         const lastCards = {
           cards: startCards.value,
-          section: 'authors',
+          section: route.value.path,
           page: pageNumber.value
         }
         localStorage.setItem('lastCards', JSON.stringify(lastCards))
