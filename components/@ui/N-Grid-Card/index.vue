@@ -519,7 +519,7 @@ export default {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     &.transition {
-      transition: .2s;
+      // transition: .2s;
     }
     @media (max-width: $mobileWidth) {
       width: 100%;

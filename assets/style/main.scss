@@ -102,12 +102,9 @@ html {
   @media (max-width: $desktopWidth) {
     font-size: calc((10 / 1440) * 100vw);
   }
-  @media (max-width: $desktopWidth) {
-    font-size: calc((10 / 1440) * 100vw);
-  }
-  @media (max-width: $tabletWidth) {
-    font-size: calc((10 / 900) * 100vw);
-  }
+  // @media (max-width: $tabletWidth) {
+  //   font-size: calc((10 / 900) * 100vw);
+  // }
   @media (max-width: $mobileWidth) {
     font-size: calc((10 / 390) * 100vw);
   }
