@@ -3,13 +3,14 @@
     <div :class="$style.overlay" :style="{backgroundColor: 'transparent' }" />
   </div>-->
   <div class="background" :class="$style.backgroundWrap">
-    <lazy-component
+    <img
+    rel="preload"
     v-for="(item, index) of BLAND_BACKGROUNDS"
     :key="index"
-    v-lazy:background-image=" item.image ? `/backgrounds/${item.image}` : `/backgrounds/index.jpg`"
+    :src="item.image ? `/backgrounds/${item.image}` : `/backgrounds/index.jpg`"
     :alt="item"
     :class="[$style.wrapper, $style.bg, pageName === item.key ? $style.show : '' ]">
-    </lazy-component>
+    <!--</div>-->
     <div :class="$style.overlay" :style="{backgroundColor: isHomePage ? '#292BC2' : $props.color }" />
   </div>
 
@@ -89,9 +90,11 @@ export default {
   min-height: 100vh;
   // background-image: url('@/assets/img/background/coin-background.png');
   background-size: cover;
-  opacity: 0;
+  object-fit: cover;
+  object-position: 50% 0%;
+  display: none;
   &.show {
-    opacity: 1
+    display: block;
   }
 }
 .overlay {

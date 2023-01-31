@@ -94,7 +94,6 @@
 
 html {
   font-size: 10px;
-  background-color: $blueBlack3;
   height: -webkit-fill-available;
   @media (min-width: $desktopWidth) {
     font-size: 13.33333333248px;
@@ -129,7 +128,7 @@ html {
 }
 body {
   width: 100%;
-  background-color: $blueBlack3;
+  background-color: rgba(41, 43, 194,0.8);
   @include regular-text-small;
   // @include regular-text;
   min-height: 100vh;
