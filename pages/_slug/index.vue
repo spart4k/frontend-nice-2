@@ -500,7 +500,7 @@ export default defineComponent({
         metaTags.value = {
           seo_title: response.seo_title,
           seo_description: response?.seo_description,
-          seo_image: seo.data.data[0]?.seo_file?.src
+          seo_image: response?.seo_file_id?.src
         }
         console.log('test')
         console.log(response)

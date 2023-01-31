@@ -251,6 +251,9 @@ export default {
     const openMenu = () => {
       if (menu.value) {
         setTimeout(() => {
+          console.log(menu.value)
+          console.log(menu.value.$children)
+          console.log(menu.value.$children[0])
           menu.value.$children[0].open()
           if (window.innerWidth > 450) {
             sheetWidth.value = 39

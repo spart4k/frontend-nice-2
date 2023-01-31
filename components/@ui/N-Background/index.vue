@@ -3,13 +3,13 @@
     <div :class="$style.overlay" :style="{backgroundColor: 'transparent' }" />
   </div>-->
   <div class="background" :class="$style.backgroundWrap">
-    <div
+    <lazy-component
     v-for="(item, index) of BLAND_BACKGROUNDS"
     :key="index"
     v-lazy:background-image=" item.image ? `/backgrounds/${item.image}` : `/backgrounds/index.jpg`"
     :alt="item"
     :class="[$style.wrapper, $style.bg, pageName === item.key ? $style.show : '' ]">
-    </div>
+    </lazy-component>
     <div :class="$style.overlay" :style="{backgroundColor: isHomePage ? '#292BC2' : $props.color }" />
   </div>
 
