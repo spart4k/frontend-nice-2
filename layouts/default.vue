@@ -21,6 +21,8 @@
         v-if="$route.name !== 'cards-id' && headerHidden"
         class="navbarSlug"
         :class="[
+          sheetWidth && !sheetRight ? $style.alignLeft : 'center',
+          sheetWidth && sheetRight ? $style.alignRight : 'center',
           $style.tabs,
           showAnimate && $style.animateContent,
           !isHomePage ? $style.noHome : ''
@@ -500,8 +502,18 @@ export default {
   margin: 17rem 0 5.815rem 0;
   z-index: 10;
   width: 100%;
-  transition: opacity 0.3s;
+  transition: 0.3s;
   will-change: transform;
+  &.alignLeft {
+    ul {
+      justify-content: flex-start;
+    }
+  }
+  &.alignRight {
+    ul {
+      justify-content: flex-end;
+    }
+  }
   @media (max-width: $mobileWidth) {
     margin: 23.6rem 0 5.815rem 0;
     // margin: 22rem 0 5.815rem 0;
