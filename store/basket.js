@@ -64,7 +64,7 @@ export const actions = {
       }
       return data
     } catch (e) {
-      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
+      this.$toast.error(`Ошибка: ${e.response.data.message}, basket: 67`, { position: 'bottom-right', icon: true })
     }
   },
   async getBasket ({ commit, rootState }) {
@@ -80,7 +80,7 @@ export const actions = {
         return response
       }
     } catch (e) {
-      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
+      this.$toast.error(`Ошибка: ${e.response.data.message}, basket: 83`, { position: 'bottom-right', icon: true })
     }
   },
   async sendBasket ({ commit }, params) {
@@ -90,7 +90,7 @@ export const actions = {
       commit('setBasket', data)
       return data
     } catch (e) {
-      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
+      this.$toast.error(`Ошибка: ${e.response.data.message}, basket: 93`, { position: 'bottom-right', icon: true })
     }
   },
   async addToBasket ({ commit, state }, params) {
@@ -100,7 +100,7 @@ export const actions = {
       // commit('setBasketSum', response.data.data[1])
       return response.data
     } catch (e) {
-      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
+      this.$toast.error(`Ошибка: ${e.response.data.message}, basket: 103`, { position: 'bottom-right', icon: true })
     }
   },
   async deleteFromBasket ({ commit }, params) {
@@ -111,7 +111,7 @@ export const actions = {
       }
       return data.data
     } catch (e) {
-      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
+      this.$toast.error(`Ошибка: ${e.response.data.message}, basket: 114`, { position: 'bottom-right', icon: true })
     }
   }
 }

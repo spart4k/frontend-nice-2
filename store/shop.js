@@ -10,7 +10,7 @@ export const actions = {
       const data = await this.$axios('api/v1/cards/shop', { params })
       return data
     } catch (e) {
-      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
+      this.$toast.error(`Ошибка: ${e.response.data.message}, shop: 13`, { position: 'bottom-right', icon: true })
     }
   },
   async getDataForShop (state, params) {
@@ -18,7 +18,7 @@ export const actions = {
       const data = await this.$axios('api/v1/sections/forshop', { params })
       return data
     } catch (e) {
-      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
+      this.$toast.error(`Ошибка: ${e.response.data.message}, shop: 21`, { position: 'bottom-right', icon: true })
     }
   },
   async getWires (state, params) {
@@ -26,7 +26,7 @@ export const actions = {
       const data = await this.$axios.post('api/v1/interfacePairSearch', params)
       return data.data
     } catch (e) {
-      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
+      this.$toast.error(`Ошибка: ${e.response.data.message}, shop: 29`, { position: 'bottom-right', icon: true })
     }
   },
   async getPrice (state, params) {
@@ -34,7 +34,7 @@ export const actions = {
       const data = await this.$axios.post('api/v1/computePrice', params)
       return data.data
     } catch (e) {
-      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
+      this.$toast.error(`Ошибка: ${e.response.data.message}, shop: 37`, { position: 'bottom-right', icon: true })
     }
   },
   async createNewOrder ({ commit }, params) {
@@ -42,7 +42,7 @@ export const actions = {
       const data = await this.$axios.post('api/v1/createNewOrder', params)
       return data.data
     } catch (e) {
-      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
+      this.$toast.error(`Ошибка: ${e.response.data.message}, shop: 45`, { position: 'bottom-right', icon: true })
     }
   }
 }

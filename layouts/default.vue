@@ -358,45 +358,45 @@ export default {
       }
     }
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
-    const instanceBlur = () => {
-      const resizeContainer = document.getElementById('resize-container')
-      console.log(resizeContainer)
-      // const resizeValueMobile = document.getElementById('resize-value-mobile')
+    // const instanceBlur = () => {
+    //  const resizeContainer = document.getElementById('resize-container')
+    //  console.log(resizeContainer)
+    //  // const resizeValueMobile = document.getElementById('resize-value-mobile')
 
-      let isMobile = false
-      let timeout = null
-      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        isMobile = true
-      }
-      console.log(isMobile)
-      const windowResizeFunction = function () {
-        console.log('resize')
-        clearTimeout(timeout)
-        timeout = setTimeout(windowResizeStopFunction, 1000)
-        // resizeValueMobile.innerHTML = screenWidth +' &mdash; '+screenHeight;
-        resizeContainer.classList.add('show')
-        console.log(resizeContainer)
-        console.log('resize')
-      }
-      const windowResizeStopFunction = function () {
-        resizeContainer.classList.remove('show')
-      }
-      window.addEventListener('resize', function (event) {
-        console.log('log')
-        if (!isMobile) {
-          console.log('log')
-          windowResizeFunction()
-        }
-      })
-      window.addEventListener('orientationchange', () => {
-        windowResizeFunction()
-      })
-      // if (window.matchMedia('(orientation: portrait)').matches) {
-      //   windowResizeFunction()
-      // } else if (window.matchMedia('(orientation: landscape)').matches) {
-      //   windowResizeFunction()
-      // }
-    }
+    //  let isMobile = false
+    //  let timeout = null
+    //  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    //    isMobile = true
+    //  }
+    //  console.log(isMobile)
+    //  const windowResizeFunction = function () {
+    //    console.log('resize')
+    //    clearTimeout(timeout)
+    //    timeout = setTimeout(windowResizeStopFunction, 1000)
+    //    // resizeValueMobile.innerHTML = screenWidth +' &mdash; '+screenHeight;
+    //    resizeContainer.classList.add('show')
+    //    console.log(resizeContainer)
+    //    console.log('resize')
+    //  }
+    //  const windowResizeStopFunction = function () {
+    //    resizeContainer.classList.remove('show')
+    //  }
+    //  window.addEventListener('resize', function (event) {
+    //    console.log('log')
+    //    if (!isMobile) {
+    //      console.log('log')
+    //      windowResizeFunction()
+    //    }
+    //  })
+    //  window.addEventListener('orientationchange', () => {
+    //    windowResizeFunction()
+    //  })
+    //  // if (window.matchMedia('(orientation: portrait)').matches) {
+    //  //   windowResizeFunction()
+    //  // } else if (window.matchMedia('(orientation: landscape)').matches) {
+    //  //   windowResizeFunction()
+    //  // }
+    // }
     const pausedRadio = () => {
       console.log('pause radio')
     }
@@ -404,7 +404,7 @@ export default {
       console.log('play radio')
     }
     onMounted(() => {
-      instanceBlur()
+      // instanceBlur()
       localStorage.setItem('lastCards', {})
       document.body.style.backgroundColor = color.value
       setTimeout(() => {
