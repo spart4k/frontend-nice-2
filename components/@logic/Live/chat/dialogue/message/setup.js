@@ -11,8 +11,7 @@ export default {
     const decodeText = computed(() => {
       return decodeURIComponent(escape(props.message.message_text))
     })
-    const nickName = computed(() => props.message.user.nickname)
-
+    const nickName = computed(() => props?.message?.user?.nickname)
     return {
       decodeText,
       nickName

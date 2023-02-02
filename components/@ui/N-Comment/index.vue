@@ -9,7 +9,7 @@
       </p>
       <img
         :class="$style.sticker"
-        :src="`https://test.itisthenice.com/${sticker.file.src}`"
+        :src="`${$axios.defaults.baseURL}/${sticker.file.src}`"
         alt=""
       >
     </template>

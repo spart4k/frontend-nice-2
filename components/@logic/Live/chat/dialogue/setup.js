@@ -21,9 +21,12 @@ export default {
     })
     const dialog = ref()
     const scrollDown = () => {
-      dialog.value.scrollTop = dialog.value.scrollHeight
+      dialog.value.scrollTop = 0
+      // setTimeout(() => {
+      //   alert('scrollTop =' + dialog.value.scrollTop)
+      //   alert('scrollHeight =' + dialog.value.scrollHeight)
+      // }, 1000)
     }
-
     onMounted(() => {
     })
 

@@ -35,7 +35,7 @@
         >
           <N-Icon name="arrow-back" :class="$style.backButton" />
         </N-Button>
-        <span ref="trigger">
+        <span :class="$style.triggerSpan" ref="trigger">
           <slot />
         </span>
       <!-- </client-only> -->
@@ -94,6 +94,9 @@ export default {
 </script>
 
 <style lang="scss" module>
+.triggerSpan {
+  height: 100%;
+}
 .wrapper {
   .bottomSheet  {
     // transform: translate3d(0, 0, 0);
@@ -145,6 +148,10 @@ export default {
     // overflow-y: scroll !important;
     // overflow-x: hidden !important;
     // -webkit-overflow-scrolling: touch !important;
+    height: calc(100% - 5rem) !important;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
 
   :global(.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-left) {

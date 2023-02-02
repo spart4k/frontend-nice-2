@@ -49,6 +49,10 @@ export default {
   .icon {
     width: 3.5rem;
     height: 2.2rem;
+    svg {
+      width: 100%;
+      height: 100%;
+    }
   }
   .iconLogo {
     width: 1.98rem;

@@ -9,9 +9,9 @@
         @closeState="closeState"
       />
     </div>
-
     <n-intro-wrapper
       :class="$style.main"
+      class="main-wrap"
       :is-home-page="isHomePage"
       :style="{ marginLeft: sheetWidth && !sheetRight ? '39rem' : '0', marginRight: sheetWidth && sheetRight ? '39rem' : '0' }"
       :color="color"
@@ -21,6 +21,8 @@
         v-if="$route.name !== 'cards-id' && headerHidden"
         class="navbarSlug"
         :class="[
+          sheetWidth && !sheetRight ? $style.alignLeft : 'center',
+          sheetWidth && sheetRight ? $style.alignRight : 'center',
           $style.tabs,
           showAnimate && $style.animateContent,
           !isHomePage ? $style.noHome : ''
@@ -84,8 +86,24 @@
       />
     </N-BootomSheet>
     <portal-target name="sliderPopup" />
-    <audio v-if="audioDelay && audioDestroy" ref="audioSource" src="https://test.itisthenice.com/stream" />
+    <audio
+    @playing="playingRadio"
+    @paused="pausedRadio"
+    :src="`${$axios.defaults.baseURL}/stream`"
+    v-if="audioDelay && audioDestroy"
+    ref="audioSource"
+    id="audioLive"
+    />
     <!-- <N-Websocket v-if="websocketDelay" :message="mes" /> -->
+    <div id="resize-container">
+      <div class="main-container">
+        <div class="main-inner-container">
+          <div class="content-container">
+            <img src="/company-logo.png" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -105,7 +123,7 @@ export default {
       ]
     }
   },
-  setup (_, props) {
+  setup (props, {root}) {
     const headerItems = ref([])
     const body = ref(null)
     const menu = ref(null)
@@ -139,21 +157,31 @@ export default {
 
     const playAudio = () => {
       audioDestroy.value = true
+
       nextTick(() => {
-        audioSource.value.play()
+        setTimeout(() => {
+          audioSource.value.src = `${root.$axios.defaults.baseURL}/stream`
+          audioSource.value.load()
+
+          audioSource.value.addEventListener('canplaythrough', () => {
+            console.log('loaded audio')
+            audioSource.value.play()
+          })
+        }, 60)
       })
     }
 
     const pauseAudio = () => {
+      audioSource.value.src = ''
       audioSource.value.pause()
       audioDestroy.value = false
     }
 
     const destroyTag = () => {
-      pauseAudio()
-      setTimeout(() => {
+       pauseAudio()
+       setTimeout(() => {
         playAudio()
-      }, 50)
+       }, 100)
     }
 
     const changeComp = (value) => {
@@ -225,6 +253,9 @@ export default {
     const openMenu = () => {
       if (menu.value) {
         setTimeout(() => {
+          console.log(menu.value)
+          console.log(menu.value.$children)
+          console.log(menu.value.$children[0])
           menu.value.$children[0].open()
           if (window.innerWidth > 450) {
             sheetWidth.value = 39
@@ -247,6 +278,11 @@ export default {
       }
     }
     const closeMenu = () => {
+      const wrap = document.getElementById('__nuxt')
+      if (window.innerWidth <= 768) {
+        document.body.style.overflow = 'auto'
+        wrap.classList.remove('noScroll')
+      }
       sheetWidth.value = 0
       store.commit('menu/changeKeyMenu', { key: '', effect: 'fx-slide-from-left' })
       store.commit('menu/changeStepMenu', { step: 0 })
@@ -260,6 +296,10 @@ export default {
     })
     watch(() => route.value.path, () => {
       store.commit('content/changeContentLoader', false)
+    })
+    watch(() => color.value, () => {
+      console.log('change color')
+      document.body.style.backgroundColor = color.value
     })
     watch(() => store.state.menu.component.key, () => {
       currentShowComponents.value.key = store.state.menu.component.key
@@ -318,9 +358,55 @@ export default {
       }
     }
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
+    // const instanceBlur = () => {
+    //  const resizeContainer = document.getElementById('resize-container')
+    //  console.log(resizeContainer)
+    //  // const resizeValueMobile = document.getElementById('resize-value-mobile')
 
+    //  let isMobile = false
+    //  let timeout = null
+    //  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    //    isMobile = true
+    //  }
+    //  console.log(isMobile)
+    //  const windowResizeFunction = function () {
+    //    console.log('resize')
+    //    clearTimeout(timeout)
+    //    timeout = setTimeout(windowResizeStopFunction, 1000)
+    //    // resizeValueMobile.innerHTML = screenWidth +' &mdash; '+screenHeight;
+    //    resizeContainer.classList.add('show')
+    //    console.log(resizeContainer)
+    //    console.log('resize')
+    //  }
+    //  const windowResizeStopFunction = function () {
+    //    resizeContainer.classList.remove('show')
+    //  }
+    //  window.addEventListener('resize', function (event) {
+    //    console.log('log')
+    //    if (!isMobile) {
+    //      console.log('log')
+    //      windowResizeFunction()
+    //    }
+    //  })
+    //  window.addEventListener('orientationchange', () => {
+    //    windowResizeFunction()
+    //  })
+    //  // if (window.matchMedia('(orientation: portrait)').matches) {
+    //  //   windowResizeFunction()
+    //  // } else if (window.matchMedia('(orientation: landscape)').matches) {
+    //  //   windowResizeFunction()
+    //  // }
+    // }
+    const pausedRadio = () => {
+      console.log('pause radio')
+    }
+    const playingRadio = () => {
+      console.log('play radio')
+    }
     onMounted(() => {
+      // instanceBlur()
       localStorage.setItem('lastCards', {})
+      document.body.style.backgroundColor = color.value
       setTimeout(() => {
         audioDelay.value = true
       }, 500)
@@ -370,7 +456,9 @@ export default {
       bottomSheetDelay,
       menu1,
       contentLoader,
-      disabledSheet
+      disabledSheet,
+      pausedRadio,
+      playingRadio
     }
   }
 }
@@ -387,6 +475,7 @@ export default {
 }
 .main {
   transition-duration: .3s;
+  position: relative;
 }
 .disabled {
   opacity: 0;
@@ -413,8 +502,18 @@ export default {
   margin: 17rem 0 5.815rem 0;
   z-index: 10;
   width: 100%;
-  transition: opacity 0.3s;
+  transition: 0.3s;
   will-change: transform;
+  &.alignLeft {
+    ul {
+      justify-content: flex-start;
+    }
+  }
+  &.alignRight {
+    ul {
+      justify-content: flex-end;
+    }
+  }
   @media (max-width: $mobileWidth) {
     margin: 23.6rem 0 5.815rem 0;
     // margin: 22rem 0 5.815rem 0;

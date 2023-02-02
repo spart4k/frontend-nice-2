@@ -36,11 +36,14 @@ export default {
     }
     watch(() => props.value, () => {
       const body = document.querySelector('body')
+      const wrap = document.getElementById('__nuxt')
       if (props.value) {
         body.style.overflow = 'hidden'
+        wrap.classList.add('noScroll')
         return
       }
       body.style.overflow = 'visible'
+      wrap.classList.remove('noScroll')
     })
     return {
       close

@@ -113,5 +113,6 @@ export default {
   //overflow: auto;
   //width: 100%;
   //@include container;
+  height: auto;
 }
 </style>

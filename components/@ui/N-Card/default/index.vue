@@ -45,53 +45,6 @@
       ]"
     >
       <template>
-        <!-- <NuxtLink v-if="!$props.detailPage" :class="$style.body__top" tag="div" :to="`../${data.section.slug}/${data.id}`">
-          <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '1.5rem' }">
-            {{ data.title }}
-          </h2>
-          <div v-if="data.date_event" :class="$style.time">
-            {{ dateFormat }}
-          </div>
-          <div :class="$style.cardText">
-            <div :class="$style.parser" v-html="data.subtitle" />
-          </div>
-          <template v-if="data.price && !$props.detailPage">
-            <div :class="$style.price">
-              {{ data.price }} р.
-            </div>
-          </template>
-          <div v-if="!$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
-            <div :class="$style.socialsItem">
-              <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
-              <div :class="$style.parser">
-                {{ data.like_count }}
-              </div>
-            </div>
-            <div v-if="!((windowWidth > 900) && $props.detailPage)" :class="$style.socialsItem" @click="showComments = !showComments; commentHeightSet">
-              <N-Icon name="comments" :class="$style.commentsButtonContainer" />
-              <div :class="$style.parser">
-                {{ !$props.detailPage ? data.comments_count : 'Комментировать' }}
-              </div>
-            </div>
-          </div>
-          <div v-if="!$props.detailPage && data.tags.length" :class="$style.body__tags" :style="{ marginTop: !$props.detailPage ? '2rem' : '' }">
-            <N-Chip
-              v-for="item in data.tags"
-              :key="item.id"
-              ref="chipsArray"
-              :class="$style.chip"
-              @click="$emit('clickTag', item.id)"
-            >
-              {{ item.name }}
-            </N-Chip>
-            <N-Chip
-              v-if="chipsCounter > 0"
-              :class="$style.chip"
-            >
-              +{{ chipsCounter }}
-            </N-Chip>
-          </div>
-        </NuxtLink> -->
         <NuxtLink v-if="!$props.detailPage" :to="`../${data.section.slug}/${data.id}`">
           <div :class="$style.body__top">
             <h2 :class="$style.title" :style="{ marginBottom: !$props.detailPage ? '1rem' : '1.5rem' }">
@@ -101,7 +54,7 @@
               {{ dateFormat }}
             </div>
             <div :class="$style.cardText">
-              <div :class="[$style.parser, $style[linkColor]]" v-html="data.subtitle" />
+              <div :style="{}" :class="[$style.parser, $style[linkColor]]" v-html="data.subtitle" />
             </div>
             <template v-if="data.price && !$props.detailPage">
               <div :class="$style.price">
@@ -110,7 +63,7 @@
             </template>
             <div v-if="!$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
               <div :class="$style.socialsItem">
-                <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
+                <N-Like v-model="isLiked" :class="$style.likeContainer" :value="isLiked" />
                 <div :class="$style.parser">
                   {{ data.like_count }}
                 </div>
@@ -164,7 +117,13 @@
               <N-Audio :files="data.files" />
             </div> -->
             <div v-for="item in data.files" :key="item.id" :class="$style.cardAudio">
-              <N-Audio v-if="item.file_type_id === 3" :title="item.title" :src="`${$axios.defaults.baseURL}/${item.src}`" :stop="audioStop" @playAudio="playAudio" />
+              <N-Audio
+              @playingEvent="playingEvent"
+              v-if="item.file_type_id === 3"
+              :title="item.title"
+              :src="`${$axios.defaults.baseURL}/${item.src}`"
+              :stop="audioStop"
+              @playAudio="playAudio" />
             </div>
           </template>
           <template v-if="data.price && $props.detailPage">
@@ -205,7 +164,7 @@
         </div>
         <div v-if="$props.detailPage" :class="[$style.socials, detailPage && $style.detailPage]" :style="{marginTop: $props.detailPage ? '3rem' : '2rem', borderTop: $props.detailPage ? '.1rem solid rgba(34, 34, 34, 0.1)' : 'none', padding: $props.detailPage ? '3rem 0 1rem' : '0 0 1rem'}">
           <div :class="$style.socialsItem" @click="addLike">
-            <N-Like v-model="like" :class="$style.likeContainer" :value="like" />
+            <N-Like v-model="isLiked" :class="$style.likeContainer" :value="isLiked" />
             <div :class="$style.parser">
               {{ 'Нравится' }}
             </div>
@@ -253,10 +212,13 @@ export default {
   components: {
   },
   props: { ...dataProps.props },
-  setup (props) {
+  setup (props, ctx) {
+    const { emit } = ctx
     const videoRef = ref(null)
     const showComments = ref(false)
-    const like = ref(props.data.liked)
+    const isLiked = computed(() => {
+      return props.data.liked
+    })
     const likeCounter = ref(props.data.like_count)
     const chipExtra = ref()
     const proxyComments = computed(() => props.comments)
@@ -285,8 +247,33 @@ export default {
       })
       return array.value
     })
-    const playAudio = () => {
+    const playAudio = (title) => {
       audioStop.value++
+      console.log('play')
+      console.log(title)
+      console.log(props.data.title)
+      const radio = document.getElementById('audioLive')
+      if (radio) {
+        radio.pause()
+      }
+      if ('mediaSession' in navigator) {
+        const wrapPlayer = ctx.root.$axios.defaults.baseURL + '/' + sliderImages.value[0].src
+        console.log(wrapPlayer)
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title,
+          artwork: [
+            { src: wrapPlayer, sizes: '96x96', type: 'image/png' },
+            { src: wrapPlayer, sizes: '128x128', type: 'image/png' },
+            { src: wrapPlayer, sizes: '192x192', type: 'image/png' },
+            { src: wrapPlayer, sizes: '256x256', type: 'image/png' },
+            { src: wrapPlayer, sizes: '384x384', type: 'image/png' },
+            { src: wrapPlayer, sizes: '512x512', type: 'image/png' },
+            { src: wrapPlayer, sizes: '1024x1024', type: 'image/png' },
+            { src: wrapPlayer, sizes: '2048x2048', type: 'image/png' },
+            { src: wrapPlayer, sizes: '4096x4096', type: 'image/png' }
+          ]
+        })
+      }
     }
     const login = () => {
       if (!store.state.menu.isShowBottomMenu) {
@@ -324,12 +311,37 @@ export default {
     }
     const addLike = async () => {
       if (store.state.authentication.authorizated) {
-        like.value = !like.value
-        if (like.value === true) {
+        // like.value = !like.value
+        emit('setLike', !isLiked.value)
+        if (isLiked.value === true) {
           likeCounter.value++
+          if (localStorage.getItem('lastCards') !== '[object Object]') {
+            if (JSON.parse(localStorage.getItem('lastCards')).cards) {
+              const localInfo = JSON.parse(localStorage.getItem('lastCards'))
+              JSON.parse(localStorage.getItem('lastCards')).cards.forEach((item, index) => {
+                if (item.id === props.data.id) {
+                  localInfo.cards[index].like_count += 1
+                  localInfo.cards[index].liked = true
+                  localStorage.setItem('lastCards', JSON.stringify(localInfo))
+                }
+              })
+            }
+          }
           await store.dispatch('socials/addLike', props.data.id)
         } else {
           likeCounter.value--
+          if (localStorage.getItem('lastCards') !== '[object Object]') {
+            if (JSON.parse(localStorage.getItem('lastCards')).cards) {
+              const localInfo = JSON.parse(localStorage.getItem('lastCards'))
+              JSON.parse(localStorage.getItem('lastCards')).cards.forEach((item, index) => {
+                if (item.id === props.data.id) {
+                  localInfo.cards[index].like_count -= 1
+                  localInfo.cards[index].liked = false
+                  localStorage.setItem('lastCards', JSON.stringify(localInfo))
+                }
+              })
+            }
+          }
           await store.dispatch('socials/removeLike', props.data.id)
         }
       } else if (!store.state.menu.isShowBottomMenu) {
@@ -353,7 +365,6 @@ export default {
         text: unescape(encodeURIComponent(val)),
         sticker_id: null
       }
-      console.log('send')
       proxyComments.value.data.unshift({
         user: {
           nickname: store.state.authentication.user.nickname
@@ -404,7 +415,6 @@ export default {
     })
     const videoUrl = ref()
     const commentHeightSet = () => {
-      // console.log(commentBox)
       if (props.detailPage === true) {
         setTimeout(() => {
           commentHeight.value = commentBox.value.scrollHeight + 'px'
@@ -435,6 +445,7 @@ export default {
       windowWidth.value = window.innerWidth
     }
     onMounted(() => {
+      console.log()
       store.commit('content/imgLoadCounterReset')
       if (props.detailPage === true) {
         proxyComments.value.data.reverse()
@@ -459,24 +470,50 @@ export default {
       window.removeEventListener('resize', windowWidthCount)
       window.removeEventListener('resize', commentHeightSet)
     })
+    const playingEvent = (title) => {
+      console.log(title)
+      // console.log('play')
+      if ('mediaSession' in navigator) {
+        const wrapPlayer = ctx.root.$axios.defaults.baseURL + '/' + sliderImages.value[0].src
+        console.log(wrapPlayer)
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title,
+          artwork: [
+            { src: wrapPlayer, sizes: '96x96', type: 'image/png' },
+            { src: wrapPlayer, sizes: '128x128', type: 'image/png' },
+            { src: wrapPlayer, sizes: '192x192', type: 'image/png' },
+            { src: wrapPlayer, sizes: '256x256', type: 'image/png' },
+            { src: wrapPlayer, sizes: '384x384', type: 'image/png' },
+            { src: wrapPlayer, sizes: '512x512', type: 'image/png' },
+            { src: wrapPlayer, sizes: '1024x1024', type: 'image/png' },
+            { src: wrapPlayer, sizes: '2048x2048', type: 'image/png' },
+            { src: wrapPlayer, sizes: '4096x4096', type: 'image/png' }
+          ]
+        })
+      }
+    }
     const dateFormat = computed(() => {
-      const t = props.data.date_event.split(/[- :]/)
-      let min = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMinutes()
-      const hour = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getHours()
-      const day = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getDate()
-      let month = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMonth() + 1
-      const year = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getFullYear()
-      if (String(min).length === 1) {
-        min = '0' + min
+      if (props.data.date_event) {
+        const t = props.data.date_event.split(/[- :]/)
+        let min = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMinutes()
+        const hour = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getHours()
+        const day = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getDate()
+        let month = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMonth() + 1
+        const year = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getFullYear()
+        if (String(min).length === 1) {
+          min = '0' + min
+        }
+        if (String(month).length === 1) {
+          month = '0' + month
+        }
+        const totalTime = day + '.' + month + '.' + year + ' / ' + hour + ':' + min
+        return totalTime
+      } else {
+        return 0
       }
-      if (String(month).length === 1) {
-        month = '0' + month
-      }
-      const totalTime = day + '.' + month + '.' + year + ' / ' + hour + ':' + min
-      return totalTime
     })
     return {
-      like,
+      // like,
       likeCounter,
       chipsCounter,
       showComments,
@@ -511,7 +548,9 @@ export default {
       page,
       sliderImages,
       playAudio,
-      linkColor
+      linkColor,
+      isLiked,
+      playingEvent
     }
   }
 }
@@ -549,6 +588,7 @@ export default {
           min-width: 50%;
           max-width: 50%;
           :global(.slick-slider) {
+            touch-action: auto!important;
             height: 100% !important;
             display: flex;
             :global(.slick-dots) {
@@ -561,6 +601,7 @@ export default {
                 height: 100%;
                 :global(.slick-slide) {
                   height: 100%;
+                  touch-action: auto!important;
                   :global(div) {
                     height: 100%;
                     img {
@@ -644,6 +685,9 @@ export default {
     @include regular-text;
     // -webkit-line-clamp: 3;
     // -webkit-box-orient: vertical;
+    a {
+      color: #000 !important;
+    }
   }
   .parserDetail{
     word-break: break-word;
@@ -861,7 +905,7 @@ export default {
     }
     .event {
       a {
-        color: #D13C33;
+        color: #D46D33;
       }
     }
     .broadcast {
@@ -910,6 +954,7 @@ export default {
       will-change: max-height;
       transition: max-height .5s, opacity .5s, margin-top .5s;
       overflow: hidden;
+      padding-bottom: 0.2rem;
       opacity: 0;
       &__title {
         color: $fontColorDefault;

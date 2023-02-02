@@ -120,7 +120,12 @@ export default {
     // const headerAnimation = document.querySelector('.headerAnimation')
 
     const openMenu = () => {
-      if (document.querySelector('.headerAnimation').classList.contains('pageLoaded') || pageLoading.value) {
+      const wrap = document.getElementById('__nuxt')
+      if (window.innerWidth <= 768) {
+        wrap.classList.add('noScroll')
+        document.body.style.overflow = 'hidden'
+      }
+      // if (document.querySelector('.headerAnimation').classList.contains('pageLoaded') || pageLoading.value) {
         if (store.state.menu.isShowBottomMenu && !store.state.menu.isShowBottomLive && pageLoad.value) {
           setTimeout(() => {
             store.commit('menu/changeShowStateBottomSheetLive', { value: true })
@@ -134,11 +139,17 @@ export default {
           store.commit('menu/changeShowStateBottomSheetMenu', { value: true })
           store.commit('menu/changeShowStateBottomSheetLive', { value: true })
         }
-      }
+      // }
     }
 
     const openLive = () => {
-      if (document.querySelector('.headerAnimation').classList.contains('pageLoaded') || pageLoading.value) {
+      const wrap = document.getElementById('__nuxt')
+      console.log(wrap)
+      if (window.innerWidth <= 768) {
+        wrap.classList.add('noScroll')
+        document.body.style.overflow = 'hidden'
+      }
+      // if (document.querySelector('.headerAnimation').classList.contains('pageLoaded') || pageLoading.value) {
         if (store.state.menu.isShowBottomMenu && store.state.menu.isShowBottomLive && pageLoad.value) {
           emit('closeState')
           setTimeout(() => {
@@ -157,7 +168,7 @@ export default {
           })
           store.commit('menu/changeShowStateBottomSheetLive', { value: false })
         }
-      }
+      // }
     }
 
     const openProfile = () => {

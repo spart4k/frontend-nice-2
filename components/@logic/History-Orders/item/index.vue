@@ -36,7 +36,6 @@ export default {
         props.order.basket.cards.forEach((item) => {
           string.value += item.title + ', ' + item.pivot.quantity + 'шт. '
           if (item.pivot.details) {
-            console.log(item.pivot.details)
             string.value += JSON.parse(item.pivot.details).начало + ', ' + JSON.parse(item.pivot.details).конец + ', ' + JSON.parse(item.pivot.details).длина + 'см. '
           }
         })
@@ -67,7 +66,7 @@ export default {
     width: 100%;
     display: flex;
     background: #F5F5F5;
-    border-radius: 20px;
+    border-radius: 2rem;
     padding: 1.5rem;
     flex-direction: column;
     .order {

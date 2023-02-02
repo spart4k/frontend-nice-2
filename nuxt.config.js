@@ -1,19 +1,19 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Найс',
+    // title: 'Найс',
     htmlAttrs: {
       lang: 'ru'
     },
     // transition: 'home',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1, user-scalable=no' },
+      { name: 'viewport', content: 'width=device-width, minimum-scale=1.0, maximum-scale = 1.0, user-scalable = no"' },
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'msapplication-TileColor', content: '#ffffff' },
-      { name: 'msapplication-TileImage', content: '/ms-icon-144x144.png' }
-
+      { name: 'msapplication-TileImage', content: '/ms-icon-144x144.png' },
+      { property: 'og:type', content: 'website' },
     ],
     link: [
       // { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -141,7 +141,8 @@ export default {
     '@plugins/v-lazyload.js',
     '@plugins/v-debounce.js',
     { src: '@plugins/v-infinity-scroll.js', ssr: false },
-    { src: '@plugins/vue-bottom-sheet.js', ssr: false }
+    { src: '@plugins/vue-bottom-sheet.js', ssr: false },
+    { src: '@/plugins/v-masonry', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -178,7 +179,8 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: 'https://test.itisthenice.com'
+    baseURL: 'https://itisthenice.com',
+    baseURLWS: 'wss://itisthenice.com'
     // baseURL: 'http://192.168.1.19:8999'
   },
 

@@ -31,6 +31,7 @@ const animation = ($gsap, Elastic) => {
     const SUBTITLE = '.subtitleLogo'
     const animationPlug = document.querySelector('.animationPlug')
     const backgroundElement = document.querySelector('.background')
+    console.log(backgroundElement)
     const logo = document.querySelector('.logo')
     const content = document.querySelector('.content')
     tl.set(SUBTITLE, {
@@ -211,7 +212,6 @@ const animation = ($gsap, Elastic) => {
 
   const animateBackground = () => {
     // const height = ref(window.innerHeight / 10)
-    // console.log(height)
     // $gsap.to('.background',
     //   {
     //     scrollTrigger: {

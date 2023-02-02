@@ -74,6 +74,14 @@ export default {
     const popup = ref(false)
     const popupChange = () => {
       popup.value = !popup.value
+      const wrap = document.getElementById('__nuxt')
+      if (popup.value) {
+        wrap.classList.add('noScroll')
+        document.body.style.overflow = 'hidden'
+      } else {
+        wrap.classList.remove('noScroll')
+        document.body.style.overflow = 'auto'
+      }
     }
     const syncSlidersBottom = (value, sliderTwo) => {
       c1.value.goTo(sliderTwo)
@@ -261,6 +269,7 @@ export default {
         height: inherit !important;
         display: flex;
         padding: 1rem 1rem;
+        touch-action: auto!important;
         :global(.slick-list) {
           height: 100% !important;
           margin: auto 0;

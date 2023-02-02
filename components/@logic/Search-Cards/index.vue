@@ -85,7 +85,6 @@ export default {
       if (val.length) {
         loading.value = true
         const searchResult = await store.dispatch('search/searchCards', searchData)
-        console.log(searchResult.data)
         resultCards.value = searchResult.data.cards
         resultAuthors.value = searchResult.data.authors
         loading.value = false

@@ -6,7 +6,7 @@
     <template v-if="$props.message.sticker && ($props.message.sticker.id !== 1)">
       <img
         :class="$style.sticker"
-        :src="`https://test.itisthenice.com/${message.sticker.src}`"
+        :src="`${$axios.defaults.baseURL}/${message.sticker.src}`"
         alt=""
       >
     </template>

@@ -2,13 +2,14 @@
   <main :class="$style.main">
     <div :class="$style.wrapper">
       <N-Preloader v-if="!card" />
-      <template v-if="card">
+      <template v-if="card && section">
         <SectionCards
           :key="card.id"
-          :section="card.card.data.section"
+          :section="section"
           detail-page
           :card="card.card"
           :comments="card.comments"
+          @setStateLike="setLike"
           @clickTag="clickTag"
           @clickAuthor="clickAuthor"
         />
@@ -40,7 +41,7 @@ export default defineComponent({
   layout: 'default',
   // middleware: 'background',
   // transition: 'home',
-  setup () {
+  setup (_, {root}) {
     const isAddedBasket = ref(false)
     const { route, store } = useContext()
     const router = useRouter()
@@ -60,53 +61,110 @@ export default defineComponent({
     const clickAuthor = (value) => {
       router.push({ path: `/authors/${value}` })
     }
-
-    const card = useAsync(async () => {
+    const card = ref({
+      card: {},
+      comments: {}
+    })
+    const section = computed(() => {
+      return card?.value?.card?.data?.section
+    })
+    const fetchData = async () => {
       const params = {
         card_id: route.value.params.id,
         count: 99
       }
+      const responseCard = await store.dispatch('detailPage/getData', route.value.params.id)
+      console.log(route.value.params.id)
+      const responseComments = await store.dispatch('detailPage/getComments', params)
+      return {
+        responseCard,
+        responseComments
+      }
+    }
+    useAsync(async () => {
       try {
-        const responseCard = await store.dispatch('detailPage/getData', route.value.params.id)
-        const responseComments = await store.dispatch('detailPage/getComments', params)
+        const response = await fetchData()
         metaTags.value = {
-          seo_title: responseComments.data?.seo_title,
-          seo_description: responseComments.data?.seo_description,
-          seo_image: responseComments.data?.seo_file_id?.src
+          seo_title: response.responseCard.data?.data?.seo_title,
+          seo_description: response.responseCard.data?.data?.seo_description,
+          seo_image: response.responseCard.data?.data?.seo_file?.src
         }
-        return {
-          card: responseCard.data,
-          comments: responseComments.data
+        console.log(metaTags.value)
+        card.value = {
+          card: response.responseCard.data,
+          comments: response.responseComments.data
         }
         } catch (e) {
-          console.log(e)
         }
       }, route.value.params.id)
     useMeta(() => ({
-        title: card?.value?.card?.data?.seo_title,
+        title: metaTags.value.seo_title,
         meta: [
           {
-            hid: 'og:title',
-            name: 'og:title',
-            property: 'og:title',
-            content: card?.value?.card?.data?.seo_title
-          },
-          {
-            hid: 'og:description',
-            name: 'og:description',
-            property: 'og:description',
-            content: card?.value?.card?.data?.seo_description
+            hid: 'title',
+            name: 'title',
+            content: metaTags.value.seo_title
           },
           {
             hid: 'description',
             name: 'description',
-            property: 'description',
-            content: card?.value?.[0]?.data?.seo_description
+            content: metaTags.value.seo_description
+          },
+          {
+            property: 'og:url',
+            content: root.$axios.defaults.baseURL
+          },
+          {
+            hid: 'og:title',
+            name: 'og:title',
+            property: 'og:title',
+            content: metaTags.value.seo_title
+          },
+          {
+            property: 'og:description',
+            content: metaTags.value.seo_description
+          },
+          {
+            hid: 'og:image',
+            name: 'og:image',
+            property: 'og:image',
+            content: `${root.$axios.defaults.baseURL}/${metaTags.value.seo_image}`
+          },
+          {
+            hid: 'twitter:card',
+            property: 'twitter:card',
+            content: 'summary_large_image'
+          },
+          {
+            hid: 'twitter:url',
+            property: 'twitter:url',
+            content: root.$axios.defaults.baseURL
+          },
+          {
+            hid: 'twitter:title',
+            property: 'twitter:title',
+            content: metaTags.value.seo_title
+          },
+          {
+            hid: 'twitter:card',
+            property: 'twitter:description',
+            content: metaTags.value.seo_description
+          },
+          {
+            hid: 'twitter:description',
+            property: 'twitter:description',
+            content: metaTags.value.seo_description
+          },
+          {
+            hid: 'twitter:image',
+            name: 'twitter:image',
+            property: 'twitter:image',
+            content: `${root.$axios.defaults.baseURL}/${metaTags.value.seo_image}`
           }
         ]
     }))
     const bgName = computed(() => {
-      const find = sections.value?.find(item => Number(item.id) === +card.value?.section.id)
+      const find = sections.value?.data?.find(item => Number(item.id) === +card.value?.card.data?.section.id)
       return find
     })
 
@@ -134,6 +192,9 @@ export default defineComponent({
       store.commit('content/setSingleAnimation', false)
       store.commit('content/changeAnimationEnd', true)
     })
+    const setLike = (state) => {
+      card.value.card.data.liked = state
+    }
 
     return {
       card,
@@ -144,8 +205,9 @@ export default defineComponent({
       isAddedBasket,
       bgName,
       isAuth,
-      metaTags
-
+      metaTags,
+      section,
+      setLike
     }
   },
   head: {},

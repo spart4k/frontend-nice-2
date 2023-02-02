@@ -3,7 +3,7 @@ import useForm from '~/compositions/useForm'
 import { email, required, phone, onlyNumeric } from '~/utills/validations'
 
 export default {
-  name: 'TabDelivery',
+  name: 'TabPickup',
   setup (_, ctx) {
     const { store } = useContext()
     const activePayment = ref('card')
@@ -52,7 +52,6 @@ export default {
             })
           }
         } catch (e) {
-          console.log(e)
         } finally {
           loading.value = false
         }
@@ -86,7 +85,6 @@ export default {
             store.commit('menu/changeStepMenu', { step: 3 })
           }
         } catch (e) {
-          console.log(e)
         } finally {
           loading.value = false
         }

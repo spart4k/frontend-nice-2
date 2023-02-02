@@ -55,7 +55,6 @@ export default {
             store.commit('basket/removeFromBasket', index)
           }
         } catch (e) {
-          console.log(e)
         }
       })
     }

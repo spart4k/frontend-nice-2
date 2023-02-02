@@ -12,6 +12,9 @@
     <div :class="$style.audioContainer">
       <audio ref="audioSource"
       :src="src"
+      class="audioCard"
+      @playing="playingEvent"
+      @pause="pausedEvent"
       preload="none"
       @canplay="isLoaded"
       :class="$style.audio"
@@ -61,7 +64,7 @@
   </div> -->
 </template>
 <script lang="js">
-import { ref, onMounted, nextTick, computed, onUnmounted, watch } from '@nuxtjs/composition-api'
+import { ref, onMounted, nextTick, useContext, computed, onUnmounted, watch } from '@nuxtjs/composition-api'
 
 export default {
   name: 'NAudio',
@@ -83,6 +86,7 @@ export default {
   },
   setup (props, ctx) {
     const { emit } = ctx
+    const { store } = useContext()
     const audioPlaying = ref(false)
     const audioSource = ref(null)
     const audioTitle = computed(() => { return props.title.slice(0, -4) })
@@ -112,18 +116,30 @@ export default {
     }
     const playAudio = () => {
       audioStart.value = true
-      if (!audioSource.value.readyState) {
+      try {
+        if (!audioSource.value.readyState) {
         loading.value = true
       }
-      emit('playAudio')
+      } catch (e) {
+        console.log(e)
+      }
+      emit('playAudio', audioTitle.value)
       setTimeout(() => {
         audioPlaying.value = true
-        audioSource.value.play()
-      }, 100)
+        if (audioSource.value) {
+          audioSource.value.play()
+        }
+      }, 150)
     }
     const pauseAudio = () => {
-      audioPlaying.value = false
-      audioSource.value.pause()
+      try {
+        audioPlaying.value = false
+        if (audioSource.value) {
+          audioSource.value.pause()
+        }
+      } catch (e) {
+        console.log(e)
+      }
     }
     const innerHeight = ref(null)
     const marqueeLengthComputed = computed(() => {
@@ -147,6 +163,11 @@ export default {
       }
       loop()
     }
+    const playingEvent = () => {
+      console.log('playing')
+      store.commit('menu/changeAudioPlaying', false)
+      emit('playingEvent', audioTitle.value)
+    }
     const onTimeUpdate = (val) => {
       if (audioStart.value) {
         finished.value = (inputTimeLine.value.value / inputTimeLine.value.max) * 100
@@ -168,7 +189,6 @@ export default {
       }
     }
     const secConverter = (val) => {
-      console.log(val)
       let sec = val
       let minutes = 0
       if (Math.floor(sec / 60)) {
@@ -204,7 +224,7 @@ export default {
       })
     })
     onUnmounted(() => {
-      window.removeEventListener('mousedown', lockInput)
+      window.removeEventListener('mousedofwn', lockInput)
       window.removeEventListener('mouseup', unlockInput)
     })
 
@@ -212,6 +232,11 @@ export default {
       audioPlaying.value = false
       audioSource.value.pause()
     })
+
+    const pausedEvent = () => {
+      console.log('paused Auio')
+      audioPlaying.value = false
+    }
 
     return {
       audioPlaying,
@@ -243,7 +268,9 @@ export default {
       lockInput,
       unlockInput,
       timeWidth,
-      secConverter
+      secConverter,
+      playingEvent,
+      pausedEvent
     }
   }
 }
@@ -320,6 +347,7 @@ input[type="range"]::-ms-track {
   .time {
     @include regular-text-small;
     opacity: 0.5;
+    white-space: nowrap;
     @media (max-width: $mobileWidth) {
       // width: 14.5rem;
     }

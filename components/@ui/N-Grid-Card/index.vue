@@ -1,7 +1,6 @@
 <template>
-  <div>
     <div :class="$style.cards">
-      <template v-if="spliceArray.colLeft && spliceArray.colRight">
+      <!-- <template v-if="spliceArray.colLeft && spliceArray.colRight">
         <div :class="$style.col">
           <div
             v-for="(card, index) in spliceArray.colLeft"
@@ -60,53 +59,69 @@
             </div>
           </div>
         </template>
-      </template>
-      <template v-else-if="spliceArray.colFull">
-        <div :class="$style.col">
-          <div
-            v-for="(card, index) in spliceArray.colFull"
-            :key="index"
-            @click="saveHeight"
-          >
-            <template v-if="(selectors === 'shop') && card.hasOwnProperty('preview')">
+      </template> -->
+      <template v-if="spliceArray.colFull">
+        <!-- <div :class="$style.col"> -->
+        <client-only>
+          <div v-masonry
+          id="masonry"
+          ref="masonryList"
+          transition-duration="0"
+          item-selector=".item"
+          :class="$style.masonry"
+          class="masonry-container">
+            <template v-if="(selectors === 'shop') && previewCard.hasOwnProperty('preview')">
               <n-section-intro
-                v-if="card.hasOwnProperty('preview')"
-                :key="card.id"
-                :description="card"
-                :image="card.image"
-                :class="$style.preview"
+                v-if="previewCard.hasOwnProperty('preview')"
+                :description="previewCard"
+                :image="previewCard.image"
+                class="item"
+                :class="[$style.preview, $style.masonryItem, transitionMasonry ? $style.transition: '']"
               />
-              <div v-if="selectors === 'shop'" :class="$style.rowMobile">
+              <div v-if="selectors === 'shop'" class="item" :class="[$style.rowMobile, $style.masonryItem, $style.filters, transitionMasonry ? $style.transition: '']">
                 <N-Select :class="$style.select" :selectedValue="selectedSection" :select-items="sections" @setProperty="sendSection" />
                 <N-Select :class="$style.select" :selectedValue="selectedMode" :select-items="searchMode" @setProperty="sendMode" />
-                <div :class="$style.selectPriority"  @click="$emit('sendNovelty', noveltyCount); noveltyCount = !noveltyCount">
+                <div :class="$style.selectPriority"  @click="sendSort">
                   <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
                 </div>
               </div>
             </template>
             <n-section-intro
-              v-else-if="card.hasOwnProperty('preview')"
-              :key="card.id"
-              :description="card"
-              :image="card.image"
-              :class="$style.preview"
+              v-else-if="previewCard.hasOwnProperty('preview')"
+              :description="previewCard"
+              :image="previewCard.image"
+              class="item"
+              :class="[$style.preview, $style.masonryItem, transitionMasonry ? $style.transition: '']"
             />
-            <div v-else-if="card.hasOwnProperty('home')" :key="card.id" :class="$style.image">
-              <img :src="card.image" alt="DOG ">
+            <div v-else-if="previewCard.hasOwnProperty('home')" class="item" :class="[$style.image, $style.masonryItem, transitionMasonry ? $style.transition: '']">
+              <img :src="previewCard.image" alt="DOG ">
             </div>
-            <N-Card-Author v-else-if="card.hasOwnProperty('author_data')" :author="card" :class="$style.authorCard" />
-            <template v-else>
-              <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
-            </template>
+            <div class="item" v-else-if="previewCard.hasOwnProperty('author_data')" :class="[$style.authorCard, $style.masonryItem, transitionMasonry ? $style.transition: '']">
+              <N-Card-Author :author="previewCard" />
+            </div>
+            <div
+              v-masonry-tile
+              resize="false"
+              class="item"
+              :class="[$style.masonryItem, transitionMasonry ? $style.transition: '']"
+              v-for="(card, index) in spliceArray.colFull"
+              :key="index"
+              @click="saveHeight"
+            >
+              <template>
+                <!-- {{ card }} -->
+                <section-cards :key="card.id" :section="card.section" :class="$style.cards__item" :card="card" />
+              </template>
+            </div>
           </div>
-        </div>
+        </client-only>
+        <!-- </div> -->
       </template>
     </div>
-  </div>
 </template>
 
 <script>
-
+import Vue from 'vue'
 import { computed, onMounted, ref, useContext, onUnmounted, watch } from '@nuxtjs/composition-api'
 
 export default {
@@ -146,9 +161,13 @@ export default {
     })
     const leftArray = ref()
     const { emit } = ctx
+    const previewCard = ref({})
     const rightArray = ref()
+    const isShowBottomMenu = computed(() => store.state.menu.isShowBottomMenu)
     const noveltyCount = ref(false)
     const windowWidth = ref()
+    const masonryList = ref(null)
+    const transitionMasonry = ref(false)
     const widthFrameStart = computed(() => {
       if (process.browser) {
         return window.innerWidth
@@ -160,30 +179,35 @@ export default {
     const windowWidthCount = () => {
       windowWidth.value = window.innerWidth
     }
+    const masonryRebuild = () => {
+      // window.dispatchEvent(new Event('resize'))
+      Vue.prototype.$redrawVueMasonry()
+    }
     const spliceArray = computed(() => {
-      // if (route.value.query.author) {
-      console.log(route.value.name === 'authors-id')
       if (route.value.name === 'authors-id') {
-        proxyArray.value.unshift({
+        // proxyArray.value.unshift({
+        //   author_data: props.author
+        // })
+        previewCard.value = {
           author_data: props.author
-        })
+        }
       // } else if (!route.value.query.tag && !route.value.query.author) {
       } else if (route.value.name !== 'tags-id' && route.value.name !== 'authors-id') {
         if (!props.homePage) {
-          proxyArray.value.unshift({
+          previewCard.value = {
             image: route.value.params.slug,
             title: props.description.title,
             text: props.introData?.quote_text,
             author: props.introData?.author,
             preview: true,
             id: Math.random()
-          })
+          }
         } else {
-          proxyArray.value?.unshift({
+          previewCard.value = {
             home: true,
             image: require('~/assets/img/preview/dogs.png'),
             id: Math.random()
-          })
+          }
         }
       }
       const firstHalfDesktop = ref([])
@@ -252,13 +276,33 @@ export default {
 
   onMounted(() => {
     windowWidthCount()
-    window.addEventListener('resize', windowWidthCount)
+    // const grid = document.getElementById('masonry')
+    // this.msnry = new Masonry(grid, {
+    //    columnWidth: 25
+    // })
+    window.addEventListener('resize', () => {
+      windowWidthCount()
+    })
+    window.addEventListener('resize', () => {
+      setTimeout(() => {
+        masonryRebuild()
+      }, 200)
+    })
     if (selectors.value === 'shop') {
       getСategories()
     }
     if (props.selectAsc) {
       noveltyCount.value = !noveltyCount.value
     }
+    setTimeout(() => {
+      // const block = masonryList.value.childNodes
+      // block.forEach((item) => {
+      //   if (item.style && item.style.left !== '0px') {
+      //     console.log(item)
+      //     item.style.left = '50%'
+      //   }
+      // })
+    }, 1000)
   })
 
   onUnmounted(() => {
@@ -267,6 +311,32 @@ export default {
 
   watch(() => props.items, () => {
     proxyArray.value = props.items
+  })
+  const timeoutTransition = () => {
+    const timeout = setTimeout(() => {
+      transitionMasonry.value = false
+    }, 2000)
+    return timeout
+  }
+  const sendSort = () => {
+    emit('sendNovelty', noveltyCount.value)
+    noveltyCount.value = !noveltyCount.value
+    setTimeout(() => {
+      transitionMasonry.value = true
+      masonryRebuild()
+    }, 500)
+  }
+  watch(() => isShowBottomMenu.value, (curVal) => {
+    let timer = null
+    transitionMasonry.value = true
+    if (curVal) {
+      timer = 400
+    } else {
+      timer = 200
+    }
+    setTimeout((timer) => {
+      masonryRebuild()
+    }, timer)
   })
 
   return {
@@ -285,7 +355,14 @@ export default {
     getСategories,
     sendMode,
     sendSection,
-    categories
+    categories,
+    masonryRebuild,
+    isShowBottomMenu,
+    previewCard,
+    transitionMasonry,
+    masonryList,
+    timeoutTransition,
+    sendSort
     }
   }
 }
@@ -305,14 +382,15 @@ export default {
   display: flex;
   margin: 0 auto;
   justify-content: center;
-  @media (min-width: $desktopWidth) {
-    width: calc(100%);
-  }
-  @media (max-width: $tabletWidth) {
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-  }
+  width: 100%;
+  // @media (min-width: $desktopWidth) {
+  //   width: calc(100%);
+  // }
+  // @media (max-width: $tabletWidth) {
+  //   flex-direction: column;
+  //   justify-content: center;
+  //   width: 100%;
+  // }
   &__item {
     margin-bottom: 2rem;
     display: flex;
@@ -337,7 +415,9 @@ export default {
     }
   }
 }
-
+.authorCard {
+  margin-bottom: 2rem;
+}
 .col {
   max-width: 53.2rem;
   width: calc(50% - 1.5rem);
@@ -356,15 +436,41 @@ export default {
     max-width: none;
     min-width: none;
   }
-  .authorCard {
-    margin-bottom: 2rem;
+  .filters {
+    .row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+      .select {
+        width: 20.3rem;
+        height: 4.4rem;
+      }
+      .selectPriority {
+        width: 4.4rem;
+        height: 4.4rem;
+        background: white;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        border-radius: 50%;
+        justify-content: center;
+        cursor: pointer;
+        .icon {
+          transition-duration: .5s;
+          z-index: 5;
+          color: $pink2;
+        }
+      }
+    }
   }
-  .row {
+}
+  .rowMobile{
     display: flex;
     justify-content: flex-end;
     gap: 1.5rem;
     margin-bottom: 4rem;
-    @media (max-width: $tabletWidth) {
+    @media (min-width: $tabletWidth) {
       display: none;
     }
     .select {
@@ -381,6 +487,9 @@ export default {
       border-radius: 50%;
       justify-content: center;
       cursor: pointer;
+      @media (max-width: $tabletWidth) {
+        width: 6.4rem;
+      }
       .icon {
         transition-duration: .5s;
         z-index: 5;
@@ -388,40 +497,35 @@ export default {
       }
     }
   }
-  .rowMobile{
-    display: flex;
-    justify-content: flex-end;
-    gap: 1.5rem;
-    margin-bottom: 4rem;
-    @media (min-width: $tabletWidth) {
-      display: none;
-    }
-    .select {
-      width: 14.3rem;
-      height: 4.4rem;
-    }
-    .selectPriority {
-      width: 4.4rem;
-      height: 4.4rem;
-      background: white;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      border-radius: 50%;
-      justify-content: center;
-      cursor: pointer;
-      .icon {
-        transition-duration: .5s;
-        z-index: 5;
-        color: $pink2;
-      }
-    }
-  }
-}
 .col + .col {
   margin-left: 3rem;
   @media (max-width: $tabletWidth) {
     margin-left: 0;
+  }
+}
+.filters {
+  display: flex;
+  justify-content: flex-end;
+  grid-gap: 1.5rem;
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+.masonry {
+  width: 100%;
+  max-width: 105rem;
+  display: flex;
+  .masonryItem {
+    width: 50%;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    &.transition {
+      // transition: .2s;
+    }
+    @media (max-width: $mobileWidth) {
+      width: 100%;
+      padding-left: 0rem;
+      padding-right: 0rem;
+    }
   }
 }
 </style>

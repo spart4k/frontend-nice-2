@@ -8,8 +8,7 @@ export const actions = {
       const data = await this.$axios.post('api/v1/cardsSearch', params)
       return data
     } catch (e) {
-      this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
-      console.log(e)
+      this.$toast.error(`Ошибка: ${e.response.data.message}, main: 11`, { position: 'bottom-right', icon: true })
     }
   },
   async getSeo (state, params) {
@@ -18,7 +17,6 @@ export const actions = {
       return data
     } catch (e) {
       // this.$toast.error(`Ошибка: ${e.response.data.message}`, { position: 'bottom-right', icon: true })
-      console.log(e)
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <N-Preloader v-if="$fetchState.pending" />
+    <N-Preloader v-if="!fetchLoading" />
     <n-intro-slug v-else>
       <template>
         <NGridCard
@@ -32,7 +32,8 @@ import {
   defineComponent,
   useRouter,
   useContext,
-  useFetch,
+  // useFetch,
+  useAsync,
   useMeta,
   computed, onMounted, nextTick, onUpdated
   // useMeta,
@@ -49,7 +50,7 @@ export default defineComponent({
     return path
   },
   // components: { vSelect },
-  setup () {
+  setup (_, {root}) {
     const router = useRouter()
     const { store, route, $gsap } = useContext()
     const cards = ref([])
@@ -89,12 +90,12 @@ export default defineComponent({
     const selectPresent = ref(null)
     const selectMode = ref('created_at')
     const priceFetch = ref(1)
+    const metaTags = ref({})
     const scrollHeight = computed(() => store?.state?.content?.scrollHeight)
     const metaTitle = computed(() => store?.state?.content?.sections?.data)
     const firstRender = ref(true)
 
     const sendSection = (value) => {
-      console.log(value)
       selectThird.value = ''
       if (value === 8) {
         value = 9
@@ -136,25 +137,64 @@ export default defineComponent({
       searchCards()
     }
     useMeta(() => ({
-      title: metaTitle.value[id.value - 1]?.seo_title,
+      title: author.value?.name,
       meta: [
         {
           hid: 'og:title',
           name: 'og:title',
           property: 'og:title',
-          content: metaTitle.value[id.value - 1]?.seo_title
-        },
-        {
-          hid: 'og:description',
-          name: 'og:description',
-          property: 'og:description',
-          content: metaTitle.value[id.value - 1]?.seo_description
+          content: author.value?.name
         },
         {
           hid: 'description',
           name: 'description',
-          property: 'description',
-          content: metaTitle.value[id.value - 1]?.seo_description
+          content: metaTags.value?.seo_description
+        },
+        {
+          property: 'og:url',
+          content: root.$axios.defaults.baseURL
+        },
+        {
+          hid: 'og:title',
+          name: 'og:title',
+          property: 'og:title',
+          content: metaTags.value?.seo_title
+        },
+        {
+          property: 'og:description',
+          content: metaTags.value?.seo_description
+        },
+        {
+          hid: 'og:image',
+          name: 'og:image',
+          property: 'og:image',
+          content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_file?.src}`
+        },
+        {
+          hid: 'twitter:card',
+          property: 'twitter:card',
+          content: 'summary_large_image'
+        },
+        {
+          hid: 'twitter:url',
+          property: 'twitter:url',
+          content: root.$axios.defaults.baseURL
+        },
+        {
+          hid: 'twitter:title',
+          property: 'twitter:title',
+          content: metaTags.value?.seo_title
+        },
+        {
+          hid: 'twitter:description',
+          property: 'twitter:description',
+          content: metaTags.value?.seo_description
+        },
+        {
+          hid: 'twitter:image',
+          name: 'twitter:image',
+          property: 'twitter:image',
+          content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_file?.src}`
         }
       ]
     }))
@@ -227,10 +267,12 @@ export default defineComponent({
           opacity: 0
         })
       })
-      if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'authors') {
+      if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== route.value.path) {
+        console.log(route.value)
         const lastSection = {
-          section: 'authors'
+          section: route.value.path
         }
+        console.log(JSON.stringify(lastSection))
         localStorage.setItem('lastSection', JSON.stringify(lastSection))
         store.commit('content/setScrollHeight', 0)
       }
@@ -241,7 +283,7 @@ export default defineComponent({
         store.commit('content/setHeaderHidden', true)
         if (firstRender.value) {
           firstRender.value = false
-          if (JSON.parse(localStorage.getItem('lastSection')).section === 'authors' && scrollHeight.value !== 0) {
+          if (JSON.parse(localStorage.getItem('lastSection')).section === route.value.path && scrollHeight.value !== 0) {
             window.scroll({
               top: scrollHeight.value,
               left: 0
@@ -256,7 +298,7 @@ export default defineComponent({
           store.commit('content/setHeaderHidden', true)
           if (firstRender.value) {
             firstRender.value = false
-            if (JSON.parse(localStorage.getItem('lastSection')).section === 'authors' && scrollHeight.value !== 0) {
+            if (JSON.parse(localStorage.getItem('lastSection')).section === route.value.path && scrollHeight.value !== 0) {
                 window.scroll({
                   top: 0,
                   left: 0
@@ -293,9 +335,11 @@ export default defineComponent({
       return response
     }
 
-    useFetch(async () => {
+    useAsync(async () => {
         try {
           const response = await fetchData()
+          const seo = await store.dispatch('main/getSeo')
+          metaTags.value = seo.data.data[0]
           if (authorId.value) {
             const authorResponse = await fetchAuthor()
             author.value = authorResponse
@@ -307,13 +351,12 @@ export default defineComponent({
           fetchLoading.value = true
           cards.value = [...response.data]
           startCards.value = [...cards.value]
-          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === 'authors') {
+          if (JSON.parse(localStorage.getItem('lastCards')) && JSON.parse(localStorage.getItem('lastCards')).section === route.value.path) {
             cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
             startCards.value = [...cards.value]
             pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
           }
         } catch (e) {
-          console.log(e)
         }
     })
 
@@ -366,7 +409,7 @@ export default defineComponent({
         startCards.value = [...cards.value]
         const lastCards = {
           cards: startCards.value,
-          section: 'authors',
+          section: route.value.path,
           page: pageNumber.value
         }
         localStorage.setItem('lastCards', JSON.stringify(lastCards))
@@ -410,7 +453,8 @@ export default defineComponent({
       sendMode,
       metaTitle,
       scrollHeight,
-      firstRender
+      firstRender,
+      metaTags
     }
   },
   head: {}

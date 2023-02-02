@@ -40,13 +40,15 @@ export default {
         fields: {
           name: { default: store.state.authentication.user.fullname, validations: { required } },
           email: { default: store.state.authentication.user.email, validations: { email, required } },
-          phone: { default: store.state.authentication.user.phone, validations: { phone, required, onlyNumeric } }
+          phone: { default: store.state.authentication.user.phone, validations: { phone, required, onlyNumeric } },
+          address_id: { default: store.state.authentication.adress[0][0], validations: { required } }
         }
       })
     const paymentsMethodSelect = [
       { text: 'Картой', icon: 'card-stepper', value: 'card' }
     ]
     const submit = async () => {
+      console.log('delivery')
       try {
         if (!validate()) { return }
         loading.value = true
@@ -69,7 +71,6 @@ export default {
           })
         }
       } catch (e) {
-          console.log(e)
       } finally {
         loading.value = false
       }

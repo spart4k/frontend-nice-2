@@ -75,7 +75,6 @@ export default {
             store.commit('authentication/removeUserAdress', index)
           }
         } catch (e) {
-          console.log(e)
         }
       })
     }
@@ -102,7 +101,6 @@ export default {
             citiesArray.value.push(item.name)
           })
         } catch (e) {
-          console.log(e)
         }
       })
     }
@@ -142,12 +140,10 @@ export default {
           store.commit('menu/changeStepMenu', { step: 1 })
         }
       } catch (e) {
-        console.log(e)
       }
     }
 
     const setAddress = (value, index) => {
-      console.log(value, index)
       store.commit('authentication/setSelectedAddress', value)
       store.commit('authentication/setSelectedAddressIndex', index)
     }

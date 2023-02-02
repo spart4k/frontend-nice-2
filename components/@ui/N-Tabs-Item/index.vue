@@ -2,9 +2,8 @@
   <li
     :class="[$style.item, showAnimate && $style.showAnimate]"
     class="navSectionItem"
-    :style="{backgroundColor: BLAND_COLOR[item.slug] }"
   >
-    <nuxt-link :to="{ path: `/${item.slug}` }">
+    <nuxt-link :style="{backgroundColor: BLAND_COLOR[item.slug] }" :to="{ path: `/${item.slug}` }">
       {{ item.title }}
     </nuxt-link>
   </li>

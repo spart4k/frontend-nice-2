@@ -1,9 +1,9 @@
 <template>
   <div>
-    <N-Preloader v-if="!cards.data || !loadingEnd" />
+    <N-Preloader v-if="!cards  || !loadingEnd && !showAnimate" />
     <n-intro
       :class="!loadingEnd && $style.disabled"
-      v-if="cards.data"
+      v-show="cards.data"
       :description="introTitle"
       :is-show-animation="true"
     >
@@ -18,14 +18,16 @@
         />
       </div>
       <div class="content" :class="[showAnimate && $style.animateContent, $style.content]">
-        <NGridCard
-          v-if="cards && cards.data"
-          ref="content"
-          :items="cards.data"
-          :class="!loadingEnd && $style.disabled"
-          home-page
-          @clickTag="clickTag"
-        />
+        <client-only>
+          <NGridCard
+            v-if="cards && cards.data"
+            ref="content"
+            :items="cards.data"
+            :class="!loadingEnd && $style.disabled"
+            home-page
+            @clickTag="clickTag"
+          />
+        </client-only>
       </div>
     </n-intro>
     <div :class="$style.loadingContainer">
@@ -41,8 +43,8 @@ import {
   ref,
   computed,
   defineComponent,
-  useContext,
-  useFetch, useAsync, watch,
+  useContext, useFetch,
+  useAsync, watch,
   onMounted, onUnmounted, onUpdated, nextTick,
   useRouter,
   useMeta
@@ -123,176 +125,172 @@ export default defineComponent({
       animateNavbar,
       animationTimeline
     } = animationGSAP($gsap, Elastic)
-
     onMounted(() => {
       store.commit('content/changeContentLoader', true)
-      // getLikes()
-      // if (backgroundLoaded.value) {
-        const body = document.querySelector('body')
-        body.style.overflow = 'hidden'
-        window.addEventListener('resize', resize)
-        window.addEventListener('load', () => {
-          if (store.state.content.singleAnimation) {
-            localStorage.setItem('showAnimateHomePage', 'true')
-            store.commit('content/setSingleAnimation', false)
-            // store.commit('content/setAnimate', false)
-          }
-          if (window.innerWidth < 450) {
-            animationlogo()
-          }
-          animateSubtitle()
-          animateNavbar('.navbarSlug')
-          const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
-          if (!isPlayAnimation) {
-            store.commit('content/setAnimate', false)
-            document.querySelector('.logo').style.visibility = 'visible'
-          } else {
-            animationTimeline('.navbarSlug', elementAnimate.value, root.$mq)
-          }
-        })
-        if (!store.state.content.singleAnimation) {
-          const logo = document.querySelector('.logo')
-          logo.classList.add('animationEnd')
-          body.style.overflow = 'auto'
+      const body = document.querySelector('body')
+      body.style.overflow = 'hidden'
+      window.addEventListener('resize', resize)
+      window.addEventListener('load', () => {
+        if (store.state.content.singleAnimation) {
+          localStorage.setItem('showAnimateHomePage', 'true')
+          store.commit('content/setSingleAnimation', false)
         }
-        setTimeout(() => {
-          fetchLoading.value = true
-          animationLoad.value = true
-        }, 1000)
-        if (!localStorage.getItem('lastSection')) {
-            const lastSection = {
-              section: 'index'
-            }
-            localStorage.setItem('lastSection', JSON.stringify(lastSection))
+        if (window.innerWidth < 450) {
+          animationlogo()
+        }
+        animateSubtitle()
+        animateNavbar('.navbarSlug')
+        const isPlayAnimation = JSON.parse(localStorage.getItem('showAnimateHomePage'))
+        if (!isPlayAnimation) {
+          store.commit('content/setAnimate', false)
+          document.querySelector('.logo').style.visibility = 'visible'
+        } else {
+          animationTimeline('.navbarSlug', elementAnimate.value, root.$mq)
+        }
+      })
+      if (!store.state.content.singleAnimation) {
+        const logo = document.querySelector('.logo')
+        logo.classList.add('animationEnd')
+        body.style.overflow = 'auto'
+      }
+      setTimeout(() => {
+        fetchLoading.value = true
+        animationLoad.value = true
+      }, 1000)
+      setTimeout(() => {
+        content.value.masonryRebuild()
+      }, 2500)
+      setTimeout(() => {
+        content.value.masonryRebuild()
+        // store.commit('content/setAnimate', false)
+        // document.querySelector('.logo').style.visibility = 'visible'
+      }, 3200)
+      if (!localStorage.getItem('lastSection')) {
+          const lastSection = {
+            section: 'index'
           }
-        // }
+          localStorage.setItem('lastSection', JSON.stringify(lastSection))
+        }
     })
 
     onUpdated(() => {
     })
 
-  //  const getVerify = async () => {
-  //     await store.commit('authentication/setToken')
-  //     const response = await store.dispatch('authentication/verifyToken')
-  //     if (response.error) {
-  //       localStorage.removeItem('token')
-  //     } else {
-  //       store.dispatch('basket/getBasket')
-  //       store.commit('authentication/setUserData')
-  //     }
-  //   }
-
     const getSeoInfo = async () => {
-      // const response = await store.dispatch('main/getSeo')
     }
+    useFetch(async () => {
+      // try {
+      //   const response = await fetchData()
+      //   if (response.data.data.data.length < 6) {
+      //     cardsDispatch.value = false
+      //   }
+      //   totalPage.value = response?.data.last_pages
+      //   cards.value = response.data.data
+      //   startCards.value = cards.value.data
+      //   if (scrollHeight.value !== 0) {
+      //     if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
+      //       loadingEnd.value = false
+      //       cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
+      //       startCards.value = [...cards.value.data]
+      //       pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+      //     }
+      //     if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
+      //       loadingEnd.value = false
+      //     }
+      //     if (JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+      //       store.commit('content/setHeaderHidden', true)
+      //     }
+      //   } else {
+      //     store.commit('content/setHeaderHidden', true)
+      //   }
+      //   if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+      //     const lastSection = {
+      //       section: 'index'
+      //     }
+      //     localStorage.setItem('lastSection', JSON.stringify(lastSection))
+      //     store.commit('content/setScrollHeight', 0)
+      //   }
+      //   const lastCards = {
+      //     cards: startCards.value,
+      //     section: 'index',
+      //     page: pageNumber.value
+      //   }
+      //   localStorage.setItem('lastCards', JSON.stringify(lastCards))
+      // } catch (e) {
+      // }
+    })
+    const getLikes = async () => {
+    }
+
     useAsync(async () => {
+      // if (showAnimate.value) {
+      //   loadingEnd.value = true
+      // }
       try {
         const response = await fetchData()
-        metaTags.value = {
-          seo_title: response.data.data?.seo_title,
-          seo_description: response.data.data?.seo_description,
-          seo_image: response.data.data?.seo_file_id?.src
+        const seo = await store.dispatch('main/getSeo')
+        metaTags.value = seo.data.data[0]
+        if (response.data.data.data.length < 6) {
+          cardsDispatch.value = false
         }
-      } catch (e) {
-        console.log(e)
-      }
-    })
-    // const getSeoInfo = async () => {
-    //   const response = await store.dispatch('main/getSeo')
-    //   return response
-    // }
-    // useAsync(async () => {
-    //   try {
-    //     const response = await fetchData()
-    //     startCardsProxy.value = response.data?.data
-    //     const responseMeta = await getSeoInfo()
-    //     metaTags.value = {
-    //       seo_title: responseMeta.data?.data[0]?.seo_title,
-    //       seo_description: responseMeta.data?.data[0]?.seo_description,
-    //       seo_image: responseMeta.data?.data[0]?.seo_file_id?.src
-    //     }
-    //   } catch (e) {
-    //     console.log(e)
-    //   }
-    // })
-    const getLikes = async () => {
-      const array = []
-      startCards.value.forEach((item) => {
-        array.push(item.id)
-      })
-      const params = {
-        cardIds: array
-      }
-      const response = await store.dispatch('content/checkLikesOnCards', params)
-      console.log(response)
-      for (const [key, value] of Object.entries(response)) {
-        if (value === true) {
-          startCards.value.forEach((item) => {
-            console.log(key)
-            if (key === item.id) {
-              console.log('asdsad')
-            }
-          })
-        }
-      }
-    }
-
-    useFetch(async () => {
-        try {
-          // await getVerify()
-          // if (localStorage.getItem('token') !== null) {
-          // }
-          const response = await fetchData()
-          if (response.data.data.data.length < 6) {
-            cardsDispatch.value = false
+        totalPage.value = response?.data.last_pages
+        cards.value = response.data.data
+        startCards.value = [...cards.value.data]
+        if (scrollHeight.value !== 0) {
+          if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
+            loadingEnd.value = false
+            cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
+            startCards.value = [...cards.value.data]
+            pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
           }
-          totalPage.value = response?.data.last_pages
-          cards.value = response.data.data
-          startCards.value = cards.value.data
-          loadingEnd.value = true
-          if (scrollHeight.value !== 0) {
-            if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === 'index') {
-              loadingEnd.value = false
-              cards.value.data = JSON.parse(localStorage.getItem('lastCards')).cards
-              startCards.value = [...cards.value.data]
-              pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-            }
-            if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
-              loadingEnd.value = false
-            }
-            if (JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
-              store.commit('content/setHeaderHidden', true)
-            }
-          } else {
+          if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === 'index') {
+            loadingEnd.value = false
+          }
+          if (JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
             store.commit('content/setHeaderHidden', true)
           }
-          // console.log(localStorage.getItem('lastSection'), JSON.parse(localStorage.getItem('lastSection')).section !== 'index')
-          if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
-            const lastSection = {
-              section: 'index'
-            }
-            localStorage.setItem('lastSection', JSON.stringify(lastSection))
-            store.commit('content/setScrollHeight', 0)
-          }
-          const lastCards = {
-            cards: startCards.value,
-            section: 'index',
-            page: pageNumber.value
-          }
-          localStorage.setItem('lastCards', JSON.stringify(lastCards))
-        } catch (e) {
-          console.log(e)
+        } else {
+          store.commit('content/setHeaderHidden', true)
         }
+        if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== 'index') {
+          const lastSection = {
+            section: 'index'
+          }
+          localStorage.setItem('lastSection', JSON.stringify(lastSection))
+          store.commit('content/setScrollHeight', 0)
+        }
+        const lastCards = {
+          cards: startCards.value,
+          section: 'index',
+          page: pageNumber.value
+        }
+        localStorage.setItem('lastCards', JSON.stringify(lastCards))
+        loadingEnd.value = false
+      } catch (e) {
+      }
     })
     onUnmounted(() => {
       window.removeEventListener('resize', resize)
       loadingEnd.value = false
     })
-
     store.commit('content/clearBgIntro')
     useMeta(() => ({
         title: metaTags.value.seo_title,
         meta: [
+          {
+            hid: 'title',
+            name: 'title',
+            content: metaTags.value.seo_title
+          },
+          {
+            hid: 'description',
+            name: 'description',
+            content: metaTags.value.seo_description
+          },
+          {
+            property: 'og:url',
+            content: root.$axios.defaults.baseURL
+          },
           {
             hid: 'og:title',
             name: 'og:title',
@@ -300,8 +298,6 @@ export default defineComponent({
             content: metaTags.value.seo_title
           },
           {
-            hid: 'og:description',
-            name: 'og:description',
             property: 'og:description',
             content: metaTags.value.seo_description
           },
@@ -309,25 +305,38 @@ export default defineComponent({
             hid: 'og:image',
             name: 'og:image',
             property: 'og:image',
-            content: `https://test.itisthenice.com/${metaTags.value.seo_image}`
+            content: `${root.$axios.defaults.baseURL}/${metaTags.value.seo_file?.src}`
           },
           {
             hid: 'twitter:card',
-            name: 'twitter:card',
             property: 'twitter:card',
             content: 'summary_large_image'
+          },
+          {
+            hid: 'twitter:url',
+            property: 'twitter:url',
+            content: root.$axios.defaults.baseURL
+          },
+          {
+            hid: 'twitter:title',
+            property: 'twitter:title',
+            content: metaTags.value.seo_title
+          },
+          {
+            hid: 'twitter:card',
+            property: 'twitter:description',
+            content: metaTags.value.seo_description
+          },
+          {
+            hid: 'twitter:description',
+            property: 'twitter:description',
+            content: metaTags.value.seo_description
           },
           {
             hid: 'twitter:image',
             name: 'twitter:image',
             property: 'twitter:image',
-            content: `https://test.itisthenice.com/${metaTags.value.seo_image}`
-          },
-          {
-            hid: 'description',
-            name: 'description',
-            property: 'description',
-            content: metaTags.value.seo_description
+            content: `${root.$axios.defaults.baseURL}/${metaTags.value.seo_file?.src}`
           }
         ]
     }))
@@ -366,7 +375,6 @@ export default defineComponent({
           }
           localStorage.setItem('lastCards', JSON.stringify(lastCards))
         } else {
-          console.log('wwwwwwwwwwwwwww')
           const params = {
             page: pageNumber.value,
             count: 6,
@@ -405,19 +413,24 @@ export default defineComponent({
     }
 
     watch(() => imgLoadCount.value, () => {
+      const cardsCount = startCards.value.length
       if (scrollHeight.value !== 0) {
         if (localStorage.getItem('lastCards') !== '[object Object]') {
           if (imgLoadCount.value === JSON.parse(localStorage.getItem('lastCards')).cards.length) {
             if (window.innerWidth < 450) {
-            store.commit('content/setHeaderHidden', true)
             if (firstRender.value) {
               firstRender.value = false
               if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-                window.scroll({
-                  top: scrollHeight.value,
-                  left: 0
-                })
-                loadingEnd.value = true
+                  setTimeout(() => {
+                    store.commit('content/setHeaderHidden', true)
+                    console.log(store.state.content.hearerHidden)
+                    content.value.masonryRebuild()
+                    window.scroll({
+                      top: scrollHeight.value,
+                      left: 0
+                    })
+                    loadingEnd.value = true
+                  }, 300)
               }
               nextTick(() => {
                 animateNavbar('.navbarSlug')
@@ -425,21 +438,26 @@ export default defineComponent({
             }
           } else {
             nextTick(() => {
-              store.commit('content/setHeaderHidden', true)
               if (firstRender.value) {
                 firstRender.value = false
                 if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+                    content.value.masonryRebuild()
                     window.scroll({
                       top: 0,
                       left: 0
                     })
-                    nextTick(() => {
-                      window.scroll({
-                        top: scrollHeight.value,
-                        left: 0
-                      })
-                      loadingEnd.value = true
-                    })
+                    setTimeout(() => {
+                      store.commit('content/setHeaderHidden', true)
+                      setTimeout(() => {
+                        console.log(scrollHeight.value)
+                        content.value.masonryRebuild()
+                        window.scroll({
+                          top: scrollHeight.value,
+                          left: 0
+                        })
+                        loadingEnd.value = true
+                      }, 1)
+                    }, 300)
                 }
                 nextTick(() => {
                   animateNavbar('.navbarSlug')
@@ -451,15 +469,21 @@ export default defineComponent({
         } else if (localStorage.getItem('lastCards') === '[object Object]') {
           if (imgLoadCount.value <= 6) {
             if (window.innerWidth < 450) {
-            store.commit('content/setHeaderHidden', true)
             if (firstRender.value) {
               firstRender.value = false
               if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
-                window.scroll({
-                  top: scrollHeight.value,
-                  left: 0
-                })
-                loadingEnd.value = true
+                // setTimeout(() => {
+                  setTimeout(() => {
+                    store.commit('content/setHeaderHidden', true)
+                    console.log(store.state.content.hearerHidden)
+                    content.value.masonryRebuild()
+                    window.scroll({
+                      top: scrollHeight.value,
+                      left: 0
+                    })
+                    loadingEnd.value = true
+                  }, 300)
+                // }, 1200)
               }
               nextTick(() => {
                 animateNavbar('.navbarSlug')
@@ -467,21 +491,26 @@ export default defineComponent({
             }
           } else {
             nextTick(() => {
-              store.commit('content/setHeaderHidden', true)
               if (firstRender.value) {
                 firstRender.value = false
                 if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
+                    content.value.masonryRebuild()
                     window.scroll({
                       top: 0,
                       left: 0
                     })
-                    nextTick(() => {
-                      window.scroll({
-                        top: scrollHeight.value,
-                        left: 0
-                      })
-                      loadingEnd.value = true
-                    })
+                    // setTimeout(() => {
+                      setTimeout(() => {
+                        store.commit('content/setHeaderHidden', true)
+                        console.log(store.state.content.hearerHidden)
+                        content.value.masonryRebuild()
+                        window.scroll({
+                          top: scrollHeight.value,
+                          left: 0
+                        })
+                        loadingEnd.value = true
+                      }, 300)
+                    // }, 1200)
                 }
                 nextTick(() => {
                   animateNavbar('.navbarSlug')
@@ -491,8 +520,11 @@ export default defineComponent({
           }
           }
         }
-      } else if (imgLoadCount.value === JSON.parse(JSON.stringify(startCards.value)).length) {
+      } else if (imgLoadCount.value === cardsCount) {
+        // setTimeout(() => {
+        content.value.masonryRebuild()
         loadingEnd.value = true
+        // }, 200)
       }
     })
 
@@ -526,6 +558,15 @@ export default defineComponent({
   },
   head: {
 
+  },
+  beforeEnter (to, from, next) {
+    console.log('enter')
+    // var image = new Image();
+    // image.src = 'http://camera1.lc/onvif/snapshot?img'+Math.random(0,100);
+    // image.onload = function() {
+    //    var img_tag = '<img src="'+this.src+'" width="673" height="505" />';
+    //    document.getElementById('img_reload').innerHTML = img_tag;
+    // }
   }
 })
 </script>

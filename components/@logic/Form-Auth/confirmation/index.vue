@@ -71,8 +71,6 @@ export default {
             emit('closePopup')
           } else if (res.message === 'Wrong sms code') {
               errResponse.value = 'Неверный код'
-            } else {
-              console.log('true')
             }
       })
     }

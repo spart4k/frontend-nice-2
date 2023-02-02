@@ -26,7 +26,7 @@
   width: 4.2rem;
   height: 4.2rem;
   left: 50%;
-  top: 50%;
+  top: 40rem;
   transform: translate(-50%,-50%);
   border-radius: 50%;
   position: absolute;

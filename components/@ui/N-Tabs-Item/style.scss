@@ -1,12 +1,11 @@
 .item {
   @include regular-text-bold;
   box-sizing: border-box;
-  width: calc((144rem - 8rem - (0.5rem * 9))/10);
+  // min-width: calc((144rem - 8rem - (0.5rem * 9))/10);
   line-height: 4rem;
   color: $white;
-  background: #D46D33;
+  // background: #D46D33;
   flex-shrink: 0;
-  border-radius: $border-radius-3;
   list-style: none;
   text-align: center;
   &.showAnimate {
@@ -16,8 +15,15 @@
     width: 13rem;
   }
   a {
+    width: calc((144rem - 8rem - (0.5rem * 10))/10);
+    border-radius: $border-radius-3;
     color: inherit;
     display: block;
     padding: 0 2rem;
+    transition: transform .1s;
+    transform: scale(1);
+    &:active {
+      transform: scale(.95);
+    }
   }
 }

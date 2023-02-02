@@ -38,7 +38,8 @@ import {
   defineComponent,
   useRouter,
   useContext,
-  useFetch,
+  // useFetch,
+  useAsync,
   useMeta, watch, onUnmounted,
   computed, onMounted, nextTick
   // useMeta,
@@ -54,7 +55,7 @@ export default defineComponent({
     return path
   },
   // components: { vSelect },
-  setup () {
+  setup (_, {root}) {
     const router = useRouter()
 
     const { store, route, $gsap } = useContext()
@@ -65,6 +66,8 @@ export default defineComponent({
     const totalPage = ref([])
     const pageNumber = ref(2)
     const introData = ref()
+    const metaTags = ref({})
+    const contentGrid = ref(null)
     const tagId = computed(() => Number(route.value.query.tag))
     const id = computed(() => {
       switch (route.value.params.slug) {
@@ -148,26 +151,131 @@ export default defineComponent({
       }
       searchCards()
     }
+    // const { title, meta } = useMeta()
+    // console.log(title.value)
+    // title.value = metaTags.value?.seo_title
+    // console.log(metaTags.value)
+    // meta.value = [
+    //   {
+    //     hid: 'title',
+    //     name: 'title',
+    //     content: metaTags.value?.seo_title
+    //   },
+    //   {
+    //     hid: 'description',
+    //     name: 'description',
+    //     content: metaTags.value?.seo_description
+    //   },
+    //   {
+    //     property: 'og:url',
+    //     content: root.$axios.defaults.baseURL
+    //   },
+    //   {
+    //     hid: 'og:title',
+    //     name: 'og:title',
+    //     property: 'og:title',
+    //     content: metaTags.value?.seo_title
+    //   },
+    //   {
+    //     property: 'og:description',
+    //     content: metaTags.value?.seo_description
+    //   },
+    //   {
+    //     hid: 'og:image',
+    //     name: 'og:image',
+    //     property: 'og:image',
+    //     content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_file_id?.src}`
+    //   },
+    //   {
+    //     hid: 'twitter:card',
+    //     property: 'twitter:card',
+    //     content: 'summary_large_image'
+    //   },
+    //   {
+    //     hid: 'twitter:url',
+    //     property: 'twitter:url',
+    //     content: root.$axios.defaults.baseURL
+    //   },
+    //   {
+    //     hid: 'twitter:title',
+    //     property: 'twitter:title',
+    //     content: metaTitle.value[id.value - 1]?.seo_title
+    //   },
+    //   {
+    //     hid: 'twitter:card',
+    //     property: 'twitter:description',
+    //     content: metaTitle.value[id.value - 1]?.seo_description
+    //   },
+    //   {
+    //     hid: 'twitter:description',
+    //     property: 'twitter:description',
+    //     content: metaTitle.value[id.value - 1]?.seo_description
+    //   },
+    //   {
+    //     hid: 'twitter:image',
+    //     name: 'twitter:image',
+    //     property: 'twitter:image',
+    //     content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_file_id?.src}`
+    //   }
+    // ]
     useMeta(() => ({
-      title: metaTitle.value[id.value - 1]?.seo_title,
+      title: metaTags.value?.seo_title,
       meta: [
         {
-          hid: 'og:title',
-          name: 'og:title',
-          property: 'og:title',
-          content: metaTitle.value[id.value - 1]?.seo_title
-        },
-        {
-          hid: 'og:description',
-          name: 'og:description',
-          property: 'og:description',
-          content: metaTitle.value[id.value - 1]?.seo_description
+          hid: 'title',
+          name: 'title',
+          content: metaTags.value?.seo_title
         },
         {
           hid: 'description',
           name: 'description',
-          property: 'description',
-          content: metaTitle.value[id.value - 1]?.seo_description
+          content: metaTags.value?.seo_description
+        },
+        {
+          property: 'og:url',
+          content: root.$axios.defaults.baseURL
+        },
+        {
+          hid: 'og:title',
+          name: 'og:title',
+          property: 'og:title',
+          content: metaTags.value?.seo_title
+        },
+        {
+          property: 'og:description',
+          content: metaTags.value?.seo_description
+        },
+        {
+          hid: 'og:image',
+          name: 'og:image',
+          property: 'og:image',
+          content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_image}`
+        },
+        {
+          hid: 'twitter:card',
+          property: 'twitter:card',
+          content: 'summary_large_image'
+        },
+        {
+          hid: 'twitter:url',
+          property: 'twitter:url',
+          content: root.$axios.defaults.baseURL
+        },
+        {
+          hid: 'twitter:title',
+          property: 'twitter:title',
+          content: metaTags.value?.seo_title
+        },
+        {
+          hid: 'twitter:description',
+          property: 'twitter:description',
+          content: metaTags.value?.seo_description
+        },
+        {
+          hid: 'twitter:image',
+          name: 'twitter:image',
+          property: 'twitter:image',
+          content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_image}`
         }
       ]
     }))
@@ -209,6 +317,11 @@ export default defineComponent({
       }
         localStorage.setItem('lastSection', JSON.stringify(lastSection))
       }
+      setTimeout(() => {
+        // contentGrid.value.masonryRebuild()
+        // console.log(contentGrid.value)
+        // console.log('rebuild')
+      }, 0)
     }
 
     const introTitle = computed(() => {
@@ -265,6 +378,10 @@ export default defineComponent({
         }
         localStorage.setItem('lastSection', JSON.stringify(lastSection))
       }
+      setTimeout(() => {
+        // contentGrid.value.masonryRebuild()
+        // loadingEnd.value = true
+      }, 500)
     })
 
     const fetchData = async (currentPage) => {
@@ -284,93 +401,195 @@ export default defineComponent({
       const response = await store.dispatch(path, params)
       return response
     }
-
-    useFetch(async () => {
-        try {
-          const response = await fetchData()
-          if (authorId.value) {
-            const authorResponse = await fetchAuthor()
-            author.value = authorResponse
-          }
-          if (response.data.length < 6) {
-            cardsDispatch.value = false
-          }
-          introData.value = response.quote
-          fetchLoading.value = true
-          cards.value = [...response.data]
-          startCards.value = [...cards.value]
-          // loadingEnd.value = true
-          if (scrollHeight.value !== 0) {
-            if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
-              cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
-              startCards.value = [...cards.value]
-              pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
-              loadingEnd.value = false
-              if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
-                selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
-                selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
-                if (JSON.parse(localStorage.getItem('lastSection')).searchCategory) {
-                  selectCategory.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
-                  selectSection.value = ''
-                  selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
-                  selectCategoryNumber.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
-                } else {
-                  selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+    // useAsync(async () => {
+    //   // try {
+    //   //   const response = await fetchData()
+    //   //   if (authorId.value) {
+    //   //     const authorResponse = await fetchAuthor()
+    //   //     author.value = authorResponse
+    //   //   }
+    //   //   if (response.data.length < 6) {
+    //   //     cardsDispatch.value = false
+    //   //   }
+    //   //   introData.value = response.quote
+    //   //   fetchLoading.value = true
+    //   //   cards.value = [...response.data]
+    //   //   startCards.value = [...cards.value]
+    //   //   loadingEnd.value = true
+    //   //   console.log('true', '310')
+    //   //   if (scrollHeight.value !== 0) {
+    //   //     if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
+    //   //       cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
+    //   //       startCards.value = [...cards.value]
+    //   //       pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+    //   //       loadingEnd.value = true
+    //   //       console.log('trie, 316')
+    //   //       if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
+    //   //         selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+    //   //         selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
+    //   //         if (JSON.parse(localStorage.getItem('lastSection')).searchCategory) {
+    //   //           selectCategory.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
+    //   //           selectSection.value = ''
+    //   //           selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
+    //   //           selectCategoryNumber.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
+    //   //         } else {
+    //   //           selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+    //   //         }
+    //   //         if (JSON.parse(localStorage.getItem('lastSection')).searchMode === 'asc') {
+    //   //           selectAsc.value = true
+    //   //           selectDescAsc.value = 'asc'
+    //   //         }
+    //   //         selectPresent.value = JSON.parse(localStorage.getItem('lastSection')).searchPresent
+    //   //         switch (JSON.parse(localStorage.getItem('lastSection')).searchColomn) {
+    //   //           case 'created_at': {
+    //   //             selectedMode.value = 0
+    //   //             if (JSON.parse(localStorage.getItem('lastSection')).searchPresent) {
+    //   //               selectedMode.value = 3
+    //   //             }
+    //   //             return
+    //   //           }
+    //   //           case 'price': {
+    //   //             selectedMode.value = 1
+    //   //             return
+    //   //           }
+    //   //           case 'like_count': {
+    //   //             selectedMode.value = 2
+    //   //             return
+    //   //           }
+    //   //         }
+    //   //       }
+    //   //     }
+    //   //     if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
+    //   //       loadingEnd.value = false
+    //   //       console.log('false, 354')
+    //   //     }
+    //   //     if (JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
+    //   //       store.commit('content/setHeaderHidden', true)
+    //   //     }
+    //   //   } else {
+    //   //     store.commit('content/setHeaderHidden', true)
+    //   //   }
+    //   //   if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
+    //   //     loadingEnd.value = true
+    //   //     console.log('true, 364')
+    //   //   }
+    //   //   if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
+    //   //     const lastSection = {
+    //   //       section: id.value
+    //   //     }
+    //   //     localStorage.setItem('lastSection', JSON.stringify(lastSection))
+    //   //     store.commit('content/setScrollHeight', 0)
+    //   //   }
+    //   //   const lastCards = {
+    //   //     cards: startCards.value,
+    //   //     section: id.value,
+    //   //     page: pageNumber.value
+    //   //   }
+    //   //   localStorage.setItem('lastCards', JSON.stringify(lastCards))
+    //   // } catch (e) {
+    //   // }
+    // })
+    useAsync(async () => {
+      try {
+        const response = await fetchData()
+        console.log(response)
+        // metaTags.value = response
+        const seo = await store.dispatch('main/getSeo')
+        console.log(response)
+        console.log(seo)
+        metaTags.value = {
+          seo_title: response.seo_title,
+          seo_description: response?.seo_description,
+          seo_image: response?.seo_file_id?.src
+        }
+        console.log('test')
+        console.log(response)
+        console.log(metaTags.value)
+        if (authorId.value) {
+          const authorResponse = await fetchAuthor()
+          author.value = authorResponse
+        }
+        if (response.data.length < 6) {
+          cardsDispatch.value = false
+        }
+        introData.value = response.quote
+        fetchLoading.value = true
+        console.log(response.data)
+        cards.value = [...response.data]
+        console.log(cards.value)
+        console.log('cards')
+        startCards.value = [...cards.value]
+        // loadingEnd.value = true
+        if (scrollHeight.value !== 0) {
+          if (localStorage.getItem('lastCards') !== '[object Object]' && JSON.parse(localStorage.getItem('lastCards')).section === id.value) {
+            cards.value = JSON.parse(localStorage.getItem('lastCards')).cards
+            startCards.value = [...cards.value]
+            pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
+            loadingEnd.value = false
+            if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
+              selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+              selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
+              if (JSON.parse(localStorage.getItem('lastSection')).searchCategory) {
+                selectCategory.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
+                selectSection.value = ''
+                selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
+                selectCategoryNumber.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
+              } else {
+                selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+              }
+              if (JSON.parse(localStorage.getItem('lastSection')).searchMode === 'asc') {
+                selectAsc.value = true
+                selectDescAsc.value = 'asc'
+              }
+              selectPresent.value = JSON.parse(localStorage.getItem('lastSection')).searchPresent
+              switch (JSON.parse(localStorage.getItem('lastSection')).searchColomn) {
+                case 'created_at': {
+                  selectedMode.value = 0
+                  if (JSON.parse(localStorage.getItem('lastSection')).searchPresent) {
+                    selectedMode.value = 3
+                  }
+                  return
                 }
-                if (JSON.parse(localStorage.getItem('lastSection')).searchMode === 'asc') {
-                  selectAsc.value = true
-                  selectDescAsc.value = 'asc'
+                case 'price': {
+                  selectedMode.value = 1
+                  return
                 }
-                selectPresent.value = JSON.parse(localStorage.getItem('lastSection')).searchPresent
-                switch (JSON.parse(localStorage.getItem('lastSection')).searchColomn) {
-                  case 'created_at': {
-                    selectedMode.value = 0
-                    if (JSON.parse(localStorage.getItem('lastSection')).searchPresent) {
-                      selectedMode.value = 3
-                    }
-                    return
-                  }
-                  case 'price': {
-                    selectedMode.value = 1
-                    return
-                  }
-                  case 'like_count': {
-                    selectedMode.value = 2
-                    return
-                  }
+                case 'like_count': {
+                  selectedMode.value = 2
+                  return
                 }
               }
             }
-            if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
-              loadingEnd.value = false
-            }
-            if (JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
-              store.commit('content/setHeaderHidden', true)
-            }
-          } else {
-            store.commit('content/setHeaderHidden', true)
           }
           if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
             loadingEnd.value = false
           }
-          if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
-            const lastSection = {
-              section: id.value
-            }
-            localStorage.setItem('lastSection', JSON.stringify(lastSection))
-            store.commit('content/setScrollHeight', 0)
+          if (JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
+            store.commit('content/setHeaderHidden', true)
           }
-          const lastCards = {
-            cards: startCards.value,
-            section: id.value,
-            page: pageNumber.value
-          }
-          localStorage.setItem('lastCards', JSON.stringify(lastCards))
-        } catch (e) {
-          console.log(e)
+        } else {
+          store.commit('content/setHeaderHidden', true)
         }
+        if (localStorage.getItem('lastCards') === '[object Object]' && JSON.parse(localStorage.getItem('lastSection')).section === id.value) {
+          loadingEnd.value = false
+        }
+        if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== id.value) {
+          const lastSection = {
+            section: id.value
+          }
+          localStorage.setItem('lastSection', JSON.stringify(lastSection))
+          store.commit('content/setScrollHeight', 0)
+        }
+        const lastCards = {
+          cards: startCards.value,
+          section: id.value,
+          page: pageNumber.value
+        }
+        localStorage.setItem('lastCards', JSON.stringify(lastCards))
+        loadingEnd.value = false
+      } catch (e) {
+      }
     })
-
     const fetchAuthor = () => {
       if (authorId.value) {
         const params = {
@@ -454,11 +673,14 @@ export default defineComponent({
             if (firstRender.value) {
               firstRender.value = false
               if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
-                window.scroll({
-                  top: scrollHeight.value,
-                  left: 0
-                })
-                loadingEnd.value = true
+                // setTimeout(() => {
+                  contentGrid.value.masonryRebuild()
+                  window.scroll({
+                    top: scrollHeight.value,
+                    left: 0
+                  })
+                  loadingEnd.value = true
+                // }, 1200)
               }
               nextTick(() => {
                 animateNavbar('.navbarSlug')
@@ -470,16 +692,20 @@ export default defineComponent({
               if (firstRender.value) {
                 firstRender.value = false
                 if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
+                    contentGrid.value.masonryRebuild()
                     window.scroll({
                       top: 0,
                       left: 0
                     })
                     nextTick(() => {
-                      window.scroll({
-                        top: scrollHeight.value,
-                        left: 0
-                      })
-                      loadingEnd.value = true
+                      // setTimeout(() => {
+                        contentGrid.value.masonryRebuild()
+                        window.scroll({
+                          top: scrollHeight.value,
+                          left: 0
+                        })
+                        loadingEnd.value = true
+                      // }, 1200)
                     })
                 }
                 nextTick(() => {
@@ -496,11 +722,14 @@ export default defineComponent({
             if (firstRender.value) {
               firstRender.value = false
               if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
-                window.scroll({
-                  top: scrollHeight.value,
-                  left: 0
-                })
-                loadingEnd.value = true
+                // setTimeout(() => {
+                  contentGrid.value.masonryRebuild()
+                  window.scroll({
+                    top: scrollHeight.value,
+                    left: 0
+                  })
+                  loadingEnd.value = true
+                // }, 1200)
               }
               nextTick(() => {
                 animateNavbar('.navbarSlug')
@@ -512,16 +741,20 @@ export default defineComponent({
               if (firstRender.value) {
                 firstRender.value = false
                 if (JSON.parse(localStorage.getItem('lastSection')).section === id.value && scrollHeight.value !== 0) {
+                    contentGrid.value.masonryRebuild()
                     window.scroll({
                       top: 0,
                       left: 0
                     })
                     nextTick(() => {
-                      window.scroll({
-                        top: scrollHeight.value,
-                        left: 0
-                      })
-                      loadingEnd.value = true
+                      // setTimeout(() => {
+                        contentGrid.value.masonryRebuild()
+                        window.scroll({
+                          top: scrollHeight.value,
+                          left: 0
+                        })
+                        loadingEnd.value = true
+                      // }, 1200)
                     })
                 }
                 nextTick(() => {
@@ -533,7 +766,10 @@ export default defineComponent({
           }
         }
       } else if (imgLoadCount.value === JSON.parse(JSON.stringify(startCards.value)).length) {
-        loadingEnd.value = true
+        setTimeout(() => {
+          contentGrid.value.masonryRebuild()
+          loadingEnd.value = true
+        }, 200)
       }
     })
 
@@ -542,10 +778,6 @@ export default defineComponent({
     }
 
     store.commit('content/changeBgIntro', route.value.params.slug)
-
-    onMounted(() => {
-      // console.log(route.value.fullPath)
-    })
 
     return {
       clickTag,
@@ -584,7 +816,9 @@ export default defineComponent({
       selectedMode,
       selectAsc,
       imgLoadCount,
-      loadingEnd
+      loadingEnd,
+      contentGrid,
+      metaTags
     }
   },
   head: {}

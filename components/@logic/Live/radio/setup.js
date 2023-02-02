@@ -19,9 +19,14 @@ export default {
     const audioPlay = ref(null)
     const cardLink = computed(() => {
       if (props.song.link) {
-        return JSON.parse(props.song.link)
+        if (props.song.link === '/undefined/undefined') {
+          return undefined
+        } else {
+          return props.song.link
+        }
       }
     })
+    console.log()
     const audioPlaying = computed(() => store.state.menu.audioPlaying)
     const marquee = ref(null)
     const marqueeLength = ref(null)
@@ -35,6 +40,11 @@ export default {
     }
     const playAudio = () => {
       emit('playAudio')
+      const audioCard = document.querySelector('.audioCard')
+      if (audioCard) {
+        audioCard.pause()
+      }
+      console.log(audioCard)
       store.commit('menu/changeAudioPlaying', true)
     }
     const pauseAudio = () => {
