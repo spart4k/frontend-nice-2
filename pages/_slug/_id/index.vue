@@ -74,6 +74,7 @@ export default defineComponent({
         count: 99
       }
       const responseCard = await store.dispatch('detailPage/getData', route.value.params.id)
+      console.log(route.value.params.id)
       const responseComments = await store.dispatch('detailPage/getComments', params)
       return {
         responseCard,

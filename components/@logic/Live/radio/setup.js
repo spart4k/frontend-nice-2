@@ -19,7 +19,11 @@ export default {
     const audioPlay = ref(null)
     const cardLink = computed(() => {
       if (props.song.link) {
-        return props.song.link
+        if (props.song.link === '/undefined/undefined') {
+          return undefined
+        } else {
+          return props.song.link
+        }
       }
     })
     console.log()
