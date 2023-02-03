@@ -267,6 +267,8 @@ export default {
       } else {
         disabledSheet.value = true
         setTimeout(() => {
+          console.log(menu1.value)
+          console.log(menu1.value.$children)
           menu1.value.$children[0].open()
           if (window.innerWidth > 450) {
             sheetWidth.value = 39
@@ -414,8 +416,9 @@ export default {
         getVerify()
       }
       animateBackground()
+      bottomSheetDelay.value = true
       window.addEventListener('load', () => {
-        bottomSheetDelay.value = true
+
       })
     })
     provide('backgroundLoaded', isLoaded)

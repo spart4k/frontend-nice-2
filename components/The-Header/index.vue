@@ -126,7 +126,7 @@ export default {
         document.body.style.overflow = 'hidden'
       }
       // if (document.querySelector('.headerAnimation').classList.contains('pageLoaded') || pageLoading.value) {
-        if (store.state.menu.isShowBottomMenu && !store.state.menu.isShowBottomLive && pageLoad.value) {
+        if (store.state.menu.isShowBottomMenu && !store.state.menu.isShowBottomLive) {
           setTimeout(() => {
             store.commit('menu/changeShowStateBottomSheetLive', { value: true })
           }, 100)
@@ -191,8 +191,9 @@ export default {
     onMounted(() => {
       windowWidthCount()
       window.addEventListener('resize', windowWidthCount)
+      pageLoad.value = true
       window.addEventListener('load', () => {
-        pageLoad.value = true
+        // pageLoad.value = true
       })
     })
 
