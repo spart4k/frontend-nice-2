@@ -173,9 +173,17 @@ export default {
     '@nuxtjs/auth-next',
     'nuxt-mq',
     'vue-toastification/nuxt',
-    ['portal-vue/nuxt']
+    ['portal-vue/nuxt'],
+    '@nuxtjs/yandex-metrika',
   ],
-
+  publicRuntimeConfig: {
+    yandexMetrika: {
+      id: 92353445,
+      clickmap:true,
+      trackLinks:true,
+      accurateTrackBounce:true
+    }
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308

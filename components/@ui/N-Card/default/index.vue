@@ -739,7 +739,7 @@ export default {
     }
     .photo {
       a {
-        color: #ED6E69;
+        color: #ED6E69 !important;
       }
     }
     .fashion {
