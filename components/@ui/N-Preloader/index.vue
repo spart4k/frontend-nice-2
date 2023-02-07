@@ -30,6 +30,9 @@
   transform: translate(-50%,-50%);
   border-radius: 50%;
   position: absolute;
+  @media (max-width: $mobileWidth) {
+    position: fixed;
+  }
 }
 .loader {
   display: block;

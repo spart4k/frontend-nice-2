@@ -107,6 +107,9 @@ html {
   @media (max-width: $mobileWidth) {
     font-size: calc((10 / 390) * 100vw);
   }
+  &::-webkit-scrollbar {
+    display: none;
+  }
   &.noScroll {
     position: fixed;
     overflow: hidden;
@@ -125,6 +128,9 @@ html {
     left: 0;
     top: 0;
   }
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 body {
   width: 100%;
@@ -135,6 +141,9 @@ body {
   min-height: -webkit-fill-available;
   &:global(.popup-opened) {
     overflow: hidden;
+  }
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 
