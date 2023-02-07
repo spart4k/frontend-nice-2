@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="$style.page">
     <N-Preloader v-if="!cards  || !loadingEnd && !showAnimate" />
     <n-intro
       :class="!loadingEnd && $style.disabled"
@@ -571,6 +571,16 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" module>
+.page {
+  max-width: 105rem;
+  width: 100%;
+  //margin: 0 auto;
+  transition: 0.2s;
+  margin: 0 auto;
+  @media (max-width: calc(1920px + 39rem)) {
+    //margin: 0 39rem 0 auto;
+  }
+}
 .cards {
   width: 100%;
   display: flex;
@@ -591,7 +601,7 @@ $heightBig: 4.6rem;
   width: 100%;
   height: 100%;
   top: 0;
-  left: 0;
+  left: 0%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

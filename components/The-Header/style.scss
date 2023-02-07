@@ -6,7 +6,7 @@
   justify-content: space-between;
   align-items: center;
   z-index: var(--header-z-index);
-  max-width: $desktopWidth;
+  // max-width: $desktopWidth;
 }
 
 .showAnimate {
@@ -48,7 +48,18 @@
   width: 16.3rem;
   // visibility: hidden;
   top: 2.9rem;
-  transition: left .3s;
+  left: 50%;
+  transition: .3s;
+  @media (max-width: calc($desktopWidth + 39rem)) {
+    &.paddingLeft {
+      //left: calc(50% + 18.5rem);
+      transform: translateX(18.5rem) !important;
+    }
+    &.paddingRight {
+      //left: calc(50% + -18.5rem);
+      transform: translateX(-18.5rem) !important;
+    }
+  }
   @media (max-width: $mobileWidth ) {
     top: 9rem;
   }

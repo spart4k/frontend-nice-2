@@ -22,6 +22,9 @@
     padding: 0 2rem;
     transition: transform .1s;
     transform: scale(1);
+    @media (min-width: $desktopWidth) {
+      //width: calc((100vw - 8rem - (0.5rem * 10))/10);
+    }
     &:active {
       transform: scale(.95);
     }

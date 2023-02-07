@@ -9,11 +9,14 @@
         @closeState="closeState"
       />
     </div>
+    <!--:style="{ paddingLeft: sheetWidth && !sheetRight ? '39rem' : '0', paddingRight: sheetWidth && sheetRight ? '39rem' : '0' }"-->
     <n-intro-wrapper
-      :class="$style.main"
+      :class="[
+      $style.main,
+      sheetWidth && !sheetRight ? $style.paddingLeft : '', sheetWidth && sheetRight ? $style.paddingRight : ''
+      ]"
       class="main-wrap"
       :is-home-page="isHomePage"
-      :style="{ marginLeft: sheetWidth && !sheetRight ? '39rem' : '0', marginRight: sheetWidth && sheetRight ? '39rem' : '0' }"
       :color="color"
       @backgroundLoaded="backgroundLoaded"
     >
@@ -23,6 +26,7 @@
         :class="[
           sheetWidth && !sheetRight ? $style.alignLeft : 'center',
           sheetWidth && sheetRight ? $style.alignRight : 'center',
+          sheetWidth && !sheetRight ? $style.paddingLeft : '', sheetWidth && sheetRight ? $style.paddingRight : '',
           $style.tabs,
           showAnimate && $style.animateContent,
           !isHomePage ? $style.noHome : ''
@@ -479,6 +483,19 @@ export default {
 .main {
   transition-duration: .3s;
   position: relative;
+  //width: 100%;
+  //max-width: 105rem;
+  //margin: 0 auto;
+  &.paddingLeft {
+    @media (max-width: calc($desktopWidth + 28rem)) {
+      padding-left: 39rem;
+    }
+  }
+  &.paddingRight {
+    @media (max-width: calc($desktopWidth + 28rem)) {
+      padding-right: 39rem;
+    }
+  }
 }
 .disabled {
   opacity: 0;
@@ -507,6 +524,16 @@ export default {
   width: 100%;
   transition: 0.3s;
   will-change: transform;
+  &.paddingLeft {
+    @media (max-width: calc($desktopWidth + 39rem + 20rem)) {
+      //padding-left: 39rem;
+    }
+  }
+  &.paddingRight {
+    @media (max-width: calc($desktopWidth + 39rem + 20rem)) {
+      //padding-right: 39rem;
+    }
+  }
   &.alignLeft {
     ul {
       justify-content: flex-start;

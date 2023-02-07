@@ -3,12 +3,16 @@
   <div class="">
     <header>
       <div class="headerAnimation" :class="[$style.header, (showAnimate && $route.name === 'index') && $style.animateContent]">
+        <!--:style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}rem)` : '50%'}"-->
         <nuxt-link
           v-show="$route.name === 'index'"
           class="logo"
           :to="'/'"
-          :class="[$style.logo, showAnimate && $style.logoVisible]"
-          :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}rem)` : '50%'}"
+          :class="[
+          $style.logo,
+          showAnimate && $style.logoVisible,
+          sheetWidth === 39 ? $style.paddingLeft : sheetWidth === -39 ? $style.paddingRight: ''
+          ]"
           v-on:click.native="scrollTop"
         >
           <n-logo />
