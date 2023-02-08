@@ -138,6 +138,7 @@ export default defineComponent({
       selectCategoryNumber.value = value
     }
     const sendMode = (value) => {
+      console.log(value)
       if (value === 0) {
         selectMode.value = 'created_at'
         selectPresent.value = null
@@ -148,8 +149,8 @@ export default defineComponent({
         selectMode.value = 'like_count'
         selectPresent.value = null
       } else if (value === 3) {
-        selectMode.value = 'created_at'
-        selectPresent.value = true
+        selectMode.value = 'count'
+        // selectPresent.value = true
       }
       searchCards()
     }

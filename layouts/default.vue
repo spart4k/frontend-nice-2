@@ -99,15 +99,6 @@
     id="audioLive"
     />
     <!-- <N-Websocket v-if="websocketDelay" :message="mes" /> -->
-    <div id="resize-container">
-      <div class="main-container">
-        <div class="main-inner-container">
-          <div class="content-container">
-            <img src="/company-logo.png" alt="">
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 

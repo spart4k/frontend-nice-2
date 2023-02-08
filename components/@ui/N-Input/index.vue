@@ -227,7 +227,7 @@ export default {
       @include regular-text;
       color: $fontColorDefault;
       overflow: hidden;
-      padding: 1rem 0;
+      padding: .7rem 0;
       border: none;
       border-bottom: .2rem solid #D46D33;
       border-radius: 0;
@@ -235,6 +235,10 @@ export default {
       resize: none;
       background-color: transparent;
       transition: .1s;
+    }
+    .textarea {
+      padding: .2rem 0 .7rem 0;
+      height: auto;
     }
     .emoji {
       margin-top: 1.5rem;
