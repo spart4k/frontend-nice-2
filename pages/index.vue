@@ -558,15 +558,6 @@ export default defineComponent({
   },
   head: {
 
-  },
-  beforeEnter (to, from, next) {
-    console.log('enter')
-    // var image = new Image();
-    // image.src = 'http://camera1.lc/onvif/snapshot?img'+Math.random(0,100);
-    // image.onload = function() {
-    //    var img_tag = '<img src="'+this.src+'" width="673" height="505" />';
-    //    document.getElementById('img_reload').innerHTML = img_tag;
-    // }
   }
 })
 </script>
