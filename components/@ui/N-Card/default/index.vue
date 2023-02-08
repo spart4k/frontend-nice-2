@@ -494,20 +494,59 @@ export default {
     }
     const dateFormat = computed(() => {
       if (props.data.date_event) {
-        const t = props.data.date_event.split(/[- :]/)
-        let min = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMinutes()
-        const hour = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getHours()
-        const day = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getDate()
-        let month = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMonth() + 1
-        const year = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getFullYear()
-        if (String(min).length === 1) {
-          min = '0' + min
+        let newDateUTC = props.data.date_event
+        const newDate = new Date(newDateUTC).toUTCString()
+        // let delta = new Date(formData.value.date_event).getTimezoneOffset()
+        // formData.value.date_event = newDate.setMinutes(newDate.getMinutes() - delta);
+        const localDate = new Date(newDate)
+        const myDate = {
+          YY: '',
+          MM: '',
+          DD: '',
+          HH: '',
+          mm: '',
+          ss: ''
         }
-        if (String(month).length === 1) {
-          month = '0' + month
+        myDate.YY = localDate.getFullYear()
+        myDate.DD = localDate.getDate()
+        console.log(myDate.DD)
+        myDate.MM = localDate.getMonth() + 1
+        if (myDate.MM.toString().length <= 1) {
+          myDate.MM = `0${myDate.MM}`
         }
-        const totalTime = day + '.' + month + '.' + year + ' / ' + hour + ':' + min
-        return totalTime
+
+        myDate.DD = localDate.getDate()
+
+        myDate.HH = localDate.getHours()
+
+        myDate.mm = localDate.getMinutes()
+        if (myDate.mm.toString().length <= 1) {
+          myDate.mm = `0${myDate.mm}`
+        }
+
+        myDate.ss = localDate.getSeconds()
+
+        newDateUTC = `${myDate.YY}.${myDate.MM}.${myDate.DD} ${myDate.HH}:${myDate.mm}`
+        return newDateUTC
+        // const delta = new Date(newDateUTC).getTimezoneOffset()
+        // const newDate = new Date(newDateUTC)
+        // newDate.setMinutes(newDate.getMinutes() - delta)
+        // console.log(newDate)
+        // const t = newDate.split(/[- :]/)
+        // let min = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMinutes()
+        // const hour = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getHours()
+        // console.log(hour)
+        // const day = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getDate()
+        // let month = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getMonth() + 1
+        // const year = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5])).getFullYear()
+        // if (String(min).length === 1) {
+        //   min = '0' + min
+        // }
+        // if (String(month).length === 1) {
+        //   month = '0' + month
+        // }
+        // const totalTime = day + '.' + month + '.' + year + ' / ' + hour + ':' + min
+        // return totalTime
       } else {
         return 0
       }
