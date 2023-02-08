@@ -107,8 +107,10 @@ export default defineComponent({
     const selectAsc = ref(false)
 
     const sendSection = (value) => {
+      console.log(value)
       selectCategoryNumber.value = null
       selectCategory.value = ''
+      console.log(selectCategory.value)
       if (value === 8) {
         value = 9
       }
@@ -286,7 +288,6 @@ export default defineComponent({
       const params = {
         page: 1,
         count: 6,
-        section_id: selectSection.value ? selectSection.value : '',
         category_id: selectCategory.value ? selectCategory.value : '',
         order_by_column: selectMode.value,
         order_by_mode: selectDescAsc.value,
@@ -527,15 +528,15 @@ export default defineComponent({
             pageNumber.value = JSON.parse(localStorage.getItem('lastCards')).page
             loadingEnd.value = false
             if (JSON.parse(localStorage.getItem('lastSection')).section === 8) {
-              selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+              selectSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
               selectMode.value = JSON.parse(localStorage.getItem('lastSection')).searchColomn
               if (JSON.parse(localStorage.getItem('lastSection')).searchCategory) {
                 selectCategory.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
                 selectSection.value = ''
-                selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
+                selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
                 selectCategoryNumber.value = JSON.parse(localStorage.getItem('lastSection')).searchCategoryNumber
               } else {
-                selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchSection
+                selectedSection.value = JSON.parse(localStorage.getItem('lastSection')).searchCategory
               }
               if (JSON.parse(localStorage.getItem('lastSection')).searchMode === 'asc') {
                 selectAsc.value = true

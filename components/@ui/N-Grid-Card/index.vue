@@ -79,7 +79,7 @@
                 :class="[$style.preview, $style.masonryItem, transitionMasonry ? $style.transition: '']"
               />
               <div v-if="selectors === 'shop'" class="item" :class="[$style.rowMobile, $style.masonryItem, $style.filters, transitionMasonry ? $style.transition: '']">
-                <N-Select :class="$style.select" :selectedValue="selectedSection" :select-items="sections" @setProperty="sendSection" />
+                <N-Select :class="$style.select" :selectedValue="selectedSectionString" :select-items="categories" @setProperty="sendSection" />
                 <N-Select :class="$style.select" :selectedValue="selectedMode" :select-items="searchMode" @setProperty="sendMode" />
                 <div :class="$style.selectPriority"  @click="sendSort">
                   <n-icon :style="{transform: noveltyCount ? 'rotate(180deg)' : 'rotate(0deg)'}" name="arrow-select" :class="$style.icon" />
@@ -183,6 +183,13 @@ export default {
       // window.dispatchEvent(new Event('resize'))
       Vue.prototype.$redrawVueMasonry()
     }
+    const selectedSectionString = computed(() => {
+      console.log(props.selectedSection)
+      const selectedSectionObject = sections.value.find(el => el.id === props.selectedSection)
+      console.log(selectedSectionObject)
+      const indexSection = sections.value.indexOf(selectedSectionObject)
+      return indexSection
+    })
     const spliceArray = computed(() => {
       if (route.value.name === 'authors-id') {
         // proxyArray.value.unshift({
@@ -242,36 +249,47 @@ export default {
         }
       }
     })
-    const categories = ref([])
+    const categories = ref(['Все товары'])
     const searchMode = ref(['Новизна', 'Цена', 'Популярность', 'Наличие'])
-    const sections = ref(['Все товары', 'Музыка', 'Видео', 'Искусство', 'Кухня', 'Чтиво', 'Фото', 'Одежда', 'Анонсы'])
+    const sections = ref([{name: 'Все товары', id: null}])
     const getСategories = async () => {
       const data = await store.dispatch('search/searchCards', {
         entity: 'categories',
         searchField: '',
+        order_by_column: 'ord',
+        order_by_mode: 'desc',
         page: 1,
         count: 9999
       })
       data.data.data.forEach((item) => {
-        sections.value.push(item.name)
-        categories.value.push(item)
+        sections.value.push(item)
+        categories.value.push(item.name)
       })
     }
     const sendMode = (value) => {
       emit('sendMode', value)
     }
     const sendSection = (value) => {
-      if (value >= 9) {
-      emit('sendCategoryNumber', value)
-      value -= 9
-      categories.value.forEach((item, index) => {
+      // console.log(value)
+      // if (value >= 9) {
+      // emit('sendCategoryNumber', value)
+      // value -= 9
+      // categories.value.forEach((item, index) => {
+      //  if (index === value) {
+      //    emit('sendCategory', item.id)
+      //  }
+      // })
+      // } else {
+
+      // })
+      sections.value.forEach((item, index) => {
+        console.log(index)
+        console.log(value)
+        console.log(item)
         if (index === value) {
           emit('sendCategory', item.id)
         }
       })
-      } else {
-        emit('sendSection', value)
-      }
     }
 
   onMounted(() => {
@@ -362,7 +380,8 @@ export default {
     transitionMasonry,
     masonryList,
     timeoutTransition,
-    sendSort
+    sendSort,
+    selectedSectionString
     }
   }
 }
