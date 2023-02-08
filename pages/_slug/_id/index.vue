@@ -1,7 +1,7 @@
 <template>
   <main :class="$style.main">
     <div :class="$style.wrapper">
-      <N-Preloader v-if="!card" />
+      <N-Preloader v-if="!loading" />
       <template v-if="card && section">
         <SectionCards
           :key="card.id"
@@ -45,6 +45,7 @@ export default defineComponent({
     const isAddedBasket = ref(false)
     const { route, store } = useContext()
     const router = useRouter()
+    const loading = ref(true)
     // const paramsId = computed(() => Number(route.value.params.id))
     const sections = computed(() => store?.state.content.sections)
 
@@ -94,6 +95,7 @@ export default defineComponent({
           card: response.responseCard.data,
           comments: response.responseComments.data
         }
+        loading.value = false
         } catch (e) {
         }
       }, route.value.params.id)
@@ -207,7 +209,8 @@ export default defineComponent({
       isAuth,
       metaTags,
       section,
-      setLike
+      setLike,
+      loading
     }
   },
   head: {},
