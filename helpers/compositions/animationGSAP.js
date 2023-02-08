@@ -14,12 +14,14 @@ const animation = ($gsap, Elastic) => {
       const content = document.querySelector('.content')
       window.addEventListener('resize', () => {
         if (window.innerWidth > 450 && content.getBoundingClientRect().top > 0) {
+          console.log(logo)
           logo.style.top = '2.9rem'
         }
         if (window.innerWidth < 450 && content.getBoundingClientRect().top > 0) {
           logo.style.top = '9rem'
         }
       })
+      console.log(logo)
       logo.classList.add('animationEnd')
       header.classList.add('pageLoaded')
       animationPlug.classList.add('animationPlugDisplay')
@@ -33,6 +35,8 @@ const animation = ($gsap, Elastic) => {
     const backgroundElement = document.querySelector('.background')
     console.log(backgroundElement)
     const logo = document.querySelector('.logo')
+    // const logoImage = document.querySelector('.logo_image')
+    console.log('WIDTH')
     const content = document.querySelector('.content')
     tl.set(SUBTITLE, {
       opacity: 0
@@ -40,7 +44,7 @@ const animation = ($gsap, Elastic) => {
     tl.set(logo, {
       scale: 0,
       visibility: 'visible',
-      top: '50%'
+      top: '50vh'
     })
     tl.set('body', {
       overflow: 'hidden'
@@ -49,10 +53,13 @@ const animation = ($gsap, Elastic) => {
     tl.to(logo, {
       scale: 5
     })
+    // tl.to(logoImage, {
+    //   width: '100%'
+    // })
 
     tl.to(logo, 0.3, {
       scale: 0.5,
-      top: '-=35%',
+      top: '-=35vh',
       ease: 'cubic-bezier(.71,.01,.15,1)'
     })
 
