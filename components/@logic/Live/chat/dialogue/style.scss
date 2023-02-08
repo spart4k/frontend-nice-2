@@ -6,7 +6,9 @@
   overflow: hidden;
   margin-bottom: .5rem;
   // margin-top: 2rem;
+  -webkit-mask-image: -webkit-linear-gradient(bottom,transparent,#000 7%,#000);
   .wrap {
+    -webkit-mask-image: -webkit-linear-gradient(top,transparent,#000 5%,#000);
     display: flex;
     flex-direction: column-reverse;
     flex-grow: 1;
@@ -14,7 +16,7 @@
     overflow-y: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    padding-bottom: .1rem;
+    padding-bottom: 2.5rem;
     // -moz-box-shadow: inset 0 -10px 10px -10px #000000;
     // -webkit-box-shadow: inset 0 -10px 10px -10px #000000;
     // box-shadow: inset 0 -10px 10px -10px #000000;
