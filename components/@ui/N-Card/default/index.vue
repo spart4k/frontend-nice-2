@@ -495,7 +495,8 @@ export default {
     const dateFormat = computed(() => {
       if (props.data.date_event) {
         let newDateUTC = props.data.date_event
-        const newDate = new Date(newDateUTC).toUTCString()
+        const newDate = new Date(newDateUTC.replace(/-/g, '/')).toUTCString()
+        console.log(newDate)
         // let delta = new Date(formData.value.date_event).getTimezoneOffset()
         // formData.value.date_event = newDate.setMinutes(newDate.getMinutes() - delta);
         const localDate = new Date(newDate)
@@ -507,9 +508,10 @@ export default {
           mm: '',
           ss: ''
         }
+        console.log(localDate)
         myDate.YY = localDate.getFullYear()
         myDate.DD = localDate.getDate()
-        console.log(myDate.DD)
+        console.log(myDate)
         myDate.MM = localDate.getMonth() + 1
         if (myDate.MM.toString().length <= 1) {
           myDate.MM = `0${myDate.MM}`
@@ -526,7 +528,7 @@ export default {
 
         myDate.ss = localDate.getSeconds()
 
-        newDateUTC = `${myDate.YY}.${myDate.MM}.${myDate.DD} ${myDate.HH}:${myDate.mm}`
+        newDateUTC = `${myDate.DD}.${myDate.MM}.${myDate.YY} ${myDate.HH}:${myDate.mm}`
         return newDateUTC
         // const delta = new Date(newDateUTC).getTimezoneOffset()
         // const newDate = new Date(newDateUTC)
