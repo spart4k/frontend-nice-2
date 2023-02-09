@@ -18,6 +18,12 @@ export default {
     link: [
       // { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
+        rel: 'preconnect', href: 'https://fonts.googleapis.com'
+      },
+      {
+        rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap'
+      },
+      {
         rel: 'apple-touch-icon',
         sizes: '57x57',
         type: 'image/png',
