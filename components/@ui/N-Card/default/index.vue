@@ -980,9 +980,13 @@ export default {
     &__tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 1.039rem;
+      //gap: 1.039rem;
+
       .chip {
         cursor: pointer;
+        &:not(:last-child) {
+          margin-right: 1.039rem;
+        }
       }
     }
     &__footer {
