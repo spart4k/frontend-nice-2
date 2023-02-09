@@ -8,9 +8,6 @@
           v-show="$route.name === 'index'"
           class="logo"
           :to="'/'"
-          :style="{
-            'will-change': 'transform'
-          }"
           :class="[
           $style.logo,
           showAnimate && $style.logoVisible,
