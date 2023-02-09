@@ -60,6 +60,7 @@ export default defineComponent({
     const totalPage = ref([])
     const pageNumber = ref(2)
     const introData = ref()
+    const metaDesc = ref('')
     const tagId = computed(() => Number(route.value.query.tag))
     const id = computed(() => {
       switch (route.value.params.slug) {
@@ -148,7 +149,7 @@ export default defineComponent({
         {
           hid: 'description',
           name: 'description',
-          content: metaTags.value?.seo_description
+          content: metaDesc.value
         },
         {
           property: 'og:url',
@@ -162,13 +163,13 @@ export default defineComponent({
         },
         {
           property: 'og:description',
-          content: metaTags.value?.seo_description
+          content: metaDesc.value
         },
         {
           hid: 'og:image',
           name: 'og:image',
           property: 'og:image',
-          content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_file?.src}`
+          content: `${root.$axios.defaults.baseURL}/${author.value?.avatar?.src}`
         },
         {
           hid: 'twitter:card',
@@ -188,13 +189,13 @@ export default defineComponent({
         {
           hid: 'twitter:description',
           property: 'twitter:description',
-          content: metaTags.value?.seo_description
+          content: metaDesc.value
         },
         {
           hid: 'twitter:image',
           name: 'twitter:image',
           property: 'twitter:image',
-          content: `${root.$axios.defaults.baseURL}/${metaTags.value?.seo_file?.src}`
+          content: `${root.$axios.defaults.baseURL}/${author.value?.avatar?.src}`
         }
       ]
     }))
@@ -339,6 +340,7 @@ export default defineComponent({
         try {
           const response = await fetchData()
           const seo = await store.dispatch('main/getSeo')
+          console.log(response)
           metaTags.value = seo.data.data[0]
           if (authorId.value) {
             const authorResponse = await fetchAuthor()
@@ -360,12 +362,20 @@ export default defineComponent({
         }
     })
 
-    const fetchAuthor = () => {
+    const fetchAuthor = async () => {
       if (authorId.value) {
         const params = {
           id: authorId.value
         }
-        const response = store.dispatch('pages/getAuthorById', params)
+        const response = await store.dispatch('pages/getAuthorById', params)
+        console.log(response)
+        function cutTegs (str) {
+          const regex = /( |<([^>]+)>)/ig
+          const result = str.replace(regex, '')
+          return result
+        }
+        metaDesc.value = cutTegs(response.description)
+        console.log(metaDesc.value)
         return response
       }
     }
