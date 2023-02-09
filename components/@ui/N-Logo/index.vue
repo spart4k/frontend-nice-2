@@ -111,6 +111,11 @@ export default {
   will-change: transform;
   img {
     width: 100%;
+    image-rendering: high-quality;
+    filter: blur(0);
+    -webkit-filter: blur(0);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
   svg {
     width: 100%;
@@ -129,10 +134,19 @@ export default {
     //transform: scale(.2);
     //transform-origin: left top;
   }
+  .wrapperImage {
+    width: 100%;
+    height: 100%;
+  }
   .logoImage {
-    display: block;
-    padding-bottom: 1.2rem;
-    line-height: 0;
+    //display: block;
+    //padding-bottom: 1.2rem;
+    //line-height: 0;
+    //width: 100%;
+    //height: 8.3rem;
+    //background-image: url('@/assets/img/logo.png');
+    //background-size: contain;
+    //background-repeat: no-repeat;
     @media (max-width: $mobileWidth) {
       //width: 16.3rem;
       padding-bottom: .91rem;
