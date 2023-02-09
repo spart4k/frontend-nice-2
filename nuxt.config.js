@@ -185,6 +185,7 @@ export default {
   publicRuntimeConfig: {
     yandexMetrika: {
       id: 92353445,
+      webvisor: true,
       clickmap:true,
       trackLinks:true,
       accurateTrackBounce:true
