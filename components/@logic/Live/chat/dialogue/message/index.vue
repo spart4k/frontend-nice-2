@@ -1,8 +1,8 @@
 <template>
   <div v-if="nickName" :class="$style.message">
-    <div :class="$style.author">
+    <p :class="$style.author">
       {{ nickName }}
-    </div>
+    </p>
     <template v-if="$props.message.sticker && ($props.message.sticker.id !== 1)">
       <img
         :class="$style.sticker"
@@ -11,7 +11,7 @@
       >
     </template>
     <template v-else>
-      <div :class="$style.body" v-html="decodeText" />
+      <p :class="$style.body" v-html="decodeText" />
     </template>
   </div>
 </template>
