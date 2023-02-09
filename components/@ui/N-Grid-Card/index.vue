@@ -459,7 +459,7 @@ export default {
     .row {
       display: flex;
       justify-content: flex-end;
-      gap: 1.5rem;
+      //gap: 1.5rem;
       margin-bottom: 4rem;
       .select {
         width: 20.3rem;
@@ -487,7 +487,7 @@ export default {
   .rowMobile{
     display: flex;
     justify-content: flex-end;
-    gap: 1.5rem;
+    //gap: 1.5rem;
     margin-bottom: 4rem;
     @media (min-width: $tabletWidth) {
       display: none;
@@ -525,9 +525,14 @@ export default {
 .filters {
   display: flex;
   justify-content: flex-end;
-  grid-gap: 1.5rem;
-  gap: 1.5rem;
+  //grid-gap: 1.5rem;
+  //gap: 1.5rem;
   margin-bottom: 4rem;
+  > div {
+    &:not(:first-child) {
+      margin-left: 1.5rem;
+    }
+  }
 }
 .masonry {
   width: 100%;
