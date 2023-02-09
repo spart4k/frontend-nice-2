@@ -566,7 +566,7 @@ export default defineComponent({
   max-width: 105rem;
   width: 100%;
   //margin: 0 auto;
-  transition: 0.2s;
+  //transition: 0.2s;
   margin: 0 auto;
   @media (max-width: calc(1920px + 39rem)) {
     //margin: 0 39rem 0 auto;
