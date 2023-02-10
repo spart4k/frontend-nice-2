@@ -478,12 +478,12 @@ export default {
   //max-width: 105rem;
   //margin: 0 auto;
   &.paddingLeft {
-    @media (max-width: calc($desktopWidth + 28rem)) {
+    @media (max-width: calc($desktopWidth + 56.5rem)) {
       padding-left: 39rem;
     }
   }
   &.paddingRight {
-    @media (max-width: calc($desktopWidth + 28rem)) {
+    @media (max-width: calc($desktopWidth + 56.5rem)) {
       padding-right: 39rem;
     }
   }

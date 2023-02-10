@@ -2,7 +2,11 @@
   <!--  , showAnimate && $style.animateContent-->
   <div class="">
     <header>
-      <div class="headerAnimation" :class="[$style.header, (showAnimate && $route.name === 'index') && $style.animateContent]">
+      <div class="headerAnimation"
+      :class="[
+        $style.header,
+        (showAnimate && $route.name === 'index') && $style.animateContent
+      ]">
         <!--:style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}rem)` : '50%'}"-->
         <nuxt-link
           v-show="$route.name === 'index'"
@@ -10,8 +14,7 @@
           :to="'/'"
           :class="[
           $style.logo,
-          showAnimate && $style.logoVisible,
-          sheetWidth === 39 ? $style.paddingLeft : sheetWidth === -39 ? $style.paddingRight: ''
+          showAnimate && $style.logoVisible
           ]"
           v-on:click.native="scrollTop"
         >
@@ -19,7 +22,10 @@
         </nuxt-link>
         <nuxt-link
           v-show="$route.name !== 'index'"
-          :class="$style.logoSlug"
+          :class="[
+            $style.logoSlug,
+            sheetWidth === 39 ? $style.paddingLeft : sheetWidth === -39 ? $style.paddingRight: ''
+          ]"
           :to="'/'"
           :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}rem)` : '50%'}"
         >

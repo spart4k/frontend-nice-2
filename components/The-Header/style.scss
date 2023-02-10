@@ -50,16 +50,6 @@
   top: 2.9rem;
   left: 50%;
   transition: left .3s;
-  @media (max-width: calc($desktopWidth + 39rem)) {
-    &.paddingLeft {
-      left: calc(50% + 18.5rem);
-      //transform: translateX(18.5rem) !important;
-    }
-    &.paddingRight {
-      left: calc(50% + -18.5rem);
-      //transform: translateX(-18.5rem) !important;
-    }
-  }
   @media (max-width: $mobileWidth ) {
     top: 9rem;
   }
@@ -87,6 +77,16 @@
   @media (max-width: $mobileWidth ) {
     width: 9.7rem;
     top: 2.3rem;
+  }
+  @media (min-width: calc($desktopWidth + 56.5rem)) {
+    &.paddingLeft {
+      left: 50% !important;
+      //transform: translateX(18.5rem) !important;
+    }
+    &.paddingRight {
+      left: 50% !important;
+      //transform: translateX(-18.5rem) !important;
+    }
   }
   z-index: var(--logo-z-index);
 }
