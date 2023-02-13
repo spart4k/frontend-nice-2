@@ -44,12 +44,12 @@ $animationTiming1: cubic-bezier(.71,.01,.15,1);
 }
 
 @mixin montserratSemiBold {
-  font-family: 'Montserrat-SemiBold', sans-serif;
-  font-weight: normal;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
 }
 @mixin montserratBold {
-  font-family: 'Montserrat-Bold', sans-serif;
-  font-weight: normal;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
 }
 
 @mixin Bankir-Retro {
@@ -85,38 +85,38 @@ $animationTiming1: cubic-bezier(.71,.01,.15,1);
 
 
 @mixin regular-text-small {
-  font-family: 'Montserrat-Medium', sans-serif;
-  font-weight: normal;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
   font-size: 1.2rem;
 }
 
 @mixin regular-text-bold {
-  font-family: 'Montserrat-Bold', sans-serif;
-  font-weight: normal;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
   font-size: 1.4rem;
 }
 
 @mixin regular-text {
-  font-family: 'Montserrat-Medium', sans-serif;
-  font-weight: normal;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
   font-size: 1.4rem;
 }
 
 @mixin button {
-  font-family: 'Montserrat-Medium', sans-serif;
-  font-weight: normal;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
   font-size: 1.8rem;
 }
 
 @mixin text-style-h2 {
-  font-family: 'Montserrat-Bold', sans-serif;
-  font-weight: normal;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
   font-size: 2.1rem;
 }
 
 @mixin text-style-h1 {
-  font-family: 'Montserrat-Black', sans-serif;
-  font-weight: normal;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
   font-size: 4.8rem;
 }
 

@@ -249,9 +249,9 @@ export default {
         }
       }
     })
-    const categories = ref(['Все товары'])
+    const categories = ref([])
     const searchMode = ref(['Новизна', 'Цена', 'Популярность', 'Наличие'])
-    const sections = ref([{name: 'Все товары', id: null}])
+    const sections = ref([{name: 'Все товары', id: null, ord: 0}])
     const getСategories = async () => {
       const data = await store.dispatch('search/searchCards', {
         entity: 'categories',
@@ -263,6 +263,9 @@ export default {
       })
       data.data.data.forEach((item) => {
         sections.value.push(item)
+      })
+      sections.value = sections.value.sort((a, b) => a.ord - b.ord)
+      sections.value.forEach((item) => {
         categories.value.push(item.name)
       })
     }

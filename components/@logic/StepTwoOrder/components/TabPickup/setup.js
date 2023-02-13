@@ -65,7 +65,7 @@ export default {
           loading.value = true
           const params = {
             delivery_place_id: 5,
-            pay_type: 2,
+            pay_type: activePayment.value === 'money' ? 2 : 3,
             address_id: null,
             email: formData.email,
             phone: Number(formData.phone.replace('+7', '8').replace('(', '').replace(')', '')),
