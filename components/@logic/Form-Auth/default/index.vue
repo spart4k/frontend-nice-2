@@ -40,10 +40,14 @@
         :color-border="'blueBorder'"
         type="password"
       />
+      <div :class="$style.personalData">
+        <input v-model="personalData" type="checkbox">
+        Я принимаю <a href="@/assets/img/ProcessingPersonalData.pdf" download="ProcessingPersonalData.pdf">Политику обработки персональных данных</a>
+      </div>
     </form>
     <n-button
       :class="$style.button"
-      :disabled="$v.$invalid && $touched "
+      :disabled="!personalData ? !personalData : $v.$invalid && $touched"
       background-color="#5289C5"
       @click.prevent="submit"
     >
@@ -74,6 +78,7 @@ export default {
     const { emit } = ctx
     const { store } = useContext()
     const loading = ref(false)
+    const personalData = ref(false)
     const { formData, validate, $errors, $v, $touched } = useForm(
       {
         fields: {
@@ -117,7 +122,8 @@ export default {
       $v,
       loading,
       submit,
-      subminOnEnter
+      subminOnEnter,
+      personalData
     }
   }
 }
@@ -141,6 +147,17 @@ export default {
     }
     .buttonTologin {
       margin-top: 1rem;
+    }
+    .personalData {
+      margin-top: 2.5rem;
+      @include regular-text;
+      input {
+        width: 1rem;
+        height: 1rem;
+      }
+      a {
+        color: $blue2;
+      }
     }
   }
 </style>

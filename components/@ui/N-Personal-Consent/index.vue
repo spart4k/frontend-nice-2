@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.wrapper">
-    Нажимая на кнопку, вы соглашаетесь с <a :class="$style.link" href="@/assets/img/ProcessingPersonalData.pdf" download="ProcessingPersonalData.pdf">Условиями обработки перс. данных</a>, а также с <a :class="$style.link" href="@/assets/img/ProcessingPersonalData.pdf" download="ProcessingPersonalData.pdf">Условиями продажи</a>
+    Нажимая на кнопку, вы соглашаетесь с <a :class="$style.link" href="@/assets/img/TermsOfSale.pdf" download="TermsOfSale.pdf">Условиями продажи</a>
   </div>
 </template>
 
