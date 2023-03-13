@@ -129,17 +129,14 @@ export default {
       useAsync(async () => {
         try {
             priceLoading.value = true
-            console.log(val)
             const responseCount = await store.dispatch('shop/getPrice', val)
-            console.log(responseCount)
             totalPrice.value = responseCount.data
-            console.log(totalPrice.value)
             priceLoading.value = false
         } catch (e) {
         }
       })
     } else {
-      totalPrice.value = 500
+      totalPrice.value = props.price
     }
   }
   const colorChange = (val) => {
