@@ -56,8 +56,7 @@ export default {
         fields: {
           name: { default: store.state.authentication.user.fullname, validations: { required } },
           email: { default: store.state.authentication.user.email, validations: { email, required } },
-          phone: { default: store.state.authentication.user.phone, validations: { phone, required, onlyNumeric } },
-          address_id: { default: store.state.authentication.adress[0][0], validations: { required } }
+          phone: { default: store.state.authentication.user.phone, validations: { phone, required, onlyNumeric } }
         }
       })
     const paymentsMethodSelect = [
@@ -67,7 +66,16 @@ export default {
       try {
         if (!validate()) { return }
         loading.value = true
-        if ((city.value !== store.state.authentication.adress[0][0].city.name || address.value !== store.state.authentication.adress[0][0].address) && deliveryValue.value === 'courier') {
+        if (store.state.authentication.adress[0].length) {
+          if ((city.value !== store.state.authentication.adress[0][0].city.name || address.value !== store.state.authentication.adress[0][0].address) && deliveryValue.value === 'courier') {
+            const params = {
+              user_address: address.value,
+              city_id: cityId.value
+            }
+            const response = await store.dispatch('authentication/addAdress', params)
+            addressId.value = response.data.id
+          }
+        } else {
           const params = {
             user_address: address.value,
             city_id: cityId.value
@@ -218,7 +226,7 @@ export default {
       basketData.value.forEach((item) => {
         totalWeight.value += item.weight * item.pivot.quantity
       })
-      if (store.state.authentication.adress[0][0]) {
+      if (store.state.authentication.adress[0][0] && store.state.authentication.adress[0][0].city.name) {
         city.value = store.state.authentication.adress[0][0].city.name
         cityCode.value = store.state.authentication.adress[0][0].city.code
         cityId.value = store.state.authentication.adress[0][0].city.id

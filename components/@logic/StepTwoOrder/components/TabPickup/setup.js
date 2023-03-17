@@ -36,6 +36,10 @@ export default {
           const params = {
             delivery_place_id: 5,
             pay_type: 1,
+            delivery_price: 0,
+            delivery_place_address: null,
+            city_id: null,
+            weight_sum: null,
             address_id: null,
             email: formData.email,
             phone: Number(formData.phone.replace('+7', '8').replace('(', '').replace(')', '')),
@@ -66,7 +70,7 @@ export default {
           const params = {
             delivery_place_id: 5,
             pay_type: activePayment.value === 'money' ? 2 : 3,
-            delivery_price: null,
+            delivery_price: 0,
             delivery_place_address: null,
             city_id: null,
             weight_sum: null,
