@@ -36,7 +36,7 @@
             Адрес
           </h3>
           <span v-if="addressItem[0]" :class="$style.adress">
-            {{ addressItem[0].city.name }}, {{ addressItem[0].address }}
+            {{ addressItem[0].city ? `${addressItem[0].city.name}, ` : '' }}{{ addressItem[0].address ? addressItem[0].address : '' }}
           </span>
           <N-Button :class="$style.noRegistered" type-button="wide" background-color="transparent" color="#C83F8E" @click.prevent="changeAddress">
             Изменить адрес
