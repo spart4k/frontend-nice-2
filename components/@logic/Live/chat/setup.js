@@ -1,4 +1,4 @@
-import { onMounted, useContext, ref } from '@nuxtjs/composition-api'
+import { onMounted, useContext, ref, computed } from '@nuxtjs/composition-api'
 
 export default {
   name: 'live-chat',
@@ -7,6 +7,8 @@ export default {
   },
   setup (props, { emit }) {
     const { store } = useContext()
+    const abilities = computed(() => { return store.state.authentication.abilities })
+    const chatEnable = ref(false)
     const login = () => {
       emit('closeState')
       setTimeout(() => {
@@ -69,6 +71,11 @@ export default {
     // }
 
     onMounted(() => {
+      abilities.value.forEach((item) => {
+        if (item === 'Чат') {
+          chatEnable.value = true
+        }
+      })
     })
     return {
       login,
@@ -76,7 +83,9 @@ export default {
       scrollDown,
       sendMessage,
       scrollTrigger,
-      sendSticker
+      sendSticker,
+      abilities,
+      chatEnable
     }
   }
 }

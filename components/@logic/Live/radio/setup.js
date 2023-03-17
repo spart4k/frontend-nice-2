@@ -44,7 +44,7 @@ export default {
       if (audioCard) {
         audioCard.pause()
       }
-      console.log(audioCard)
+      // console.log(audioCard)
       store.commit('menu/changeAudioPlaying', true)
     }
     const pauseAudio = () => {

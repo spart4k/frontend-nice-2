@@ -6,10 +6,12 @@ export const state = () => ({
     phone: '',
     fullname: ''
   },
+  abilities: [],
   adress: [],
   selectedAddress: '',
   selectedAddressIndex: 0,
   token: '',
+  tokenSecond: '',
   authorizated: false,
   showLogin: false
 })
@@ -21,11 +23,15 @@ export const mutations = {
       state.user = JSON.parse(user)
     }
   },
+  setUserAbilities (state, value) {
+    state.abilities = value
+  },
   setToken (state) {
     const token = localStorage.getItem('token')
     if (token) {
       this.$axios.defaults.headers.common.Authorization = `Bearer ${token}`
       state.token = token
+      state.tokenSecond = token
       state.authorizated = true
     }
   },
@@ -165,7 +171,8 @@ export const actions = {
     try {
       const response = await this.$axios('api/v1/verifyToken')
         commit('setUserInfo', response.data.data.user)
-        commit('loadUserAdress', response.data.data.addresses)
+      commit('loadUserAdress', response.data.data.addresses)
+      commit('setUserAbilities', response.data.data.abilities)
       return response.data
     } catch (e) {
       this.$toast.error(`Ошибка: ${e.response.data.message}, auth: 171`, { position: 'bottom-right', icon: true })
