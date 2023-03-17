@@ -113,6 +113,27 @@ export const actions = {
     } catch (e) {
       this.$toast.error(`Ошибка: ${e.response.data.message}, basket: 114`, { position: 'bottom-right', icon: true })
     }
+  },
+  async getDeliveryPoints ({ commit, state }, params) {
+    try {
+      const response = await this.$axios.get(`getDeliveryPoints/${params}`)
+      return response.data
+    } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}, basket: 1200`, { position: 'bottom-right', icon: true })
+    }
+  },
+  async calcDeliverySum ({ commit, state }, params) {
+    try {
+      const response = await this.$axios.post('calcDeliverySum', params)
+      console.log(response.data)
+      if (!response.data.errors) {
+        return response.data
+      } else {
+        this.$toast.error('Доставка до этого населённого пункта не возможна', { position: 'bottom-right', icon: true })
+      }
+    } catch (e) {
+      this.$toast.error(`Ошибка: ${e.response.data.message}, basket: 121`, { position: 'bottom-right', icon: true })
+    }
   }
 }
 

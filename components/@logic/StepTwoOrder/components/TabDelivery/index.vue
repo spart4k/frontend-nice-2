@@ -30,11 +30,67 @@
         />
       </n-row>
     </form>
-    <div :class="$style.addressWrapper">
+    <div :class="$style.deliveryWrapper">
       <h4 :class="$style.title">
-        Адрес
+        Тип доставки
       </h4>
-      <n-row v-if="selectedAddress" :class="$style.addressText">
+      <n-row>
+        <div :class="$style.deliveryCheck">
+          <div :class="$style.deliveryCheck__item">
+            <!-- <input name="delivery" checked type="radio"> -->
+            <label :class="$style.wireColor" :style="{ borderColor: deliveryValue === 'courier' ? '#C83F8E' : '#D9D9D9'}">
+              <input name="delivery" type="radio" checked @change="deliveryChange('courier')">
+              <span v-if="deliveryValue === 'courier'" :class="$style.checkmark" />
+            </label>
+            <div>
+              Курьером
+            </div>
+          </div>
+          <div :class="$style.deliveryCheck__item">
+            <!-- <input name="delivery" type="radio"> -->
+            <label :class="$style.wireColor" :style="{ borderColor: deliveryValue === 'pickup' ? '#C83F8E' : '#D9D9D9'}">
+              <input name="delivery" type="radio" @change="deliveryChange('pickup')">
+              <span v-if="deliveryValue === 'pickup'" :class="$style.checkmark" />
+            </label>
+            <div>
+              Самовывоз<br> из пункта СДЭК
+            </div>
+          </div>
+        </div>
+      </n-row>
+    </div>
+    <div :class="$style.addressWrapper">
+      <!-- <h4 :class="$style.title">
+        Адрес
+      </h4> -->
+      <div :class="$style.city">
+      <p :class="$style.subtitle">
+        {{deliveryValue === 'courier' ? 'Адрес' : 'Список пунктов выдачи'}}
+      </p>
+      <v-select
+        v-model="city"
+        v-debounce:350ms="searchCity"
+        :options="citiesArray"
+        :class="$style.citySelect"
+      >
+        <template #no-options="{ }">
+          Подождите.
+        </template>
+      </v-select>
+      <n-text-field v-if="(deliveryValue === 'courier') && render" v-model="address" :class="$style.input" placeholder="Улица, дом, квартира" color="#C83F8E" />
+      <v-select
+        v-model="pickupPoint"
+        v-else
+        v-debounce:350ms="searchPickupPoint"
+        :options="pickupPointArray"
+        :class="[$style.citySelect, (!city || pickupPointArray.length === 0) && $style.disabled]"
+      >
+        <template #no-options="{ }">
+          Подождите.
+        </template>
+      </v-select>
+    </div>
+      <!-- <n-row v-if="selectedAddress" :class="$style.addressText">
         {{ selectedAddress.city.name }}, {{ selectedAddress.address }}
       </n-row>
       <n-row v-else-if="addressItem" :class="$style.addressText">
@@ -50,7 +106,7 @@
       </n-button>
       <div v-if="$errors.address_id" :class="$style.errorAddress">
         {{ $errors.address_id[0] }}
-      </div>
+      </div> -->
     </div>
     <n-row>
       <n-row>
@@ -90,14 +146,9 @@
             <div :class="$style.col__left">
               Стоимость доставки
             </div>
-            <template v-if="addressItem">
+            <template>
               <div :class="$style.col__right">
-                {{ addressItem.city.name === 'Нижний Новгород' ? '300 р.' : '1000 р.' }}
-              </div>
-            </template>
-            <template v-else>
-              <div :class="$style.col__right">
-                Выберите город
+                {{deliveryPrice && city ? `${deliveryPrice} р.`: 'Выберите город'}}
               </div>
             </template>
           </div>
@@ -122,7 +173,7 @@
       <n-button
         :class="$style.btn"
         :type-button="'pink'"
-        :disabled="$v.$invalid && $touched"
+        :disabled="(!city || !noErrorCity || !(pickupPoint || address)) ? (!city || !noErrorCity ||  !(pickupPoint || address)) : $v.$invalid && $touched"
         @click="$emit('toAddress', false); submit($event)"
       >
         <template v-if="!loading">

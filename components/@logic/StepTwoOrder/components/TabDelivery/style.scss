@@ -21,6 +21,9 @@
 .addressWrapper {
   margin-bottom: 3.9rem;
 }
+.deliveryWrapper {
+  margin-bottom: 2.5rem;
+}
 .btnChangeAddress {
   width: 100%;
 }
@@ -81,4 +84,105 @@
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   font-size: 1.4rem;
+}
+
+.deliveryCheck {
+  display: flex;
+  justify-content: space-between;
+  &__item {
+    display: flex;
+    align-items: center;
+    input {
+      margin-right: 1rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      background-color: #C83F8E;
+    }
+    div {
+      margin-right: 2.8rem;
+      @include regular-text;
+    }
+  }
+}
+
+.city {
+  margin-bottom: 2.5rem;
+  .subtitle {
+    @include regular-text;
+    color: $fontColorDefault;
+    opacity: 0.5;
+  }
+  .citySelect {
+      width: 100%;
+      @include regular-text;
+      color: $fontColorDefault;
+      border: none;
+      border-bottom: .2rem solid #C83F8E;
+      outline: none;
+      margin-bottom: 1.5rem;
+      :global(.vs__dropdown-toggle) {
+          border: none;
+          padding: 0;
+          :global(.vs__selected-options) {
+              padding: 0;
+              :global(.vs__search) {
+                  padding: 0;
+                  font-size: 1.4rem !important;
+              }
+              :global(.vs__selected) {
+                  margin: 0;
+                  padding: 0;
+              }
+          }
+          :global(.vs__actions) {
+              margin: 1.3rem 0;
+              padding: 0;
+              :global(.vs__open-indicator) {
+                  fill: #C83F8E
+              }
+              :global(.vs__clear) {
+                  display: none
+              }
+          }
+      }
+      :global(.vs__dropdown-option) {
+          height: 4.5rem;
+          display: flex;
+          font-size: 1.6rem;
+          align-items: center;
+      }
+      :global(.vs__dropdown-option--highlight) {
+          background: #C83F8E;
+      }
+  }
+}
+.wireColor {
+  width: 2.5rem;
+  height: 2.5rem;
+  position: relative;
+  border: solid .2rem;
+  border-radius: 50%;
+  margin-right: 1rem;
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+  }
+  .checkmark {
+    position: absolute;
+    width: 1.1rem;
+    height: 1.1rem;
+    top: calc(50% - 0.55rem);
+    left: calc(50% - 0.55rem);
+    border-radius: 50%;
+    background-color: #C83F8E;
+  }
+}
+
+.disabled {
+  opacity: 0.4;
+  pointer-events: none;
 }

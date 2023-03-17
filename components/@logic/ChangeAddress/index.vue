@@ -82,8 +82,8 @@ export default {
     const adress = ref()
     const city = ref()
     const citiesArray = ref([])
-    const cityId = ref([])
     const defaulArray = ref([])
+    const cityId = ref([])
     const searchCity = (val) => {
       useAsync(async () => {
         const cityData = {

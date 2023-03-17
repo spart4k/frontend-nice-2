@@ -1,8 +1,8 @@
 <template>
   <div class="chat" :class="$style.chat">
     <live-chat-dialogue :scrollTrigger="scrollTrigger" :messages="messages" />
-    <live-chat-panel v-if="$store.state.authentication.authorizated" @sendText="sendMessage" @sendSticker="sendSticker" />
-    <N-Plug v-else style="margin-bottom: 0;" @login="login" @registration="registration" />
+    <live-chat-panel v-if="$store.state.authentication.authorizated && chatEnable" @sendText="sendMessage" @sendSticker="sendSticker" />
+    <N-Plug v-else-if="!$store.state.authentication.authorizated" style="margin-bottom: 0;" @login="login" @registration="registration" />
   </div>
 </template>
 
