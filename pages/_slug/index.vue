@@ -289,7 +289,7 @@ export default defineComponent({
       const params = {
         page: 1,
         count: 6,
-        category_id: selectCategory.value ? selectCategory.value : '',
+        categories: selectCategory.value ? [selectCategory.value] : '',
         order_by_column: selectMode.value,
         order_by_mode: selectDescAsc.value,
         minPrice: priceFetch.value,
@@ -390,7 +390,7 @@ export default defineComponent({
       const params = {
         page: 1,
         count: 6,
-        category_id: '',
+        categories: '',
         section_id: id.value,
         tags: tagId.value ? [tagId.value] : '',
         authors: authorId.value ? [authorId.value] : '',
@@ -622,7 +622,7 @@ export default defineComponent({
         page: pageNumber.value,
         count: 6,
         section_id: selectSection.value ? selectSection.value : null,
-        category_id: selectCategory.value,
+        categories: [selectCategory.value],
         // tags: tagId.value ? [tagId.value] : null,
         // authors: authorId.value ? [authorId.value] : null,
         order_by_column: selectMode.value,

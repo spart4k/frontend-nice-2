@@ -42,11 +42,13 @@ export default {
     const totalWeight = ref(0)
     const deliveryChange = (val) => {
       deliveryValue.value = val
-      getCdekPrice()
       if (deliveryValue.value === 'courier') {
         pickupPoint.value = ''
       } else {
         address.value = ''
+      }
+      if (city.value) {
+        getCdekPrice()
       }
     }
     const deliveryPrice = ref(0)
