@@ -68,8 +68,17 @@ export default {
       try {
         if (!validate()) { return }
         loading.value = true
-        if (store.state.authentication.adress[0].length) {
-          if ((city.value !== store.state.authentication.adress[0][0].city.name || address.value !== store.state.authentication.adress[0][0].address) && deliveryValue.value === 'courier') {
+        if (deliveryValue.value === 'courier') {
+          if (store.state.authentication.adress[0].length) {
+            if ((city.value !== store.state.authentication.adress[0][0].city.name || address.value !== store.state.authentication.adress[0][0].address) && deliveryValue.value === 'courier') {
+              const params = {
+                user_address: address.value,
+                city_id: cityId.value
+              }
+              const response = await store.dispatch('authentication/addAdress', params)
+              addressId.value = response.data.id
+            }
+          } else {
             const params = {
               user_address: address.value,
               city_id: cityId.value
@@ -77,13 +86,6 @@ export default {
             const response = await store.dispatch('authentication/addAdress', params)
             addressId.value = response.data.id
           }
-        } else {
-          const params = {
-            user_address: address.value,
-            city_id: cityId.value
-          }
-          const response = await store.dispatch('authentication/addAdress', params)
-          addressId.value = response.data.id
         }
         const params = {
           delivery_place_address: deliveryValue.value === 'courier' ? null : pickupPoint.value,
