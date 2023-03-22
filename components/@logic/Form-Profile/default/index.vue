@@ -284,6 +284,9 @@ form {
           :global(.vs__search) {
             padding: 0;
             font-size: 1.4rem !important;
+            @media (max-width: $tabletWidth) {
+              font-size: 16px !important;
+            }
           }
           :global(.vs__selected) {
             margin: 0;
