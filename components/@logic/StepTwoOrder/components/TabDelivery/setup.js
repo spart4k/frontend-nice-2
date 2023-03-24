@@ -28,6 +28,7 @@ export default {
     const loading = ref(false)
     const pickupPoint = ref()
     const pickupPointArray = ref([])
+    const pickupPointArrayFull = ref([])
     const address = ref('')
     const render = ref(true)
     const city = ref()
@@ -40,6 +41,8 @@ export default {
     const addressId = ref(0)
     const deliveryValue = ref('courier')
     const totalWeight = ref(0)
+    const basketId = computed(() => { return store.state.basket.basketId })
+    const deliveryPoint = ref(0)
     const deliveryChange = (val) => {
       deliveryValue.value = val
       if (deliveryValue.value === 'courier') {
@@ -87,16 +90,22 @@ export default {
             addressId.value = response.data.id
           }
         }
+        if (deliveryValue.value !== 'courier') {
+          pickupPointArrayFull.value.forEach((item) => {
+            if (item.location.address === pickupPoint.value) {
+              deliveryPoint.value = item.code
+            }
+          })
+        }
         const params = {
-          delivery_place_address: deliveryValue.value === 'courier' ? null : pickupPoint.value,
-          delivery_price: deliveryPrice.value,
-          city_id: deliveryValue.value === 'courier' ? null : cityId.value,
-          weight_sum: totalWeight.value,
           address_id: deliveryValue.value === 'courier' ? addressId.value : null,
           pay_type: 1,
+          delivery_price: deliveryPrice.value,
           email: formData.email,
           phone: Number(formData.phone.replace('+7', '8').replace('(', '').replace(')', '')),
-          FIO: formData.name
+          FIO: formData.name,
+          delivery_type: deliveryValue.value === 'courier' ? 137 : 136,
+          delivery_point: deliveryValue.value === 'courier' ? null : deliveryPoint.value
         }
         const result = await store.dispatch('shop/createNewOrder', params)
         if (!result.data.error) {
@@ -134,10 +143,6 @@ export default {
       responseCity.data.data.forEach((item) => {
         fullCityArray.value.push(item)
       })
-    }
-
-    const searchPickupPoint = () => {
-      console.log('asd')
     }
 
     const searchCity = (val) => {
@@ -178,14 +183,14 @@ export default {
           tariff: 137,
           from_code: 414,
           to_code: cityCode.value,
-          weight: totalWeight.value
+          basket_id: basketId.value
         }
       } else {
         data = {
           tariff: 136,
           from_code: 414,
           to_code: cityCode.value,
-          weight: totalWeight.value
+          basket_id: basketId.value
         }
       }
       const response = await store.dispatch('basket/calcDeliverySum', data)
@@ -205,9 +210,11 @@ export default {
         }
       })
       pickupPointArray.value = []
+      pickupPointArrayFull.value = []
       const response = await store.dispatch('basket/getDeliveryPoints', cityCode.value)
       response.forEach((item) => {
         pickupPointArray.value.push(item.location.address)
+        pickupPointArrayFull.value.push(item)
       })
     }
 
@@ -276,7 +283,7 @@ export default {
       city,
       pickupPoint,
       pickupPointArray,
-      searchPickupPoint,
+      pickupPointArrayFull,
       address,
       fullCityArray,
       getCdekPrice,
@@ -287,7 +294,9 @@ export default {
       render,
       cityId,
       addressId,
-      noErrorCity
+      noErrorCity,
+      basketId,
+      deliveryPoint
     }
   }
 }

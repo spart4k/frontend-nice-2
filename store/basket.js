@@ -2,12 +2,14 @@ export const state = () => ({
   basket: [],
   basketLength: 0,
   basketSum: 0,
-  lastOrder: ''
+  lastOrder: '',
+  basketId: 0
 })
 
 export const mutations = {
   setBasket (state, value) {
-    state.basket = value
+    state.basket = value.cards
+    state.basketId = value.id
     // let qty = 0
     // value.data.cards.forEach((card) => {
     //   qty += card.pivot.quantity
@@ -73,7 +75,7 @@ export const actions = {
         const response = await this.$axios('api/v1/getBasket')
         if (!response.data.error) {
           if (response.data.data.cards) {
-            commit('setBasket', response.data.data.cards)
+            commit('setBasket', response.data.data)
           }
           commit('changeBasketSum', response.data.data.cards_sum)
         }
