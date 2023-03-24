@@ -101,7 +101,7 @@
       {{ activePayment === 'card' ? 'Оплатить онлайн' : 'Оформить заказ' }}
     </n-button>
     <form name="TinkoffPayForm" onsubmit="pay(this); return false;">
-      <input class="tinkoffPayRow" type="hidden" name="terminalkey" value="1658916651586DEMO">
+      <input class="tinkoffPayRow" type="hidden" name="terminalkey" value="1658916651586">
       <input class="tinkoffPayRow" type="hidden" name="frame" value="true">
       <input class="tinkoffPayRow" type="hidden" name="language" value="ru">
       <input v-model="tinkoffPrice" type="hidden" class="tinkoffPayRow" name="amount">
