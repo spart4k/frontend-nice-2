@@ -34,16 +34,14 @@ export default {
           if (!validate()) { return }
           loading.value = true
           const params = {
-            delivery_place_id: 5,
             pay_type: 1,
-            delivery_price: 0,
-            delivery_place_address: null,
-            city_id: null,
-            weight_sum: null,
-            address_id: null,
             email: formData.email,
             phone: Number(formData.phone.replace('+7', '8').replace('(', '').replace(')', '')),
-            FIO: formData.name
+            FIO: formData.name,
+            address_id: null,
+            delivery_price: 0,
+            delivery_type: 0,
+            delivery_point: null
           }
           const result = await store.dispatch('shop/createNewOrder', params)
           if (!result.data.error) {
@@ -68,16 +66,14 @@ export default {
           if (!validate()) { return }
           loading.value = true
           const params = {
-            delivery_place_id: 5,
             pay_type: activePayment.value === 'money' ? 2 : 3,
-            delivery_price: 0,
-            delivery_place_address: null,
-            city_id: null,
-            weight_sum: null,
-            address_id: null,
             email: formData.email,
             phone: Number(formData.phone.replace('+7', '8').replace('(', '').replace(')', '')),
-            FIO: formData.name
+            FIO: formData.name,
+            address_id: null,
+            delivery_price: 0,
+            delivery_type: 0,
+            delivery_point: null
           }
           const result = await store.dispatch('shop/createNewOrder', params)
           if (!result.data.error) {
