@@ -14,8 +14,9 @@
           :to="'/'"
           :class="[
           $style.logo,
-          showAnimate && $style.logoVisible
+          showAnimate && $style.logoVisible,
           ]"
+          :style="{left: sheetWidth ? `calc(50% + ${sheetWidth/2}rem)` : '50%'}"
           v-on:click.native="scrollTop"
         >
           <n-logo />

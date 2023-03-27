@@ -106,13 +106,14 @@ export default {
     const socketCloseListener = (event) => {
       socket.onmessage = async (event) => {
         const data = JSON.parse(event.data)
-          if (data.messageType === 'bank' && data.status === 'CONFIRMED' && data.status === 'CONFIRMED' && data.user_id === store.state.authentication.user.id) {
+        console.log(data)
+          if (data.messageType === 'bank' && data.status === 'CONFIRMED' && data.user_id === store.state.authentication.user.id) {
             store.commit('menu/changeKeyMenu', {
               key: 'basket',
               effect: 'fx-slide-from-left'
             })
             store.commit('menu/changeStepMenu', { step: 3 })
-            store.commit('basket/setBasket', [])
+            store.commit('basket/resetBasket')
             store.commit('basket/setBasketSum', 0)
           } else if (loading.value && data.messageType === 'lastMessages') {
             messages.value = data.messageArray

@@ -104,6 +104,8 @@
       <input class="tinkoffPayRow" type="hidden" name="terminalkey" value="1658916651586">
       <input class="tinkoffPayRow" type="hidden" name="frame" value="true">
       <input class="tinkoffPayRow" type="hidden" name="language" value="ru">
+      <input class="tinkoffPayRow" type="hidden" name="receipt" value="">
+      <input :value="test" class="tinkoffPayRow" type="hidden" name="receipt">
       <input v-model="tinkoffPrice" type="hidden" class="tinkoffPayRow" name="amount">
       <input v-model="orderId" class="tinkoffPayRow" type="hidden" placeholder="Номер заказа" name="order">
       <!-- <input v-model="formData.name" class="tinkoffPayRow" type="hidden" placeholder="Описание заказа" name="description"> -->

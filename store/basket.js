@@ -16,6 +16,9 @@ export const mutations = {
     // })
     // state.basketLength = qty
   },
+  resetBasket (state) {
+    state.basket = []
+  },
   setBasketSum (state, value) {
     state.basketSum = value
   },
