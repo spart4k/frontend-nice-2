@@ -528,18 +528,24 @@ export default {
     }
   }
   &.alignLeft {
-    ul {
-      justify-content: flex-start;
+    @media (min-width: $mobileWidth) {
+      ul {
+        justify-content: flex-start;
+      }
     }
   }
   &.alignRight {
-    ul {
-      justify-content: flex-end;
+    @media (min-width: $mobileWidth) {
+      ul {
+        justify-content: flex-end;
+      }
     }
   }
   &.alignCenter {
-    ul {
-      justify-content: center;
+    @media (min-width: $mobileWidth) {
+      ul {
+        justify-content: center;
+      }
     }
   }
   @media (max-width: $mobileWidth) {
