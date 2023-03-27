@@ -28,6 +28,19 @@ export default {
       { text: 'Наличными', icon: 'money-stepper', value: 'money' },
       { text: 'Оплата менеджеру', icon: 'phone-stepper', value: 'phone' }
     ]
+    const test = ref(JSON.stringify({
+      EmailCompany: 'itisthenice@gmail.com',
+      Taxation: 'patent',
+      Items: [
+        {
+          Name: 'test',
+          Price: 1 + '00',
+          Quantity: 1,
+          Amount: 1 + '00',
+          Tax: 'none'
+        }
+      ]
+  }))
     const submit = async () => {
       if (activePayment.value === 'card') {
         try {
@@ -123,7 +136,8 @@ export default {
       tinkoffPay,
       totalPrice,
       loading,
-      subminOnEnter
+      subminOnEnter,
+      test
     }
   }
 }

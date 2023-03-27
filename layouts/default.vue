@@ -20,14 +20,16 @@
       :color="color"
       @backgroundLoaded="backgroundLoaded"
     >
+        <!-- :style="{ paddingLeft: sheetWidth && !sheetRight ? '39rem' : '0', paddingRight: sheetWidth && sheetRight ? '39rem' : '0' }" -->
+          <!-- sheetWidth && !sheetRight ? $style.paddingLeft :  '', sheetWidth && sheetRight ? $style.paddingRight : '', -->
+          <!-- sheetWidth && !sheetRight ? $style.alignLeft : 'center', -->
+          <!-- sheetWidth && sheetRight ? $style.alignRight : 'center', -->
       <n-tabs
         v-if="$route.name !== 'cards-id' && headerHidden"
         class="navbarSlug"
         :class="[
-          sheetWidth && !sheetRight ? $style.alignLeft : 'center',
-          sheetWidth && sheetRight ? $style.alignRight : 'center',
-          sheetWidth && !sheetRight ? $style.paddingLeft : '', sheetWidth && sheetRight ? $style.paddingRight : '',
           $style.tabs,
+          $style[tabsAlign],
           showAnimate && $style.animateContent,
           !isHomePage ? $style.noHome : ''
         ]"
@@ -130,6 +132,7 @@ export default {
     const contentLoader = computed(() => store?.state?.content?.contentLoader)
     const sheetRight = ref(false)
     const keyAnimation = ref('next')
+    const tabsAlign = ref('alignCenter')
     const currentShowComponents = ref({
       key: '',
       effect: 'fx-slide-from-left'
@@ -248,22 +251,20 @@ export default {
     const openMenu = () => {
       if (menu.value) {
         setTimeout(() => {
-          console.log(menu.value)
-          console.log(menu.value.$children)
-          console.log(menu.value.$children[0])
           menu.value.$children[0].open()
           if (window.innerWidth > 450) {
             sheetWidth.value = 39
+            tabsAlign.value = 'alignLeft'
             if (sheetRight.value) {
               sheetWidth.value = -sheetWidth.value
+              tabsAlign.value = 'alignRight'
             }
+              console.log(tabsAlign.value)
           }
         }, 100)
       } else {
         disabledSheet.value = true
         setTimeout(() => {
-          console.log(menu1.value)
-          console.log(menu1.value.$children)
           menu1.value.$children[0].open()
           if (window.innerWidth > 450) {
             sheetWidth.value = 39
@@ -456,7 +457,8 @@ export default {
       contentLoader,
       disabledSheet,
       pausedRadio,
-      playingRadio
+      playingRadio,
+      tabsAlign
     }
   }
 }
@@ -517,12 +519,12 @@ export default {
   will-change: transform;
   &.paddingLeft {
     @media (max-width: calc($desktopWidth + 39rem + 20rem)) {
-      //padding-left: 39rem;
+      // padding-left: 39rem;
     }
   }
   &.paddingRight {
     @media (max-width: calc($desktopWidth + 39rem + 20rem)) {
-      //padding-right: 39rem;
+      // padding-right: 39rem;
     }
   }
   &.alignLeft {
@@ -533,6 +535,11 @@ export default {
   &.alignRight {
     ul {
       justify-content: flex-end;
+    }
+  }
+  &.alignCenter {
+    ul {
+      justify-content: center;
     }
   }
   @media (max-width: $mobileWidth) {
