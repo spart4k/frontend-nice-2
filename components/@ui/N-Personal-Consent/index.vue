@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.wrapper">
-    Нажимая на кнопку, вы соглашаетесь с <a :class="$style.link" href="/assets/TermsOfSale.pdf" download>Условиями продажи</a>
+    Нажимая на кнопку, вы соглашаетесь с <a :class="$style.link" href="/TermsOfSale.pdf">Условиями продажи</a>
   </div>
 </template>
 

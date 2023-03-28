@@ -42,7 +42,7 @@
       />
       <div :class="$style.personalData">
         <input v-model="personalData" type="checkbox">
-        Я принимаю <a href="/assets/ProcessingPersonalData.pdf" download>Политику обработки персональных данных</a>
+        Я принимаю <a href="/ProcessingPersonalData.pdf">Политику обработки персональных данных</a>
       </div>
     </form>
     <n-button
