@@ -36,9 +36,7 @@ export default {
   },
   setup (_, ctx) {
     const { emit } = ctx
-    console.log(BLAND_BACKGROUNDS)
     const { route } = useContext()
-    console.log(route.value)
     const { $Lazyload } = ctx.root
     const backgroundImage = computed(() => {
         if (route.value.params.slug === undefined) {

@@ -162,7 +162,6 @@ export default {
           audioSource.value.load()
 
           audioSource.value.addEventListener('canplaythrough', () => {
-            console.log('loaded audio')
             audioSource.value.play()
           })
         }, 60)
@@ -259,7 +258,6 @@ export default {
               sheetWidth.value = -sheetWidth.value
               tabsAlign.value = 'alignRight'
             }
-              console.log(tabsAlign.value)
           }
         }, 100)
       } else {
@@ -296,7 +294,6 @@ export default {
       store.commit('content/changeContentLoader', false)
     })
     watch(() => color.value, () => {
-      console.log('change color')
       document.body.style.backgroundColor = color.value
     })
     watch(() => store.state.menu.component.key, () => {
@@ -396,10 +393,8 @@ export default {
     //  // }
     // }
     const pausedRadio = () => {
-      console.log('pause radio')
     }
     const playingRadio = () => {
-      console.log('play radio')
     }
     onMounted(() => {
       // instanceBlur()

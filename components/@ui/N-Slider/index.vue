@@ -84,13 +84,11 @@ export default {
       }
     }
     const syncSlidersBottom = (value, sliderTwo) => {
-      console.log(sliderTwo)
       if (sliderTwo) {
         c1.value.goTo(sliderTwo)
       }
     }
     const syncSlidersTop = (value, sliderOne) => {
-      console.log(sliderOne)
       c2.value.goTo(sliderOne)
     }
     return {

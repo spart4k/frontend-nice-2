@@ -75,7 +75,6 @@ export default defineComponent({
         count: 99
       }
       const responseCard = await store.dispatch('detailPage/getData', route.value.params.id)
-      console.log(route.value.params.id)
       const responseComments = await store.dispatch('detailPage/getComments', params)
       return {
         responseCard,
@@ -90,7 +89,6 @@ export default defineComponent({
           seo_description: response.responseCard.data?.data?.seo_description,
           seo_image: response.responseCard.data?.data?.seo_file?.src
         }
-        console.log(metaTags.value)
         card.value = {
           card: response.responseCard.data,
           comments: response.responseComments.data

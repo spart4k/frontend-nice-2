@@ -107,10 +107,8 @@ export default defineComponent({
     const selectAsc = ref(false)
 
     const sendSection = (value) => {
-      console.log(value)
       selectCategoryNumber.value = null
       selectCategory.value = ''
-      console.log(selectCategory.value)
       if (value === 8) {
         value = 9
       }
@@ -138,7 +136,6 @@ export default defineComponent({
       selectCategoryNumber.value = value
     }
     const sendMode = (value) => {
-      console.log(value)
       if (value === 0) {
         selectMode.value = 'created_at'
         selectPresent.value = null
@@ -494,19 +491,13 @@ export default defineComponent({
     useAsync(async () => {
       try {
         const response = await fetchData()
-        console.log(response)
         // metaTags.value = response
         const seo = await store.dispatch('main/getSeo')
-        console.log(response)
-        console.log(seo)
         metaTags.value = {
           seo_title: response.seo_title,
           seo_description: response?.seo_description,
           seo_image: response?.seo_file_id?.src
         }
-        console.log('test')
-        console.log(response)
-        console.log(metaTags.value)
         if (authorId.value) {
           const authorResponse = await fetchAuthor()
           author.value = authorResponse
@@ -516,10 +507,7 @@ export default defineComponent({
         }
         introData.value = response.quote
         fetchLoading.value = true
-        console.log(response.data)
         cards.value = [...response.data]
-        console.log(cards.value)
-        console.log('cards')
         startCards.value = [...cards.value]
         // loadingEnd.value = true
         if (scrollHeight.value !== 0) {

@@ -269,11 +269,9 @@ export default defineComponent({
         })
       })
       if (!localStorage.getItem('lastSection') || JSON.parse(localStorage.getItem('lastSection')).section !== route.value.path) {
-        console.log(route.value)
         const lastSection = {
           section: route.value.path
         }
-        console.log(JSON.stringify(lastSection))
         localStorage.setItem('lastSection', JSON.stringify(lastSection))
         store.commit('content/setScrollHeight', 0)
       }
@@ -340,7 +338,6 @@ export default defineComponent({
         try {
           const response = await fetchData()
           const seo = await store.dispatch('main/getSeo')
-          console.log(response)
           metaTags.value = seo.data.data[0]
           if (authorId.value) {
             const authorResponse = await fetchAuthor()
@@ -368,14 +365,12 @@ export default defineComponent({
           id: authorId.value
         }
         const response = await store.dispatch('pages/getAuthorById', params)
-        console.log(response)
         function cutTegs (str) {
           const regex = /( |<([^>]+)>)/ig
           const result = str.replace(regex, '')
           return result
         }
         metaDesc.value = cutTegs(response.description)
-        console.log(metaDesc.value)
         return response
       }
     }

@@ -249,16 +249,12 @@ export default {
     })
     const playAudio = (title) => {
       audioStop.value++
-      console.log('play')
-      console.log(title)
-      console.log(props.data.title)
       const radio = document.getElementById('audioLive')
       if (radio) {
         radio.pause()
       }
       if ('mediaSession' in navigator) {
         const wrapPlayer = ctx.root.$axios.defaults.baseURL + '/' + sliderImages.value[0].src
-        console.log(wrapPlayer)
         navigator.mediaSession.metadata = new MediaMetadata({
           title,
           artwork: [
@@ -471,11 +467,9 @@ export default {
       window.removeEventListener('resize', commentHeightSet)
     })
     const playingEvent = (title) => {
-      console.log(title)
       // console.log('play')
       if ('mediaSession' in navigator) {
         const wrapPlayer = ctx.root.$axios.defaults.baseURL + '/' + sliderImages.value[0].src
-        console.log(wrapPlayer)
         navigator.mediaSession.metadata = new MediaMetadata({
           title,
           artwork: [
@@ -496,7 +490,6 @@ export default {
       if (props.data.date_event) {
         let newDateUTC = props.data.date_event
         const newDate = new Date(newDateUTC.replace(/-/g, '/')).toUTCString()
-        console.log(newDate)
         // let delta = new Date(formData.value.date_event).getTimezoneOffset()
         // formData.value.date_event = newDate.setMinutes(newDate.getMinutes() - delta);
         const localDate = new Date(newDate)
@@ -508,10 +501,8 @@ export default {
           mm: '',
           ss: ''
         }
-        console.log(localDate)
         myDate.YY = localDate.getFullYear()
         myDate.DD = localDate.getDate()
-        console.log(myDate)
         myDate.MM = localDate.getMonth() + 1
         if (myDate.MM.toString().length <= 1) {
           myDate.MM = `0${myDate.MM}`

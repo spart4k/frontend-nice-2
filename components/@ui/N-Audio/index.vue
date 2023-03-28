@@ -164,7 +164,6 @@ export default {
       loop()
     }
     const playingEvent = () => {
-      console.log('playing')
       store.commit('menu/changeAudioPlaying', false)
       emit('playingEvent', audioTitle.value)
     }
@@ -234,7 +233,6 @@ export default {
     })
 
     const pausedEvent = () => {
-      console.log('paused Auio')
       audioPlaying.value = false
     }
 

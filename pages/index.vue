@@ -423,7 +423,6 @@ export default defineComponent({
               if (JSON.parse(localStorage.getItem('lastSection')).section === 'index' && scrollHeight.value !== 0) {
                   setTimeout(() => {
                     store.commit('content/setHeaderHidden', true)
-                    console.log(store.state.content.hearerHidden)
                     content.value.masonryRebuild()
                     window.scroll({
                       top: scrollHeight.value,
@@ -449,7 +448,6 @@ export default defineComponent({
                     setTimeout(() => {
                       store.commit('content/setHeaderHidden', true)
                       setTimeout(() => {
-                        console.log(scrollHeight.value)
                         content.value.masonryRebuild()
                         window.scroll({
                           top: scrollHeight.value,
@@ -475,7 +473,6 @@ export default defineComponent({
                 // setTimeout(() => {
                   setTimeout(() => {
                     store.commit('content/setHeaderHidden', true)
-                    console.log(store.state.content.hearerHidden)
                     content.value.masonryRebuild()
                     window.scroll({
                       top: scrollHeight.value,
@@ -502,7 +499,6 @@ export default defineComponent({
                     // setTimeout(() => {
                       setTimeout(() => {
                         store.commit('content/setHeaderHidden', true)
-                        console.log(store.state.content.hearerHidden)
                         content.value.masonryRebuild()
                         window.scroll({
                           top: scrollHeight.value,

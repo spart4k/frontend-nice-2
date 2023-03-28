@@ -144,7 +144,6 @@ export default {
   }
   const responceLengthPrice = (val) => {
     formData.length = val
-    console.log(formData)
     responceTotalPrice(formData.length, formData.count)
   }
   const responceCountPrice = (val) => {

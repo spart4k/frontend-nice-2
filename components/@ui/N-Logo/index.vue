@@ -127,7 +127,6 @@ export default {
     const showAnimate = computed(() => store.state.content.isShowAnimationHomePage)
     onMounted(() => {
       const logo = document.querySelector('.canvas_logo')
-      console.log(logo)
     })
     return {
       showAnimate

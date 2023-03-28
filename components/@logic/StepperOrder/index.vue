@@ -106,7 +106,6 @@ export default {
     const socketCloseListener = (event) => {
       socket.onmessage = async (event) => {
         const data = JSON.parse(event.data)
-        console.log(data)
           if (data.messageType === 'bank' && data.status === 'CONFIRMED' && data.user_id === store.state.authentication.user.id) {
             store.commit('menu/changeKeyMenu', {
               key: 'basket',
@@ -119,7 +118,6 @@ export default {
             messages.value = data.messageArray
             // song.value = data.currentSong
             if ('mediaSession' in navigator) {
-              console.log(root.$axios.defaults.baseURL)
               navigator.mediaSession.metadata = new MediaMetadata({
                 title: song.value.title,
                 artwork: [
@@ -139,7 +137,6 @@ export default {
           } else if (data.messageType === 'nextSong') {
             // song.value = data.data
             if ('mediaSession' in navigator) {
-              console.log(root.$axios.defaults.baseURL)
               navigator.mediaSession.metadata = new MediaMetadata({
                 title: song.value.title,
                 artwork: [
@@ -192,7 +189,6 @@ export default {
       }
 
       #init () {
-          console.log(this)
           this.clickHandler = this.clickHandler.bind(this)
       }
 
@@ -226,7 +222,6 @@ export default {
           function getTimestampInSeconds () {
             return Math.floor(Date.now() / 1000)
           }
-          console.log(getTimestampInSeconds())
           this.eventSource = new EventSource(`${root.$axios.defaults.baseURL}/events/${getTimestampInSeconds()}`)
 
           this.eventLog = 'Accepting data from the server.'
@@ -234,7 +229,6 @@ export default {
           this.eventSource.addEventListener('nextSong', (e) => {
               const userData = JSON.parse(e.data)
               song.value = userData
-              console.log(userData)
               if ('mediaSession' in navigator) {
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: userData.title,
@@ -257,9 +251,7 @@ export default {
           this.eventSource.addEventListener('currentSong', (e) => {
               const userData = JSON.parse(e.data)
               song.value = userData
-              console.log(song.value)
               if ('mediaSession' in navigator) {
-                console.log(`${root.$axios.defaults.baseURL}/${userData.wrap}`)
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: userData.title,
                     artwork: [
@@ -301,7 +293,6 @@ export default {
           socket.close()
         } else {
            socket = new WebSocket(websocketUrl)
-           console.log('connect: ' + websocketUrl)
            socketCloseListener()
         }
       })

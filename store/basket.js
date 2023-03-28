@@ -130,7 +130,6 @@ export const actions = {
   async calcDeliverySum ({ commit, state }, params) {
     try {
       const response = await this.$axios.post('calcDeliverySum', params)
-      console.log(response.data)
       if (!response.data.errors) {
         return response.data
       } else {

@@ -5,7 +5,6 @@ export const mutations = {}
 export const actions = {
   async getData (state, id = 0) {
     try {
-      console.log(id)
       const data = await this.$axios(`api/v1/card/${id}`)
       return data
     } catch (e) {

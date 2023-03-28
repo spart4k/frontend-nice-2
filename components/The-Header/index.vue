@@ -155,7 +155,6 @@ export default {
 
     const openLive = () => {
       const wrap = document.getElementById('__nuxt')
-      console.log(wrap)
       if (window.innerWidth <= 768) {
         wrap.classList.add('noScroll')
         document.body.style.overflow = 'hidden'

@@ -184,9 +184,7 @@ export default {
       Vue.prototype.$redrawVueMasonry()
     }
     const selectedSectionString = computed(() => {
-      console.log(props.selectedSection)
       const selectedSectionObject = sections.value.find(el => el.id === props.selectedSection)
-      console.log(selectedSectionObject)
       const indexSection = sections.value.indexOf(selectedSectionObject)
       return indexSection
     })
@@ -286,9 +284,6 @@ export default {
 
       // })
       sections.value.forEach((item, index) => {
-        console.log(index)
-        console.log(value)
-        console.log(item)
         if (index === value) {
           emit('sendCategory', item.id)
         }

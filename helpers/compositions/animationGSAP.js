@@ -14,14 +14,12 @@ const animation = ($gsap, Elastic) => {
       const content = document.querySelector('.content')
       window.addEventListener('resize', () => {
         if (window.innerWidth > 450 && content.getBoundingClientRect().top > 0) {
-          console.log(logo)
           logo.style.top = '2.9rem'
         }
         if (window.innerWidth < 450 && content.getBoundingClientRect().top > 0) {
           logo.style.top = '9rem'
         }
       })
-      console.log(logo)
       logo.classList.add('animationEnd')
       header.classList.add('pageLoaded')
       animationPlug.classList.add('animationPlugDisplay')
@@ -33,10 +31,8 @@ const animation = ($gsap, Elastic) => {
     const SUBTITLE = '.subtitleLogo'
     const animationPlug = document.querySelector('.animationPlug')
     const backgroundElement = document.querySelector('.background')
-    console.log(backgroundElement)
     const logo = document.querySelector('.logo')
     // const logoImage = document.querySelector('.logo_image')
-    console.log('WIDTH')
     const content = document.querySelector('.content')
     tl.set(SUBTITLE, {
       opacity: 0

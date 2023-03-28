@@ -26,7 +26,6 @@ export default {
         }
       }
     })
-    console.log()
     const audioPlaying = computed(() => store.state.menu.audioPlaying)
     const marquee = ref(null)
     const marqueeLength = ref(null)
