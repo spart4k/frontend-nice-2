@@ -28,19 +28,6 @@ export default {
       { text: 'Наличными', icon: 'money-stepper', value: 'money' },
       { text: 'Оплата менеджеру', icon: 'phone-stepper', value: 'phone' }
     ]
-    const test = ref(JSON.stringify({
-      EmailCompany: 'itisthenice@gmail.com',
-      Taxation: 'patent',
-      Items: [
-        {
-          Name: 'test',
-          Price: 1 + '00',
-          Quantity: 1,
-          Amount: 1 + '00',
-          Tax: 'none'
-        }
-      ]
-  }))
     const submit = async () => {
       if (activePayment.value === 'card') {
         try {
@@ -91,7 +78,7 @@ export default {
           const result = await store.dispatch('shop/createNewOrder', params)
           if (!result.data.error) {
             store.commit('authentication/setUserFullname', formData.name)
-            store.commit('basket/setBasket', [])
+            store.commit('basket/resetBasket')
             store.commit('basket/setBasketSum', 0)
             orderId.value = String(result.data.id)
             store.commit('basket/lastOrderChange', result.data.id)
@@ -136,8 +123,7 @@ export default {
       tinkoffPay,
       totalPrice,
       loading,
-      subminOnEnter,
-      test
+      subminOnEnter
     }
   }
 }
