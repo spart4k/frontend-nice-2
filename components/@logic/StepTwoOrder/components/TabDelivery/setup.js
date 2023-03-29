@@ -43,19 +43,6 @@ export default {
     const totalWeight = ref(0)
     const basketId = computed(() => { return store.state.basket.basketId })
     const deliveryPoint = ref(0)
-    const test = ref(JSON.stringify({
-      EmailCompany: 'itisthenice@gmail.com',
-      Taxation: 'patent',
-      Items: [
-        {
-          Name: 'test',
-          Price: 1 + '00',
-          Quantity: 1,
-          Amount: 1 + '00',
-          Tax: 'none'
-        }
-      ]
-  }))
     const deliveryChange = (val) => {
       deliveryValue.value = val
       if (deliveryValue.value === 'courier') {
@@ -309,8 +296,7 @@ export default {
       addressId,
       noErrorCity,
       basketId,
-      deliveryPoint,
-      test
+      deliveryPoint
     }
   }
 }
